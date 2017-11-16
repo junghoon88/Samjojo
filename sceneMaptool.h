@@ -18,13 +18,12 @@ enum CTRL
 class sceneMaptool : public gameNode
 {
 private:
-	tagCurrentTile _currentTile;
+	int _selectSampleIndex;
 	tagSampleTile _sampleTiles[SAMPLETILEX * SAMPLETILEY];
 	tagTile _tiles[TILEX * TILEY];
 
-	int _pos[2];
-
-	button* ctrlButton[CTRL_END];
+	button* _ctrlButton[CTRL_END];
+	TCHAR _strButton[CTRL_END][100];
 	int _ctrSelect;
 
 private:
@@ -52,10 +51,12 @@ public:
 	void save(void);
 	void load(void);
 
-	TERRAIN terrainSelect(int frameX, int frameY);
-	OBJECT objSelect(int frameX, int frameY);
+	TERRAIN terrainSelect(int index);
+	OBJECT objSelect(int index);
 
 	inline int getCtrlSelect(void) { return _ctrSelect; }
 	inline void setCtrlSelect(int select) { _ctrSelect = select; }
+
+	inline tagSampleTile* getSampleTile(void) { return _sampleTiles; }
 };
 

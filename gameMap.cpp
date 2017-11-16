@@ -15,6 +15,11 @@ HRESULT gameMap::init(void)
 {
 	load();
 
+	for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
+	{
+		_stprintf(_strSampleImgKey[i], L"tile (%02d)", i + 1);
+	}
+
 	return S_OK;
 }
 
@@ -31,8 +36,7 @@ void gameMap::render(void)
 	//ÁöÇü
 	for (int i = 0; i < TILEX * TILEY; i++)
 	{
-		IMAGEMANAGER->render(L"mapTiles", getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top,
-										_tiles[i].terrainFrameX * (TILESIZE + 1) + 1, _tiles[i].terrainFrameY * (TILESIZE + 1) + 1, TILESIZE, TILESIZE);
+		IMAGEMANAGER->render(_strSampleImgKey[_tiles[i].sampleTerrainIdx], getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top);
 	}
 
 }

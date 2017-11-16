@@ -53,5 +53,8 @@ public:
 
 	button();
 	~button();
+
+public:
+	inline RECT getRect(void) { return _rc; }
 };
 

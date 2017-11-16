@@ -14,10 +14,9 @@ sceneMaptool::~sceneMaptool()
 
 HRESULT sceneMaptool::init(void)
 {
-	IMAGEMANAGER->addFrameImage(L"버튼", L"image/button.bmp", 100, 30, 1, 1);
-	IMAGEMANAGER->addFrameImage(L"mapTiles", L"image/mapTiles.bmp", 0, 0, 640, 288, SAMPLETILEX, SAMPLETILEY, true, RGB(255, 0, 255));
-
 	setup();
+
+	_selectSampleIndex = 0;
 
 	return S_OK;
 }
@@ -28,11 +27,9 @@ void sceneMaptool::release(void)
 
 void sceneMaptool::update(void)	
 {
-	RECT rcMap = { 0, 0, TILESIZEX, TILESIZEY };
-
 	for (int i = 0; i < CTRL_END; i++)
 	{
-		ctrlButton[i]->update();
+		_ctrlButton[i]->update();
 	}
 
 	if (KEYMANAGER->isOnceKeyDown(MK_LBUTTON) || KEYMANAGER->isStayKeyDown(MK_LBUTTON))
@@ -42,29 +39,29 @@ void sceneMaptool::update(void)
 
 void sceneMaptool::render(void)	
 {
-	IMAGEMANAGER->render(L"mapTiles", getMemDC(), WINSIZEX - IMAGEMANAGER->findImage(L"mapTiles")->getWidth(), 0);
+	for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
+	{
+		if (_sampleTiles[i].img == NULL) continue;
+		_sampleTiles[i].img->render(getMemDC(), _sampleTiles[i].rcTile.left, _sampleTiles[i].rcTile.top);
+	}
 
 
 	//지형
 	for (int i = 0; i < TILEX * TILEY; i++)
 	{
-		IMAGEMANAGER->frameRender(L"mapTiles", getMemDC(),
-												_tiles[i].rc.left, _tiles[i].rc.top,
-												_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
+		IMAGEMANAGER->render(_sampleTiles[_tiles[i].sampleTerrainIdx].strImgKey, getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top);
 	}
 
 	//오브젝트
 	for (int i = 0; i < TILEX * TILEY; i++)
 	{
-		if (_tiles[i].obj == OBJ_NONE) continue;
-		IMAGEMANAGER->frameRender(L"mapTiles", getMemDC(),
-												_tiles[i].rc.left, _tiles[i].rc.top,
-												_tiles[i].objFrameX, _tiles[i].objFrameY);
+		if (_tiles[i].obj == OBJECT_NONE) continue;
 	}
 
 	for (int i = 0; i < CTRL_END; i++)
 	{
-		ctrlButton[i]->render();
+		_ctrlButton[i]->render();
+		TextOut(getMemDC(), _ctrlButton[i]->getRect().left, _ctrlButton[i]->getRect().top, _strButton[i], _tcslen(_strButton[i]));
 	}
 
 }
@@ -107,54 +104,62 @@ void sceneMaptool::ctrlSelectEraser(void* obj)
 
 void sceneMaptool::setup(void)
 {
-	ctrlButton[CTRL_SAVE] = new button;
-	ctrlButton[CTRL_SAVE]->init(L"버튼", 700, 500, { 0, 0 }, { 0, 0 }, ctrlSelectSave, this);
-	ctrlButton[CTRL_LOAD] = new button;
-	ctrlButton[CTRL_LOAD]->init(L"버튼", 850, 500, { 0, 0 }, { 0, 0 }, ctrlSelectLoad, this);
-	ctrlButton[CTRL_TERRAINDRAW] = new button;
-	ctrlButton[CTRL_TERRAINDRAW]->init(L"버튼", 1000, 500, { 0, 0 }, { 0, 0 }, ctrlSelectTerrain, this);
-	ctrlButton[CTRL_OBJDRAW] = new button;
-	ctrlButton[CTRL_OBJDRAW]->init(L"버튼", 700, 600, { 0, 0 }, { 0, 0 }, ctrlSelectObject, this);
-	ctrlButton[CTRL_ERASER] = new button;
-	ctrlButton[CTRL_ERASER]->init(L"버튼", 850, 600, { 0, 0 }, { 0, 0 }, ctrlSelectEraser, this);
+	_ctrlButton[CTRL_SAVE] = new button;
+	_ctrlButton[CTRL_LOAD] = new button;
+	_ctrlButton[CTRL_TERRAINDRAW] = new button;
+	_ctrlButton[CTRL_OBJDRAW] = new button;
+	_ctrlButton[CTRL_ERASER] = new button;
+	
+	_ctrlButton[CTRL_SAVE]->init(L"맵툴버튼",         1100, 300, { 0, 0 }, { 0, 1 }, ctrlSelectSave, this);
+	_ctrlButton[CTRL_LOAD]->init(L"맵툴버튼",         1100, 400, { 0, 0 }, { 0, 1 }, ctrlSelectLoad, this);
+	_ctrlButton[CTRL_TERRAINDRAW]->init(L"맵툴버튼",  1100, 500, { 0, 0 }, { 0, 1 }, ctrlSelectTerrain, this);
+	_ctrlButton[CTRL_OBJDRAW]->init(L"맵툴버튼",      1100, 600, { 0, 0 }, { 0, 1 }, ctrlSelectObject, this);
+	_ctrlButton[CTRL_ERASER]->init(L"맵툴버튼",       1100, 700, { 0, 0 }, { 0, 1 }, ctrlSelectEraser, this);
+
+	
+	_stprintf(_strButton[CTRL_SAVE], L"SAVE");
+	_stprintf(_strButton[CTRL_LOAD], L"LOAD");
+	_stprintf(_strButton[CTRL_TERRAINDRAW], L"TERRAIN");
+	_stprintf(_strButton[CTRL_OBJDRAW], L"OBJECT");
+	_stprintf(_strButton[CTRL_ERASER], L"ERASER");
 
 	_ctrSelect = CTRL_TERRAINDRAW;
 
-	//타일셋 셋팅
+	//샘플타일 시작점
+	POINT ptSampleStart = { WINSIZEX - TILESIZE * SAMPLETILEX, 0 };
+
+	//샘플 타일셋 셋팅
 	for (int i = 0; i < SAMPLETILEY; i++)
 	{
 		for (int j = 0; j < SAMPLETILEX; j++)
 		{
-			_sampleTiles[i * SAMPLETILEX + j].terrainFrameX = j;
-			_sampleTiles[i * SAMPLETILEX + j].terrainFrameY = i;
+			int index = i * SAMPLETILEX + j;
+			_stprintf(_sampleTiles[index].strImgKey, L"tile (%02d)", index + 1);
 
-			SetRect(&_sampleTiles[i * SAMPLETILEX + j].rcTile,
-				(WINSIZEX - IMAGEMANAGER->findImage(L"mapTiles")->getWidth()) + j * TILESIZE, i * TILESIZE, 
-				(WINSIZEX - IMAGEMANAGER->findImage(L"mapTiles")->getWidth()) + j * TILESIZE + TILESIZE, i * TILESIZE + TILESIZE);
+			_sampleTiles[index].img = IMAGEMANAGER->findImage(_sampleTiles[index].strImgKey);
+			_sampleTiles[index].rcTile = RectMake(ptSampleStart.x + j*TILESIZE, ptSampleStart.y + i * TILESIZE, TILESIZE, TILESIZE);
 		}
 	}
+
+	//샘플타일 시작점
+	POINT ptTileStart = { 0, 0 };
 
 	//타일 영역 셋팅
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			SetRect(&_tiles[i * TILEX + j].rc,
-				j * TILESIZE,
-				i * TILESIZE,
-				j * TILESIZE + TILESIZE,
-				i * TILESIZE + TILESIZE);
+			int index = i * TILEX + j;
+
+			_tiles[index].rc = RectMake(ptTileStart.x + j * TILESIZE, ptTileStart.y + i * TILESIZE, TILESIZE, TILESIZE);
 		}
 	}
 
 	for (int i = 0; i < TILEX * TILEY; i++)
 	{
-		_tiles[i].terrainFrameX = 3;
-		_tiles[i].terrainFrameY = 0;
-		_tiles[i].objFrameX = 0;
-		_tiles[i].objFrameY = 0;
-		_tiles[i].terrain = terrainSelect(_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
-		_tiles[i].obj = OBJ_NONE;
+		_tiles[i].sampleTerrainIdx = 0;
+		_tiles[i].terrain = terrainSelect(_tiles[i].sampleTerrainIdx);
+		_tiles[i].obj = OBJECT_NONE;
 	}
 }
 
@@ -164,8 +169,7 @@ void sceneMaptool::setMap(void)
 	{
 		if (PtInRect(&_sampleTiles[i].rcTile, _ptMouse))
 		{
-			_currentTile.x = _sampleTiles[i].terrainFrameX;
-			_currentTile.y = _sampleTiles[i].terrainFrameY;
+			_selectSampleIndex = i;
 			break;
 		}
 	}
@@ -176,24 +180,19 @@ void sceneMaptool::setMap(void)
 		{
 			if (_ctrSelect == CTRL_TERRAINDRAW)
 			{
-				_tiles[i].terrainFrameX = _currentTile.x;
-				_tiles[i].terrainFrameY = _currentTile.y;
+				_tiles[i].sampleTerrainIdx = _selectSampleIndex;
 
-				_tiles[i].terrain = terrainSelect(_currentTile.x, _currentTile.y);
+				_tiles[i].terrain = terrainSelect(_tiles[i].sampleTerrainIdx);
 			}
 			else if (_ctrSelect == CTRL_OBJDRAW)
 			{
-				_tiles[i].objFrameX = _currentTile.x;
-				_tiles[i].objFrameY = _currentTile.y;
-
-				_tiles[i].obj = objSelect(_currentTile.x, _currentTile.y);
+				//_tiles[i].obj = objSelect(_currentTile.x, _currentTile.y);
 			}
 			else if (_ctrSelect == CTRL_ERASER)
 			{
-				_tiles[i].objFrameX = NULL;
-				_tiles[i].objFrameY = NULL;
+				_tiles[i].sampleTerrainIdx = NULL;
 
-				_tiles[i].obj = OBJ_NONE;
+				//_tiles[i].obj = OBJ_NONE;
 			}
 
 			break;
@@ -209,7 +208,6 @@ void sceneMaptool::save(void)
 	file = CreateFile(L"mapSave.map", GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
-	WriteFile(file, _pos, sizeof(int) * 2, &write, NULL);
 
 	CloseHandle(file);
 
@@ -224,55 +222,18 @@ void sceneMaptool::load(void)
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
-	ReadFile(file, _pos, sizeof(int) * 2, &read, NULL);
 
 	CloseHandle(file);
 }
 
-TERRAIN sceneMaptool::terrainSelect(int frameX, int frameY)
+TERRAIN sceneMaptool::terrainSelect(int index)
 {
-	if (frameX == 1 && frameY == 0)
-	{
-		return TR_CEMENT;
-	}
-	else if (frameX == 2 && frameY == 0)
-	{
-		return TR_DESERT;
-	}
-	else if (frameX == 3 && frameY == 0)
-	{
-		return TR_GRASS;
-	}
-	else if (frameX == 4 && frameY == 0)
-	{
-		return TR_WATER;
-	}
 
-	return TR_GRASS;
+	return TERRAIN_NONE;
 }
 
-OBJECT sceneMaptool::objSelect(int frameX, int frameY)
+OBJECT sceneMaptool::objSelect(int index)
 {
-	if (frameX == 0 && frameY == 0)
-	{
-		return OBJ_TANK1;
-	}
-	else if (frameX == 0 && frameY == 8)
-	{
-		return OBJ_TANK2;
-	}
-	else if (frameX == 0 && frameY == 1)
-	{
-		return OBJ_BLOCK1;
-	}
-	else if (frameX == 0 && frameY == 2)
-	{
-		return OBJ_BLOCK3;
-	}
-	else if (frameX == 15 && frameY == 3)
-	{
-		return OBJ_BLOCKS;
-	}
 
-	return OBJ_BLOCK1;
+	return OBJECT_NONE;
 }

@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Friend.h"
+#include "gameMap.h"
 
 class sceneBattle : public gameNode
 {
@@ -10,6 +11,8 @@ private:
 	Player*		_player;	//플레이어
 	Friend*		_friend;	//아군
 	Enemy*		_enemy;		//적군
+
+	gameMap*	_map;		//게임 맵
 
 private:
 	void initImage(void);

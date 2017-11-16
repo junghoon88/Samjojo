@@ -1,11 +1,15 @@
 #pragma once
 #include "gameNode.h"
+#include "tileNode.h"
 
 class sceneInit : public gameNode
 {
 private:
 	void initImage(void);
 	void initSound(void);
+
+
+	void initImageMapTool(void);
 
 public:
 	HRESULT init(void);

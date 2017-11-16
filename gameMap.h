@@ -8,7 +8,10 @@ private:
 	tagTile _tiles[TILEX * TILEY];	 // 鸥老
 	DWORD _attribute[TILEX * TILEY]; // 鸥老 加己
 
+	TCHAR _strSampleImgKey[SAMPLETILEX * SAMPLETILEY][100];
+
 	int _pos[2];
+
 
 public:
 	gameMap();
@@ -29,5 +32,6 @@ public:
 	//1p, 2p 器瘤记 
 	int getPosFirst() { return _pos[0]; }
 	int getPosSecond() { return _pos[1]; }
+
 };
 

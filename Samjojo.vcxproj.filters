@@ -85,6 +85,9 @@
     <Filter Include="MainGame\sceneBattle\aStar">
       <UniqueIdentifier>{e9da99b9-273c-45a4-819e-2a1875cad09d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\sceneStory">
+      <UniqueIdentifier>{c64bfb5a-5052-472b-9d5d-d982a31e9725}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -225,6 +228,9 @@
     <ClInclude Include="gameMap.h">
       <Filter>MainGame\sceneBattle\aStar</Filter>
     </ClInclude>
+    <ClInclude Include="sceneStory.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -343,6 +349,9 @@
     </ClCompile>
     <ClCompile Include="gameMap.cpp">
       <Filter>MainGame\sceneBattle\aStar</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneStory.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

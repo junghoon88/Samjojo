@@ -35,21 +35,24 @@ HRESULT mainGame::init(void)
 
 void mainGame::initScene(void)
 {
-	SCENEMANAGER->addScene(L"ÃÊ±âÈ­¾À", new sceneInit);
-	SCENEMANAGER->addScene(L"·Îµù¾À", new sceneLoading);
+	gameNode* node = SCENEMANAGER->addScene(L"ÃÊ±âÈ­¾À", new sceneInit);  //°ÔÀÓ ¸®¼Ò½º ÃÊ±âÈ­
+	node->init();
+	SCENEMANAGER->addScene(L"·Îµù¾À", new sceneLoading); //°ÔÀÓ ¼¼ÀÌºê ÆÄÀÏ ·Îµù¾À
 	SCENEMANAGER->addScene(L"¸ÊÅø¾À", new sceneMaptool);
+
+	SCENEMANAGER->addScene(L"´ëÈ­¾À", new sceneStory);
 
 	sceneSelect* _sceneSelect = new sceneSelect;
 	_sceneSelect->setLinkAdressPlayer(_player);
 	_sceneSelect->setLinkAdressEnemy(_enemy);
 	_sceneSelect->setLinkAdressFriend(_friend);
-	SCENEMANAGER->addScene(L"¼¿·º¾À", _sceneSelect);
+	SCENEMANAGER->addScene(L"¼±ÅÃ¾À", _sceneSelect);
 
 	sceneBattle* _sceneBattle = new sceneBattle;
 	_sceneBattle->setLinkAdressPlayer(_player);
 	_sceneBattle->setLinkAdressEnemy(_enemy);
 	_sceneBattle->setLinkAdressFriend(_friend);
-	SCENEMANAGER->addScene(L"¹èÆ²¾À", _sceneBattle);
+	SCENEMANAGER->addScene(L"ÀüÅõ¾À", _sceneBattle);
 
 	SCENEMANAGER->changeScene(L"¸ÊÅø¾À");
 }
@@ -68,6 +71,23 @@ void mainGame::release(void)
 void mainGame::update(void)	
 {
 	gameNode::update();
+
+	if (KEYMANAGER->isOnceKeyDown(VK_F1))
+	{
+		SCENEMANAGER->changeScene(L"¸ÊÅø¾À");
+	}
+	else if (KEYMANAGER->isOnceKeyDown(VK_F2))
+	{
+		SCENEMANAGER->changeScene(L"´ëÈ­¾À");
+	}
+	else if (KEYMANAGER->isOnceKeyDown(VK_F3))
+	{
+		SCENEMANAGER->changeScene(L"¼±ÅÃ¾À");
+	}
+	else if (KEYMANAGER->isOnceKeyDown(VK_F4))
+	{
+		SCENEMANAGER->changeScene(L"ÀüÅõ¾À");
+	}
 
 	SCENEMANAGER->update();
 }
