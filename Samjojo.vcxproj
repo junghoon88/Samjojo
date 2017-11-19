@@ -14,7 +14,7 @@
     <ProjectGuid>{03A295ED-8259-42B5-BB8D-346487E24943}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>MySamjojo</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -116,6 +116,7 @@
     <ClInclude Include="sceneMaptool.h" />
     <ClInclude Include="sceneSelect.h" />
     <ClInclude Include="sceneStory.h" />
+    <ClInclude Include="sceneUnitEditor.h" />
     <ClInclude Include="singletonBase.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stdafx.h" />
@@ -160,6 +161,7 @@
     <ClCompile Include="sceneMaptool.cpp" />
     <ClCompile Include="sceneSelect.cpp" />
     <ClCompile Include="sceneStory.cpp" />
+    <ClCompile Include="sceneUnitEditor.cpp" />
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

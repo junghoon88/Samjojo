@@ -16,6 +16,8 @@
 #define DIR_U			0x04
 #define DIR_D			0x08
 
+#define FACE_MAX		300
+
 
 typedef enum DIRECTION
 {
@@ -39,6 +41,8 @@ enum ATTACK_RANGE
 
 enum TEAM
 {
+	TEAM_NONE = -1,
+
 	TEAM_PLAYER,
 	TEAM_SAME,
 	TEAM_ENEMY,

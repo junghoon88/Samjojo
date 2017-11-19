@@ -39,6 +39,7 @@ void mainGame::initScene(void)
 	node->init();
 	SCENEMANAGER->addScene(L"·Îµù¾À", new sceneLoading); //°ÔÀÓ ¼¼ÀÌºê ÆÄÀÏ ·Îµù¾À
 	SCENEMANAGER->addScene(L"¸ÊÅø¾À", new sceneMaptool);
+	SCENEMANAGER->addScene(L"À¯´Ö¿¡µğÅÍ", new sceneUnitEditor);
 
 	SCENEMANAGER->addScene(L"´ëÈ­¾À", new sceneStory);
 
@@ -87,6 +88,10 @@ void mainGame::update(void)
 	else if (KEYMANAGER->isOnceKeyDown(VK_F4))
 	{
 		SCENEMANAGER->changeScene(L"ÀüÅõ¾À");
+	}
+	else if (KEYMANAGER->isOnceKeyDown(VK_F6))
+	{
+		SCENEMANAGER->changeScene(L"À¯´Ö¿¡µğÅÍ");
 	}
 
 	SCENEMANAGER->update();
