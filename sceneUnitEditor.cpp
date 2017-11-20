@@ -33,11 +33,21 @@ HRESULT sceneUnitEditor::init(void)
 	_stprintf(_strButton[UNITEDITOR_BUTTON_ARMOR_NEXT], L"¡¡¢º");
 	_stprintf(_strButton[UNITEDITOR_BUTTON_SUBITEM_PREV], L"¡¡¢¸");
 	_stprintf(_strButton[UNITEDITOR_BUTTON_SUBITEM_NEXT], L"¡¡¢º");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_NAME], L"ÀÌ¸§");
 
 
 	_faceNum = 0;
 	_normalNum = 0;
 	_combatNum = 0;
+	_weaponNum = 0;
+	_armorNum = 0;
+	_subitemNum = 0;
+
+
+	//_editTest = EDITBOXMANAGER->addEditbox(L"Å×½ºÆ®", RectMake(200, 100, 100, 30));
+	_editTest = new editbox;
+	_editTest->init();
+	_editTest->setRect(RectMake(500, 100, 100, 30));
 
 	return S_OK;
 }
@@ -45,6 +55,8 @@ HRESULT sceneUnitEditor::init(void)
 void sceneUnitEditor::release(void)
 {
 	SAFE_DELETE(_unit);
+	_editTest->release();
+	SAFE_DELETE(_editTest);
 }
 
 void sceneUnitEditor::update(void)
@@ -54,7 +66,7 @@ void sceneUnitEditor::update(void)
 		_ctrlButton[i]->update();
 	}
 
-	btnSetup();
+	_editTest->update();
 }
 
 void sceneUnitEditor::render(void)
@@ -89,13 +101,11 @@ void sceneUnitEditor::render(void)
 
 void sceneUnitEditor::initButton(void)
 {
-	_ctrlButton[UNITEDITOR_BUTTON_DATA_NEW] = new button;
-	_ctrlButton[UNITEDITOR_BUTTON_DATA_NEW]->init(L"¸ÊÅø¹öÆ°", 1300 + 50, 430 + 15, { 0, 0 }, { 0, 1 }, ctrlSelectDataNew, this);
-	_ctrlButton[UNITEDITOR_BUTTON_DATA_LOAD] = new button;
-	_ctrlButton[UNITEDITOR_BUTTON_DATA_LOAD]->init(L"¸ÊÅø¹öÆ°", 1300 + 50, 490 + 15, { 0, 0 }, { 0, 1 }, ctrlSelectDataLoad, this);
-	_ctrlButton[UNITEDITOR_BUTTON_DATA_SAVE] = new button;
-	_ctrlButton[UNITEDITOR_BUTTON_DATA_SAVE]->init(L"¸ÊÅø¹öÆ°", 1300 + 50, 550 + 15, { 0, 0 }, { 0, 1 }, ctrlSelectDataSave, this);
+	//label
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_NAME] = new button;
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_NAME]->init(L"¸ÊÅø¹öÆ°2", 400 + 25, 100 + 15, { 0, 0 }, { 0, 1 }, ctrlSelectFacePrev, this);
 
+	//prev, next
 	_ctrlButton[UNITEDITOR_BUTTON_FACE_PREV] = new button;
 	_ctrlButton[UNITEDITOR_BUTTON_FACE_PREV]->init(L"¸ÊÅø¹öÆ°", 100 + 50, 240 + 15, { 0, 0 }, { 0, 1 }, ctrlSelectFacePrev, this);
 	_ctrlButton[UNITEDITOR_BUTTON_FACE_NEXT] = new button;
@@ -125,6 +135,14 @@ void sceneUnitEditor::initButton(void)
 	_ctrlButton[UNITEDITOR_BUTTON_SUBITEM_PREV]->init(L"¸ÊÅø¹öÆ°2", 800 + 25, 390 + 15, { 0, 0 }, { 0, 1 }, ctrlSelectSubitemPrev, this);
 	_ctrlButton[UNITEDITOR_BUTTON_SUBITEM_NEXT] = new button;
 	_ctrlButton[UNITEDITOR_BUTTON_SUBITEM_NEXT]->init(L"¸ÊÅø¹öÆ°2", 850 + 25, 390 + 15, { 0, 0 }, { 0, 1 }, ctrlSelectSubitemNext, this);
+
+	//new, save, load, exit
+	_ctrlButton[UNITEDITOR_BUTTON_DATA_NEW] = new button;
+	_ctrlButton[UNITEDITOR_BUTTON_DATA_NEW]->init(L"¸ÊÅø¹öÆ°", 1300 + 50, 430 + 15, { 0, 0 }, { 0, 1 }, ctrlSelectDataNew, this);
+	_ctrlButton[UNITEDITOR_BUTTON_DATA_LOAD] = new button;
+	_ctrlButton[UNITEDITOR_BUTTON_DATA_LOAD]->init(L"¸ÊÅø¹öÆ°", 1300 + 50, 490 + 15, { 0, 0 }, { 0, 1 }, ctrlSelectDataLoad, this);
+	_ctrlButton[UNITEDITOR_BUTTON_DATA_SAVE] = new button;
+	_ctrlButton[UNITEDITOR_BUTTON_DATA_SAVE]->init(L"¸ÊÅø¹öÆ°", 1300 + 50, 550 + 15, { 0, 0 }, { 0, 1 }, ctrlSelectDataSave, this);
 }
 
 void sceneUnitEditor::btnSetup(void)
@@ -195,6 +213,9 @@ void sceneUnitEditor::rectSketch(void)
 	Rectangle(getMemDC(), 1300, 490, 1400, 520);	//¼¼ÀÌºê
 	Rectangle(getMemDC(), 1300, 550, 1400, 580);	//·Îµå
 	Rectangle(getMemDC(), 1300, 640, 1400, 670);	//Á¾·á
+
+	_editTest->render();
+
 }
 
 //-----------------------------------------------------------------------------------------

@@ -28,6 +28,7 @@
 #include "txtData.h"
 #include "collision.h"
 #include "camera.h"
+//#include "editboxManager.h"
 
 //전역 매크로변수
 #include "globalMacroVariables.h"
@@ -60,6 +61,7 @@ using namespace IOTA_UTIL;
 #define DATABASE database::getSingleton()
 #define MAINCAMERA camera::getSingleton()
 #define RENDERMANAGER RenderManager::getSingleton()
+//#define EDITBOXMANAGER editboxManager::getSingleton()
 
 //==================================
 // ## 매크로 함수 ## 17.08.07 ##

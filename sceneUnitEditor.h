@@ -2,9 +2,12 @@
 #include "gameNode.h"
 #include "Unit.h"
 #include "button.h"
+#include "editbox.h"
 
 enum UNITEDITOR_BUTTON
 {
+	UNITEDITOR_BUTTON_LABEL_NAME,		//이름
+
 	UNITEDITOR_BUTTON_DATA_NEW,			//새 영웅 만들기
 	UNITEDITOR_BUTTON_DATA_LOAD,		//영웅 데이터 불러오기
 	UNITEDITOR_BUTTON_DATA_SAVE,		//영웅 데이터 저장하기
@@ -57,8 +60,12 @@ private:
 	button* _ctrlButton[UNITEDITOR_BUTTON_MAX];
 	TCHAR _strButton[UNITEDITOR_BUTTON_MAX][100];
 
+
 	//임시
 	RECT _editBox[UNITEDITOR_EDITBOX_MAX];
+
+	editbox* _editTest;
+
 
 	int _faceNum;
 	int _normalNum;

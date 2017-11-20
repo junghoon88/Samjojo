@@ -88,6 +88,8 @@
     <ClInclude Include="collision.h" />
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="database.h" />
+    <ClInclude Include="editbox.h" />
+    <ClInclude Include="editboxManager.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
     <ClInclude Include="Enemy.h" />
@@ -136,6 +138,8 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="database.cpp" />
+    <ClCompile Include="editbox.cpp" />
+    <ClCompile Include="editboxManager.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
