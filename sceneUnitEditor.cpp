@@ -35,12 +35,20 @@ HRESULT sceneUnitEditor::init(void)
 
 	_faceNum = 0;
 
+
+	//_editTest = EDITBOXMANAGER->addEditbox(L"Å×½ºÆ®", RectMake(200, 100, 100, 30));
+	_editTest = new editbox;
+	_editTest->init();
+	_editTest->setRect(RectMake(200, 100, 100, 30));
+
 	return S_OK;
 }
 
 void sceneUnitEditor::release(void)
 {
 	SAFE_DELETE(_unit);
+	_editTest->release();
+	SAFE_DELETE(_editTest);
 }
 
 void sceneUnitEditor::update(void)
@@ -49,6 +57,9 @@ void sceneUnitEditor::update(void)
 	{
 		_ctrlButton[i]->update();
 	}
+
+	
+	_editTest->update();
 }
 
 void sceneUnitEditor::render(void)
@@ -63,6 +74,8 @@ void sceneUnitEditor::render(void)
 		_ctrlButton[i]->render();
 		TextOut(getMemDC(), _ctrlButton[i]->getRect().left, _ctrlButton[i]->getRect().top, _strButton[i], _tcslen(_strButton[i]));
 	}
+
+	_editTest->render();
 }
 
 //-----------------------------------------------------------------------------------------

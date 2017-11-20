@@ -91,6 +91,9 @@
     <Filter Include="MainGame\sceneStory">
       <UniqueIdentifier>{5c4772fb-0dca-4983-bf6b-9843f2ce63a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="2DFramework\editbox">
+      <UniqueIdentifier>{1dec7e4c-1646-401a-8435-9ca07918e97d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -237,6 +240,12 @@
     <ClInclude Include="sceneStory.h">
       <Filter>MainGame\sceneStory</Filter>
     </ClInclude>
+    <ClInclude Include="editbox.h">
+      <Filter>2DFramework\editbox</Filter>
+    </ClInclude>
+    <ClInclude Include="editboxManager.h">
+      <Filter>2DFramework\editbox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -361,6 +370,12 @@
     </ClCompile>
     <ClCompile Include="sceneStory.cpp">
       <Filter>MainGame\sceneStory</Filter>
+    </ClCompile>
+    <ClCompile Include="editbox.cpp">
+      <Filter>2DFramework\editbox</Filter>
+    </ClCompile>
+    <ClCompile Include="editboxManager.cpp">
+      <Filter>2DFramework\editbox</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

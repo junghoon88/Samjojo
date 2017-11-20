@@ -2,6 +2,7 @@
 #include "gameNode.h"
 #include "Unit.h"
 #include "button.h"
+#include "editbox.h"
 
 enum UNITEDITOR_BUTTON
 {
@@ -15,6 +16,8 @@ enum UNITEDITOR_BUTTON
 	UNITEDITOR_BUTTON_MAX
 };
 
+
+
 class sceneUnitEditor : public gameNode
 {
 private:
@@ -22,6 +25,10 @@ private:
 
 	button* _ctrlButton[UNITEDITOR_BUTTON_MAX];
 	TCHAR _strButton[UNITEDITOR_BUTTON_MAX][100];
+
+
+	editbox* _editTest;
+
 
 	int _faceNum;
 
