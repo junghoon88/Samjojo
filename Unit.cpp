@@ -15,7 +15,9 @@ Unit::Unit()
 	_team = TEAM_NONE;
 
 	//¿ÃπÃ¡ˆ
-	_img = NULL;
+	_imgFace = NULL;
+	_imgStory = NULL;
+	_imgBattle = NULL;
 	
 	ZeroMemory(&_atkRange, sizeof(_atkRange));
 

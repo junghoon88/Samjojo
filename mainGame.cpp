@@ -1,6 +1,15 @@
 #include "stdafx.h"
 #include "mainGame.h"
 
+#include "sceneInit.h"
+#include "sceneLoading.h"
+#include "sceneStory.h"
+#include "sceneSelect.h"
+#include "sceneBattle.h"
+#include "sceneMaptool.h"
+#include "sceneUnitEditor.h"
+
+
 mainGame::mainGame()
 {
 

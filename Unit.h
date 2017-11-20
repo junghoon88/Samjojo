@@ -52,7 +52,9 @@ protected:
 	TEAM			_team;
 
 	//이미지
-	image*			_img;
+	image*			_imgFace;
+	image*			_imgStory;
+	image*			_imgBattle;
 	POINT			_pt;
 	RECT			_rc;
 	POINT			_tilePt;	//타일 번호
