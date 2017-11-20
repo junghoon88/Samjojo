@@ -41,7 +41,7 @@ using namespace IOTA_UTIL;
 //===============================================
 
 #define WINNAME (LPTSTR)(TEXT("Samjojo"))
-#define WINSTARTX 100
+#define WINSTARTX 0
 #define WINSTARTY 0
 #define WINSIZEX 640 + 80 + 800
 #define WINSIZEY 800

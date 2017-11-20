@@ -17,6 +17,15 @@ HRESULT sceneMaptool::init(void)
 	setup();
 
 	_selectSampleIndex = 0;
+	
+	_countX = _countY = 0;
+
+	for (int i = 0; i < 9; i++)
+	{
+		_tileSizeX[i] = _tileSizeY[i] = 20 + i * 5;
+	}
+
+	_selectSize = 8;
 
 	return S_OK;
 }
@@ -32,9 +41,28 @@ void sceneMaptool::update(void)
 		_ctrlButton[i]->update();
 	}
 
-	if (KEYMANAGER->isOnceKeyDown(MK_LBUTTON) || KEYMANAGER->isStayKeyDown(MK_LBUTTON))
-		setMap();
+	if (KEYMANAGER->isOnceKeyDown(MK_LBUTTON) || KEYMANAGER->isStayKeyDown(MK_LBUTTON))	setMap();
 
+	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
+	{
+		_countX--;
+		if (_countX < 0) _countX = 0;
+	}
+	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
+	{
+		_countX++;
+		if (_countX + 20 > _tileSizeX[_selectSize]) _countX = _tileSizeX[_selectSize] - 20;
+	}
+	if (KEYMANAGER->isStayKeyDown(VK_UP))
+	{
+		_countY--;
+		if (_countY < 0) _countY = 0;
+	}
+	if (KEYMANAGER->isStayKeyDown(VK_DOWN))
+	{
+		_countY++;
+		if (_countY + 20 > _tileSizeY[_selectSize]) _countY = _tileSizeY[_selectSize] - 20;
+	}
 }
 
 void sceneMaptool::render(void)	
@@ -47,9 +75,12 @@ void sceneMaptool::render(void)
 
 
 	//지형
-	for (int i = 0; i < TILEX * TILEY; i++)
+	for (int i = 0; i < 20; i++)
 	{
-		IMAGEMANAGER->render(_sampleTiles[_tiles[i].sampleTerrainIdx].strImgKey, getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top);
+		for (int j = 0; j < 20; j++)
+		{
+			IMAGEMANAGER->render(_sampleTiles[_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleTerrainIdx].strImgKey, getMemDC(), _tiles[i * 20 * (TILEX / 20) + j].rc.left, _tiles[i * 20 * (TILEX / 20) + j].rc.top);
+		}
 	}
 
 	//오브젝트
@@ -165,6 +196,7 @@ void sceneMaptool::setup(void)
 
 void sceneMaptool::setMap(void)
 {
+	if (PtInRect(&RectMake(WINSIZEX - 3 * TILESIZE, 0, 3 * TILESIZE, 10 * TILESIZE), _ptMouse))
 	for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
 	{
 		if (PtInRect(&_sampleTiles[i].rcTile, _ptMouse))
@@ -174,28 +206,32 @@ void sceneMaptool::setMap(void)
 		}
 	}
 
-	for (int i = 0; i < TILEX * TILEY; i++)
+	if (PtInRect(&RectMake(0, 0, 20 * TILESIZE, 20 * TILESIZE), _ptMouse))
+	for (int i = 0; i < TILEX; i++)
 	{
-		if (PtInRect(&_tiles[i].rc, _ptMouse))
+		for (int j = 0; j < TILEY; j++)
 		{
-			if (_ctrSelect == CTRL_TERRAINDRAW)
+			if (PtInRect(&_tiles[i * 20 * (TILEX / 20) + j].rc, _ptMouse))
 			{
-				_tiles[i].sampleTerrainIdx = _selectSampleIndex;
+				if (_ctrSelect == CTRL_TERRAINDRAW)
+				{
+					_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleTerrainIdx = _selectSampleIndex;
 
-				_tiles[i].terrain = terrainSelect(_tiles[i].sampleTerrainIdx);
-			}
-			else if (_ctrSelect == CTRL_OBJDRAW)
-			{
-				//_tiles[i].obj = objSelect(_currentTile.x, _currentTile.y);
-			}
-			else if (_ctrSelect == CTRL_ERASER)
-			{
-				_tiles[i].sampleTerrainIdx = NULL;
+					_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].terrain = terrainSelect(_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleTerrainIdx);
+				}
+				else if (_ctrSelect == CTRL_OBJDRAW)
+				{
+					//_tiles[i].obj = objSelect(_currentTile.x, _currentTile.y);
+				}
+				else if (_ctrSelect == CTRL_ERASER)
+				{
+					_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleTerrainIdx = NULL;
 
-				//_tiles[i].obj = OBJ_NONE;
-			}
+					//_tiles[i].obj = OBJ_NONE;
+				}
 
-			break;
+				break;
+			}
 		}
 	}
 }

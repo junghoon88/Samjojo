@@ -24,7 +24,16 @@ private:
 
 	button* _ctrlButton[CTRL_END];
 	TCHAR _strButton[CTRL_END][100];
+
 	int _ctrSelect;
+
+	int _countX;
+	int _countY;
+
+	int _tileSizeX[9];
+	int _tileSizeY[9];
+
+	int _selectSize;
 
 private:
 	static void ctrlSelectSave(void* obj);
