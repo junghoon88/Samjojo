@@ -64,7 +64,7 @@ void mainGame::initScene(void)
 	_sceneBattle->setLinkAdressFriend(_friend);
 	SCENEMANAGER->addScene(L"ÀüÅõ¾À", _sceneBattle);
 
-	SCENEMANAGER->changeScene(L"¸ÊÅø¾À");
+	SCENEMANAGER->changeScene(L"À¯´Ö¿¡µğÅÍ");
 }
 
 
