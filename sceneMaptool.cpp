@@ -97,6 +97,8 @@ void sceneMaptool::render(void)
 
 }
 
+//-----------------------------------------------------------------------------------------
+//callback functions
 void sceneMaptool::ctrlSelectSave(void* obj)
 {
 	sceneMaptool* maptool = (sceneMaptool*)obj;
@@ -131,7 +133,8 @@ void sceneMaptool::ctrlSelectEraser(void* obj)
 
 	maptool->setCtrlSelect(CTRL_ERASER);
 }
-
+//~callback functions
+//-----------------------------------------------------------------------------------------
 
 void sceneMaptool::setup(void)
 {
@@ -241,7 +244,7 @@ void sceneMaptool::save(void)
 	HANDLE file;
 	DWORD write;
 
-	file = CreateFile(L"mapSave.map", GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	file = CreateFile(L"MapData/mapSave.map", GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
 
@@ -254,7 +257,7 @@ void sceneMaptool::load(void)
 	HANDLE file;
 	DWORD read;
 
-	file = CreateFile(L"mapSave.map", GENERIC_READ, 0, NULL,
+	file = CreateFile(L"MapData/mapSave.map", GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);

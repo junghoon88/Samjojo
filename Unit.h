@@ -1,10 +1,12 @@
 #pragma once
 #include "Item.h"
 
+#define UNIT_ATTACK_RANGE_MAX 7
 
 struct tagStatus
 {
 	TCHAR name[30];
+	bool isLive;
 	int level;
 	int exp;
 	int expMax;
@@ -22,6 +24,21 @@ struct tagStatus
 	int Int;		//지력
 	int Dex;		//민첩
 	int Luk;		//운
+
+	//레벨당 증가하는 수치
+	int LvPerHPMax;
+	int LvPerMPMax;
+	int LvPerAtk;		//공격력
+	int LvPerDep;		//방어력
+	int LvPerRes;		//정신력
+	int LvPerAgl;		//순발력
+	int LvPerFig;		//사기
+	int LvPerPwr;		//무력
+	int LvPerLds;		//통솔
+	int LvPerInt;		//지력
+	int LvPerDex;		//민첩
+	int LvPerLuk;		//운
+
 };
 
 class Unit
@@ -35,11 +52,14 @@ protected:
 	TEAM			_team;
 
 	//이미지
-	image*			_img;
+	image*			_imgFace;
+	image*			_imgStory;
+	image*			_imgBattle;
 	POINT			_pt;
 	RECT			_rc;
 	POINT			_tilePt;	//타일 번호
 
+	BOOL			_atkRange[UNIT_ATTACK_RANGE_MAX][UNIT_ATTACK_RANGE_MAX];
 	
 
 

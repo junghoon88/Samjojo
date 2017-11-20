@@ -76,17 +76,20 @@
     <Filter Include="MainGame\sceneInit">
       <UniqueIdentifier>{f1a0224a-0221-42bf-b3ab-fb15fe89edbe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainGame\sceneBattle\Units">
-      <UniqueIdentifier>{b9b81015-20cd-4dc3-9339-a6d1c322fa20}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MainGame\sceneBattle\Items">
       <UniqueIdentifier>{9b5dfb22-898e-4678-923e-f8e470a7031a}</UniqueIdentifier>
     </Filter>
     <Filter Include="MainGame\sceneBattle\aStar">
       <UniqueIdentifier>{e9da99b9-273c-45a4-819e-2a1875cad09d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\sceneUnitEditor">
+      <UniqueIdentifier>{f4bf651e-3ac3-43eb-a805-858c47d013b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Units">
+      <UniqueIdentifier>{b9b81015-20cd-4dc3-9339-a6d1c322fa20}</UniqueIdentifier>
+    </Filter>
     <Filter Include="MainGame\sceneStory">
-      <UniqueIdentifier>{c64bfb5a-5052-472b-9d5d-d982a31e9725}</UniqueIdentifier>
+      <UniqueIdentifier>{5c4772fb-0dca-4983-bf6b-9843f2ce63a1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -202,22 +205,13 @@
       <Filter>MainGame\sceneInit</Filter>
     </ClInclude>
     <ClInclude Include="Unit.h">
-      <Filter>MainGame\sceneBattle\Units</Filter>
+      <Filter>MainGame\Units</Filter>
     </ClInclude>
     <ClInclude Include="sceneBattle.h">
       <Filter>MainGame\sceneBattle</Filter>
     </ClInclude>
     <ClInclude Include="Item.h">
       <Filter>MainGame\sceneBattle\Items</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>MainGame</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>MainGame</Filter>
-    </ClInclude>
-    <ClInclude Include="Friend.h">
-      <Filter>MainGame</Filter>
     </ClInclude>
     <ClInclude Include="aStar.h">
       <Filter>MainGame\sceneBattle\aStar</Filter>
@@ -228,8 +222,20 @@
     <ClInclude Include="gameMap.h">
       <Filter>MainGame\sceneBattle\aStar</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>MainGame\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="Friend.h">
+      <Filter>MainGame\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>MainGame\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneUnitEditor.h">
+      <Filter>MainGame\sceneUnitEditor</Filter>
+    </ClInclude>
     <ClInclude Include="sceneStory.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>MainGame\sceneStory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -324,22 +330,13 @@
       <Filter>MainGame\sceneInit</Filter>
     </ClCompile>
     <ClCompile Include="Unit.cpp">
-      <Filter>MainGame\sceneBattle\Units</Filter>
+      <Filter>MainGame\Units</Filter>
     </ClCompile>
     <ClCompile Include="sceneBattle.cpp">
       <Filter>MainGame\sceneBattle</Filter>
     </ClCompile>
     <ClCompile Include="Item.cpp">
       <Filter>MainGame\sceneBattle\Items</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>MainGame</Filter>
-    </ClCompile>
-    <ClCompile Include="Friend.cpp">
-      <Filter>MainGame</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>MainGame</Filter>
     </ClCompile>
     <ClCompile Include="aStar.cpp">
       <Filter>MainGame\sceneBattle\aStar</Filter>
@@ -350,8 +347,20 @@
     <ClCompile Include="gameMap.cpp">
       <Filter>MainGame\sceneBattle\aStar</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>MainGame\Units</Filter>
+    </ClCompile>
+    <ClCompile Include="Friend.cpp">
+      <Filter>MainGame\Units</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>MainGame\Units</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneUnitEditor.cpp">
+      <Filter>MainGame\sceneUnitEditor</Filter>
+    </ClCompile>
     <ClCompile Include="sceneStory.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>MainGame\sceneStory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

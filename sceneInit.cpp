@@ -37,6 +37,7 @@ void sceneInit::render(void)
 void sceneInit::initImage(void)
 {
 	initImageMapTool();
+	initImageUnitEditor();
 }
 
 void sceneInit::initImageMapTool(void)
@@ -54,9 +55,21 @@ void sceneInit::initImageMapTool(void)
 		}
 	}
 
-	IMAGEMANAGER->addFrameImage(L"¸ÊÅø¹öÆ°", L"image/MapTool/button.bmp", 100, 60, 1, 2);
+	IMAGEMANAGER->addFrameImage(L"¸ÊÅø¹öÆ°", L"image/button.bmp", 100, 60, 1, 2);
 
 
+}
+
+void sceneInit::initImageUnitEditor(void)
+{
+	TCHAR strKey[100], strName[100];
+	//face
+	for (int i = 0; i <= FACE_MAX; i++)
+	{
+		_stprintf(strKey,  L"face %05d - size(128, 128)", i);
+		_stprintf(strName, L"image/face/face %05d.bmp", i);
+		IMAGEMANAGER->addImage(strKey, strName, 128, 128);
+	}
 }
 
 

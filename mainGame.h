@@ -1,11 +1,10 @@
 #pragma once
 #include "gameNode.h"
-#include "sceneInit.h"
-#include "sceneLoading.h"
-#include "sceneStory.h"
-#include "sceneSelect.h"
-#include "sceneBattle.h"
-#include "sceneMaptool.h"
+
+
+#include "Player.h"
+#include "Friend.h"
+#include "Enemy.h"
 
 class mainGame : public gameNode
 {

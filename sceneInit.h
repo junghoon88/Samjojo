@@ -10,6 +10,7 @@ private:
 
 
 	void initImageMapTool(void);
+	void initImageUnitEditor(void);
 
 public:
 	HRESULT init(void);
