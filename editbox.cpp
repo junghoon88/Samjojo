@@ -35,21 +35,18 @@ void editbox::update(void)
 {
 	if (PtInRect(&_rc, _ptMouse))
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
 			_clicked = true;
 		}
 	}
 	else
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
 			_clicked = false;
 		}
 	}
-
-
-	scanAll();
 }
 
 void editbox::render(int textOffsetX, int textOffsetY)
@@ -76,6 +73,7 @@ void editbox::render(int textOffsetX, int textOffsetY)
 	TextOut(getMemDC(), _rc.left + textOffsetX, _rc.top + textOffsetY, _str, _tcslen(_str));
 }
 
+#if 0 //»¹ÁþÀÇÇöÈ²
 bool editbox::scanNum(void)
 {
 	if (!_clicked) return false;
@@ -169,10 +167,34 @@ void editbox::scanAll(void)
 {
 	if (!_clicked) return;
 
-	scanDelete();
+	//scanDelete();
 
-	if (scanNum())
-		return;
-	if (scanChar())
-		return;
+	//if (scanNum())
+	//	return;
+	//if (scanChar())
+	//	return;
+}
+#endif
+
+
+void editbox::getChar(WPARAM wParam)
+{
+	if (!_clicked) return;
+
+	int len = _tcslen(_str);
+
+
+	if (wParam == VK_BACK || wParam == VK_DELETE)
+	{
+		if (len == 0) return;
+
+		TCHAR str[128] = L"";
+		_tcsncpy(str, _str, len - 1);
+		_tcscpy(_str, str);
+	}
+	else
+	{
+		_str[len] = wParam;
+		_str[len + 1] = 0;
+	}
 }

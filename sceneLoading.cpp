@@ -39,7 +39,7 @@ void sceneLoading::update(void)
 {
 	_loading->update();
 
-	if (_loading->loadingDone())
+	if (_loading->loadingImageDone())
 	{
 		SCENEMANAGER->changeScene(L"Çù°î¾À");
 	}

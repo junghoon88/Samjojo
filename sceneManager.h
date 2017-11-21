@@ -29,6 +29,7 @@ public:
 	void release(void);
 	void update(void);
 	void render(void);
+	void getChar(WPARAM wParam);
 
 	//¾À Ãß°¡
 	gameNode* addScene(wstring sceneName, gameNode* scene);

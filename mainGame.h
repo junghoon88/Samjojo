@@ -1,7 +1,6 @@
 #pragma once
 #include "gameNode.h"
 
-
 #include "Player.h"
 #include "Friend.h"
 #include "Enemy.h"
@@ -21,7 +20,8 @@ public:
 	virtual void release(void);		//메모리 해제
 	virtual void update(void);		//연산관련(타이머)
 	virtual void render(void);	//그려주는 함수
-	
+	virtual void getChar(WPARAM wParam);
+
 	mainGame();
 	~mainGame();
 };

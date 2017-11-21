@@ -22,6 +22,7 @@ struct tagImageResource
 	int frameX, frameY;
 	bool trans;
 	COLORREF transColor;
+	bool blend;
 };
 
 class loadItem
@@ -32,16 +33,12 @@ private:
 
 public:
 
-	HRESULT initForImage(wstring keyName, int width, int height);
-	HRESULT initForImage(wstring keyName, const TCHAR* fileName, int width, int height,
-		BOOL trans = FALSE, COLORREF transColor = FALSE);
-	HRESULT initForImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height,
-		BOOL trans = FALSE, COLORREF transColor = FALSE);
+	HRESULT initForImage(wstring keyName, int width, int height, bool blend = FALSE);
+	HRESULT initForImage(wstring keyName, const TCHAR* fileName, int width, int height, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
+	HRESULT initForImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
 
-	HRESULT initForFrameImage(wstring keyName, const TCHAR* fileName, int width, int height,
-		int frameX, int frameY, BOOL trans = FALSE, COLORREF transColor = FALSE);
-	HRESULT initForFrameImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height,
-		int frameX, int frameY, BOOL trans = FALSE, COLORREF transColor = FALSE);
+	HRESULT initForFrameImage(wstring keyName, const TCHAR* fileName, int width, int height, int frameX, int frameY, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
+	HRESULT initForFrameImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height, int frameX, int frameY, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
 
 	LOAD_KIND getLoadingKind() { return _kind; }
 
@@ -58,7 +55,9 @@ private:
 	typedef vector<loadItem*>::iterator arrLoadItemIter;
 
 private:
-	arrLoadItem _vLoadItem;
+	arrLoadItem _vLoadImage;
+
+
 	image* _background;
 	progressBar* _loadingBar;
 
@@ -70,15 +69,15 @@ public:
 	void update();
 	void render();
 
-	void loadImage(wstring keyName, int width, int height);
-	void loadImage(wstring keyName, const TCHAR* fileName, int width, int height, BOOL trans = FALSE, COLORREF transColor = FALSE);
-	void loadImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height, BOOL trans = FALSE, COLORREF transColor = FALSE);
-	void loadFrameImage(wstring keyName, const TCHAR* fileName, int width, int height, int frameX, int frameY, BOOL trans = FALSE, COLORREF transColor = FALSE);
-	void loadFrameImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height, int frameX, int frameY, BOOL trans = FALSE, COLORREF transColor = FALSE);
+	void loadImage(wstring keyName, int width, int height, bool blend = FALSE);
+	void loadImage(wstring keyName, const TCHAR* fileName, int width, int height, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
+	void loadImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
+	void loadFrameImage(wstring keyName, const TCHAR* fileName, int width, int height, int frameX, int frameY, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
+	void loadFrameImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height, int frameX, int frameY, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
 
-	BOOL loadingDone();
+	BOOL loadingImageDone();
 
-	vector<loadItem*> getLoadItem() { return _vLoadItem; }
+	vector<loadItem*> getLoadItem() { return _vLoadImage; }
 
 
 	loading();

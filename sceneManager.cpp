@@ -64,6 +64,11 @@ void sceneManager::render(void)
 	if (_currentScene) _currentScene->render();
 }
 
+void sceneManager::getChar(WPARAM wParam)
+{
+	if (_currentScene) _currentScene->getChar(wParam);
+}
+
 
 //¾À Ãß°¡
 gameNode* sceneManager::addScene(wstring sceneName, gameNode* scene)				 

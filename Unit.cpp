@@ -6,6 +6,7 @@ Unit::Unit()
 {
 	ZeroMemory(&_status, sizeof(tagStatus));
 	_status.isLive = true;
+	_status.enterScenario = 1;
 	_status.level = 1;
 
 	_itemW = NULL;

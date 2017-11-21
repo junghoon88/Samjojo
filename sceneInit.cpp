@@ -66,9 +66,9 @@ void sceneInit::initImageUnitEditor(void)
 	//face
 	for (int i = 0; i <= FACE_MAX; i++)
 	{
-		_stprintf(strKey,  L"face %05d - size(128, 128)", i);
+		_stprintf(strKey,  L"face %05d", i);
 		_stprintf(strName, L"image/face/face %05d.bmp", i);
-		IMAGEMANAGER->addImage(strKey, strName, 128, 128);
+		IMAGEMANAGER->addImage(strKey, strName, 120, 120);
 	}
 }
 

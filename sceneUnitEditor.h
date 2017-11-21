@@ -26,8 +26,7 @@ private:
 	button* _ctrlButton[UNITEDITOR_BUTTON_MAX];
 	TCHAR _strButton[UNITEDITOR_BUTTON_MAX][100];
 
-
-	editbox* _editTest;
+	editbox* _ebtest;
 
 
 	int _faceNum;
@@ -48,6 +47,7 @@ public:
 	void release(void);
 	void update(void);
 	void render(void);
+	void getChar(WPARAM wParam);
 
 public:
 	inline void setFacePrev(void) { _faceNum = _faceNum == 0 ? FACE_MAX : _faceNum - 1; }

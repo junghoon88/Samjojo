@@ -79,6 +79,11 @@ void gameNode::render(void)
 
 }
 
+void gameNode::getChar(WPARAM wParam)
+{
+
+}
+
 
 LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -114,6 +119,9 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 					PostMessage(hWnd, WM_DESTROY, 0, 0);
 				break;
 			}
+		break;
+		case WM_CHAR:
+			this->getChar(wParam);
 		break;
 		case WM_DESTROY:
 		//윈도우 창 종료 함수

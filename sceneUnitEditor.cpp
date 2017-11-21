@@ -35,11 +35,10 @@ HRESULT sceneUnitEditor::init(void)
 
 	_faceNum = 0;
 
+	_ebtest = new editbox();
+	_ebtest->init();
+	_ebtest->setRect(RectMake(400, 100, 100, 30));
 
-	//_editTest = EDITBOXMANAGER->addEditbox(L"Å×½ºÆ®", RectMake(200, 100, 100, 30));
-	_editTest = new editbox;
-	_editTest->init();
-	_editTest->setRect(RectMake(200, 100, 100, 30));
 
 	return S_OK;
 }
@@ -47,8 +46,9 @@ HRESULT sceneUnitEditor::init(void)
 void sceneUnitEditor::release(void)
 {
 	SAFE_DELETE(_unit);
-	_editTest->release();
-	SAFE_DELETE(_editTest);
+
+	_ebtest->release();
+	SAFE_DELETE(_ebtest);
 }
 
 void sceneUnitEditor::update(void)
@@ -58,14 +58,13 @@ void sceneUnitEditor::update(void)
 		_ctrlButton[i]->update();
 	}
 
-	
-	_editTest->update();
+	_ebtest->update();
 }
 
 void sceneUnitEditor::render(void)
 {
 	TCHAR strKey[100];
-	_stprintf(strKey, L"face %05d - size(128, 128)", _faceNum);
+	_stprintf(strKey, L"face %05d", _faceNum);
 	image* img = IMAGEMANAGER->findImage(strKey);
 	IMAGEMANAGER->findImage(strKey)->render(getMemDC(), 100, 100);
 
@@ -75,7 +74,12 @@ void sceneUnitEditor::render(void)
 		TextOut(getMemDC(), _ctrlButton[i]->getRect().left, _ctrlButton[i]->getRect().top, _strButton[i], _tcslen(_strButton[i]));
 	}
 
-	_editTest->render();
+	_ebtest->render();
+}
+
+void sceneUnitEditor::getChar(WPARAM wParam)
+{
+	_ebtest->getChar(wParam);
 }
 
 //-----------------------------------------------------------------------------------------

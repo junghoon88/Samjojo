@@ -36,6 +36,25 @@ HRESULT mainGame::init(void)
 
 	initScene();
 
+	//모든 파일 스캔 test
+	WIN32_FIND_DATA wfd;
+	HANDLE handle = FindFirstFile(L"image/logo/*.bmp", &wfd);
+	// 찾는 파일이 있다면,
+	while(handle != INVALID_HANDLE_VALUE)
+	{
+	    
+	    // FindNextFile 리턴 값으로 다음값이 있을 경우 TRUE
+	    // 없을 경우 FALSE 값 리턴
+		if (!FindNextFile(handle, &wfd))
+		{
+			break;
+		}
+	}
+	// 파일 찾기 핸들 값 닫기   
+	FindClose(handle);
+
+
+
 
 
 
@@ -46,7 +65,7 @@ void mainGame::initScene(void)
 {
 	gameNode* node = SCENEMANAGER->addScene(L"초기화씬", new sceneInit);  //게임 리소스 초기화
 	node->init();
-	SCENEMANAGER->addScene(L"로딩씬", new sceneLoading); //게임 세이브 파일 로딩씬
+	SCENEMANAGER->addScene(L"로딩씬", new sceneLoading); //맵데이터, 유닛데이터 파일 로딩씬
 	SCENEMANAGER->addScene(L"맵툴씬", new sceneMaptool);
 	SCENEMANAGER->addScene(L"유닛에디터", new sceneUnitEditor);
 
@@ -124,5 +143,13 @@ void mainGame::render(void)
 	//백버퍼에 있는걸 HDC로 그려주는 역할
 	this->getBackBuffer()->render(getHDC(), 0, 0);
 
+}
+
+void mainGame::getChar(WPARAM wParam)
+{
+	if (SCENEMANAGER->isCurScene(L"유닛에디터"))
+	{
+		SCENEMANAGER->getChar(wParam);
+	}
 }
 

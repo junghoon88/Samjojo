@@ -1,5 +1,6 @@
 #pragma once
 #include "gameNode.h"
+#include "mainGame.h"
 
 class editbox : public gameNode
 {
@@ -17,14 +18,17 @@ public:
 	~editbox();
 
 	HRESULT init(void);
-	void release(void);
-	void update(void);
-	void render(int textOffsetX = 0, int textOffsetY = 0);
+	virtual void release(void);
+	virtual void update(void);
+	virtual void render(int textOffsetX = 0, int textOffsetY = 0);
+	virtual void getChar(WPARAM wParam);
 
 	bool scanNum(void);
 	bool scanChar(void);
 	void scanDelete(void);
 	void scanAll(void);
+
+
 
 public:
 	inline void setRect(RECT rc) { _rc = rc; }
@@ -36,6 +40,7 @@ public:
 	inline void setOnlyNum(bool onlynum) { _onlyNum = onlynum; }
 	inline void setImage(image* img) { _img = img; }
 	inline image* getImage(void) { return _img; }
+	inline void clearStr(void) { _stprintf(_str, L""); }
 	
 };
 

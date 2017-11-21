@@ -7,6 +7,7 @@ struct tagStatus
 {
 	TCHAR name[30];
 	bool isLive;
+	int enterScenario; //출전 가능한 시나리오(이 수치 이후 시나리오 출전가능)
 	int level;
 	int exp;
 	int expMax;

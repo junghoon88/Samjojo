@@ -4,7 +4,7 @@
 loadItem::loadItem(){}
 loadItem::~loadItem(){}
 
-HRESULT loadItem::initForImage(wstring keyName, int width, int height)
+HRESULT loadItem::initForImage(wstring keyName, int width, int height, bool blend)
 {
 	_kind = LOAD_KIND_IMAGE_0;
 
@@ -13,12 +13,12 @@ HRESULT loadItem::initForImage(wstring keyName, int width, int height)
 	_imageResource.keyName = keyName;
 	_imageResource.width = width;
 	_imageResource.height = height;
+	_imageResource.blend = blend;
 
 	return S_OK;
 }
 
-HRESULT loadItem::initForImage(wstring keyName, const TCHAR* fileName, int width, int height,
-	BOOL trans, COLORREF transColor)
+HRESULT loadItem::initForImage(wstring keyName, const TCHAR* fileName, int width, int height, BOOL trans, COLORREF transColor, bool blend)
 {
 	_kind = LOAD_KIND_IMAGE_1;
 
@@ -30,12 +30,12 @@ HRESULT loadItem::initForImage(wstring keyName, const TCHAR* fileName, int width
 	_imageResource.height = height;
 	_imageResource.trans = trans;
 	_imageResource.transColor = transColor;
+	_imageResource.blend = blend;
 
 	return S_OK;
 }
 
-HRESULT loadItem::initForImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height,
-	BOOL trans, COLORREF transColor)
+HRESULT loadItem::initForImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height, BOOL trans, COLORREF transColor, bool blend)
 {
 	_kind = LOAD_KIND_IMAGE_2;
 
@@ -49,12 +49,12 @@ HRESULT loadItem::initForImage(wstring keyName, const TCHAR* fileName, float x, 
 	_imageResource.height = height;
 	_imageResource.trans = trans;
 	_imageResource.transColor = transColor;
+	_imageResource.blend = blend;
 
 	return S_OK;
 }
 
-HRESULT loadItem::initForFrameImage(wstring keyName, const TCHAR* fileName, int width, int height,
-	int frameX, int frameY, BOOL trans, COLORREF transColor)
+HRESULT loadItem::initForFrameImage(wstring keyName, const TCHAR* fileName, int width, int height, int frameX, int frameY, BOOL trans, COLORREF transColor, bool blend)
 {
 	_kind = LOAD_KIND_FRAMEIMAGE_0;
 
@@ -68,12 +68,13 @@ HRESULT loadItem::initForFrameImage(wstring keyName, const TCHAR* fileName, int 
 	_imageResource.frameY = frameY;
 	_imageResource.trans = trans;
 	_imageResource.transColor = transColor;
+	_imageResource.blend = blend;
 
 	return S_OK;
 }
 
 HRESULT loadItem::initForFrameImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height,
-	int frameX, int frameY, BOOL trans, COLORREF transColor)
+	int frameX, int frameY, BOOL trans, COLORREF transColor, bool blend)
 {
 	_kind = LOAD_KIND_FRAMEIMAGE_1;
 
@@ -89,6 +90,7 @@ HRESULT loadItem::initForFrameImage(wstring keyName, const TCHAR* fileName, floa
 	_imageResource.frameY = frameY;
 	_imageResource.trans = trans;
 	_imageResource.transColor = transColor;
+	_imageResource.blend = blend;
 
 	return S_OK;
 }
@@ -134,56 +136,56 @@ void loading::render()
 }
 
 
-void loading::loadImage(wstring keyName, int width, int height)
+void loading::loadImage(wstring keyName, int width, int height, bool blend)
 {
 	loadItem* item = new loadItem;
-	item->initForImage(keyName, width, height);
+	item->initForImage(keyName, width, height, blend);
 
-	_vLoadItem.push_back(item);
+	_vLoadImage.push_back(item);
 }
 
-void loading::loadImage(wstring keyName, const TCHAR* fileName, int width, int height, BOOL trans, COLORREF transColor)
+void loading::loadImage(wstring keyName, const TCHAR* fileName, int width, int height, BOOL trans, COLORREF transColor, bool blend)
 {
 	loadItem* item = new loadItem;
-	item->initForImage(keyName, fileName, width, height, trans, transColor);
+	item->initForImage(keyName, fileName, width, height, trans, transColor, blend);
 
-	_vLoadItem.push_back(item);
+	_vLoadImage.push_back(item);
 }
 
-void loading::loadImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height, BOOL trans, COLORREF transColor)
+void loading::loadImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height, BOOL trans, COLORREF transColor, bool blend)
 {
 	loadItem* item = new loadItem;
-	item->initForImage(keyName, fileName, x, y, width, height, trans, transColor);
+	item->initForImage(keyName, fileName, x, y, width, height, trans, transColor, blend);
 
-	_vLoadItem.push_back(item);
+	_vLoadImage.push_back(item);
 }
 
-void loading::loadFrameImage(wstring keyName, const TCHAR* fileName, int width, int height, int frameX, int frameY, BOOL trans, COLORREF transColor)
+void loading::loadFrameImage(wstring keyName, const TCHAR* fileName, int width, int height, int frameX, int frameY, BOOL trans, COLORREF transColor, bool blend)
 {
 	loadItem* item = new loadItem;
-	item->initForFrameImage(keyName, fileName, width, height, frameX, frameY, trans, transColor);
+	item->initForFrameImage(keyName, fileName, width, height, frameX, frameY, trans, transColor, blend);
 
-	_vLoadItem.push_back(item);
+	_vLoadImage.push_back(item);
 }
 
-void loading::loadFrameImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height, int frameX, int frameY, BOOL trans, COLORREF transColor)
+void loading::loadFrameImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height, int frameX, int frameY, BOOL trans, COLORREF transColor, bool blend)
 {
 	loadItem* item = new loadItem;
-	item->initForFrameImage(keyName, fileName, x, y, width, height, frameX, frameY, trans, transColor);
+	item->initForFrameImage(keyName, fileName, x, y, width, height, frameX, frameY, trans, transColor, blend);
 
-	_vLoadItem.push_back(item);
+	_vLoadImage.push_back(item);
 }
 
 
-BOOL loading::loadingDone()
+BOOL loading::loadingImageDone()
 {
 	//로딩이 끝났으면 다됐다고 전해라~
-	if (_currentGauge >= _vLoadItem.size())
+	if (_currentGauge >= _vLoadImage.size())
 	{
 		return TRUE;
 	}
 
-	loadItem* item = _vLoadItem[_currentGauge];
+	loadItem* item = _vLoadImage[_currentGauge];
 
 	switch (item->getLoadingKind())
 	{
@@ -196,34 +198,25 @@ BOOL loading::loadingDone()
 		case LOAD_KIND_IMAGE_1:
 		{
 			tagImageResource img = item->getImageResource();
-			IMAGEMANAGER->addImage(img.keyName, img.fileName,
-				img.width, img.height, img.trans, img.transColor);
+			IMAGEMANAGER->addImage(img.keyName, img.fileName, img.width, img.height, img.trans, img.transColor);
 		}
 		break;
 		case LOAD_KIND_IMAGE_2:
 		{
 			tagImageResource img = item->getImageResource();
-			IMAGEMANAGER->addImage(img.keyName, img.fileName,
-				img.x, img.y, img.width, img.height, 
-				img.trans, img.transColor);
+			IMAGEMANAGER->addImage(img.keyName, img.fileName, img.x, img.y, img.width, img.height, img.trans, img.transColor);
 		}
 		break;
 		case LOAD_KIND_FRAMEIMAGE_0:
 		{
 			tagImageResource img = item->getImageResource();
-			IMAGEMANAGER->addFrameImage(img.keyName, img.fileName,
-				img.width, img.height,
-				img.frameX, img.frameY,
-				img.trans, img.transColor);
+			IMAGEMANAGER->addFrameImage(img.keyName, img.fileName, img.width, img.height, img.frameX, img.frameY, img.trans, img.transColor);
 		}
 		break;
 		case LOAD_KIND_FRAMEIMAGE_1:
 		{
 			tagImageResource img = item->getImageResource();
-			IMAGEMANAGER->addFrameImage(img.keyName, img.fileName,
-				img.x, img.y, img.width, img.height,
-				img.frameX, img.frameY,
-				img.trans, img.transColor);
+			IMAGEMANAGER->addFrameImage(img.keyName, img.fileName, img.x, img.y, img.width, img.height, img.frameX, img.frameY, img.trans, img.transColor);
 		}
 		break;
 		case LOAD_KIND_SOUND:
@@ -233,7 +226,7 @@ BOOL loading::loadingDone()
 		break;
 	}
 
-	_loadingBar->setGauge(_currentGauge, _vLoadItem.size());
+	_loadingBar->setGauge(_currentGauge, _vLoadImage.size());
 	_currentGauge++;
 
 	return FALSE;
