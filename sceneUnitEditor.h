@@ -34,45 +34,60 @@ enum UNITEDITOR_BUTTON
 };
 
 //ctl + shift + u 대문자로
-enum UNITEDITOR_EDITBOX
+enum UNITEDITOR_NUMEDITBOX
 {
-	UNITEDITOR_EDITBOX_DATA_HP,
-	UNITEDITOR_EDITBOX_DATA_MP,
-	UNITEDITOR_EDITBOX_DATA_ATK,
-	UNITEDITOR_EDITBOX_DATA_DEP,
-	UNITEDITOR_EDITBOX_DATA_RES,
-	UNITEDITOR_EDITBOX_DATA_AGL,
-	UNITEDITOR_EDITBOX_DATA_FIG,
-	UNITEDITOR_EDITBOX_DATA_PWR,
-	UNITEDITOR_EDITBOX_DATA_LDS,
-	UNITEDITOR_EDITBOX_DATA_INT,
-	UNITEDITOR_EDITBOX_DATA_DEX,
-	UNITEDITOR_EDITBOX_DATA_LUK,
+	UNITEDITOR_NUMEDITBOX_DATA_HP,
+	UNITEDITOR_NUMEDITBOX_DATA_MP,
+	UNITEDITOR_NUMEDITBOX_DATA_ATK,
+	UNITEDITOR_NUMEDITBOX_DATA_DEP,
+	UNITEDITOR_NUMEDITBOX_DATA_RES,
+	UNITEDITOR_NUMEDITBOX_DATA_AGL,
+	UNITEDITOR_NUMEDITBOX_DATA_FIG,
+	UNITEDITOR_NUMEDITBOX_DATA_PWR,
+	UNITEDITOR_NUMEDITBOX_DATA_LDS,
+	UNITEDITOR_NUMEDITBOX_DATA_INT,
+	UNITEDITOR_NUMEDITBOX_DATA_DEX,
+	UNITEDITOR_NUMEDITBOX_DATA_LUK,
 
-	UNITEDITOR_EDITBOX_MAX
+	UNITEDITOR_NUMEDITBOX_MAX
 };
+
+enum UNITEDITOR_STREDITBOX
+{
+	UNITEDITOR_STREDITBOX_DATA_NAME,
+	UNITEDITOR_STREDITBOX_DATA_FAMILY,
+	UNITEDITOR_STREDITBOX_DATA_AOS,
+
+	UNITEDITOR_STREDITBOX_MAX
+};
+
 
 class sceneUnitEditor : public gameNode
 {
 private:
 	Unit* _unit;
 
+	tagStatus _tempStatus;
+
 	button* _ctrlButton[UNITEDITOR_BUTTON_MAX];
 	TCHAR _strButton[UNITEDITOR_BUTTON_MAX][100];
+	
 
+	editbox* _numEditBox[UNITEDITOR_NUMEDITBOX_MAX];
+	editbox* _strEditBox[UNITEDITOR_STREDITBOX_MAX];
 
-	//임시
-	RECT _editBox[UNITEDITOR_EDITBOX_MAX];
+private:
+	TCHAR* _filename;
+	
 
-	editbox* _editTest;
-
-
+private:
 	int _faceNum;
 	int _normalNum;
 	int _combatNum;
 	int _weaponNum;
 	int _armorNum;
 	int _subitemNum;
+
 
 private:
 	static void ctrlSelectDataNew(void* obj);
@@ -109,8 +124,18 @@ public:
 
 public:
 	void initButton(void);
+	void initValues(void);
+	void initEditbox(void);
+
+public:
 	void btnSetup(void);
 	void rectSketch(void);
+	void editBoxRender(void);
+	void unitImageRender(void);
+
+	void newUnit(void);
+	void loadUnit(void);
+	void saveUnit(void);
 
 public:
 	inline void setFacePrev(void) { _faceNum = _faceNum == 0 ? FACE_MAX : _faceNum - 1; }

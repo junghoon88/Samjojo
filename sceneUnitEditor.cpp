@@ -11,43 +11,14 @@ sceneUnitEditor::~sceneUnitEditor()
 {
 }
 
+
 HRESULT sceneUnitEditor::init(void)
 {
 	_unit = new Unit;
-
+	
 	initButton();
-
-
-	_stprintf(_strButton[UNITEDITOR_BUTTON_DATA_NEW],  L"NEW");
-	_stprintf(_strButton[UNITEDITOR_BUTTON_DATA_LOAD], L"LOAD");
-	_stprintf(_strButton[UNITEDITOR_BUTTON_DATA_SAVE], L"SAVE");
-	_stprintf(_strButton[UNITEDITOR_BUTTON_FACE_PREV], L"PREV");
-	_stprintf(_strButton[UNITEDITOR_BUTTON_FACE_NEXT], L"NEXT");
-	_stprintf(_strButton[UNITEDITOR_BUTTON_NORMAL_PREV], L"PREV");
-	_stprintf(_strButton[UNITEDITOR_BUTTON_NORMAL_NEXT], L"NEXT");
-	_stprintf(_strButton[UNITEDITOR_BUTTON_COMBAT_PREV], L"PREV");
-	_stprintf(_strButton[UNITEDITOR_BUTTON_COMBAT_NEXT], L"NEXT");
-	_stprintf(_strButton[UNITEDITOR_BUTTON_WEAPON_PREV], L"　◀");
-	_stprintf(_strButton[UNITEDITOR_BUTTON_WEAPON_NEXT], L"　▶");
-	_stprintf(_strButton[UNITEDITOR_BUTTON_ARMOR_PREV], L"　◀");
-	_stprintf(_strButton[UNITEDITOR_BUTTON_ARMOR_NEXT], L"　▶");
-	_stprintf(_strButton[UNITEDITOR_BUTTON_SUBITEM_PREV], L"　◀");
-	_stprintf(_strButton[UNITEDITOR_BUTTON_SUBITEM_NEXT], L"　▶");
-	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_NAME], L"이름");
-
-
-	_faceNum = 0;
-	_normalNum = 0;
-	_combatNum = 0;
-	_weaponNum = 0;
-	_armorNum = 0;
-	_subitemNum = 0;
-
-
-	//_editTest = EDITBOXMANAGER->addEditbox(L"테스트", RectMake(200, 100, 100, 30));
-	_editTest = new editbox;
-	_editTest->init();
-	_editTest->setRect(RectMake(500, 100, 100, 30));
+	initValues();
+	initEditbox();
 
 	return S_OK;
 }
@@ -55,8 +26,18 @@ HRESULT sceneUnitEditor::init(void)
 void sceneUnitEditor::release(void)
 {
 	SAFE_DELETE(_unit);
-	_editTest->release();
-	SAFE_DELETE(_editTest);
+
+	for (int i = 0; i < UNITEDITOR_NUMEDITBOX_MAX; i++)
+	{
+		_numEditBox[i]->release();
+		SAFE_DELETE(_numEditBox[i]);
+	}
+
+	for (int i = 0; i < UNITEDITOR_STREDITBOX_MAX; i++)
+	{
+		_strEditBox[i]->release();
+		SAFE_DELETE(_strEditBox[i]);
+	}
 }
 
 void sceneUnitEditor::update(void)
@@ -66,39 +47,32 @@ void sceneUnitEditor::update(void)
 		_ctrlButton[i]->update();
 	}
 
-	_editTest->update();
+	for (int i = 0; i < UNITEDITOR_NUMEDITBOX_MAX; i++)
+	{
+		_numEditBox[i]->update();
+	}
+
+	for (int i = 0; i < UNITEDITOR_STREDITBOX_MAX; i++)
+	{
+		_strEditBox[i]->update();
+	}
 }
 
 void sceneUnitEditor::render(void)
 {
-	rectSketch();
-
-	TCHAR strFaceKey[100];
-	_stprintf(strFaceKey, L"face %05d - size(128, 128)", _faceNum);
-	//image* img = IMAGEMANAGER->findImage(strFaceKey);	
-	IMAGEMANAGER->findImage(strFaceKey)->render(getMemDC(), 100, 100);
-
-	TCHAR strNormalKey[100];
-	_stprintf(strNormalKey, L"평조 %05d", _normalNum);
-	IMAGEMANAGER->findImage(strNormalKey)->render(getMemDC(), 100, 300);
-	//IMAGEMANAGER->findImage(strNormalKey)->frameRender(getMemDC(), 100, 300, 1, 1);
-
-	TCHAR strCombatKey[100];
-	_stprintf(strCombatKey, L"전조 %05d", _combatNum);
-	IMAGEMANAGER->findImage(strCombatKey)->render(getMemDC(), 100, 500);
-	//IMAGEMANAGER->findImage(strCombatKey)->frameRender(getMemDC(), 100, 300);
-
-	//_unit->setImage(strFaceKey, strNormalKey, strCombatKey);		<< 얼굴, 평조, 전조 순서로 키를전달해 이미지 셋
+	rectSketch();		// 컨트롤 박스들 위치 도안
+	editBoxRender();
+	unitImageRender();
 
 	for (int i = 0; i < UNITEDITOR_BUTTON_MAX; i++)
 	{
 		_ctrlButton[i]->render();
 		TextOut(getMemDC(), _ctrlButton[i]->getRect().left, _ctrlButton[i]->getRect().top, _strButton[i], _tcslen(_strButton[i]));
 	}
-
 }
 
-
+//--------------------------------------------------------------------------------------------------
+//init functions
 void sceneUnitEditor::initButton(void)
 {
 	//label
@@ -143,14 +117,80 @@ void sceneUnitEditor::initButton(void)
 	_ctrlButton[UNITEDITOR_BUTTON_DATA_LOAD]->init(L"맵툴버튼", 1300 + 50, 490 + 15, { 0, 0 }, { 0, 1 }, ctrlSelectDataLoad, this);
 	_ctrlButton[UNITEDITOR_BUTTON_DATA_SAVE] = new button;
 	_ctrlButton[UNITEDITOR_BUTTON_DATA_SAVE]->init(L"맵툴버튼", 1300 + 50, 550 + 15, { 0, 0 }, { 0, 1 }, ctrlSelectDataSave, this);
+
+
+	//--------------------------------------------------------------------------------------------
+	//버튼 이름 표시
+
+	_stprintf(_strButton[UNITEDITOR_BUTTON_DATA_NEW], L"NEW");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_DATA_LOAD], L"LOAD");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_DATA_SAVE], L"SAVE");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_FACE_PREV], L"PREV");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_FACE_NEXT], L"NEXT");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_NORMAL_PREV], L"PREV");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_NORMAL_NEXT], L"NEXT");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_COMBAT_PREV], L"PREV");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_COMBAT_NEXT], L"NEXT");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_WEAPON_PREV], L"　◀");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_WEAPON_NEXT], L"　▶");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_ARMOR_PREV], L"　◀");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_ARMOR_NEXT], L"　▶");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_SUBITEM_PREV], L"　◀");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_SUBITEM_NEXT], L"　▶");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_NAME], L"이름");
+
+	//-------------------------------------------------------------------------------------------
+}
+void sceneUnitEditor::initValues(void)
+{
+	_faceNum = 0;
+	_normalNum = 0;
+	_combatNum = 0;
+	_weaponNum = 0;
+	_armorNum = 0;
+	_subitemNum = 0;
+}
+void sceneUnitEditor::initEditbox(void)
+{
+	for (int i = 0; i < UNITEDITOR_STREDITBOX_MAX; i++)
+	{
+		_strEditBox[i] = new editbox;
+		_strEditBox[i]->init();
+	}
+	_strEditBox[UNITEDITOR_STREDITBOX_DATA_NAME]->setRect(RectMake(500, 100, 100, 30));
+	_strEditBox[UNITEDITOR_STREDITBOX_DATA_FAMILY]->setRect(RectMake(800, 100, 100, 30));
+	_strEditBox[UNITEDITOR_STREDITBOX_DATA_AOS]->setRect(RectMake(800, 140, 100, 30));
+
+	for (int i = 0; i < UNITEDITOR_NUMEDITBOX_MAX; i++)
+	{
+		_numEditBox[i] = new editbox;
+		_numEditBox[i]->init();
+		_numEditBox[i]->setOnlyNum(TRUE);
+	}
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_HP]->setRect(RectMake(500, 160, 100, 30));
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MP]->setRect(RectMake(500, 200, 100, 30));
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_ATK]->setRect(RectMake(500, 260, 100, 30));
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_DEP]->setRect(RectMake(500, 300, 100, 30));
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_RES]->setRect(RectMake(500, 340, 100, 30));
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_AGL]->setRect(RectMake(500, 380, 100, 30));
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_FIG]->setRect(RectMake(500, 420, 100, 30));
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_PWR]->setRect(RectMake(500, 480, 100, 30));
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LDS]->setRect(RectMake(500, 520, 100, 30));
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_INT]->setRect(RectMake(500, 560, 100, 30));
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_DEX]->setRect(RectMake(500, 600, 100, 30));
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LUK]->setRect(RectMake(500, 640, 100, 30));
+
+
 }
 
+//~init functions
+//-----------------------------------------------------------------------------------------
+//other functions
 void sceneUnitEditor::btnSetup(void)
 {
 	//_btnSave = CreateWindow("button", "저장", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 700, 500, 100, 30,
 	//	_hWnd, HMENU(0), _hInstance, NULL);
 }
-
 void sceneUnitEditor::rectSketch(void)
 {
 	Rectangle(getMemDC(), 100, 100, 300, 228);	//얼굴이미지
@@ -214,100 +254,191 @@ void sceneUnitEditor::rectSketch(void)
 	Rectangle(getMemDC(), 1300, 550, 1400, 580);	//로드
 	Rectangle(getMemDC(), 1300, 640, 1400, 670);	//종료
 
-	_editTest->render();
+
+}
+void sceneUnitEditor::editBoxRender(void)
+{
+	for (int i = 0; i < UNITEDITOR_NUMEDITBOX_MAX; i++)
+	{
+		_numEditBox[i]->render();
+	}
+
+	for (int i = 0; i < UNITEDITOR_STREDITBOX_MAX; i++)
+	{
+		_strEditBox[i]->render();
+	}
+}
+void sceneUnitEditor::unitImageRender(void)			// 해야될 것: 프레임 이미지로 입력받아 프레임렌더로 출력
+{
+	TCHAR strFaceKey[100];
+	_stprintf(strFaceKey, L"face %05d - size(128, 128)", _faceNum);
+	//image* img = IMAGEMANAGER->findImage(strFaceKey);	
+	IMAGEMANAGER->findImage(strFaceKey)->render(getMemDC(), 100, 100);
+
+	TCHAR strNormalKey[100];
+	_stprintf(strNormalKey, L"평조 %05d", _normalNum);
+	IMAGEMANAGER->findImage(strNormalKey)->render(getMemDC(), 100, 300);
+	//IMAGEMANAGER->findImage(strNormalKey)->frameRender(getMemDC(), 100, 300, 0, 0);
+
+	TCHAR strCombatKey[100];
+	_stprintf(strCombatKey, L"전조 %05d", _combatNum);
+	IMAGEMANAGER->findImage(strCombatKey)->render(getMemDC(), 100, 500);
+	//IMAGEMANAGER->findImage(strCombatKey)->frameRender(getMemDC(), 100, 300, 0, 0);
+
+	_unit->setImages(strFaceKey, strNormalKey, strCombatKey);		// 이미지 셋
+}
+
+void sceneUnitEditor::newUnit(void)
+{
+	this->init();
+
+	for (int i = 0; i < UNITEDITOR_NUMEDITBOX_MAX; i++)
+	{
+		// 문자열형 에딧박스 클리어
+	}
+
+	for (int i = 0; i < UNITEDITOR_STREDITBOX_MAX; i++)
+	{
+		// 숫자형 에딧박스 클리어
+	}
+}
+void sceneUnitEditor::loadUnit(void)		// 로드유닛 일단 보류
+{
+
+}
+void sceneUnitEditor::saveUnit(void)
+{
+	_tcscpy_s(_tempStatus.name, _strEditBox[UNITEDITOR_STREDITBOX_DATA_NAME]->getStr());
+	_tcscpy_s(_tempStatus.family, _strEditBox[UNITEDITOR_STREDITBOX_DATA_FAMILY]->getStr());
+	_tcscpy_s(_tempStatus.aos, _strEditBox[UNITEDITOR_STREDITBOX_DATA_AOS]->getStr());
+
+	_tempStatus.isLive = TRUE;
+	_tempStatus.level = 1;
+	_tempStatus.exp = 0;
+	_tempStatus.expMax = 100;
+	_tempStatus.HP = _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_HP]->getStrNum();
+	_tempStatus.HPMax = _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_HP]->getStrNum();
+	_tempStatus.MP = _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MP]->getStrNum();
+	_tempStatus.MPMax = _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MP]->getStrNum();
+	_tempStatus.Atk = _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_ATK]->getStrNum();
+	_tempStatus.Dep = _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_DEP]->getStrNum();
+	_tempStatus.Res = _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_RES]->getStrNum();
+	_tempStatus.Agl = _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_AGL]->getStrNum();
+	_tempStatus.Fig = _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_FIG]->getStrNum();
+	_tempStatus.Pwr = _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_PWR]->getStrNum();
+	_tempStatus.Lds = _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LDS]->getStrNum();
+	_tempStatus.Int = _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_INT]->getStrNum();
+	_tempStatus.Dex = _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_DEX]->getStrNum();
+	_tempStatus.Luk = _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LUK]->getStrNum();
+
+	_tempStatus.LvPerHPMax = 10;
+	_tempStatus.LvPerMPMax = 10;
+	_tempStatus.LvPerAtk = 1;
+	_tempStatus.LvPerDep = 1;
+	_tempStatus.LvPerRes = 1;
+	_tempStatus.LvPerAgl = 1;
+	_tempStatus.LvPerFig = 1;
+	_tempStatus.LvPerPwr = 1;
+	_tempStatus.LvPerLds = 1;
+	_tempStatus.LvPerInt = 1;
+	_tempStatus.LvPerDex = 1;
+	_tempStatus.LvPerLuk = 1;
+
+	_unit->setStatus(_tempStatus);
+
+	HANDLE file;
+	DWORD write;
+	TCHAR tempStr[1024];
+
+	_stprintf(tempStr, L"UnitData/%s", _filename);
+
+	file = CreateFile(tempStr, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	WriteFile(file, _unit, sizeof(Unit), &write, NULL);
+
+	CloseHandle(file);
+
 
 }
 
+//~other functions
 //-----------------------------------------------------------------------------------------
 //callback functions
 void sceneUnitEditor::ctrlSelectDataNew(void* obj) 
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
-
+	unitEditor->newUnit();
 }
-
 void sceneUnitEditor::ctrlSelectDataLoad(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
-
+	unitEditor->loadUnit();
 }
-
 void sceneUnitEditor::ctrlSelectDataSave(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
-
+	unitEditor->saveUnit();
 }
-
 void sceneUnitEditor::ctrlSelectFacePrev(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setFacePrev();
 }
-
 void sceneUnitEditor::ctrlSelectFaceNext(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setFaceNext();
 }
-
 void sceneUnitEditor::ctrlSelectNormalPrev(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setNormalPrev();
 }
-
 void sceneUnitEditor::ctrlSelectNormalNext(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setNormalNext();
 }
-
 void sceneUnitEditor::ctrlSelectCombatPrev(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setCombatPrev();
 }
-
 void sceneUnitEditor::ctrlSelectCombatNext(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setCombatNext();
 }
-
 void sceneUnitEditor::ctrlSelectWeaponPrev(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setWeaponPrev();
 }
-
 void sceneUnitEditor::ctrlSelectWeaponNext(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setWeaponNext();
 }
-
 void sceneUnitEditor::ctrlSelectArmorPrev(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setArmorPrev();
 }
-
 void sceneUnitEditor::ctrlSelectArmorNext(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setArmorNext();
 }
-
 void sceneUnitEditor::ctrlSelectSubitemPrev(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setSubitemPrev();
 }
-
 void sceneUnitEditor::ctrlSelectSubitemNext(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setSubitemNext();
 }
+
 //~callback functions
 //-----------------------------------------------------------------------------------------

@@ -35,14 +35,14 @@ void editbox::update(void)
 {
 	if (PtInRect(&_rc, _ptMouse))
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
 			_clicked = true;
 		}
 	}
 	else
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
 			_clicked = false;
 		}
