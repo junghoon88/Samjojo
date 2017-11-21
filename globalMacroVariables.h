@@ -16,8 +16,12 @@
 #define DIR_U			0x04
 #define DIR_D			0x08
 
-#define FACE_MAX		300
-
+#define FACE_MAX			300
+#define NORMAL_IMAGE_MAX	1
+#define COMBAT_IMAGE_MAX	1
+#define WEAPON_IMAGE_MAX	1
+#define ARMOR_IMAGE_MAX		1
+#define SUBITEM_IMAGE_MAX	1
 
 typedef enum DIRECTION
 {

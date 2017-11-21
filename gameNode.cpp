@@ -39,6 +39,7 @@ HRESULT gameNode::init(bool managerInit)
 		DATABASE->init();
 		MAINCAMERA->init();
 		RENDERMANAGER->init();
+		//EDITBOXMANAGER->init();
 	}
 
 	return S_OK;
@@ -49,17 +50,18 @@ void gameNode::release(void)
 	if (_managerInit)
 	{
 		//KillTimer(_hWnd, 1);
-		KEYMANAGER->releaseSingleton();
-		IMAGEMANAGER->releaseSingleton();
-		TXTDATA->releaseSingleton();
-		TIMEMANAGER->releaseSingleton();
-		SOUNDMANAGER->releaseSingleton();
-		EFFECTMANAGER->releaseSingleton();
-		SCENEMANAGER->releaseSingleton();
-		KEYANIMANAGER->releaseSingleton();
-		DATABASE->releaseSingleton();
-		MAINCAMERA->releaseSingleton();
-		RENDERMANAGER->releaseSingleton();
+		KEYMANAGER->release();					KEYMANAGER->releaseSingleton();
+		IMAGEMANAGER->release();				IMAGEMANAGER->releaseSingleton();
+		TXTDATA->release();						TXTDATA->releaseSingleton();
+		TIMEMANAGER->release();					TIMEMANAGER->releaseSingleton();
+		SOUNDMANAGER->release();				SOUNDMANAGER->releaseSingleton();
+		EFFECTMANAGER->release();				EFFECTMANAGER->releaseSingleton();
+		SCENEMANAGER->release();				SCENEMANAGER->releaseSingleton();
+		KEYANIMANAGER->release();				KEYANIMANAGER->releaseSingleton();
+		DATABASE->release();					DATABASE->releaseSingleton();
+		MAINCAMERA->release();					MAINCAMERA->releaseSingleton();
+		RENDERMANAGER->release();				RENDERMANAGER->releaseSingleton();
+		//EDITBOXMANAGER->release();				EDITBOXMANAGER->releaseSingleton();
 	}
 
 	ReleaseDC(_hWnd, _hdc);

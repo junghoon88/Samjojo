@@ -56,6 +56,11 @@ void sceneInit::initImageMapTool(void)
 	}
 
 	IMAGEMANAGER->addFrameImage(L"맵툴버튼", L"image/button.bmp", 100, 60, 1, 2);
+	IMAGEMANAGER->addFrameImage(L"맵툴버튼2", L"image/button2.bmp", 50, 60, 1, 2);
+	IMAGEMANAGER->addFrameImage(L"평조테스트", L"image/combat_unit_test1.bmp", 48, 49, 1, 1);
+	IMAGEMANAGER->addFrameImage(L"전조테스트", L"image/normal_unit_test1.bmp", 48, 49, 1, 1);
+	IMAGEMANAGER->addFrameImage(L"평조테스트", L"image/combat_unit_test2.bmp", 48, 49, 1, 1);
+	IMAGEMANAGER->addFrameImage(L"전조테스트", L"image/normal_unit_test2.bmp", 48, 49, 1, 1);
 
 
 }
@@ -69,6 +74,30 @@ void sceneInit::initImageUnitEditor(void)
 		_stprintf(strKey,  L"face %05d - size(128, 128)", i);
 		_stprintf(strName, L"image/face/face %05d.bmp", i);
 		IMAGEMANAGER->addImage(strKey, strName, 128, 128);
+	}
+	
+	memset(strKey, NULL, _tcslen(strKey));
+	memset(strName, NULL, _tcslen(strName));
+	
+	//normal
+	for (int i = 0; i <= NORMAL_IMAGE_MAX; i++)
+	{
+		_stprintf(strKey, L"평조 %05d", i);
+		_stprintf(strName, L"image/normal_unit_test %05d.bmp", i);
+
+		IMAGEMANAGER->addFrameImage(strKey, strName, 48, 49, 1, 1);
+	}
+
+	memset(strKey, NULL, _tcslen(strKey));
+	memset(strName, NULL, _tcslen(strName));
+
+	//combat
+	for (int i = 0; i <= COMBAT_IMAGE_MAX; i++)
+	{
+		_stprintf(strKey, L"전조 %05d", i);
+		_stprintf(strName, L"image/combat_unit_test %05d.bmp", i);
+
+		IMAGEMANAGER->addFrameImage(strKey, strName, 48, 49, 1, 1);
 	}
 }
 

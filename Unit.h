@@ -6,6 +6,9 @@
 struct tagStatus
 {
 	TCHAR name[30];
+	TCHAR family[30];	//부대
+	TCHAR aos[30];		//병과
+
 	bool isLive;
 	int level;
 	int exp;
@@ -76,6 +79,12 @@ public:
 	inline void setItemA(ItemArmor* itema) { _itemA = itema; }
 	inline ItemSpecial*	getItemS(void) { return _itemS; }
 	inline void setItemS(ItemSpecial* items) { _itemS = items; }
+	inline void setImages(TCHAR* strFace, TCHAR* strNormal, TCHAR* strCombat)
+	{
+		_imgFace = IMAGEMANAGER->findImage(strFace);
+		_imgStory = IMAGEMANAGER->findImage(strNormal);
+		_imgBattle = IMAGEMANAGER->findImage(strCombat);
+	}
 };
 
 typedef vector<Unit*>	vUnits;
