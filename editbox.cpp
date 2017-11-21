@@ -184,7 +184,7 @@ void editbox::getChar(WPARAM wParam)
 	int len = _tcslen(_str);
 
 
-	if (wParam == VK_BACK || wParam == VK_DELETE)
+	if (wParam == VK_BACK)// || wParam == VK_DELETE) //VK_DELETE¶û '.'ÀÌ¶û °ªÀÌ °°´Ù..;;
 	{
 		if (len == 0) return;
 
@@ -194,7 +194,18 @@ void editbox::getChar(WPARAM wParam)
 	}
 	else
 	{
-		_str[len] = wParam;
-		_str[len + 1] = 0;
+		if (_onlyNum)
+		{
+			if ((wParam >= '0' && wParam <= '9') || (wParam >= VK_NUMPAD0 && wParam <= VK_NUMPAD9))
+			{
+				_str[len] = wParam;
+				_str[len + 1] = 0;
+			}
+		}
+		else
+		{
+			_str[len] = wParam;
+			_str[len + 1] = 0;
+		}
 	}
 }

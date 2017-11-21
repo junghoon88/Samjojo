@@ -42,10 +42,10 @@ using namespace IOTA_UTIL;
 //===============================================
 
 #define WINNAME (LPTSTR)(TEXT("Samjojo"))
-#define WINSTARTX 100
+#define WINSTARTX 0
 #define WINSTARTY 0
 #define WINSIZEX 640 + 80 + 800
-#define WINSIZEY 800
+#define WINSIZEY 48 * 20
 #define WINSTYLE WS_CAPTION | WS_SYSMENU
 
 #define RND randomFunction::getSingleton()

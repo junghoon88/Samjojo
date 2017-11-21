@@ -83,7 +83,7 @@ void mainGame::initScene(void)
 	_sceneBattle->setLinkAdressFriend(_friend);
 	SCENEMANAGER->addScene(L"전투씬", _sceneBattle);
 
-	SCENEMANAGER->changeScene(L"맵툴씬");
+	SCENEMANAGER->changeScene(L"유닛에디터");
 }
 
 
@@ -137,7 +137,7 @@ void mainGame::render(void)
 
 	RENDERMANAGER->render();
 
-	TIMEMANAGER->render(getMemDC());
+	//TIMEMANAGER->render(getMemDC());
 	
 	//========================================================================
 	//백버퍼에 있는걸 HDC로 그려주는 역할

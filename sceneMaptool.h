@@ -15,6 +15,11 @@ enum CTRL
 	CTRL_END
 };
 
+enum MAPTOOLEDITBOX
+{
+
+};
+
 class sceneMaptool : public gameNode
 {
 private:
@@ -24,7 +29,16 @@ private:
 
 	button* _ctrlButton[CTRL_END];
 	TCHAR _strButton[CTRL_END][100];
+
 	int _ctrSelect;
+
+	int _countX;
+	int _countY;
+
+	int _tileSizeX[6];
+	int _tileSizeY[6];
+
+	int _selectSizeX, _selectSizeY;
 
 private:
 	static void ctrlSelectSave(void* obj);
