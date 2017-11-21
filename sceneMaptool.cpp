@@ -20,12 +20,12 @@ HRESULT sceneMaptool::init(void)
 	
 	_countX = _countY = 0;
 
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < 6; i++)
 	{
-		_tileSizeX[i] = _tileSizeY[i] = 20 + i * 5;
+		_tileSizeX[i] = _tileSizeY[i] = 20 + i * 4;
 	}
 
-	_selectSize = 8;
+	_selectSizeX = _selectSizeY = 5;
 
 	return S_OK;
 }
@@ -51,7 +51,7 @@ void sceneMaptool::update(void)
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
 	{
 		_countX++;
-		if (_countX + 20 > _tileSizeX[_selectSize]) _countX = _tileSizeX[_selectSize] - 20;
+		if (_countX + 20 > _tileSizeX[_selectSizeX]) _countX = _tileSizeX[_selectSizeX] - 20;
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_UP))
 	{
@@ -61,7 +61,77 @@ void sceneMaptool::update(void)
 	if (KEYMANAGER->isStayKeyDown(VK_DOWN))
 	{
 		_countY++;
-		if (_countY + 20 > _tileSizeY[_selectSize]) _countY = _tileSizeY[_selectSize] - 20;
+		if (_countY + 20 > _tileSizeY[_selectSizeY]) _countY = _tileSizeY[_selectSizeY] - 20;
+	}
+
+	//맵사이즈 변경(X축)
+	if (!KEYMANAGER->isStayKeyDown(VK_SHIFT))
+	{
+		if (KEYMANAGER->isOnceKeyDown('0'))
+		{
+			_selectSizeX = 0;
+			if (_countX + 20 > _tileSizeX[_selectSizeX]) _countX = _tileSizeX[_selectSizeX] - 20;
+		}
+		else if (KEYMANAGER->isOnceKeyDown('1'))
+		{
+			_selectSizeX = 1;
+			if (_countX + 20 > _tileSizeX[_selectSizeX]) _countX = _tileSizeX[_selectSizeX] - 20;
+		}
+		else if (KEYMANAGER->isOnceKeyDown('2'))
+		{
+			_selectSizeX = 2;
+			if (_countX + 20 > _tileSizeX[_selectSizeX]) _countX = _tileSizeX[_selectSizeX] - 20;
+		}
+		else if (KEYMANAGER->isOnceKeyDown('3'))
+		{
+			_selectSizeX = 3;
+			if (_countX + 20 > _tileSizeX[_selectSizeX]) _countX = _tileSizeX[_selectSizeX] - 20;
+		}
+		else if (KEYMANAGER->isOnceKeyDown('4'))
+		{
+			_selectSizeX = 4;
+			if (_countX + 20 > _tileSizeX[_selectSizeX]) _countX = _tileSizeX[_selectSizeX] - 20;
+		}
+		else if (KEYMANAGER->isOnceKeyDown('5'))
+		{
+			_selectSizeX = 5;
+			if (_countX + 20 > _tileSizeX[_selectSizeX]) _countX = _tileSizeX[_selectSizeX] - 20;
+		}
+	}
+
+	//맵사이즈 변경(Y축)
+	else
+	{
+		if (KEYMANAGER->isOnceKeyDown('0'))
+		{
+			_selectSizeY = 0;
+			if (_countY + 20 > _tileSizeY[_selectSizeY]) _countY = _tileSizeY[_selectSizeY] - 20;
+		}
+		else if (KEYMANAGER->isOnceKeyDown('1'))
+		{
+			_selectSizeY = 1;
+			if (_countY + 20 > _tileSizeY[_selectSizeY]) _countY = _tileSizeY[_selectSizeY] - 20;
+		}
+		else if (KEYMANAGER->isOnceKeyDown('2'))
+		{
+			_selectSizeY = 2;
+			if (_countY + 20 > _tileSizeY[_selectSizeY]) _countY = _tileSizeY[_selectSizeY] - 20;
+		}
+		else if (KEYMANAGER->isOnceKeyDown('3'))
+		{
+			_selectSizeY = 3;
+			if (_countY + 20 > _tileSizeY[_selectSizeY]) _countY = _tileSizeY[_selectSizeY] - 20;
+		}
+		else if (KEYMANAGER->isOnceKeyDown('4'))
+		{
+			_selectSizeY = 4;
+			if (_countY + 20 > _tileSizeY[_selectSizeY]) _countY = _tileSizeY[_selectSizeY] - 20;
+		}
+		else if (KEYMANAGER->isOnceKeyDown('5'))
+		{
+			_selectSizeY = 5;
+			if (_countY + 20 > _tileSizeY[_selectSizeY]) _countY = _tileSizeY[_selectSizeY] - 20;
+		}
 	}
 }
 
@@ -75,11 +145,11 @@ void sceneMaptool::render(void)
 
 
 	//지형
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < TILEVIEWX; i++)
 	{
-		for (int j = 0; j < 20; j++)
+		for (int j = 0; j < TILEVIEWY; j++)
 		{
-			IMAGEMANAGER->render(_sampleTiles[_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleTerrainIdx].strImgKey, getMemDC(), _tiles[i * 20 * (TILEX / 20) + j].rc.left, _tiles[i * 20 * (TILEX / 20) + j].rc.top);
+			IMAGEMANAGER->render(_sampleTiles[_tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].sampleTerrainIdx].strImgKey, getMemDC(), _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.left, _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.top);
 		}
 	}
 
@@ -95,6 +165,15 @@ void sceneMaptool::render(void)
 		TextOut(getMemDC(), _ctrlButton[i]->getRect().left, _ctrlButton[i]->getRect().top, _strButton[i], _tcslen(_strButton[i]));
 	}
 
+	for (int i = 0; i < TILEVIEWX; i++)
+	{
+		for (int j = 0; j < TILEVIEWY; j++)
+		{
+			TCHAR text[128];
+			_stprintf_s(text, L"%d", _tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].terrain);
+			TextOut(getMemDC(), _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.left, _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.top, text, wcslen(text));
+		}
+	}
 }
 
 //-----------------------------------------------------------------------------------------
@@ -219,7 +298,7 @@ void sceneMaptool::setMap(void)
 				if (_ctrSelect == CTRL_TERRAINDRAW)
 				{
 					_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleTerrainIdx = _selectSampleIndex;
-
+					_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].terrain = (TERRAIN)_selectSampleIndex;
 					_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].terrain = terrainSelect(_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleTerrainIdx);
 				}
 				else if (_ctrSelect == CTRL_OBJDRAW)
