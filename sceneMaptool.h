@@ -2,6 +2,7 @@
 #include "gameNode.h"
 #include "tileNode.h"
 #include "button.h"
+#include "editbox.h"
 
 enum CTRL
 {
@@ -29,6 +30,11 @@ private:
 
 	button* _ctrlButton[CTRL_END];
 	TCHAR _strButton[CTRL_END][100];
+	TCHAR _fileName[100];
+	TCHAR _saveSize[100];
+
+	editbox* _editBox;
+	editbox* _alphaValueBox;
 
 	int _ctrSelect;
 
@@ -39,6 +45,12 @@ private:
 	int _tileSizeY[6];
 
 	int _selectSizeX, _selectSizeY;
+
+	float _alphaValue;
+
+	bool _mapView;
+	bool _viewTERRAIN;
+	bool _isload;
 
 private:
 	static void ctrlSelectSave(void* obj);
@@ -57,6 +69,7 @@ public:
 	void release(void);
 	void update(void);
 	void render(void);
+	void getChar(WPARAM wParam);
 
 	sceneMaptool();
 	~sceneMaptool();

@@ -27,8 +27,32 @@ HRESULT sceneMaptool::init(void)
 
 	_selectSizeX = _selectSizeY = 5;
 
+	//IMAGEMANAGER->addImage(L"testMapView", L"image/M000.bmp", 960, 960, false, RGB(255, 0, 255), true);
+	//IMAGEMANAGER->findImage(L"testMapView")->setX(0);
+	//IMAGEMANAGER->findImage(L"testMapView")->setY(0);
+
+	_alphaValue = 128;
+
+	_mapView = false;
+	_viewTERRAIN = false;
+	_isload = false;
+
+	_editBox = new editbox;
+	_editBox->init();
+	_editBox->setRect(RectMake(1050, 100, 100, 30));
+	_editBox->setOnlyNum(TRUE);
+
+	_alphaValueBox = new editbox;
+	_alphaValueBox->init();
+	_alphaValueBox->setRect(RectMake(1050, 180, 100, 30));
+	_alphaValueBox->setOnlyNum(TRUE);
+
+	_stprintf(_saveSize, L"0 x 0");
+	_stprintf(_fileName, L"빈공간");
+
 	return S_OK;
 }
+
 void sceneMaptool::release(void)
 {
 
@@ -36,6 +60,12 @@ void sceneMaptool::release(void)
 
 void sceneMaptool::update(void)	
 {
+	//맵이름 정하기 or 불러오는 맵 이름 쓰기
+	_editBox->update();
+	int num = _editBox->getStrNum();
+	if (num > 57)	num = 57;
+	else if (num < 0) num = 0;
+
 	for (int i = 0; i < CTRL_END; i++)
 	{
 		_ctrlButton[i]->update();
@@ -133,16 +163,62 @@ void sceneMaptool::update(void)
 			if (_countY + 20 > _tileSizeY[_selectSizeY]) _countY = _tileSizeY[_selectSizeY] - 20;
 		}
 	}
+
+	//원본 맵 보기 on/off && 그림에 맞게 _selectSize맞추기
+	if (KEYMANAGER->isOnceKeyDown(VK_TAB))
+	{
+		if (_mapView)	_mapView = false;
+		else			_mapView = true;
+	}
+
+	//TERRAIN 보기 on/off
+	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+	{
+		if (_viewTERRAIN)	_viewTERRAIN = false;
+		else				_viewTERRAIN = true;
+	}
+
+	//원본맵그림 X, Y 업데이트하기
+	IMAGEMANAGER->findImage(_fileName)->setX(-(_countX * TILESIZE));
+	IMAGEMANAGER->findImage(_fileName)->setY(-(_countY * TILESIZE));
+
+	//알파블랜더 값 조절(원본 맵 보기에 사용)
+	if (KEYMANAGER->isStayKeyDown('W'))	_alphaValue++;
+	if (KEYMANAGER->isStayKeyDown('Q'))	_alphaValue--;
+	if (_alphaValue > 255)	_alphaValue = 255;
+	else if (_alphaValue < 80)	_alphaValue = 80;
+
+	_alphaValueBox->update();
 }
 
 void sceneMaptool::render(void)	
 {
+	//샘플타일
 	for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
 	{
 		if (_sampleTiles[i].img == NULL) continue;
 		_sampleTiles[i].img->render(getMemDC(), _sampleTiles[i].rcTile.left, _sampleTiles[i].rcTile.top);
 	}
 
+	//에딧박스 및 정보
+	TCHAR text[128];
+	_stprintf(text, L"맵 번호(0-57)");
+	TextOut(getMemDC(), 1050, 80, text, wcslen(text));
+	_editBox->render();
+
+	_stprintf(text, L"맵 크기");
+	TextOut(getMemDC(), 1050, 0, text, wcslen(text));
+	RectangleMake(getMemDC(), 1050, 20, 100, 30);
+
+	if (_isload)
+	{
+		_stprintf(_saveSize, L"%d x %d", (int)IMAGEMANAGER->findImage(_fileName)->getWidth(), (int)IMAGEMANAGER->findImage(_fileName)->getHeight());
+	}
+	TextOut(getMemDC(), 1055, 23, _saveSize, wcslen(_saveSize));
+
+	_stprintf(text, L"투명도(0-100(%%))");
+	TextOut(getMemDC(), 1050, 160, text, wcslen(text));
+	_alphaValueBox->render();
 
 	//지형
 	for (int i = 0; i < TILEVIEWX; i++)
@@ -165,15 +241,31 @@ void sceneMaptool::render(void)
 		TextOut(getMemDC(), _ctrlButton[i]->getRect().left, _ctrlButton[i]->getRect().top, _strButton[i], _tcslen(_strButton[i]));
 	}
 
-	for (int i = 0; i < TILEVIEWX; i++)
+	//스페이스바 누르면 TERRAIN 번호 보여주기
+	if (_viewTERRAIN)
 	{
-		for (int j = 0; j < TILEVIEWY; j++)
+		for (int i = 0; i < TILEVIEWX; i++)
 		{
-			TCHAR text[128];
-			_stprintf_s(text, L"%d", _tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].terrain);
-			TextOut(getMemDC(), _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.left, _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.top, text, wcslen(text));
+			for (int j = 0; j < TILEVIEWY; j++)
+			{
+				TCHAR text[128];
+				_stprintf_s(text, L"%d", _tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].terrain);
+				TextOut(getMemDC(), _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.left, _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.top, text, wcslen(text));
+			}
 		}
 	}
+
+	//원본 맵 탭누르면 보게하기
+	if (_mapView)
+	{
+		IMAGEMANAGER->findImage(_fileName)->alphaRender(getMemDC(), 0, 0, _countX * 48, _countY * 48, 960, 960, _alphaValue);
+	}
+}
+
+void sceneMaptool::getChar(WPARAM wParam)
+{
+	_editBox->getChar(wParam);
+	_alphaValueBox->getChar(wParam);
 }
 
 //-----------------------------------------------------------------------------------------
@@ -279,40 +371,44 @@ void sceneMaptool::setup(void)
 void sceneMaptool::setMap(void)
 {
 	if (PtInRect(&RectMake(WINSIZEX - 3 * TILESIZE, 0, 3 * TILESIZE, 10 * TILESIZE), _ptMouse))
-	for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
 	{
-		if (PtInRect(&_sampleTiles[i].rcTile, _ptMouse))
+		for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
 		{
-			_selectSampleIndex = i;
-			break;
+			if (PtInRect(&_sampleTiles[i].rcTile, _ptMouse))
+			{
+				_selectSampleIndex = i;
+				break;
+			}
 		}
 	}
 
 	if (PtInRect(&RectMake(0, 0, 20 * TILESIZE, 20 * TILESIZE), _ptMouse))
-	for (int i = 0; i < TILEX; i++)
 	{
-		for (int j = 0; j < TILEY; j++)
+		for (int i = 0; i < TILEX; i++)
 		{
-			if (PtInRect(&_tiles[i * 20 * (TILEX / 20) + j].rc, _ptMouse))
+			for (int j = 0; j < TILEY; j++)
 			{
-				if (_ctrSelect == CTRL_TERRAINDRAW)
+				if (PtInRect(&_tiles[i * 20 * (TILEX / 20) + j].rc, _ptMouse))
 				{
-					_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleTerrainIdx = _selectSampleIndex;
-					_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].terrain = (TERRAIN)_selectSampleIndex;
-					_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].terrain = terrainSelect(_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleTerrainIdx);
-				}
-				else if (_ctrSelect == CTRL_OBJDRAW)
-				{
-					//_tiles[i].obj = objSelect(_currentTile.x, _currentTile.y);
-				}
-				else if (_ctrSelect == CTRL_ERASER)
-				{
-					_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleTerrainIdx = NULL;
+					if (_ctrSelect == CTRL_TERRAINDRAW)
+					{
+						_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleTerrainIdx = _selectSampleIndex;
+						_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].terrain = (TERRAIN)_selectSampleIndex;
+						//_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].terrain = terrainSelect(_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleTerrainIdx);
+					}
+					else if (_ctrSelect == CTRL_OBJDRAW)
+					{
+						//_tiles[i].obj = objSelect(_currentTile.x, _currentTile.y);
+					}
+					else if (_ctrSelect == CTRL_ERASER)
+					{
+						_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleTerrainIdx = NULL;
+						_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].terrain = terrainSelect(_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleTerrainIdx);
+						//_tiles[i].obj = OBJ_NONE;
+					}
 
-					//_tiles[i].obj = OBJ_NONE;
+					break;
 				}
-
-				break;
 			}
 		}
 	}
@@ -323,7 +419,11 @@ void sceneMaptool::save(void)
 	HANDLE file;
 	DWORD write;
 
-	file = CreateFile(L"MapData/mapSave.map", GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	int num = _editBox->getStrNum();
+	TCHAR strFile[100];
+	_stprintf(strFile, L"MapData/M%03d.map", num);
+
+	file = CreateFile(strFile, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
 
@@ -336,10 +436,29 @@ void sceneMaptool::load(void)
 	HANDLE file;
 	DWORD read;
 
-	file = CreateFile(L"MapData/mapSave.map", GENERIC_READ, 0, NULL,
+	int num = _editBox->getStrNum();
+	TCHAR strFile[100];
+	_stprintf(strFile, L"MapData/M%03d.map", num);
+
+	file = CreateFile(strFile, GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
+
+	_stprintf(_fileName, L"M%03d", num);
+
+	//맵사이즈 그림에 맞게 변경
+	for (int i = 0; i < 6; i++)
+	{
+		if (IMAGEMANAGER->findImage(_fileName)->getWidth() / TILESIZE == _tileSizeX[i])		_selectSizeX = i;
+		if (IMAGEMANAGER->findImage(_fileName)->getHeight() / TILESIZE == _tileSizeY[i])	_selectSizeY = i;
+	}
+
+	if (_countX + 20 > _tileSizeX[_selectSizeX]) _countX = _tileSizeX[_selectSizeX] - 20;
+	if (_countY + 20 > _tileSizeY[_selectSizeY]) _countY = _tileSizeY[_selectSizeY] - 20;
+
+	_isload = true;
+	_mapView = false;
 
 	CloseHandle(file);
 }
