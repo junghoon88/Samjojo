@@ -88,7 +88,7 @@ void mainGame::initScene(void)
 	_sceneBattle->setLinkAdressFriend(_friend);
 	SCENEMANAGER->addScene(L"ÀüÅõ¾À", _sceneBattle);
 
-	SCENEMANAGER->changeScene(L"À¯´Ö¿¡µğÅÍ");
+	SCENEMANAGER->changeScene(L"¼±ÅÃ¾À");
 }
 
 
@@ -108,28 +108,9 @@ void mainGame::update(void)
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))
 	{
-		SCENEMANAGER->changeScene(L"¸ÊÅø¾À");
-	}
-	else if (KEYMANAGER->isOnceKeyDown(VK_F2))
-	{
 		SCENEMANAGER->changeScene(L"¼±ÅÃ¾À");
 	}
-	else if (KEYMANAGER->isOnceKeyDown(VK_F3))
-	{
-		SCENEMANAGER->changeScene(L"´ëÈ­¾À");
-	}
-	else if (KEYMANAGER->isOnceKeyDown(VK_F4))
-	{
-		SCENEMANAGER->changeScene(L"ÀüÅõ¾À");
-	}
-	else if (KEYMANAGER->isOnceKeyDown(VK_F6))
-	{
-		SCENEMANAGER->changeScene(L"À¯´Ö¿¡µğÅÍ");
-	}
-	else if (KEYMANAGER->isOnceKeyDown(VK_F7))
-	{
-		SCENEMANAGER->changeScene(L"»óÁ¡¾À");
-	}
+	//¾À ¹Ù²Ù°í ½ÍÀ¸¸é sceneSelect.cpp -> 150 line ¿¡ ¼öÁ¤ÇÏ±â
 
 	SCENEMANAGER->update();
 }
