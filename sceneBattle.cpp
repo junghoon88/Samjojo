@@ -19,6 +19,9 @@ HRESULT sceneBattle::init(void)
 	_map = new gameMap;
 	_map->init();
 
+	DATABASE->getSlectScenario();
+
+
 	return S_OK;
 }
 

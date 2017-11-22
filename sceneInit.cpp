@@ -36,8 +36,22 @@ void sceneInit::render(void)
 
 void sceneInit::initImage(void)
 {
+	initImageSlect();
 	initImageMapTool();
 	initImageUnitEditor();
+}
+
+void sceneInit::initImageSlect(void)
+{
+	TCHAR strKey[100], strName[100];
+	for (int i = 1; i <= 36; i++)
+	{
+		_stprintf(strKey, L"logo %02d", i);
+		_stprintf(strName, L"image/logo/Logo %05d.bmp", i);
+		IMAGEMANAGER->addImage(strKey, strName, 640, 400);
+	}
+
+	IMAGEMANAGER->addFrameImage(L"SELECT-선택버튼", L"image/button.bmp", 100, 60, 1, 2);
 }
 
 void sceneInit::initImageMapTool(void)

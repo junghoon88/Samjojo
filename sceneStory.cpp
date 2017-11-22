@@ -13,6 +13,8 @@ sceneStory::~sceneStory()
 
 HRESULT sceneStory::init(void)
 {
+	DATABASE->getSlectScenario();
+
 
 	return S_OK;
 }

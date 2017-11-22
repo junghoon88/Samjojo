@@ -25,6 +25,10 @@ private:
 private:
 	arrElement _mTotalElement;
 
+
+	int _slectScenario;
+
+
 public:
 	HRESULT init();
 	void release();
@@ -40,5 +44,9 @@ public:
 
 	database();
 	~database();
+
+public:
+	inline int getSlectScenario(void) { return _slectScenario; }
+	inline void setSlectScenario(int num) { _slectScenario = num; }
 };
 
