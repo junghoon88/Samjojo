@@ -9,6 +9,7 @@ private:
 	void initSound(void);
 
 
+	void initImageSlect(void);
 	void initImageMapTool(void);
 	void initImageUnitEditor(void);
 

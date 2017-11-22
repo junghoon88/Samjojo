@@ -37,6 +37,8 @@ public:
 	inline RECT getRect(void) { return _rc; }
 	inline TCHAR* getStr(void) { return _str; }
 	inline int getStrNum(void) { return _wtoi(_str); }
+	inline void setStr(TCHAR* str) { _tcscpy(_str, str); }
+	inline void setStrNum(int num) { _stprintf(_str, L"%d", num); }
 	inline bool getClicked(void) { return _clicked; }
 	inline void setClicked(bool click) { _clicked = click; }
 	inline void setOnlyNum(bool onlynum) { _onlyNum = onlynum; }
