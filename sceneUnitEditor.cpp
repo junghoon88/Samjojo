@@ -15,12 +15,50 @@ sceneUnitEditor::~sceneUnitEditor()
 HRESULT sceneUnitEditor::init(void)
 {
 	_unit = new Unit;
+	_unit->init();
 	
 	initButton();
 	initValues();
 	initEditbox();
 
+	loadUnitFiles();
+
+	hBrushWhite = CreateSolidBrush(RGB(255, 255, 255));
+	hBrushBlue = CreateSolidBrush(RGB(0, 0, 180));
+
+
 	return S_OK;
+}
+
+void sceneUnitEditor::loadUnitFiles(void)
+{
+	_vUnits.clear();
+
+	int filenum = 0;
+	//모든 파일 스캔 test
+	WIN32_FIND_DATA wfd;
+	HANDLE handle = FindFirstFile(L"UnitData/*.dat", &wfd);
+	// 찾는 파일이 있다면,
+	while (handle != INVALID_HANDLE_VALUE)
+	{
+		tagUnitFileInfo temp;
+		ZeroMemory(&temp, sizeof(tagUnitFileInfo));
+		_tcscpy(temp.str, wfd.cFileName);
+		temp.rc = RectMake(FILENAME_STARTX, FILENAME_STARTY + FILENAME_HEIGHT * filenum, FILENAME_WIDTH, FILENAME_HEIGHT);
+		temp.img = NULL;
+		temp.clicked = false;
+		_vUnits.push_back(temp);
+		filenum++;
+
+		// FindNextFile 리턴 값으로 다음값이 있을 경우 TRUE
+		// 없을 경우 FALSE 값 리턴
+		if (!FindNextFile(handle, &wfd))
+		{
+			break;
+		}
+	}
+	// 파일 찾기 핸들 값 닫기   
+	FindClose(handle);
 }
 
 void sceneUnitEditor::release(void)
@@ -38,6 +76,9 @@ void sceneUnitEditor::release(void)
 		_strEditBox[i]->release();
 		SAFE_DELETE(_strEditBox[i]);
 	}
+
+	DeleteObject(hBrushWhite);
+	DeleteObject(hBrushBlue);
 }
 
 void sceneUnitEditor::update(void)
@@ -56,6 +97,24 @@ void sceneUnitEditor::update(void)
 	{
 		_strEditBox[i]->update();
 	}
+
+	RECT temp = RectMake(FILENAME_STARTX, FILENAME_STARTY, FILENAME_WIDTH, FILENAME_HEIGHT * _vUnits.size());
+	if (PtInRect(&temp, _ptMouse))
+	{
+		for (int i = 0; i < _vUnits.size(); i++)
+		{
+			if (PtInRect(&_vUnits[i].rc, _ptMouse))
+			{
+				if (!_vUnits[i].clicked && KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+					_vUnits[i].clicked = true;
+			}
+			else
+			{
+				if (_vUnits[i].clicked && KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+					_vUnits[i].clicked = false;
+			}
+		}
+	}
 }
 
 void sceneUnitEditor::render(void)
@@ -69,6 +128,23 @@ void sceneUnitEditor::render(void)
 		_ctrlButton[i]->render();
 		TextOut(getMemDC(), _ctrlButton[i]->getRect().left, _ctrlButton[i]->getRect().top, _strButton[i], _tcslen(_strButton[i]));
 	}
+
+	HBRUSH oldBrush;
+	for (int i = 0; i < _vUnits.size(); i++)
+	{
+		if (_vUnits[i].clicked)
+		{
+			oldBrush = (HBRUSH)SelectObject(getMemDC(), hBrushBlue);
+		}
+		else
+		{
+			oldBrush = (HBRUSH)SelectObject(getMemDC(), hBrushWhite);
+		}
+		Rectangle(getMemDC(), _vUnits[i].rc.left, _vUnits[i].rc.top, _vUnits[i].rc.right, _vUnits[i].rc.bottom);
+		TextOut(getMemDC(), _vUnits[i].rc.left, _vUnits[i].rc.top, _vUnits[i].str, _tcslen(_vUnits[i].str));
+		SelectObject(getMemDC(), oldBrush);
+	}
+	DeleteObject(oldBrush);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -438,7 +514,39 @@ void sceneUnitEditor::getChar(WPARAM wParam)
 
 void sceneUnitEditor::loadUnit(void)		// 로드유닛 일단 보류
 {
-	//set
+	if (_vUnits.size() == 0) 
+		return;
+
+	bool find = false;
+	TCHAR filename[100] = L"UnitData/";
+
+	for (int i = 0; i < _vUnits.size(); i++)
+	{
+		if (_vUnits[i].clicked)
+		{
+			_tcscat(filename, _vUnits[i].str);
+			find = true;
+			break;
+		}
+	}
+
+	if (find == false)
+		return;
+
+	HANDLE file;
+	DWORD read;
+
+	file = CreateFile(filename, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	_unit->init(); //혹시모르니 초기화 한번
+
+	ReadFile(file, _unit, sizeof(Unit), &read, NULL);
+
+	CloseHandle(file);
+
+	//로드 끝나면 화면 갱신 한번 해줘야함 아래 이름 보여주듯이 갱신 함수 만들어서 호출하도록
+	//test
+	_strEditBox[UNITEDITOR_STREDITBOX_DATA_NAME]->setStr(_unit->getStatus().name);
 }
 void sceneUnitEditor::saveUnit(void)
 {
@@ -484,9 +592,9 @@ void sceneUnitEditor::saveUnit(void)
 
 	HANDLE file;
 	DWORD write;
-	TCHAR tempStr[1024];
-
-	_stprintf(tempStr, L"UnitData/%s", _filename);
+	TCHAR tempStr[1024] = L"UnitData/";
+	_tcscat(tempStr, _strEditBox[UNITEDITOR_STREDITBOX_DATA_NAME]->getStr());
+	_tcscat(tempStr, L".dat");
 
 	file = CreateFile(tempStr, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -512,6 +620,7 @@ void sceneUnitEditor::ctrlSelectDataSave(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->saveUnit();
+	unitEditor->loadUnitFiles();
 }
 void sceneUnitEditor::ctrlSelectFacePrev(void* obj)
 {

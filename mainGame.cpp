@@ -37,22 +37,7 @@ HRESULT mainGame::init(void)
 
 	initScene();
 
-	//모든 파일 스캔 test
-	WIN32_FIND_DATA wfd;
-	HANDLE handle = FindFirstFile(L"image/logo/*.bmp", &wfd);
-	// 찾는 파일이 있다면,
-	while(handle != INVALID_HANDLE_VALUE)
-	{
-	    
-	    // FindNextFile 리턴 값으로 다음값이 있을 경우 TRUE
-	    // 없을 경우 FALSE 값 리턴
-		if (!FindNextFile(handle, &wfd))
-		{
-			break;
-		}
-	}
-	// 파일 찾기 핸들 값 닫기   
-	FindClose(handle);
+
 
 	return S_OK;
 }
