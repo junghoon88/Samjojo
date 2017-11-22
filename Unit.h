@@ -14,6 +14,7 @@ struct tagStatus
 	int level;
 	int exp;
 	int expMax;
+	int movePoint;
 	int HP;
 	int HPMax;
 	int MP;

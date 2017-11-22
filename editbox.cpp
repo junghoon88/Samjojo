@@ -196,7 +196,7 @@ void editbox::getChar(WPARAM wParam)
 	{
 		if (_onlyNum)
 		{
-			if ((wParam >= '0' && wParam <= '9') || (wParam >= VK_NUMPAD0 && wParam <= VK_NUMPAD9))
+			if ((wParam >= '0' && wParam <= '9') /*|| (wParam >= VK_NUMPAD0 && wParam <= VK_NUMPAD9)*/)
 			{
 				_str[len] = wParam;
 				_str[len + 1] = 0;
