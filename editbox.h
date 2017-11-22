@@ -44,8 +44,9 @@ public:
 	inline image* getImage(void) { return _img; }
 	inline void clearStr(void) { _stprintf(_str, L""); }
 
-	inline void setMinNum(int num) { _minNum = num; }
-	inline void setMaxNum(int num) { _maxNum = num; }
+	inline void setMin(int num) { _minNum = num; }
+	inline void setMax(int num) { _maxNum = num; }
+	inline void setMinMax(int min, int max) { _minNum = min; _maxNum = max; }
 
 	
 };
