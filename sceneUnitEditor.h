@@ -4,8 +4,22 @@
 #include "button.h"
 #include "editbox.h"
 
+
 #define UPDATEPOSX 100
 #define UPDATEPOSY 0
+
+#define FILENAME_STARTX		0
+#define FILENAME_STARTY		100
+#define FILENAME_WIDTH		100
+#define FILENAME_HEIGHT		30
+
+struct tagUnitFileInfo
+{
+	RECT rc;
+	image* img;
+	TCHAR str[100];
+	bool clicked;
+};
 
 
 enum UNITEDITOR_BUTTON
@@ -149,9 +163,14 @@ private:
 	editbox* _numEditBox[UNITEDITOR_NUMEDITBOX_MAX];
 	editbox* _strEditBox[UNITEDITOR_STREDITBOX_MAX];
 
-private:
 	TCHAR* _filename;
-	
+
+private:
+	//기존 파일들 스캔
+	vector<tagUnitFileInfo> _vUnits;
+	void loadUnitFiles(void);
+	HBRUSH hBrushWhite;
+	HBRUSH hBrushBlue;
 
 private:
 	int _faceNum;

@@ -72,6 +72,8 @@ public:
 	Unit();
 	~Unit();
 
+	void init(void);
+
 public:
 	inline tagStatus getStatus(void) { return _status; }
 	inline void setStatus(tagStatus status) { _status = status; }
