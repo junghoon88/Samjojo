@@ -133,6 +133,7 @@ void sceneUnitEditor::initButton(void)
 	_ctrlButton[UNITEDITOR_BUTTON_COMBAT_PREV]->init(L"맵툴버튼", 100 + 50, 640 + 15, { 0, 0 }, { 0, 1 }, ctrlSelectCombatPrev, this);
 	_ctrlButton[UNITEDITOR_BUTTON_COMBAT_NEXT]->init(L"맵툴버튼", 200 + 50, 640 + 15, { 0, 0 }, { 0, 1 }, ctrlSelectCombatNext, this);
 
+
 	_ctrlButton[UNITEDITOR_BUTTON_WEAPON_PREV]->init(L"맵툴버튼2", 800 + 25, 230 + 15, { 0, 0 }, { 0, 1 }, ctrlSelectWeaponPrev, this);
 	_ctrlButton[UNITEDITOR_BUTTON_WEAPON_NEXT]->init(L"맵툴버튼2", 850 + 25, 230 + 15, { 0, 0 }, { 0, 1 }, ctrlSelectWeaponNext, this);
 
@@ -348,7 +349,7 @@ void sceneUnitEditor::rectSketch(void)
 	Rectangle(getMemDC(), 920, 280, 980, 340);	//이미지
 	Rectangle(getMemDC(), 920, 360, 980, 420);	//이미지
 
-	Rectangle(getMemDC(), 700, 470, 1000, 670);	//유닛설명
+	Rectangle(getMemDC(), 700, 470, 1000, 670);		//유닛설명
 
 	Rectangle(getMemDC(), 1040, 100, 1400, 400);	//아이템상세설명등
 
