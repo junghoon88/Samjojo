@@ -12,6 +12,8 @@ private:
 	image* _img;
 	HBRUSH _hBrushGray;
 	HBRUSH _hBrushWhite;
+	int _minNum;
+	int _maxNum;
 
 public:
 	editbox();
@@ -35,12 +37,19 @@ public:
 	inline RECT getRect(void) { return _rc; }
 	inline TCHAR* getStr(void) { return _str; }
 	inline int getStrNum(void) { return _wtoi(_str); }
+	inline void setStr(TCHAR* str) { _tcscpy(_str, str); }
+	inline void setStrNum(int num) { _stprintf(_str, L"%d", num); }
 	inline bool getClicked(void) { return _clicked; }
 	inline void setClicked(bool click) { _clicked = click; }
 	inline void setOnlyNum(bool onlynum) { _onlyNum = onlynum; }
 	inline void setImage(image* img) { _img = img; }
 	inline image* getImage(void) { return _img; }
 	inline void clearStr(void) { _stprintf(_str, L""); }
+
+	inline void setMin(int num) { _minNum = num; }
+	inline void setMax(int num) { _maxNum = num; }
+	inline void setMinMax(int min, int max) { _minNum = min; _maxNum = max; }
+
 	
 };
 

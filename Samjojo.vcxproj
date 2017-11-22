@@ -117,6 +117,7 @@
     <ClInclude Include="sceneManager.h" />
     <ClInclude Include="sceneMaptool.h" />
     <ClInclude Include="sceneSelect.h" />
+    <ClInclude Include="sceneShop.h" />
     <ClInclude Include="sceneStory.h" />
     <ClInclude Include="sceneUnitEditor.h" />
     <ClInclude Include="singletonBase.h" />
@@ -164,6 +165,7 @@
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="sceneMaptool.cpp" />
     <ClCompile Include="sceneSelect.cpp" />
+    <ClCompile Include="sceneShop.cpp" />
     <ClCompile Include="sceneStory.cpp" />
     <ClCompile Include="sceneUnitEditor.cpp" />
     <ClCompile Include="soundManager.cpp" />

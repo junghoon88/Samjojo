@@ -3,9 +3,10 @@
 
 #include "sceneInit.h"
 #include "sceneLoading.h"
-#include "sceneStory.h"
 #include "sceneSelect.h"
+#include "sceneStory.h"
 #include "sceneBattle.h"
+#include "sceneShop.h"
 #include "sceneMaptool.h"
 #include "sceneUnitEditor.h"
 
@@ -53,11 +54,6 @@ HRESULT mainGame::init(void)
 	// ÆÄÀÏ Ã£±â ÇÚµé °ª ´İ±â   
 	FindClose(handle);
 
-
-
-
-
-
 	return S_OK;
 }
 
@@ -65,19 +61,28 @@ void mainGame::initScene(void)
 {
 	gameNode* node = SCENEMANAGER->addScene(L"ÃÊ±âÈ­¾À", new sceneInit);  //°ÔÀÓ ¸®¼Ò½º ÃÊ±âÈ­
 	node->init();
-	SCENEMANAGER->addScene(L"·Îµù¾À", new sceneLoading); //¸Êµ¥ÀÌÅÍ, À¯´Öµ¥ÀÌÅÍ ÆÄÀÏ ·Îµù¾À
-	SCENEMANAGER->addScene(L"¸ÊÅø¾À", new sceneMaptool);
-	SCENEMANAGER->addScene(L"À¯´Ö¿¡µğÅÍ", new sceneUnitEditor);
+	SCENEMANAGER->addScene(L"·Îµù¾À", new sceneLoading);				//¸Êµ¥ÀÌÅÍ, À¯´Öµ¥ÀÌÅÍ ÆÄÀÏ ·Îµù¾À
+	SCENEMANAGER->addScene(L"¸ÊÅø¾À", new sceneMaptool);				//¸ÊÅø
+	SCENEMANAGER->addScene(L"À¯´Ö¿¡µğÅÍ", new sceneUnitEditor);		//À¯´Ö»ı¼º
 
-	SCENEMANAGER->addScene(L"´ëÈ­¾À", new sceneStory);
-
-	sceneSelect* _sceneSelect = new sceneSelect;
+	sceneSelect* _sceneSelect = new sceneSelect;					//½Ã³ª¸®¿À ¼±ÅÃÇÏ´Â ¾À(¼±ÅÃÀÌ ¿Ï·áµÇ¸é ½ºÅä¸®, ¼¥, ¹èÆ²¿¡ ³Ñ°ÜÁØ´Ù.)
 	_sceneSelect->setLinkAdressPlayer(_player);
 	_sceneSelect->setLinkAdressEnemy(_enemy);
 	_sceneSelect->setLinkAdressFriend(_friend);
 	SCENEMANAGER->addScene(L"¼±ÅÃ¾À", _sceneSelect);
 
-	sceneBattle* _sceneBattle = new sceneBattle;
+
+
+	SCENEMANAGER->addScene(L"´ëÈ­¾À", new sceneStory);				//½ºÅä¸®
+
+	sceneShop* _sceneShop = new sceneShop;							//»óÁ¡
+	_sceneShop->setLinkAdressPlayer(_player);
+	_sceneShop->setLinkAdressEnemy(_enemy);
+	_sceneShop->setLinkAdressFriend(_friend);
+	SCENEMANAGER->addScene(L"»óÁ¡¾À", _sceneShop);
+
+
+	sceneBattle* _sceneBattle = new sceneBattle;					//ÀüÅõ
 	_sceneBattle->setLinkAdressPlayer(_player);
 	_sceneBattle->setLinkAdressEnemy(_enemy);
 	_sceneBattle->setLinkAdressFriend(_friend);
@@ -107,11 +112,11 @@ void mainGame::update(void)
 	}
 	else if (KEYMANAGER->isOnceKeyDown(VK_F2))
 	{
-		SCENEMANAGER->changeScene(L"´ëÈ­¾À");
+		SCENEMANAGER->changeScene(L"¼±ÅÃ¾À");
 	}
 	else if (KEYMANAGER->isOnceKeyDown(VK_F3))
 	{
-		SCENEMANAGER->changeScene(L"¼±ÅÃ¾À");
+		SCENEMANAGER->changeScene(L"´ëÈ­¾À");
 	}
 	else if (KEYMANAGER->isOnceKeyDown(VK_F4))
 	{
@@ -120,6 +125,10 @@ void mainGame::update(void)
 	else if (KEYMANAGER->isOnceKeyDown(VK_F6))
 	{
 		SCENEMANAGER->changeScene(L"À¯´Ö¿¡µğÅÍ");
+	}
+	else if (KEYMANAGER->isOnceKeyDown(VK_F7))
+	{
+		SCENEMANAGER->changeScene(L"»óÁ¡¾À");
 	}
 
 	SCENEMANAGER->update();
