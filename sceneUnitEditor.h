@@ -4,6 +4,10 @@
 #include "button.h"
 #include "editbox.h"
 
+#define UPDATEPOSX 100
+#define UPDATEPOSY 0
+
+
 enum UNITEDITOR_BUTTON
 {
 	UNITEDITOR_BUTTON_LABEL_NAME,		//이름
@@ -56,6 +60,7 @@ enum UNITEDITOR_BUTTON
 	UNITEDITOR_BUTTON_DATA_NEW,			//새 영웅 만들기
 	UNITEDITOR_BUTTON_DATA_LOAD,		//영웅 데이터 불러오기
 	UNITEDITOR_BUTTON_DATA_SAVE,		//영웅 데이터 저장하기
+	UNITEDITOR_BUTTON_DATA_EXIT,		//메뉴로
 
 	UNITEDITOR_BUTTON_FACE_PREV,		//얼굴 이전 이미지
 	UNITEDITOR_BUTTON_FACE_NEXT,		//얼굴 다음 이미지
