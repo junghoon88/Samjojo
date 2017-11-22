@@ -13,6 +13,9 @@ sceneShop::~sceneShop()
 
 HRESULT sceneShop::init(void)
 {
+	DATABASE->getSlectScenario();
+
+
 	return S_OK;
 }
 

@@ -15,6 +15,8 @@ HRESULT database::init()
 {
 	loadDatabase(L"database.txt");
 
+	_slectScenario = 0;
+
 	return S_OK;
 }
 
