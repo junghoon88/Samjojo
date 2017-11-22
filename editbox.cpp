@@ -22,6 +22,10 @@ HRESULT editbox::init(void)
 	_hBrushGray = CreateSolidBrush(RGB(200, 200, 200));
 	_hBrushWhite = CreateSolidBrush(RGB(255, 255, 255));
 
+	_minNum = 0;
+	_maxNum = 99999;
+
+
 	return S_OK;
 }
 
@@ -45,6 +49,17 @@ void editbox::update(void)
 		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
 			_clicked = false;
+			if (_onlyNum)
+			{
+				if (this->getStrNum() < _minNum)
+				{
+					_stprintf(_str, L"%d", _minNum);
+				}
+				else if (this->getStrNum() > _maxNum)
+				{
+					_stprintf(_str, L"%d", _maxNum);
+				}
+			}
 		}
 	}
 }
@@ -196,7 +211,7 @@ void editbox::getChar(WPARAM wParam)
 	{
 		if (_onlyNum)
 		{
-			if ((wParam >= '0' && wParam <= '9') || (wParam >= VK_NUMPAD0 && wParam <= VK_NUMPAD9))
+			if (wParam >= '0' && wParam <= '9') // || (wParam >= VK_NUMPAD0 && wParam <= VK_NUMPAD9))
 			{
 				_str[len] = wParam;
 				_str[len + 1] = 0;

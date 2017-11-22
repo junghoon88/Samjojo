@@ -12,6 +12,8 @@ private:
 	image* _img;
 	HBRUSH _hBrushGray;
 	HBRUSH _hBrushWhite;
+	int _minNum;
+	int _maxNum;
 
 public:
 	editbox();
@@ -41,6 +43,10 @@ public:
 	inline void setImage(image* img) { _img = img; }
 	inline image* getImage(void) { return _img; }
 	inline void clearStr(void) { _stprintf(_str, L""); }
+
+	inline void setMinNum(int num) { _minNum = num; }
+	inline void setMaxNum(int num) { _maxNum = num; }
+
 	
 };
 

@@ -4,8 +4,7 @@
 #include "Enemy.h"
 #include "Friend.h"
 
-
-class sceneSelect : public gameNode
+class sceneShop : public gameNode
 {
 private:
 	Player*		_player;	//플레이어
@@ -13,17 +12,18 @@ private:
 	Enemy*		_enemy;		//적군
 
 public:
+	sceneShop();
+	~sceneShop();
+
 	HRESULT init(void);
 	void release(void);
 	void update(void);
 	void render(void);
 
-	sceneSelect();
-	~sceneSelect();
-
 public:
 	void setLinkAdressPlayer(Player* player) { _player = player; }
 	void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
 	void setLinkAdressFriend(Friend* friends) { _friend = friends; }
+
 };
 
