@@ -123,6 +123,11 @@ void sceneUnitEditor::initButton(void)
 	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERLUK]->init(L"맵툴버튼2", 600 + 25, 650 + 15, { 0, 0 }, { 0, 1 }, NULL);
 
 
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_WEAPON]->init(L"맵툴버튼2", 850 + 25, 470 + 15, { 0, 0 }, { 0, 1 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_ARMOR]->init(L"맵툴버튼2", 850 + 25, 540 + 15, { 0, 0 }, { 0, 1 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_SUBITEM]->init(L"맵툴버튼2", 850 + 25, 610 + 15, { 0, 0 }, { 0, 1 }, NULL);
+
+
 	//prev, next
 	_ctrlButton[UNITEDITOR_BUTTON_FACE_PREV]->init(L"맵툴버튼", 100 + 50, 240 + 15, { 0, 0 }, { 0, 1 }, ctrlSelectFacePrev, this);
 	_ctrlButton[UNITEDITOR_BUTTON_FACE_NEXT]->init(L"맵툴버튼", 200 + 50, 240 + 15, { 0, 0 }, { 0, 1 }, ctrlSelectFaceNext, this);
@@ -194,6 +199,11 @@ void sceneUnitEditor::initButton(void)
 	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_LVPERLUK], L"레벨당행운");
 
 
+	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_WEAPON], L"무기");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_ARMOR], L"방어구");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_SUBITEM], L"보조");
+
+
 	_stprintf(_strButton[UNITEDITOR_BUTTON_DATA_NEW], L"NEW");
 	_stprintf(_strButton[UNITEDITOR_BUTTON_DATA_LOAD], L"LOAD");
 	_stprintf(_strButton[UNITEDITOR_BUTTON_DATA_SAVE], L"SAVE");
@@ -237,6 +247,7 @@ void sceneUnitEditor::initEditbox(void)
 		_numEditBox[i] = new editbox;
 		_numEditBox[i]->init();
 		_numEditBox[i]->setOnlyNum(TRUE);
+		_numEditBox[i]->setMinMax(0, 200);
 	}
 	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_HP]->setRect(RectMake(450, 235, 100, 30));
 	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MP]->setRect(RectMake(450, 270, 100, 30));
@@ -337,23 +348,23 @@ void sceneUnitEditor::rectSketch(void)
 	Rectangle(getMemDC(), 450, 650, 550, 680);	//데이터입력
 
 
-	Rectangle(getMemDC(), 700, 200, 764, 230);	//무기
-	Rectangle(getMemDC(), 700, 280, 764, 310);	//방어구
-	Rectangle(getMemDC(), 700, 360, 764, 390);	//보조
+	Rectangle(getMemDC(), 850, 470, 914, 500);		//무기
+	Rectangle(getMemDC(), 850, 540, 914, 570);		//방어구
+	Rectangle(getMemDC(), 850, 610, 914, 640);		//보조
 
-	Rectangle(getMemDC(), 800, 200, 900, 260);	//이름
-	Rectangle(getMemDC(), 800, 280, 900, 340);	//이름
-	Rectangle(getMemDC(), 800, 360, 900, 420);	//이름
+	Rectangle(getMemDC(), 950, 470, 1050, 530);		//이름
+	Rectangle(getMemDC(), 950, 540, 1050, 600);		//이름
+	Rectangle(getMemDC(), 950, 610, 1050, 670);		//이름
 
-	Rectangle(getMemDC(), 920, 200, 980, 260);	//이미지
-	Rectangle(getMemDC(), 920, 280, 980, 340);	//이미지
-	Rectangle(getMemDC(), 920, 360, 980, 420);	//이미지
+	Rectangle(getMemDC(), 1055, 470, 1115, 530);	//이미지
+	Rectangle(getMemDC(), 1055, 540, 1115, 600);	//이미지
+	Rectangle(getMemDC(), 1055, 610, 1115, 670);	//이미지
 
-	Rectangle(getMemDC(), 700, 470, 1000, 670);		//유닛설명
-
-	Rectangle(getMemDC(), 1040, 100, 1400, 400);	//아이템상세설명등
-
-	Rectangle(getMemDC(), 1040, 430, 1240, 670);	//스킬셋
+	//Rectangle(getMemDC(), 700, 470, 1000, 670);		//유닛설명
+	//
+	//Rectangle(getMemDC(), 1040, 100, 1400, 400);	//아이템상세설명등
+	//
+	//Rectangle(getMemDC(), 1040, 430, 1240, 670);	//스킬셋
 
 	Rectangle(getMemDC(), 1300, 430, 1400, 460);	//새로만들기
 	Rectangle(getMemDC(), 1300, 490, 1400, 520);	//세이브
@@ -435,23 +446,23 @@ void sceneUnitEditor::saveUnit(void)
 	_tcscpy_s(_tempStatus.family, _strEditBox[UNITEDITOR_STREDITBOX_DATA_FAMILY]->getStr());
 	_tcscpy_s(_tempStatus.aos, _strEditBox[UNITEDITOR_STREDITBOX_DATA_AOS]->getStr());
 
-	_tempStatus.isLive = TRUE;
-	_tempStatus.exp = 0;
-	_tempStatus.expMax = 100;
-	_tempStatus.HP		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_HP]->getStrNum();
-	_tempStatus.HPMax	= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_HP]->getStrNum();
-	_tempStatus.MP		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MP]->getStrNum();
-	_tempStatus.MPMax	= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MP]->getStrNum();
-	_tempStatus.Atk		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_ATK]->getStrNum();
-	_tempStatus.Dep		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_DEP]->getStrNum();
-	_tempStatus.Res		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_RES]->getStrNum();
-	_tempStatus.Agl		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_AGL]->getStrNum();
-	_tempStatus.Fig		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_FIG]->getStrNum();
-	_tempStatus.Pwr		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_PWR]->getStrNum();
-	_tempStatus.Lds		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LDS]->getStrNum();
-	_tempStatus.Int		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_INT]->getStrNum();
-	_tempStatus.Dex		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_DEX]->getStrNum();
-	_tempStatus.Luk		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LUK]->getStrNum();
+	_tempStatus.isLive			= TRUE;
+	_tempStatus.exp				= 0;
+	_tempStatus.expMax			= 100;
+	_tempStatus.HP				= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_HP]->getStrNum();
+	_tempStatus.HPMax			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_HP]->getStrNum();
+	_tempStatus.MP				= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MP]->getStrNum();
+	_tempStatus.MPMax			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MP]->getStrNum();
+	_tempStatus.Atk				= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_ATK]->getStrNum();
+	_tempStatus.Dep				= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_DEP]->getStrNum();
+	_tempStatus.Res				= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_RES]->getStrNum();
+	_tempStatus.Agl				= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_AGL]->getStrNum();
+	_tempStatus.Fig				= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_FIG]->getStrNum();
+	_tempStatus.Pwr				= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_PWR]->getStrNum();
+	_tempStatus.Lds				= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LDS]->getStrNum();
+	_tempStatus.Int				= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_INT]->getStrNum();
+	_tempStatus.Dex				= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_DEX]->getStrNum();
+	_tempStatus.Luk				= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LUK]->getStrNum();
 
 	_tempStatus.enterScenario	= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_ENTERSCENARIO]->getStrNum();
 	_tempStatus.level			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LV]->getStrNum();
