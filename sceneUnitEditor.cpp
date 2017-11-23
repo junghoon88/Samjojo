@@ -182,7 +182,11 @@ void sceneUnitEditor::initButton(void)
 	
 	//label
 
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FILELIST]->init(L"맵툴버튼", 64 + 50 - UPDATEPOSX + UPDATEPOSX, 100 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FILELIST]->init(L"맵툴버튼", 64 + 50 - 144 + UPDATEPOSX, 100 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
+
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_TEAM_PLAYER]->init(L"맵툴버튼", -30 + UPDATEPOSX, 150 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_TEAM_ALLY]->init(L"맵툴버튼", -30 + UPDATEPOSX, 185 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_TEAM_ENEMY]->init(L"맵툴버튼", -30 + UPDATEPOSX, 220 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
 
 	_ctrlButton[UNITEDITOR_BUTTON_LABEL_NAME]->init(L"맵툴버튼2", 350 + 25 + UPDATEPOSX, 100 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
 
@@ -264,6 +268,10 @@ void sceneUnitEditor::initButton(void)
 	//--------------------------------------------------------------------------------------------
 	//버튼 이름 표시
 	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_FILELIST], L"유닛목록");
+
+	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_TEAM_PLAYER], L"플레이어");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_TEAM_ALLY], L"아군");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_TEAM_ENEMY], L"적군");
 
 	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_NAME], L"이름");
 
@@ -599,7 +607,6 @@ void sceneUnitEditor::getChar(WPARAM wParam)
 
 void sceneUnitEditor::loadUnit(void)		// 로드유닛 일단 보류
 {
-	newUnit();
 
 	if (_vUnits.size() == 0) 
 		return;
@@ -637,6 +644,9 @@ void sceneUnitEditor::loadUnit(void)		// 로드유닛 일단 보류
 
 	_strEditBox[UNITEDITOR_STREDITBOX_DATA_FAMILY]->setStr(_unit->getStatus().family);
 	_strEditBox[UNITEDITOR_STREDITBOX_DATA_AOS]->setStr(_unit->getStatus().aos);
+
+	TCHAR *tempStr = _tcstok(filename, L"/");
+	_strEditBox[UNITEDITOR_STREDITBOX_DATA_FILENAME]->setStr(_tcstok(NULL, L"."));
 
 	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_HP]->setStrNum(_unit->getStatus().HPMax);
 	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MP]->setStrNum(_unit->getStatus().MPMax);
