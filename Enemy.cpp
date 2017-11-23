@@ -10,3 +10,8 @@ Enemy::Enemy()
 Enemy::~Enemy()
 {
 }
+
+HRESULT Enemy::init(void)
+{
+	return S_OK;
+}

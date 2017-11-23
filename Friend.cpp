@@ -10,3 +10,8 @@ Friend::Friend()
 Friend::~Friend()
 {
 }
+
+HRESULT Friend::init(void)
+{
+	return S_OK;
+}
