@@ -49,8 +49,6 @@ struct tagStatus
 	int LvPerInt;		//지력
 	int LvPerDex;		//민첩
 	int LvPerLuk;		//운
-
-	tagRange atkRange[UNIT_ATTACK_RANGE_MAX][UNIT_ATTACK_RANGE_MAX];
 };
 
 
@@ -72,7 +70,7 @@ protected:
 	RECT			_rc;
 	POINT			_tilePt;	//타일 번호
 
-	BOOL			_atkRange[UNIT_ATTACK_RANGE_MAX][UNIT_ATTACK_RANGE_MAX];
+	tagRange		_atkRange[UNIT_ATTACK_RANGE_MAX][UNIT_ATTACK_RANGE_MAX];
 	
 
 
