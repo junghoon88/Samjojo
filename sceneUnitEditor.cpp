@@ -716,7 +716,7 @@ void sceneUnitEditor::saveUnit(void)
 
 	
 
-	memcpy(_tempStatus.atkRange, _atkRange, sizeof(_atkRange));
+	//memcpy(_tempStatus.atkRange, _atkRange, sizeof(_atkRange));
 
 	_unit->setStatus(_tempStatus);
 
