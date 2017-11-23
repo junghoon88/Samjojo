@@ -94,6 +94,9 @@
     <Filter Include="2DFramework\editbox">
       <UniqueIdentifier>{1dec7e4c-1646-401a-8435-9ca07918e97d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\info - hyunjun">
+      <UniqueIdentifier>{b83708b4-a485-4097-9ba0-c277e28550ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -246,6 +249,9 @@
     <ClInclude Include="editboxManager.h">
       <Filter>2DFramework\editbox</Filter>
     </ClInclude>
+    <ClInclude Include="infoCursor.h">
+      <Filter>MainGame\info - hyunjun</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -376,6 +382,9 @@
     </ClCompile>
     <ClCompile Include="editboxManager.cpp">
       <Filter>2DFramework\editbox</Filter>
+    </ClCompile>
+    <ClCompile Include="infoCursor.cpp">
+      <Filter>MainGame\info - hyunjun</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

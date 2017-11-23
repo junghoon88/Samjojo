@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "Friend.h"
 #include "gameMap.h"
+#include "infoCursor.h"
 
 class sceneBattle : public gameNode
 {
@@ -13,6 +14,9 @@ private:
 	Enemy*		_enemy;		//적군
 
 	gameMap*	_map;		//게임 맵
+
+	infoCursor* _cursor;	//커서 정보
+
 
 private:
 	void initImage(void);

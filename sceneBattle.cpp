@@ -18,7 +18,8 @@ HRESULT sceneBattle::init(void)
 {
 	_map = new gameMap;
 	_map->init();
-
+	_cursor = new infoCursor;
+	_cursor->init();
 	return S_OK;
 }
 
@@ -26,16 +27,19 @@ HRESULT sceneBattle::init(void)
 void sceneBattle::release(void)
 {
 	_map->release();
+	_cursor->release();
 }
 
 void sceneBattle::update(void)
 {
 	_map->update();
+	_cursor->update();
 }
 
 void sceneBattle::render(void)
 {
 	_map->render();
+	_cursor->render();
 }
 
 void sceneBattle::initImage(void)

@@ -99,6 +99,7 @@
     <ClInclude Include="globalMacroVariables.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="imageManager.h" />
+    <ClInclude Include="infoCursor.h" />
     <ClInclude Include="iniDataManager.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="keyAniManager.h" />
@@ -148,6 +149,7 @@
     <ClCompile Include="gameNode.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="imageManager.cpp" />
+    <ClCompile Include="infoCursor.cpp" />
     <ClCompile Include="iniDataManager.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="keyAniManager.cpp" />
