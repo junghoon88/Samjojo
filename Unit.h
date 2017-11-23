@@ -46,6 +46,12 @@ struct tagStatus
 
 };
 
+struct tagRange
+{
+	RECT rc;
+	bool clicked;
+};
+
 class Unit
 {
 protected:

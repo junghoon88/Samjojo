@@ -20,12 +20,16 @@ HRESULT sceneUnitEditor::init(void)
 	initButton();
 	initValues();
 	initEditbox();
+	initRangeRect();
 
 	loadUnitFiles();
 
 	hBrushWhite = CreateSolidBrush(RGB(255, 255, 255));
 	hBrushBlue = CreateSolidBrush(RGB(0, 0, 180));
-
+	
+	hBrushRange = CreateSolidBrush(RGB(64, 64, 64));
+	hBrushPlayer = CreateSolidBrush(RGB(32, 32, 240));
+	hBrushAttack = CreateSolidBrush(RGB(240, 32, 32));
 
 	return S_OK;
 }
@@ -115,6 +119,23 @@ void sceneUnitEditor::update(void)
 			}
 		}
 	}
+
+	for (int i = 0; i < RANGESIZEX; i++)
+	{
+		for (int j = 0; j < RANGESIZEY; j++)
+		{
+			if (PtInRect(&_atkRange[i][j].rc, _ptMouse))
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				{
+					if (!_atkRange[i][j].clicked)
+						_atkRange[i][j].clicked = TRUE;
+					else
+						_atkRange[i][j].clicked = FALSE;
+				}
+			}
+		}
+	}
 }
 
 void sceneUnitEditor::render(void)
@@ -145,6 +166,9 @@ void sceneUnitEditor::render(void)
 		SelectObject(getMemDC(), oldBrush);
 	}
 	DeleteObject(oldBrush);
+
+	atkRangeRender();
+
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -157,6 +181,9 @@ void sceneUnitEditor::initButton(void)
 	}
 	
 	//label
+
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FILELIST]->init(L"맵툴버튼", 64 + 50 - UPDATEPOSX + UPDATEPOSX, 100 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
+
 	_ctrlButton[UNITEDITOR_BUTTON_LABEL_NAME]->init(L"맵툴버튼2", 350 + 25 + UPDATEPOSX, 100 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
 
 	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FAMILY]->init(L"맵툴버튼2", 350 + 25 + UPDATEPOSX, 150 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
@@ -204,6 +231,9 @@ void sceneUnitEditor::initButton(void)
 	_ctrlButton[UNITEDITOR_BUTTON_LABEL_SUBITEM]->init(L"맵툴버튼2", 850 + 25 + UPDATEPOSX, 610 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
 
 
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FILENAME]->init(L"맵툴버튼2", 1025 + 25 + UPDATEPOSX, 430 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
+
+
 	//prev, next
 	_ctrlButton[UNITEDITOR_BUTTON_FACE_PREV]->init(L"맵툴버튼", 100 + 50 + UPDATEPOSX, 240 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectFacePrev, this);
 	_ctrlButton[UNITEDITOR_BUTTON_FACE_NEXT]->init(L"맵툴버튼", 200 + 50 + UPDATEPOSX, 240 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectFaceNext, this);
@@ -233,6 +263,7 @@ void sceneUnitEditor::initButton(void)
 
 	//--------------------------------------------------------------------------------------------
 	//버튼 이름 표시
+	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_FILELIST], L"유닛목록");
 
 	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_NAME], L"이름");
 
@@ -286,6 +317,8 @@ void sceneUnitEditor::initButton(void)
 	_stprintf(_strButton[UNITEDITOR_BUTTON_DATA_SAVE], L"SAVE");
 	_stprintf(_strButton[UNITEDITOR_BUTTON_DATA_EXIT], L"EXIT");
 
+	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_FILENAME], L"저장이름");
+
 	_stprintf(_strButton[UNITEDITOR_BUTTON_FACE_PREV], L"PREV");
 	_stprintf(_strButton[UNITEDITOR_BUTTON_FACE_NEXT], L"NEXT");
 	_stprintf(_strButton[UNITEDITOR_BUTTON_NORMAL_PREV], L"PREV");
@@ -320,6 +353,10 @@ void sceneUnitEditor::initEditbox(void)
 	_strEditBox[UNITEDITOR_STREDITBOX_DATA_NAME]->setRect(RectMake(450 + UPDATEPOSX, 100 + UPDATEPOSY, 100, 30));
 	_strEditBox[UNITEDITOR_STREDITBOX_DATA_FAMILY]->setRect(RectMake(450 + UPDATEPOSX, 150 + UPDATEPOSY, 100, 30));
 	_strEditBox[UNITEDITOR_STREDITBOX_DATA_AOS]->setRect(RectMake(450 + UPDATEPOSX, 185 + UPDATEPOSY, 100, 30));
+
+
+	_strEditBox[UNITEDITOR_STREDITBOX_DATA_FILENAME]->setRect(RectMake(1125 + UPDATEPOSX, 430 + UPDATEPOSY, 150, 30));
+
 
 	for (int i = 0; i < UNITEDITOR_NUMEDITBOX_MAX; i++)
 	{
@@ -363,6 +400,22 @@ void sceneUnitEditor::initEditbox(void)
 	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERINT]->setRect(RectMake(700 + UPDATEPOSX, 580 + UPDATEPOSY, 100, 30));
 	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERDEX]->setRect(RectMake(700 + UPDATEPOSX, 615 + UPDATEPOSY, 100, 30));
 	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERLUK]->setRect(RectMake(700 + UPDATEPOSX, 650 + UPDATEPOSY, 100, 30));
+}
+void sceneUnitEditor::initRangeRect(void)
+{
+	for (int i = 0; i < RANGESIZEX; i++)
+	{
+		for (int j = 0; j < RANGESIZEY; j++)
+		{
+			_atkRange[i][j].rc = RectMake(
+				850 + i * TILEWIDTH / 2 + UPDATEPOSX,
+				100 + j * TILEHEIGHT / 2 + UPDATEPOSY,
+				TILEWIDTH / 2,
+				TILEHEIGHT / 2);
+
+			_atkRange[i][j].clicked = FALSE;
+		}
+	}
 }
 
 //~init functions
@@ -483,6 +536,35 @@ void sceneUnitEditor::unitImageRender(void)			// 해야될 것: 프레임 이미지로 입력
 
 	_unit->setImages(strFaceKey, strNormalKey, strCombatKey);		// 이미지 셋
 }
+void sceneUnitEditor::atkRangeRender(void)
+{
+	HBRUSH oldBrushRange;
+	for (int i = 0; i < RANGESIZEX; i++)
+	{
+		for (int j = 0; j < RANGESIZEY; j++)
+		{
+			if (_atkRange[i][j].clicked)
+			{
+				oldBrushRange = (HBRUSH)SelectObject(getMemDC(), hBrushAttack);
+			}
+			else
+			{
+				oldBrushRange = (HBRUSH)SelectObject(getMemDC(), hBrushRange);
+			}
+
+			Rectangle(getMemDC(), _atkRange[i][j].rc.left, _atkRange[i][j].rc.top, _atkRange[i][j].rc.right, _atkRange[i][j].rc.bottom);
+
+			SelectObject(getMemDC(), oldBrushRange);
+		}
+	}
+	DeleteObject(oldBrushRange);
+
+	HBRUSH oldBrushPlayer;
+	oldBrushPlayer = (HBRUSH)SelectObject(getMemDC(), hBrushPlayer);
+	Rectangle(getMemDC(), _atkRange[3][3].rc.left, _atkRange[3][3].rc.top, _atkRange[3][3].rc.right, _atkRange[3][3].rc.bottom);
+	SelectObject(getMemDC(), oldBrushPlayer);
+	DeleteObject(oldBrushPlayer);
+}
 
 void sceneUnitEditor::newUnit(void)
 {
@@ -551,6 +633,44 @@ void sceneUnitEditor::loadUnit(void)		// 로드유닛 일단 보류
 	//test
 	_strEditBox[UNITEDITOR_STREDITBOX_DATA_NAME]->setStr(_unit->getStatus().name);
 
+	_strEditBox[UNITEDITOR_STREDITBOX_DATA_FAMILY]->setStr(_unit->getStatus().family);
+	_strEditBox[UNITEDITOR_STREDITBOX_DATA_AOS]->setStr(_unit->getStatus().aos);
+
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_HP]->setStrNum(_unit->getStatus().HPMax);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MP]->setStrNum(_unit->getStatus().MPMax);
+
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_ATK]->setStrNum(_unit->getStatus().Atk);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_DEP]->setStrNum(_unit->getStatus().Dep);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_RES]->setStrNum(_unit->getStatus().Res);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_AGL]->setStrNum(_unit->getStatus().Agl);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_FIG]->setStrNum(_unit->getStatus().Fig);
+
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_PWR]->setStrNum(_unit->getStatus().Pwr);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LDS]->setStrNum(_unit->getStatus().Lds);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_INT]->setStrNum(_unit->getStatus().Int);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_DEX]->setStrNum(_unit->getStatus().Dex);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LUK]->setStrNum(_unit->getStatus().Luk);
+
+
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_ENTERSCENARIO]->setStrNum(_unit->getStatus().enterScenario);
+
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LV]->setStrNum(_unit->getStatus().level);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MOVE]->setStrNum(_unit->getStatus().movePoint);
+
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERHP]->setStrNum(_unit->getStatus().LvPerHPMax);;
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERMP]->setStrNum(_unit->getStatus().LvPerMPMax);;
+
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERATK]->setStrNum(_unit->getStatus().Atk);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERDEP]->setStrNum(_unit->getStatus().Dep);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERRES]->setStrNum(_unit->getStatus().Res);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERAGL]->setStrNum(_unit->getStatus().Agl);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERFIG]->setStrNum(_unit->getStatus().Fig);
+
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERPWR]->setStrNum(_unit->getStatus().Pwr);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERLDS]->setStrNum(_unit->getStatus().Lds);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERINT]->setStrNum(_unit->getStatus().Int);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERDEX]->setStrNum(_unit->getStatus().Dex);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERLUK]->setStrNum(_unit->getStatus().Luk);
 }
 void sceneUnitEditor::saveUnit(void)
 {
@@ -597,7 +717,7 @@ void sceneUnitEditor::saveUnit(void)
 	HANDLE file;
 	DWORD write;
 	TCHAR tempStr[1024] = L"UnitData/";
-	_tcscat(tempStr, _strEditBox[UNITEDITOR_STREDITBOX_DATA_NAME]->getStr());
+	_tcscat(tempStr, _strEditBox[UNITEDITOR_STREDITBOX_DATA_FILENAME]->getStr());
 	_tcscat(tempStr, L".dat");
 
 	file = CreateFile(tempStr, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);

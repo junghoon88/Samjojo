@@ -5,13 +5,19 @@
 #include "editbox.h"
 
 
-#define UPDATEPOSX 100
+#define UPDATEPOSX 144
 #define UPDATEPOSY 0
 
-#define FILENAME_STARTX		0
-#define FILENAME_STARTY		100
-#define FILENAME_WIDTH		100
+#define FILENAME_STARTX		64
+#define FILENAME_STARTY		150
+#define FILENAME_WIDTH		128
 #define FILENAME_HEIGHT		30
+
+#define RANGESIZEX	7
+#define RANGESIZEY	7
+#define TILEWIDTH	48
+#define TILEHEIGHT	48
+
 
 struct tagUnitFileInfo
 {
@@ -24,6 +30,8 @@ struct tagUnitFileInfo
 
 enum UNITEDITOR_BUTTON
 {
+	UNITEDITOR_BUTTON_LABEL_FILELIST,
+
 	UNITEDITOR_BUTTON_LABEL_NAME,		//이름
 	
 	UNITEDITOR_BUTTON_LABEL_FAMILY,
@@ -69,6 +77,9 @@ enum UNITEDITOR_BUTTON
 	UNITEDITOR_BUTTON_LABEL_WEAPON,
 	UNITEDITOR_BUTTON_LABEL_ARMOR,
 	UNITEDITOR_BUTTON_LABEL_SUBITEM,
+
+
+	UNITEDITOR_BUTTON_LABEL_FILENAME,
 
 
 	UNITEDITOR_BUTTON_DATA_NEW,			//새 영웅 만들기
@@ -136,6 +147,7 @@ enum UNITEDITOR_NUMEDITBOX
 	UNITEDITOR_NUMEDITBOX_DATA_LVPERDEX,
 	UNITEDITOR_NUMEDITBOX_DATA_LVPERLUK,
 
+
 	UNITEDITOR_NUMEDITBOX_MAX
 };
 
@@ -144,6 +156,8 @@ enum UNITEDITOR_STREDITBOX
 	UNITEDITOR_STREDITBOX_DATA_NAME,
 	UNITEDITOR_STREDITBOX_DATA_FAMILY,
 	UNITEDITOR_STREDITBOX_DATA_AOS,
+
+	UNITEDITOR_STREDITBOX_DATA_FILENAME,
 
 	UNITEDITOR_STREDITBOX_MAX
 };
@@ -159,11 +173,13 @@ private:
 	button* _ctrlButton[UNITEDITOR_BUTTON_MAX];
 	TCHAR _strButton[UNITEDITOR_BUTTON_MAX][100];
 	
-
 	editbox* _numEditBox[UNITEDITOR_NUMEDITBOX_MAX];
 	editbox* _strEditBox[UNITEDITOR_STREDITBOX_MAX];
 
 	TCHAR* _filename;
+
+	tagRange _atkRange[RANGESIZEX][RANGESIZEY];
+
 
 private:
 	//기존 파일들 스캔
@@ -171,6 +187,10 @@ private:
 	void loadUnitFiles(void);
 	HBRUSH hBrushWhite;
 	HBRUSH hBrushBlue;
+
+	HBRUSH hBrushRange;
+	HBRUSH hBrushPlayer;
+	HBRUSH hBrushAttack;
 
 private:
 	int _faceNum;
@@ -219,12 +239,15 @@ public:
 	void initButton(void);
 	void initValues(void);
 	void initEditbox(void);
+	void initRangeRect(void);
 
 public:
 	void btnSetup(void);
+
 	void rectSketch(void);
 	void editBoxRender(void);
 	void unitImageRender(void);
+	void atkRangeRender(void);
 
 	void newUnit(void);
 	void loadUnit(void);
