@@ -3,12 +3,6 @@
 
 #define UNIT_ATTACK_RANGE_MAX 7
 
-struct tagRange
-{
-	RECT rc;
-	bool clicked;
-};
-
 struct tagStatus
 {
 	TCHAR name[30];
@@ -70,7 +64,7 @@ protected:
 	RECT			_rc;
 	POINT			_tilePt;	//타일 번호
 
-	tagRange		_atkRange[UNIT_ATTACK_RANGE_MAX][UNIT_ATTACK_RANGE_MAX];
+	BOOL			_atkRange[UNIT_ATTACK_RANGE_MAX][UNIT_ATTACK_RANGE_MAX];
 	
 
 
@@ -95,6 +89,7 @@ public:
 		_imgStory = IMAGEMANAGER->findImage(strNormal);
 		_imgBattle = IMAGEMANAGER->findImage(strCombat);
 	}
+	inline void setAtkRange(BOOL(*range)[UNIT_ATTACK_RANGE_MAX]) { memcpy(_atkRange, range, sizeof(BOOL) * UNIT_ATTACK_RANGE_MAX* UNIT_ATTACK_RANGE_MAX); }
 };
 
 typedef vector<Unit*>	vUnits;

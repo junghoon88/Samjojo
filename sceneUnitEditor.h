@@ -28,6 +28,13 @@ struct tagUnitFileInfo
 };
 
 
+struct tagRange
+{
+	RECT rc;
+	bool clicked;
+};
+
+
 enum UNITEDITOR_BUTTON
 {
 	UNITEDITOR_BUTTON_LABEL_FILELIST,

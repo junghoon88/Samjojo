@@ -140,7 +140,7 @@ void sceneUnitEditor::update(void)
 
 void sceneUnitEditor::render(void)
 {
-	rectSketch();		// 컨트롤 박스들 위치 도안
+	//rectSketch();		// 컨트롤 박스들 위치 도안
 	editBoxRender();
 	unitImageRender();
 
@@ -150,22 +150,25 @@ void sceneUnitEditor::render(void)
 		TextOut(getMemDC(), _ctrlButton[i]->getRect().left, _ctrlButton[i]->getRect().top, _strButton[i], _tcslen(_strButton[i]));
 	}
 
-	HBRUSH oldBrush;
-	for (int i = 0; i < _vUnits.size(); i++)
+	if (_vUnits.size() > 0)
 	{
-		if (_vUnits[i].clicked)
+		HBRUSH oldBrush;
+		for (int i = 0; i < _vUnits.size(); i++)
 		{
-			oldBrush = (HBRUSH)SelectObject(getMemDC(), hBrushBlue);
+			if (_vUnits[i].clicked)
+			{
+				oldBrush = (HBRUSH)SelectObject(getMemDC(), hBrushBlue);
+			}
+			else
+			{
+				oldBrush = (HBRUSH)SelectObject(getMemDC(), hBrushWhite);
+			}
+			Rectangle(getMemDC(), _vUnits[i].rc.left, _vUnits[i].rc.top, _vUnits[i].rc.right, _vUnits[i].rc.bottom);
+			TextOut(getMemDC(), _vUnits[i].rc.left, _vUnits[i].rc.top, _vUnits[i].str, _tcslen(_vUnits[i].str));
+			SelectObject(getMemDC(), oldBrush);
 		}
-		else
-		{
-			oldBrush = (HBRUSH)SelectObject(getMemDC(), hBrushWhite);
-		}
-		Rectangle(getMemDC(), _vUnits[i].rc.left, _vUnits[i].rc.top, _vUnits[i].rc.right, _vUnits[i].rc.bottom);
-		TextOut(getMemDC(), _vUnits[i].rc.left, _vUnits[i].rc.top, _vUnits[i].str, _tcslen(_vUnits[i].str));
-		SelectObject(getMemDC(), oldBrush);
+		DeleteObject(oldBrush);
 	}
-	DeleteObject(oldBrush);
 
 	atkRangeRender();
 
@@ -551,6 +554,8 @@ void sceneUnitEditor::atkRangeRender(void)
 	{
 		for (int j = 0; j < RANGESIZEY; j++)
 		{
+			if (i == RANGESIZEX / 2 && j == RANGESIZEY / 2) continue;
+
 			if (_atkRange[i][j].clicked)
 			{
 				oldBrushRange = (HBRUSH)SelectObject(getMemDC(), hBrushAttack);
@@ -607,7 +612,6 @@ void sceneUnitEditor::getChar(WPARAM wParam)
 
 void sceneUnitEditor::loadUnit(void)		// 로드유닛 일단 보류
 {
-
 	if (_vUnits.size() == 0) 
 		return;
 
@@ -632,7 +636,7 @@ void sceneUnitEditor::loadUnit(void)		// 로드유닛 일단 보류
 
 	file = CreateFile(filename, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	_unit->init(); //혹시모르니 초기화 한번
+	newUnit();
 
 	ReadFile(file, _unit, sizeof(Unit), &read, NULL);
 
@@ -726,9 +730,17 @@ void sceneUnitEditor::saveUnit(void)
 
 	
 
-	//memcpy(_tempStatus.atkRange, _atkRange, sizeof(_atkRange));
+	BOOL tempRange[RANGESIZEX][RANGESIZEY];
+	for (int i = 0; i < RANGESIZEX; i++)
+	{
+		for (int j = 0; j < RANGESIZEY; j++)
+		{
+			tempRange[i][j] = _atkRange[i][j].clicked;
+		}
+	}
 
 	_unit->setStatus(_tempStatus);
+	_unit->setAtkRange(tempRange);
 
 	HANDLE file;
 	DWORD write;

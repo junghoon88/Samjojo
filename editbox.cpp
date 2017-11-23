@@ -207,6 +207,11 @@ void editbox::getChar(WPARAM wParam)
 		_tcsncpy(str, _str, len - 1);
 		_tcscpy(_str, str);
 	}
+	else if (wParam == VK_RETURN)
+	{
+		_clicked = false;
+		return;
+	}
 	else
 	{
 		if (_onlyNum)
