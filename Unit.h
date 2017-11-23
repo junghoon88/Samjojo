@@ -14,6 +14,7 @@ struct tagStatus
 	int level;
 	int exp;
 	int expMax;
+	int movePoint;
 	int HP;
 	int HPMax;
 	int MP;
@@ -45,6 +46,12 @@ struct tagStatus
 
 };
 
+struct tagRange
+{
+	RECT rc;
+	bool clicked;
+};
+
 class Unit
 {
 protected:
@@ -70,6 +77,8 @@ protected:
 public:
 	Unit();
 	~Unit();
+
+	void init(void);
 
 public:
 	inline tagStatus getStatus(void) { return _status; }

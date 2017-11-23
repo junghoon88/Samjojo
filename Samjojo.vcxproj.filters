@@ -94,8 +94,13 @@
     <Filter Include="2DFramework\editbox">
       <UniqueIdentifier>{1dec7e4c-1646-401a-8435-9ca07918e97d}</UniqueIdentifier>
     </Filter>
+
     <Filter Include="MainGame\info - hyunjun">
       <UniqueIdentifier>{b83708b4-a485-4097-9ba0-c277e28550ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\sceneShop">
+      <UniqueIdentifier>{38383b26-74d5-42c8-9bb6-2b43ae5f1080}</UniqueIdentifier>
+
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -249,8 +254,16 @@
     <ClInclude Include="editboxManager.h">
       <Filter>2DFramework\editbox</Filter>
     </ClInclude>
+
     <ClInclude Include="infoCursor.h">
       <Filter>MainGame\info - hyunjun</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneShop.h">
+      <Filter>MainGame\sceneShop</Filter>
+    </ClInclude>
+    <ClInclude Include="scanDialog.h">
+      <Filter>MainGame\sceneStory</Filter>
+
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -383,8 +396,16 @@
     <ClCompile Include="editboxManager.cpp">
       <Filter>2DFramework\editbox</Filter>
     </ClCompile>
+
     <ClCompile Include="infoCursor.cpp">
       <Filter>MainGame\info - hyunjun</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneShop.cpp">
+      <Filter>MainGame\sceneShop</Filter>
+    </ClCompile>
+    <ClCompile Include="scanDialog.cpp">
+      <Filter>MainGame\sceneStory</Filter>
+
     </ClCompile>
   </ItemGroup>
 </Project>

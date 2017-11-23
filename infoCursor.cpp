@@ -11,17 +11,19 @@ HRESULT infoCursor::init(void)
 	findtile = new gameMap;
 	findtile->init();
 	isShow = false;
-	
+	isUnit = false;
+
 	rc = { 0,0,0,0 };
 	
-	unit = L"빈공간";
-	tilename = L"널";
-	prop = L"널";
+	unit = L"유닛이름정보";
+	tilename = L"타일이름정보";
+	prop = L"지형속성정보";
 
 	fire = false;
 	wind = false;
 	earth = false;
 	water = false;
+
 
 	drawLine = { findtile->getTile()[0].rc.left,findtile->getTile()[0].rc.top,findtile->getTile()[0].rc.right,findtile->getTile()[0].rc.bottom };
 
@@ -56,7 +58,7 @@ void infoCursor::render(void)
 		}
 		else//지형을 눌렀을때 표시할 것들
 		{
-			TextOut(getMemDC(), rc.left + 10, rc.top + 10, unit, _tcslen(tilename));
+			TextOut(getMemDC(), rc.left + 10, rc.top + 10, tilename, _tcslen(tilename));
 		}
 			
 	}
@@ -343,7 +345,7 @@ void infoCursor::Click(int num)
 				break;
 
 			case TERRAIN_NONE:
-				tilename = L"논";
+				tilename = L"지형정보없음";
 				fire = false;
 				water = false;
 				wind = false;

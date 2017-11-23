@@ -18,8 +18,12 @@ HRESULT sceneBattle::init(void)
 {
 	_map = new gameMap;
 	_map->init();
+
 	_cursor = new infoCursor;
 	_cursor->init();
+
+	DATABASE->getSlectScenario();
+
 	return S_OK;
 }
 
