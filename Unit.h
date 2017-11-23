@@ -48,6 +48,9 @@ struct tagStatus
 
 class Unit
 {
+private:
+	typedef BOOL(*Temp)[UNIT_ATTACK_RANGE_MAX];
+
 protected:
 	tagStatus		_status;
 	ItemWeapon*		_itemW;
@@ -89,6 +92,8 @@ public:
 		_imgStory = IMAGEMANAGER->findImage(strNormal);
 		_imgBattle = IMAGEMANAGER->findImage(strCombat);
 	}
+
+	inline Temp getAtkRange(void) { return _atkRange; }
 	inline void setAtkRange(BOOL(*range)[UNIT_ATTACK_RANGE_MAX]) { memcpy(_atkRange, range, sizeof(BOOL) * UNIT_ATTACK_RANGE_MAX* UNIT_ATTACK_RANGE_MAX); }
 };
 

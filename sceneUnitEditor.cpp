@@ -687,6 +687,15 @@ void sceneUnitEditor::loadUnit(void)		// 로드유닛 일단 보류
 	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERINT]->setStrNum(_unit->getStatus().Int);
 	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERDEX]->setStrNum(_unit->getStatus().Dex);
 	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERLUK]->setStrNum(_unit->getStatus().Luk);
+
+	for (int i = 0; i < RANGESIZEX; i++)
+	{
+
+		for (int j = 0; j < RANGESIZEY; j++)
+		{
+			_atkRange[i][j].clicked = (_unit->getAtkRange())[i][j];
+		}
+	}
 }
 void sceneUnitEditor::saveUnit(void)
 {
