@@ -252,6 +252,9 @@
     <ClInclude Include="sceneShop.h">
       <Filter>MainGame\sceneShop</Filter>
     </ClInclude>
+    <ClInclude Include="scanDialog.h">
+      <Filter>MainGame\sceneStory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -385,6 +388,9 @@
     </ClCompile>
     <ClCompile Include="sceneShop.cpp">
       <Filter>MainGame\sceneShop</Filter>
+    </ClCompile>
+    <ClCompile Include="scanDialog.cpp">
+      <Filter>MainGame\sceneStory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
