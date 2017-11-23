@@ -3,6 +3,12 @@
 
 #define UNIT_ATTACK_RANGE_MAX 7
 
+struct tagRange
+{
+	RECT rc;
+	bool clicked;
+};
+
 struct tagStatus
 {
 	TCHAR name[30];
@@ -43,14 +49,8 @@ struct tagStatus
 	int LvPerInt;		//Áö·Â
 	int LvPerDex;		//¹ÎÃ¸
 	int LvPerLuk;		//¿î
-
 };
 
-struct tagRange
-{
-	RECT rc;
-	bool clicked;
-};
 
 class Unit
 {
@@ -70,7 +70,7 @@ protected:
 	RECT			_rc;
 	POINT			_tilePt;	//Å¸ÀÏ ¹øÈ£
 
-	BOOL			_atkRange[UNIT_ATTACK_RANGE_MAX][UNIT_ATTACK_RANGE_MAX];
+	tagRange		_atkRange[UNIT_ATTACK_RANGE_MAX][UNIT_ATTACK_RANGE_MAX];
 	
 
 
