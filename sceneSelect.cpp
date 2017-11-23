@@ -146,9 +146,9 @@ void sceneSelect::selectScenario(void)
 		if (PtInRect(&_button2[i]->getRect(), _ptMouse))
 		{
 			DATABASE->setSlectScenario(i);
-			//SCENEMANAGER->changeScene(L"´ëÈ­¾À");
+			SCENEMANAGER->changeScene(L"´ëÈ­¾À");
 			//SCENEMANAGER->changeScene(L"»óÁ¡¾À");
-			SCENEMANAGER->changeScene(L"ÀüÅõ¾À");
+			//SCENEMANAGER->changeScene(L"ÀüÅõ¾À");
 			break;
 		}
 	}

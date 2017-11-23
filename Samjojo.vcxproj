@@ -111,6 +111,7 @@
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="RenderManager.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="scanDialog.h" />
     <ClInclude Include="sceneBattle.h" />
     <ClInclude Include="sceneInit.h" />
     <ClInclude Include="sceneLoading.h" />
@@ -159,6 +160,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="RenderManager.cpp" />
+    <ClCompile Include="scanDialog.cpp" />
     <ClCompile Include="sceneBattle.cpp" />
     <ClCompile Include="sceneInit.cpp" />
     <ClCompile Include="sceneLoading.cpp" />
