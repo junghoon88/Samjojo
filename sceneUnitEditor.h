@@ -9,7 +9,7 @@
 #define UPDATEPOSY 0
 
 #define FILENAME_STARTX		64
-#define FILENAME_STARTY		150
+#define FILENAME_STARTY		260
 #define FILENAME_WIDTH		128
 #define FILENAME_HEIGHT		30
 
@@ -17,6 +17,14 @@
 #define RANGESIZEY	UNIT_ATTACK_RANGE_MAX
 #define TILEWIDTH	48
 #define TILEHEIGHT	48
+
+struct tagTeamInfo
+{
+	RECT rc;
+	image* img;
+	TCHAR str[100];
+	bool clicked;
+};
 
 
 struct tagUnitFileInfo
@@ -177,6 +185,9 @@ private:
 
 	tagStatus _tempStatus;
 
+	TEAM _team;
+	tagTeamInfo _teamButton[TEAM_MAX];
+
 	button* _ctrlButton[UNITEDITOR_BUTTON_MAX];
 	TCHAR _strButton[UNITEDITOR_BUTTON_MAX][100];
 	
@@ -186,6 +197,8 @@ private:
 	TCHAR* _filename;
 
 	tagRange _atkRange[RANGESIZEX][RANGESIZEY];
+
+	bool _exit;
 
 
 private:
@@ -212,6 +225,7 @@ private:
 	static void ctrlSelectDataNew(void* obj);
 	static void ctrlSelectDataLoad(void* obj);
 	static void ctrlSelectDataSave(void* obj);
+	static void ctrlSelectExit(void* obj);
 
 	static void ctrlSelectFacePrev(void* obj);
 	static void ctrlSelectFaceNext(void* obj);
@@ -231,6 +245,10 @@ private:
 	static void ctrlSelectSubitemPrev(void* obj);
 	static void ctrlSelectSubitemNext(void* obj);
 
+	static void cbFuncChangeTeamPlayer(void* obj);
+	static void cbFuncChangeTeamFriend(void* obj);
+	static void cbFuncChangeTeamEnemy(void* obj);
+
 
 public:
 	sceneUnitEditor();
@@ -247,14 +265,19 @@ public:
 	void initValues(void);
 	void initEditbox(void);
 	void initRangeRect(void);
+	void initTeamButton(void);
 
 public:
-	void btnSetup(void);
+	void filesUpdate(void);
+	void teamButtonUpdate(void);
 
+public:
 	void rectSketch(void);
 	void editBoxRender(void);
 	void unitImageRender(void);
 	void atkRangeRender(void);
+	void filesRender(void);
+	void teamButtonRender(void);
 
 	void newUnit(void);
 	void loadUnit(void);
@@ -278,5 +301,7 @@ public:
 
 	inline void setSubitemPrev(void) { _subitemNum = _subitemNum == 0 ? SUBITEM_IMAGE_MAX : _subitemNum - 1; }
 	inline void setSubitemNext(void) { _subitemNum = _subitemNum == SUBITEM_IMAGE_MAX ? 0 : _subitemNum + 1; }
+
+	inline void setExit(void) { _exit = true; }
 };
 

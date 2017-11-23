@@ -18,6 +18,7 @@ public:
 	void render(void);
 
 	void loadUnits(void);
+	void deleteUnits(void);
 
 public:
 	inline vUnits getUnits(void) { return _vUnits; }
