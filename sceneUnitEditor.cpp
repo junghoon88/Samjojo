@@ -599,6 +599,8 @@ void sceneUnitEditor::getChar(WPARAM wParam)
 
 void sceneUnitEditor::loadUnit(void)		// 로드유닛 일단 보류
 {
+	newUnit();
+
 	if (_vUnits.size() == 0) 
 		return;
 
@@ -711,6 +713,10 @@ void sceneUnitEditor::saveUnit(void)
 	_tempStatus.LvPerInt		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERINT]->getStrNum();
 	_tempStatus.LvPerDex		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERDEX]->getStrNum();
 	_tempStatus.LvPerLuk		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERLUK]->getStrNum();
+
+	
+
+	memcpy(_tempStatus.atkRange, _atkRange, sizeof(_atkRange));
 
 	_unit->setStatus(_tempStatus);
 
