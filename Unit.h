@@ -43,14 +43,8 @@ struct tagStatus
 	int LvPerInt;		//Áö·Â
 	int LvPerDex;		//¹ÎÃ¸
 	int LvPerLuk;		//¿î
-
 };
 
-struct tagRange
-{
-	RECT rc;
-	bool clicked;
-};
 
 class Unit
 {
@@ -95,6 +89,7 @@ public:
 		_imgStory = IMAGEMANAGER->findImage(strNormal);
 		_imgBattle = IMAGEMANAGER->findImage(strCombat);
 	}
+	inline void setAtkRange(BOOL(*range)[UNIT_ATTACK_RANGE_MAX]) { memcpy(_atkRange, range, sizeof(BOOL) * UNIT_ATTACK_RANGE_MAX* UNIT_ATTACK_RANGE_MAX); }
 };
 
 typedef vector<Unit*>	vUnits;

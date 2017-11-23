@@ -13,8 +13,8 @@
 #define FILENAME_WIDTH		128
 #define FILENAME_HEIGHT		30
 
-#define RANGESIZEX	7
-#define RANGESIZEY	7
+#define RANGESIZEX	UNIT_ATTACK_RANGE_MAX
+#define RANGESIZEY	UNIT_ATTACK_RANGE_MAX
 #define TILEWIDTH	48
 #define TILEHEIGHT	48
 
@@ -24,6 +24,13 @@ struct tagUnitFileInfo
 	RECT rc;
 	image* img;
 	TCHAR str[100];
+	bool clicked;
+};
+
+
+struct tagRange
+{
+	RECT rc;
 	bool clicked;
 };
 
