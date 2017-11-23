@@ -18,7 +18,6 @@ HRESULT sceneStory::init(void)
 
 	_dialog = new scanDialog;
 	_dialog->init("scripts/script 00.txt");
-	_dialog->loadDialog();
 
 	return S_OK;
 }
@@ -29,7 +28,12 @@ void sceneStory::release(void)
 
 void sceneStory::update(void)
 {
+	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+	{
+		_dialog->loadDialog();
+	}
 }
+
 
 void sceneStory::render(void)
 {

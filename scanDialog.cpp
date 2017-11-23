@@ -36,11 +36,16 @@ void scanDialog::update(void)
 
 void scanDialog::render(void)
 {
-	TextOut(getMemDC(), 0, 0, convert_wc(_strName), strlen(_strName));
+	wstring ss = convert_wc(_strName);
+	int len = _tcslen(ss.c_str());
+
+	TextOut(getMemDC(), 0, 0, ss.c_str(), len);
 
 	for (int i = 0; i < _vScripts.size(); i++)
 	{
-		TextOut(getMemDC(), 0, 50*(i+1), convert_wc(_vScripts[i].c_str()), strlen(_vScripts[i].c_str()));
+		ss = convert_wc(_vScripts[i]);
+		len = _tcslen(ss.c_str());
+		TextOut(getMemDC(), 0, 50 * (i + 1), ss.c_str(), len);
 	}
 
 }
@@ -56,6 +61,9 @@ void scanDialog::loadDialog(void)
 	{
 		char str[STRING_MAX] = "";
 		fgets(str, STRING_MAX, _fp);
+		if (strlen(str) == 0)
+			return;
+		
 		if (str[0] == '[')
 		{
 			int len = strlen(str);
