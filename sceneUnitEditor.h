@@ -198,6 +198,11 @@ private:
 
 	tagRange _atkRange[RANGESIZEX][RANGESIZEY];
 
+	image* _imgFace;
+	image* _imgBattleAtk;
+	image* _imgBattleIdle;
+	image* _imgBattleSpc;
+
 	bool _exit;
 
 
@@ -261,6 +266,7 @@ public:
 	void getChar(WPARAM wParam);
 
 public:
+	void initImage(void);
 	void initButton(void);
 	void initValues(void);
 	void initEditbox(void);
@@ -282,6 +288,12 @@ public:
 	void newUnit(void);
 	void loadUnit(void);
 	void saveUnit(void);
+
+	void selectImgFace(void);
+	void selectImgBattleAtk(void);
+	void selectImgBattleIdle(void);
+	void selectImgBattleSpc(void);
+
 
 public:
 	inline void setFacePrev(void) { _faceNum = _faceNum == 0 ? FACE_MAX : _faceNum - 1; }

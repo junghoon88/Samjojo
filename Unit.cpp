@@ -26,14 +26,8 @@ void Unit::init(void)
 
 	//¿ÃπÃ¡ˆ
 	_imgFace = NULL;
-	_imgStory = NULL;
-	_imgBattle = NULL;
 
-	ZeroMemory(&_pt, sizeof(POINT));
-	ZeroMemory(&_rc, sizeof(RECT));
-	ZeroMemory(&_tilePt, sizeof(POINT));
-
+	ZeroMemory(&_battleState, sizeof(tagBattleState));
 
 	ZeroMemory(&_atkRange, sizeof(_atkRange));
-
 }
