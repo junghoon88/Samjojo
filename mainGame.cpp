@@ -73,7 +73,7 @@ void mainGame::initScene(void)
 	_sceneBattle->setLinkAdressFriend(_friend);
 	SCENEMANAGER->addScene(L"ÀüÅõ¾À", _sceneBattle);
 
-	SCENEMANAGER->changeScene(L"¼±ÅÃ¾À");
+	SCENEMANAGER->changeScene(L"¸ÊÅø¾À");
 }
 
 
@@ -123,6 +123,10 @@ void mainGame::render(void)
 void mainGame::getChar(WPARAM wParam)
 {
 	if (SCENEMANAGER->isCurScene(L"À¯´Ö¿¡µðÅÍ"))
+	{
+		SCENEMANAGER->getChar(wParam);
+	}
+	else if (SCENEMANAGER->isCurScene(L"¸ÊÅø¾À"))
 	{
 		SCENEMANAGER->getChar(wParam);
 	}

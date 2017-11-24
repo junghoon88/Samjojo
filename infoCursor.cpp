@@ -13,8 +13,11 @@ HRESULT infoCursor::init(void)
 	isShow = false;
 	isUnit = false;
 
-	rc = { 0,0,0,0 };
-	
+	rc = { WINSIZEX - INTERFACESIZEX,0,WINSIZEX,WINSIZEY };//인터페이스 간이 렉트
+	tileImgRect = RectMakeCenter(rc.left + INTERFACESIZEX / 2, 80, 100, 100);
+	unitImgRect = RectMakeCenter(rc.left + INTERFACESIZEX / 2, WINSIZEY/2 , 100, 100);
+
+
 	unit = L"유닛이름정보";
 	tilename = L"타일이름정보";
 	prop = L"지형속성정보";
@@ -37,31 +40,18 @@ void infoCursor::update(void)
 {
 
 	Scanning();
-	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON)) isShow = false; //윈도우 닫기
+	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON)) dataClean();  //윈도우 닫기
 
 
 }
 void infoCursor::render(void) 
 {
-	MoveToEx(getMemDC(), drawLine.left, drawLine.top, NULL); //현재 타일 테두리그림
-	LineTo(getMemDC(), drawLine.right, drawLine.top);		 //현재 타일 테두리그림
-	LineTo(getMemDC(), drawLine.right, drawLine.bottom);	 //현재 타일 테두리그림
-	LineTo(getMemDC(), drawLine.left, drawLine.bottom);		 //현재 타일 테두리그림
-	LineTo(getMemDC(), drawLine.left, drawLine.top);		 //현재 타일 테두리그림
+	tileLineDraw(); //커서 타일 테두리 그림
+	Rectangle(getMemDC(), rc.left, rc.top, rc.right, rc.bottom);
+	Rectangle(getMemDC(), tileImgRect.left, tileImgRect.top, tileImgRect.right, tileImgRect.bottom);
+	Rectangle(getMemDC(), unitImgRect.left, unitImgRect.top, unitImgRect.right, unitImgRect.bottom);
+	if (isShow) infoDraw();// 정보 표시
 
-	if (isShow) //
-	{
-		Rectangle(getMemDC(), rc.left, rc.top, rc.right, rc.bottom);
-		if (isUnit) //유닛을 눌렀을때 표시할 것들
-		{
-			TextOut(getMemDC(), rc.left + 10, rc.top + 10, unit, _tcslen(unit));
-		}
-		else//지형을 눌렀을때 표시할 것들
-		{
-			TextOut(getMemDC(), rc.left + 10, rc.top + 10, tilename, _tcslen(tilename));
-		}
-			
-	}
 
 }
 
@@ -354,10 +344,44 @@ void infoCursor::Click(int num)
 
 			}
 			isUnit = false;//지형은 false로
-			rc = RectMake(findtile->getTile()[i].rc.left, findtile->getTile()[i].rc.top, 40, 80);
+			//rc = RectMake(findtile->getTile()[i].rc.left, findtile->getTile()[i].rc.top, 40, 80);
 
 		}
 	}
 	
 	isShow = true;
+}
+
+void infoCursor::dataClean(void)//마우스 우클릭 시 현재 인터페이스의 정보를 초기화 해주는 역할을 할 것.
+{
+	isShow = false;
+	isUnit = false;
+	fire = false;
+	wind = false;
+	earth = false;
+	water = false;
+}
+void infoCursor::tileLineDraw(void)
+{
+	MoveToEx(getMemDC(), drawLine.left, drawLine.top, NULL); //현재 타일 테두리그림
+	LineTo(getMemDC(), drawLine.right, drawLine.top);		 //현재 타일 테두리그림
+	LineTo(getMemDC(), drawLine.right, drawLine.bottom);	 //현재 타일 테두리그림
+	LineTo(getMemDC(), drawLine.left, drawLine.bottom);		 //현재 타일 테두리그림
+	LineTo(getMemDC(), drawLine.left, drawLine.top);		 //현재 타일 테두리그림
+}
+void infoCursor::infoDraw(void)
+{
+		if (isUnit) //유닛을 눌렀을때 표시할 것들
+		{
+			TextOut(getMemDC(), unitImgRect.left, unitImgRect.bottom + 20, unit, _tcslen(unit));
+			TextOut(getMemDC(), tileImgRect.left, tileImgRect.bottom + 20, tilename, _tcslen(tilename));
+			TextOut(getMemDC(), tileImgRect.left, tileImgRect.bottom + 40, prop, _tcslen(prop));
+		}
+		else//지형을 눌렀을때 표시할 것들
+		{
+			TextOut(getMemDC(), tileImgRect.left, tileImgRect.bottom + 20, tilename, _tcslen(tilename));
+			TextOut(getMemDC(), tileImgRect.left, tileImgRect.bottom + 40, prop, _tcslen(prop));
+		}
+
+
 }

@@ -3,8 +3,8 @@
 #include "gameNode.h"
 #include "gameMap.h"
 
-#define BOXSIZEX 80
-#define BOXSIZEY 150
+#define INTERFACESIZEX 200
+#define INTERFACESIZEY 150
 
 class infoCursor : public gameNode
 {
@@ -13,6 +13,8 @@ private:
 
 	RECT rc;//정보 제공용 박스
 	RECT drawLine;//타일 테두리 표시용
+	RECT tileImgRect;
+	RECT unitImgRect;
 	
 	//유닛 정보 표시용
 	TCHAR* unit;
@@ -50,6 +52,9 @@ public:
 	void update(void);
 	void render(void);
 
+
+	void tileLineDraw(void);
+	void infoDraw(void);
 	void Scanning(void);
 	void Click(int num);
 };
