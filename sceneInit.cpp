@@ -39,6 +39,7 @@ void sceneInit::initImage(void)
 	initImageSlect();
 	initImageMapTool();
 	initImageUnitEditor();
+	initImageUnits();
 }
 
 void sceneInit::initImageSlect(void)
@@ -118,7 +119,7 @@ void sceneInit::initImageMapTool(void)
 
 	//버튼 이미지
 	IMAGEMANAGER->addFrameImage(L"맵툴버튼", L"image/button.bmp", 100, 60, 1, 2);
-	IMAGEMANAGER->addFrameImage(L"맵툴버튼2", L"image/button2.bmp", 50, 60, 1, 2);
+	IMAGEMANAGER->addFrameImage(L"맵툴버튼2", L"image/button.bmp", 50, 60, 1, 2);
 
 	//이것은 뭐시다냐
 	IMAGEMANAGER->addFrameImage(L"평조테스트", L"image/combat_unit_test1.bmp", 48, 49, 1, 1);
@@ -223,6 +224,269 @@ void sceneInit::initImageUnitEditor(void)
 		_stprintf(strName, L"image/combat_unit_test %05d.bmp", i);
 
 		IMAGEMANAGER->addFrameImage(strKey, strName, 48, 49, 1, 1);
+	}
+}
+
+void sceneInit::initImageUnits(void)
+{
+	TCHAR strKey[100], strName[100];
+	int unitNum = 0;
+	//조조
+	{
+		TCHAR strTemp[100] = L"조조.bmp";
+
+		_stprintf(strKey, L"unit%d-atk", unitNum);
+		_stprintf(strName, L"image/unitImage/atk/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_ATKX, UNITSIZE_ATKY, UNITFRAME_ATKX, UNITFRAME_ATKY);
+
+		_stprintf(strKey, L"unit%d-idle", unitNum);
+		_stprintf(strName, L"image/unitImage/idle/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_IDLEX, UNITSIZE_IDLEY, UNITFRAME_IDLEX, UNITFRAME_IDLEY);
+
+		_stprintf(strKey, L"unit%d-spc", unitNum);
+		_stprintf(strName, L"image/unitImage/spc/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_SPCX, UNITSIZE_SPCY, UNITFRAME_SPCX, UNITFRAME_SPCY);
+
+		unitNum++;
+	}
+
+	//하후돈
+	{
+		TCHAR strTemp[100] = L"하후돈.bmp";
+
+		_stprintf(strKey, L"unit%d-atk", unitNum);
+		_stprintf(strName, L"image/unitImage/atk/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_ATKX, UNITSIZE_ATKY, UNITFRAME_ATKX, UNITFRAME_ATKY);
+
+		_stprintf(strKey, L"unit%d-idle", unitNum);
+		_stprintf(strName, L"image/unitImage/idle/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_IDLEX, UNITSIZE_IDLEY, UNITFRAME_IDLEX, UNITFRAME_IDLEY);
+
+		_stprintf(strKey, L"unit%d-spc", unitNum);
+		_stprintf(strName, L"image/unitImage/spc/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_SPCX, UNITSIZE_SPCY, UNITFRAME_SPCX, UNITFRAME_SPCY);
+
+		unitNum++;
+	}
+
+	//여포
+	{
+		TCHAR strTemp[100] = L"여포.bmp";
+
+		_stprintf(strKey, L"unit%d-atk", unitNum);
+		_stprintf(strName, L"image/unitImage/atk/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_ATKX, UNITSIZE_ATKY, UNITFRAME_ATKX, UNITFRAME_ATKY);
+
+		_stprintf(strKey, L"unit%d-idle", unitNum);
+		_stprintf(strName, L"image/unitImage/idle/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_IDLEX, UNITSIZE_IDLEY, UNITFRAME_IDLEX, UNITFRAME_IDLEY);
+
+		_stprintf(strKey, L"unit%d-spc", unitNum);
+		_stprintf(strName, L"image/unitImage/spc/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_SPCX, UNITSIZE_SPCY, UNITFRAME_SPCX, UNITFRAME_SPCY);
+
+		unitNum++;
+	}
+
+	//보병
+	for(int i = 0; i < TEAM_MAX; i++)
+	{
+		TCHAR strTemp[100] = L"";
+		_stprintf(strTemp, L"보병_%d.bmp", i);
+
+		_stprintf(strKey, L"unit%d-%d-atk", unitNum, i);
+		_stprintf(strName, L"image/unitImage/atk/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_ATKX, UNITSIZE_ATKY, UNITFRAME_ATKX, UNITFRAME_ATKY);
+
+		_stprintf(strKey, L"unit%d-%d-idle", unitNum, i);
+		_stprintf(strName, L"image/unitImage/idle/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_IDLEX, UNITSIZE_IDLEY, UNITFRAME_IDLEX, UNITFRAME_IDLEY);
+
+		_stprintf(strKey, L"unit%d-%d-spc", unitNum, i);
+		_stprintf(strName, L"image/unitImage/spc/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_SPCX, UNITSIZE_SPCY, UNITFRAME_SPCX, UNITFRAME_SPCY);
+
+		unitNum++;
+	}
+
+	//기병
+	for (int i = 0; i < TEAM_MAX; i++)
+	{
+		TCHAR strTemp[100] = L"";
+		_stprintf(strTemp, L"기병_%d.bmp", i);
+
+		_stprintf(strKey, L"unit%d-%d-atk", unitNum, i);
+		_stprintf(strName, L"image/unitImage/atk/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_ATKX, UNITSIZE_ATKY, UNITFRAME_ATKX, UNITFRAME_ATKY);
+
+		_stprintf(strKey, L"unit%d-%d-idle", unitNum, i);
+		_stprintf(strName, L"image/unitImage/idle/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_IDLEX, UNITSIZE_IDLEY, UNITFRAME_IDLEX, UNITFRAME_IDLEY);
+
+		_stprintf(strKey, L"unit%d-%d-spc", unitNum, i);
+		_stprintf(strName, L"image/unitImage/spc/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_SPCX, UNITSIZE_SPCY, UNITFRAME_SPCX, UNITFRAME_SPCY);
+
+		unitNum++;
+	}
+
+	//궁병
+	for (int i = 0; i < TEAM_MAX; i++)
+	{
+		TCHAR strTemp[100] = L"";
+		_stprintf(strTemp, L"궁병_%d.bmp", i);
+
+		_stprintf(strKey, L"unit%d-%d-atk", unitNum, i);
+		_stprintf(strName, L"image/unitImage/atk/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_ATKX, UNITSIZE_ATKY, UNITFRAME_ATKX, UNITFRAME_ATKY);
+
+		_stprintf(strKey, L"unit%d-%d-idle", unitNum, i);
+		_stprintf(strName, L"image/unitImage/idle/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_IDLEX, UNITSIZE_IDLEY, UNITFRAME_IDLEX, UNITFRAME_IDLEY);
+
+		_stprintf(strKey, L"unit%d-%d-spc", unitNum, i);
+		_stprintf(strName, L"image/unitImage/spc/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_SPCX, UNITSIZE_SPCY, UNITFRAME_SPCX, UNITFRAME_SPCY);
+
+		unitNum++;
+	}
+
+	//궁기병
+	for (int i = 0; i < TEAM_MAX; i++)
+	{
+		TCHAR strTemp[100] = L"";
+		_stprintf(strTemp, L"궁기병_%d.bmp", i);
+
+		_stprintf(strKey, L"unit%d-%d-atk", unitNum, i);
+		_stprintf(strName, L"image/unitImage/atk/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_ATKX, UNITSIZE_ATKY, UNITFRAME_ATKX, UNITFRAME_ATKY);
+
+		_stprintf(strKey, L"unit%d-%d-idle", unitNum, i);
+		_stprintf(strName, L"image/unitImage/idle/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_IDLEX, UNITSIZE_IDLEY, UNITFRAME_IDLEX, UNITFRAME_IDLEY);
+
+		_stprintf(strKey, L"unit%d-%d-spc", unitNum, i);
+		_stprintf(strName, L"image/unitImage/spc/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_SPCX, UNITSIZE_SPCY, UNITFRAME_SPCX, UNITFRAME_SPCY);
+
+		unitNum++;
+	}
+
+	//도사
+	for (int i = 0; i < TEAM_MAX; i++)
+	{
+		TCHAR strTemp[100] = L"";
+		_stprintf(strTemp, L"도사_%d.bmp", i);
+
+		_stprintf(strKey, L"unit%d-%d-atk", unitNum, i);
+		_stprintf(strName, L"image/unitImage/atk/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_ATKX, UNITSIZE_ATKY, UNITFRAME_ATKX, UNITFRAME_ATKY);
+
+		_stprintf(strKey, L"unit%d-%d-idle", unitNum, i);
+		_stprintf(strName, L"image/unitImage/idle/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_IDLEX, UNITSIZE_IDLEY, UNITFRAME_IDLEX, UNITFRAME_IDLEY);
+
+		_stprintf(strKey, L"unit%d-%d-spc", unitNum, i);
+		_stprintf(strName, L"image/unitImage/spc/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_SPCX, UNITSIZE_SPCY, UNITFRAME_SPCX, UNITFRAME_SPCY);
+
+		unitNum++;
+	}
+
+	//법사
+	for (int i = 0; i < TEAM_MAX; i++)
+	{
+		TCHAR strTemp[100] = L"";
+		_stprintf(strTemp, L"법사_%d.bmp", i);
+
+		_stprintf(strKey, L"unit%d-%d-atk", unitNum, i);
+		_stprintf(strName, L"image/unitImage/atk/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_ATKX, UNITSIZE_ATKY, UNITFRAME_ATKX, UNITFRAME_ATKY);
+
+		_stprintf(strKey, L"unit%d-%d-idle", unitNum, i);
+		_stprintf(strName, L"image/unitImage/idle/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_IDLEX, UNITSIZE_IDLEY, UNITFRAME_IDLEX, UNITFRAME_IDLEY);
+
+		_stprintf(strKey, L"unit%d-%d-spc", unitNum, i);
+		_stprintf(strName, L"image/unitImage/spc/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_SPCX, UNITSIZE_SPCY, UNITFRAME_SPCX, UNITFRAME_SPCY);
+
+		unitNum++;
+	}
+
+	//무도가
+	for (int i = 0; i < TEAM_MAX; i++)
+	{
+		TCHAR strTemp[100] = L"";
+		_stprintf(strTemp, L"무도가_%d.bmp", i);
+
+		_stprintf(strKey, L"unit%d-%d-atk", unitNum, i);
+		_stprintf(strName, L"image/unitImage/atk/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_ATKX, UNITSIZE_ATKY, UNITFRAME_ATKX, UNITFRAME_ATKY);
+
+		_stprintf(strKey, L"unit%d-%d-idle", unitNum, i);
+		_stprintf(strName, L"image/unitImage/idle/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_IDLEX, UNITSIZE_IDLEY, UNITFRAME_IDLEX, UNITFRAME_IDLEY);
+
+		_stprintf(strKey, L"unit%d-%d-spc", unitNum, i);
+		_stprintf(strName, L"image/unitImage/spc/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_SPCX, UNITSIZE_SPCY, UNITFRAME_SPCX, UNITFRAME_SPCY);
+
+		unitNum++;
+	}
+
+	//석기
+	for (int i = 0; i < TEAM_MAX; i++)
+	{
+		TCHAR strTemp[100] = L"";
+		_stprintf(strTemp, L"석기_%d.bmp", i);
+
+		_stprintf(strKey, L"unit%d-%d-atk", unitNum, i);
+		_stprintf(strName, L"image/unitImage/atk/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_ATKX, UNITSIZE_ATKY, UNITFRAME_ATKX, UNITFRAME_ATKY);
+
+		_stprintf(strKey, L"unit%d-%d-idle", unitNum, i);
+		_stprintf(strName, L"image/unitImage/idle/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_IDLEX, UNITSIZE_IDLEY, UNITFRAME_IDLEX, UNITFRAME_IDLEY);
+
+		_stprintf(strKey, L"unit%d-%d-spc", unitNum, i);
+		_stprintf(strName, L"image/unitImage/spc/");
+		_tcscat(strName, strTemp);
+		IMAGEMANAGER->addFrameImage(strKey, strName, UNITSIZE_SPCX, UNITSIZE_SPCY, UNITFRAME_SPCX, UNITFRAME_SPCY);
+
+		unitNum++;
 	}
 }
 
