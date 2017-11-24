@@ -29,6 +29,11 @@ void Unit::init(void)
 	_imgStory = NULL;
 	_imgBattle = NULL;
 
+	ZeroMemory(&_pt, sizeof(POINT));
+	ZeroMemory(&_rc, sizeof(RECT));
+	ZeroMemory(&_tilePt, sizeof(POINT));
+
+
 	ZeroMemory(&_atkRange, sizeof(_atkRange));
 
 }

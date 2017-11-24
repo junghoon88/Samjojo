@@ -146,6 +146,11 @@ void sceneSelect::selectScenario(void)
 		if (PtInRect(&_button2[i]->getRect(), _ptMouse))
 		{
 			DATABASE->setSlectScenario(i);
+
+			_player->loadUnits();
+			_friend->loadUnits();
+			_enemy->loadUnits();
+
 			//SCENEMANAGER->changeScene(L"´ëÈ­¾À");
 			//SCENEMANAGER->changeScene(L"»óÁ¡¾À");
 			SCENEMANAGER->changeScene(L"ÀüÅõ¾À");

@@ -19,10 +19,13 @@ private:
 	TCHAR* utype;//클래스
 	TCHAR* faction;//진영(아군적군)
 	TCHAR* land;//유닛이 밟은 땅
+	TCHAR* showExp;//플레이어는 아군적군대신 경험치 표시됨
+	
+	int bonus;//밟은 땅에 따른 전투력 증감표시
+	int exp;
 	int lv;
 	int curHp, maxHp;
 	int curMp, maxMp;
-
 	//유닛 정보 표시용
 
 	//지형 정보 표시용

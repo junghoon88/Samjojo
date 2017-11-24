@@ -22,8 +22,10 @@ HRESULT sceneBattle::init(void)
 	_cursor = new infoCursor;
 	_cursor->init();
 
+
 	DATABASE->getSlectScenario();
 
+	nowPhase = playerPhase;
 	return S_OK;
 }
 
@@ -56,3 +58,8 @@ void sceneBattle::initSound(void)
 
 }
 
+
+void sceneBattle::phaseControl(void)
+{
+
+}
