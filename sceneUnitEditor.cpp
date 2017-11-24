@@ -3,7 +3,20 @@
 
 
 sceneUnitEditor::sceneUnitEditor()
+	: _unit(NULL), _imgFace(NULL), _imgBattleAtk(NULL), _imgBattleIdle(NULL), _imgBattleSpc(NULL)
 {
+	for (int i = 0; i < UNITEDITOR_BUTTON_MAX; i++)
+	{
+		_ctrlButton[i] = NULL;
+	}
+	for (int i = 0; i < UNITEDITOR_NUMEDITBOX_MAX; i++)
+	{
+		_numEditBox[i] = NULL;
+	}
+	for (int i = 0; i < UNITEDITOR_STREDITBOX_MAX; i++)
+	{
+		_strEditBox[i] = NULL;
+	}
 }
 
 
@@ -19,6 +32,7 @@ HRESULT sceneUnitEditor::init(void)
 
 	initButton();
 	initValues();
+	initImage();
 	initEditbox();
 	initRangeRect();
 	initTeamButton();
@@ -169,6 +183,14 @@ void sceneUnitEditor::render(void)
 
 	//팀선택 버튼
 	teamButtonRender();
+}
+
+void sceneUnitEditor::initImage(void)
+{
+	selectImgFace();
+	selectImgBattleAtk();
+	selectImgBattleIdle();
+	selectImgBattleSpc();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -598,22 +620,10 @@ void sceneUnitEditor::editBoxRender(void)
 }
 void sceneUnitEditor::unitImageRender(void)			// 해야될 것: 프레임 이미지로 입력받아 프레임렌더로 출력
 {
-	TCHAR strFaceKey[100];
-	_stprintf(strFaceKey, L"face %05d", _faceNum);
-	//image* img = IMAGEMANAGER->findImage(strFaceKey);	
-	IMAGEMANAGER->findImage(strFaceKey)->render(getMemDC(), 100 + UPDATEPOSX, 100 + UPDATEPOSY);
-
-	TCHAR strNormalKey[100];
-	_stprintf(strNormalKey, L"평조 %05d", _normalNum);
-	IMAGEMANAGER->findImage(strNormalKey)->render(getMemDC(), 100 + UPDATEPOSX, 300 + UPDATEPOSY);
-	//IMAGEMANAGER->findImage(strNormalKey)->frameRender(getMemDC(), 100, 300, 0, 0);
-
-	TCHAR strCombatKey[100];
-	_stprintf(strCombatKey, L"전조 %05d", _combatNum);
-	IMAGEMANAGER->findImage(strCombatKey)->render(getMemDC(), 100 + UPDATEPOSX, 500 + UPDATEPOSY);
-	//IMAGEMANAGER->findImage(strCombatKey)->frameRender(getMemDC(), 100, 300, 0, 0);
-
-	_unit->setImages(strFaceKey, strNormalKey, strCombatKey);		// 이미지 셋
+	if (_imgFace)		_imgFace->render(getMemDC(), 100 + UPDATEPOSX, 100 + UPDATEPOSY);
+	if (_imgBattleAtk)  _imgBattleAtk->render(getMemDC(), 100 + UPDATEPOSX, 300 + UPDATEPOSY);
+	if (_imgBattleIdle) _imgBattleAtk->render(getMemDC(), 100 + UPDATEPOSX, 400 + UPDATEPOSY);
+	if (_imgBattleSpc)  _imgBattleAtk->render(getMemDC(), 100 + UPDATEPOSX, 500 + UPDATEPOSY);
 }
 void sceneUnitEditor::atkRangeRender(void)
 {
@@ -907,6 +917,37 @@ void sceneUnitEditor::saveUnit(void)
 	CloseHandle(file);
 }
 
+void sceneUnitEditor::selectImgFace(void)
+{
+	TCHAR strFaceKey[100];
+	_stprintf(strFaceKey, L"face %05d", _faceNum);
+	_imgFace = IMAGEMANAGER->findImage(strFaceKey);
+}
+
+void sceneUnitEditor::selectImgBattleAtk(void)
+{
+	_imgBattleAtk = NULL;
+	//TCHAR strNormalKey[100];
+	//_stprintf(strNormalKey, L"평조 %05d", _normalNum);
+	//IMAGEMANAGER->findImage(strNormalKey)->render(getMemDC(), 100 + UPDATEPOSX, 300 + UPDATEPOSY);
+	//IMAGEMANAGER->findImage(strNormalKey)->frameRender(getMemDC(), 100, 300, 0, 0);
+
+	//TCHAR strCombatKey[100];
+	//_stprintf(strCombatKey, L"전조 %05d", _combatNum);
+	//IMAGEMANAGER->findImage(strCombatKey)->render(getMemDC(), 100 + UPDATEPOSX, 500 + UPDATEPOSY);
+	//IMAGEMANAGER->findImage(strCombatKey)->frameRender(getMemDC(), 100, 300, 0, 0);
+}
+
+void sceneUnitEditor::selectImgBattleIdle(void)
+{
+	_imgBattleIdle = NULL;
+}
+
+void sceneUnitEditor::selectImgBattleSpc(void)
+{
+	_imgBattleSpc = NULL;
+}
+
 //~other functions
 //-----------------------------------------------------------------------------------------
 //callback functions
@@ -935,21 +976,29 @@ void sceneUnitEditor::ctrlSelectFacePrev(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setFacePrev();
+	unitEditor->selectImgFace();
 }
 void sceneUnitEditor::ctrlSelectFaceNext(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setFaceNext();
+	unitEditor->selectImgFace();
 }
 void sceneUnitEditor::ctrlSelectNormalPrev(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setNormalPrev();
+	unitEditor->selectImgBattleAtk();
+	unitEditor->selectImgBattleIdle();
+	unitEditor->selectImgBattleSpc();
 }
 void sceneUnitEditor::ctrlSelectNormalNext(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setNormalNext();
+	unitEditor->selectImgBattleAtk();
+	unitEditor->selectImgBattleIdle();
+	unitEditor->selectImgBattleSpc();
 }
 void sceneUnitEditor::ctrlSelectCombatPrev(void* obj)
 {

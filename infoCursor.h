@@ -13,6 +13,8 @@ private:
 
 	RECT rc;//정보 제공용 박스
 	RECT drawLine;//타일 테두리 표시용
+	HPEN linePen,oPen;
+
 	RECT tileImgRect;
 	RECT unitImgRect;
 	
@@ -52,10 +54,10 @@ public:
 	void update(void);
 	void render(void);
 
-
+	void dataClean(void);//마우스 우클릭시 클리어 용
 	void tileLineDraw(void);
 	void infoDraw(void);
 	void Scanning(void);
-	void Click(int num);
+	void Click(void);
 };
 
