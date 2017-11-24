@@ -4,6 +4,15 @@
 
 Unit::Unit()
 {
+}
+
+
+Unit::~Unit()
+{
+}
+
+void Unit::init(void)
+{
 	ZeroMemory(&_status, sizeof(tagStatus));
 	_status.isLive = true;
 	_status.enterScenario = 1;
@@ -19,12 +28,12 @@ Unit::Unit()
 	_imgFace = NULL;
 	_imgStory = NULL;
 	_imgBattle = NULL;
-	
+
+	ZeroMemory(&_pt, sizeof(POINT));
+	ZeroMemory(&_rc, sizeof(RECT));
+	ZeroMemory(&_tilePt, sizeof(POINT));
+
+
 	ZeroMemory(&_atkRange, sizeof(_atkRange));
 
-}
-
-
-Unit::~Unit()
-{
 }

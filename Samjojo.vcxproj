@@ -14,7 +14,7 @@
     <ProjectGuid>{03A295ED-8259-42B5-BB8D-346487E24943}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>MySamjojo</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -111,6 +111,7 @@
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="RenderManager.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="scanDialog.h" />
     <ClInclude Include="sceneBattle.h" />
     <ClInclude Include="sceneInit.h" />
     <ClInclude Include="sceneLoading.h" />
@@ -159,6 +160,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="RenderManager.cpp" />
+    <ClCompile Include="scanDialog.cpp" />
     <ClCompile Include="sceneBattle.cpp" />
     <ClCompile Include="sceneInit.cpp" />
     <ClCompile Include="sceneLoading.cpp" />

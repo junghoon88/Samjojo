@@ -43,11 +43,14 @@ struct tagStatus
 	int LvPerInt;		//Áö·Â
 	int LvPerDex;		//¹ÎÃ¸
 	int LvPerLuk;		//¿î
-
 };
+
 
 class Unit
 {
+private:
+	typedef BOOL(*Temp)[UNIT_ATTACK_RANGE_MAX];
+
 protected:
 	tagStatus		_status;
 	ItemWeapon*		_itemW;
@@ -72,6 +75,8 @@ public:
 	Unit();
 	~Unit();
 
+	void init(void);
+
 public:
 	inline tagStatus getStatus(void) { return _status; }
 	inline void setStatus(tagStatus status) { _status = status; }
@@ -81,12 +86,17 @@ public:
 	inline void setItemA(ItemArmor* itema) { _itemA = itema; }
 	inline ItemSpecial*	getItemS(void) { return _itemS; }
 	inline void setItemS(ItemSpecial* items) { _itemS = items; }
+	inline TEAM getTeam(void) { return _team; }
+	inline void setTeam(TEAM team) { _team = team; }
 	inline void setImages(TCHAR* strFace, TCHAR* strNormal, TCHAR* strCombat)
 	{
 		_imgFace = IMAGEMANAGER->findImage(strFace);
 		_imgStory = IMAGEMANAGER->findImage(strNormal);
 		_imgBattle = IMAGEMANAGER->findImage(strCombat);
 	}
+
+	inline Temp getAtkRange(void) { return _atkRange; }
+	inline void setAtkRange(BOOL(*range)[UNIT_ATTACK_RANGE_MAX]) { memcpy(_atkRange, range, sizeof(BOOL) * UNIT_ATTACK_RANGE_MAX* UNIT_ATTACK_RANGE_MAX); }
 };
 
 typedef vector<Unit*>	vUnits;

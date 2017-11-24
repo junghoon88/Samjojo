@@ -4,8 +4,49 @@
 #include "button.h"
 #include "editbox.h"
 
+
+#define UPDATEPOSX 144
+#define UPDATEPOSY 0
+
+#define FILENAME_STARTX		64
+#define FILENAME_STARTY		260
+#define FILENAME_WIDTH		128
+#define FILENAME_HEIGHT		30
+
+#define RANGESIZEX	UNIT_ATTACK_RANGE_MAX
+#define RANGESIZEY	UNIT_ATTACK_RANGE_MAX
+#define TILEWIDTH	48
+#define TILEHEIGHT	48
+
+struct tagTeamInfo
+{
+	RECT rc;
+	image* img;
+	TCHAR str[100];
+	bool clicked;
+};
+
+
+struct tagUnitFileInfo
+{
+	RECT rc;
+	image* img;
+	TCHAR str[100];
+	bool clicked;
+};
+
+
+struct tagRange
+{
+	RECT rc;
+	bool clicked;
+};
+
+
 enum UNITEDITOR_BUTTON
 {
+	UNITEDITOR_BUTTON_LABEL_FILELIST,
+
 	UNITEDITOR_BUTTON_LABEL_NAME,		//이름
 	
 	UNITEDITOR_BUTTON_LABEL_FAMILY,
@@ -53,9 +94,13 @@ enum UNITEDITOR_BUTTON
 	UNITEDITOR_BUTTON_LABEL_SUBITEM,
 
 
+	UNITEDITOR_BUTTON_LABEL_FILENAME,
+
+
 	UNITEDITOR_BUTTON_DATA_NEW,			//새 영웅 만들기
 	UNITEDITOR_BUTTON_DATA_LOAD,		//영웅 데이터 불러오기
 	UNITEDITOR_BUTTON_DATA_SAVE,		//영웅 데이터 저장하기
+	UNITEDITOR_BUTTON_DATA_EXIT,		//메뉴로
 
 	UNITEDITOR_BUTTON_FACE_PREV,		//얼굴 이전 이미지
 	UNITEDITOR_BUTTON_FACE_NEXT,		//얼굴 다음 이미지
@@ -117,6 +162,7 @@ enum UNITEDITOR_NUMEDITBOX
 	UNITEDITOR_NUMEDITBOX_DATA_LVPERDEX,
 	UNITEDITOR_NUMEDITBOX_DATA_LVPERLUK,
 
+
 	UNITEDITOR_NUMEDITBOX_MAX
 };
 
@@ -125,6 +171,8 @@ enum UNITEDITOR_STREDITBOX
 	UNITEDITOR_STREDITBOX_DATA_NAME,
 	UNITEDITOR_STREDITBOX_DATA_FAMILY,
 	UNITEDITOR_STREDITBOX_DATA_AOS,
+
+	UNITEDITOR_STREDITBOX_DATA_FILENAME,
 
 	UNITEDITOR_STREDITBOX_MAX
 };
@@ -137,16 +185,32 @@ private:
 
 	tagStatus _tempStatus;
 
+	TEAM _team;
+	tagTeamInfo _teamButton[TEAM_MAX];
+
 	button* _ctrlButton[UNITEDITOR_BUTTON_MAX];
 	TCHAR _strButton[UNITEDITOR_BUTTON_MAX][100];
 	
-
 	editbox* _numEditBox[UNITEDITOR_NUMEDITBOX_MAX];
 	editbox* _strEditBox[UNITEDITOR_STREDITBOX_MAX];
 
-private:
 	TCHAR* _filename;
-	
+
+	tagRange _atkRange[RANGESIZEX][RANGESIZEY];
+
+	bool _exit;
+
+
+private:
+	//기존 파일들 스캔
+	vector<tagUnitFileInfo> _vUnits;
+	void loadUnitFiles(void);
+	HBRUSH hBrushWhite;
+	HBRUSH hBrushBlue;
+
+	HBRUSH hBrushRange;
+	HBRUSH hBrushPlayer;
+	HBRUSH hBrushAttack;
 
 private:
 	int _faceNum;
@@ -161,6 +225,7 @@ private:
 	static void ctrlSelectDataNew(void* obj);
 	static void ctrlSelectDataLoad(void* obj);
 	static void ctrlSelectDataSave(void* obj);
+	static void ctrlSelectExit(void* obj);
 
 	static void ctrlSelectFacePrev(void* obj);
 	static void ctrlSelectFaceNext(void* obj);
@@ -180,6 +245,10 @@ private:
 	static void ctrlSelectSubitemPrev(void* obj);
 	static void ctrlSelectSubitemNext(void* obj);
 
+	static void cbFuncChangeTeamPlayer(void* obj);
+	static void cbFuncChangeTeamFriend(void* obj);
+	static void cbFuncChangeTeamEnemy(void* obj);
+
 
 public:
 	sceneUnitEditor();
@@ -195,12 +264,20 @@ public:
 	void initButton(void);
 	void initValues(void);
 	void initEditbox(void);
+	void initRangeRect(void);
+	void initTeamButton(void);
 
 public:
-	void btnSetup(void);
+	void filesUpdate(void);
+	void teamButtonUpdate(void);
+
+public:
 	void rectSketch(void);
 	void editBoxRender(void);
 	void unitImageRender(void);
+	void atkRangeRender(void);
+	void filesRender(void);
+	void teamButtonRender(void);
 
 	void newUnit(void);
 	void loadUnit(void);
@@ -224,5 +301,7 @@ public:
 
 	inline void setSubitemPrev(void) { _subitemNum = _subitemNum == 0 ? SUBITEM_IMAGE_MAX : _subitemNum - 1; }
 	inline void setSubitemNext(void) { _subitemNum = _subitemNum == SUBITEM_IMAGE_MAX ? 0 : _subitemNum + 1; }
+
+	inline void setExit(void) { _exit = true; }
 };
 
