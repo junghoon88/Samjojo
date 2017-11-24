@@ -32,6 +32,7 @@
 //지형의 대한 정의
 enum TERRAIN
 {
+	TERRAIN_NONE = -1,	//미설정 상태
 	TERRAIN_RIVER,		//강(이동불가)
 	TERRAIN_BRIDGE,		//다리(화, 수, 풍)
 	TERRAIN_WATER,		//대하(이건 뭔지 도데체 모르겠다..., 아무튼 이동불가)
@@ -62,7 +63,6 @@ enum TERRAIN
 	TERRAIN_FLAT,		//평지(화, 풍)
 	TERRAIN_BADLANDS,	//황무지(지, 풍)
 	TERRAIN_GATEWAY,	//관문(화, 첫 점령시 MP 회복아이템 지급, 매턴 시작시 MP 20%회복)
-	TERRAIN_NONE,		//미설정 상태
 
 	TERRAIN_MAX			//이거 나오면 이상한거임 나올수가 없음
 };
@@ -70,9 +70,38 @@ enum TERRAIN
 //오브젝트의 대한 정의
 enum OBJECT
 {
-	OBJECT_NONE,
+	OBJECT_NONE = -1,
+	OBJECT_INFANTRY,		//보병
+	OBJECT_CAVALRY,			//기병
+	OBJECT_ARCHER,			//궁병
+	OBJECT_HORSEARCHER,		//궁기병
+	OBJECT_FIGHTER,			//무도가
+	OBJECT_THEIF,			//도적
+	OBJECT_TACTICIAN,		//책사
+	OBJECT_WIZARD,			//도사
+	OBJECT_CATAPULT,		//투석기
+	
+	OBJECT_HERO01 = 0,		//영웅
+	OBJECT_HERO02,
+	OBJECT_HERO03,
+	OBJECT_HERO04,
+	OBJECT_HERO05,
+	OBJECT_HERO06,
+	OBJECT_HERO07,
+	OBJECT_HERO08,
+	OBJECT_HERO09,
+	OBJECT_HERO10,
 
 	OBJECT_MAX
+};
+
+enum OBJECTSELECT
+{
+	OBJECTSELECT_ENEMY,
+	OBJECTSELECT_AILY,
+	OBJECTSELECT_PLAYER,
+
+	OBJECTSELECT_MAX
 };
 
 //타일 구조체
@@ -82,7 +111,9 @@ struct tagTile
 	OBJECT obj;
 	RECT rc;
 
-	int sampleTerrainIdx;	//샘플 터레인 인덱스
+	int sampleTerrainIdx;		//샘플 터레인 인덱스
+	int sampleObjectSelectIdx;	//오브젝트 case 인덱스
+	int sampleObjectIdx;		//샘플 오브젝트 인덱스
 };
 
 struct tagSampleTile
@@ -90,6 +121,14 @@ struct tagSampleTile
 	RECT rcTile;
 	image* img;
 	TCHAR strImgKey[100];
+};
+
+struct tagSampleObject
+{
+	RECT rcTile;
+	image* img;
+	TCHAR strImgKey[100];
+	OBJECT obj;
 };
 
 struct tagCurrentTile

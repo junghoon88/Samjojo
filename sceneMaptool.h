@@ -26,10 +26,13 @@ class sceneMaptool : public gameNode
 private:
 	int _selectSampleIndex;
 	tagSampleTile _sampleTiles[SAMPLETILEX * SAMPLETILEY];
+	tagSampleObject _TroopObj[OBJECTSELECT_MAX][SAMPLETILEX * SAMPLETILEY];
 	tagTile _tiles[TILEX * TILEY];
 
 	button* _ctrlButton[CTRL_END];
+	button* _objectSelect[OBJECTSELECT_MAX];
 	TCHAR _strButton[CTRL_END][100];
+	TCHAR _strObjectSelect[OBJECTSELECT_MAX][100];
 	TCHAR _fileName[100];
 	TCHAR _saveSize[100];
 
@@ -37,6 +40,7 @@ private:
 	editbox* _alphaValueBox;
 
 	int _ctrSelect;
+	int _ctrObjectSelect;
 
 	int _countX;
 	int _countY;
@@ -59,6 +63,9 @@ private:
 	static void ctrlSelectObject(void* obj);
 	static void ctrlSelectEraser(void* obj);
 
+	static void ctrlObjectSelectAily(void* obj);
+	static void ctrlObjectSelectEnemy(void* obj);
+	static void ctrlObjectSelectPlayer(void* obj);
 
 	void setup(void);
 	void setMap(void);
@@ -83,6 +90,9 @@ public:
 
 	inline int getCtrlSelect(void) { return _ctrSelect; }
 	inline void setCtrlSelect(int select) { _ctrSelect = select; }
+
+	inline int getCtrlObjectSelect(void) { return _ctrObjectSelect; }
+	inline void setCtrlObjectSelect(int ObjectSelect) { _ctrObjectSelect = ObjectSelect; }
 
 	inline tagSampleTile* getSampleTile(void) { return _sampleTiles; }
 };
