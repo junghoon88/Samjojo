@@ -622,8 +622,8 @@ void sceneUnitEditor::unitImageRender(void)			// 해야될 것: 프레임 이미지로 입력
 {
 	if (_imgFace)		_imgFace->render(getMemDC(), 100 + UPDATEPOSX, 100 + UPDATEPOSY);
 	if (_imgBattleAtk)  _imgBattleAtk->render(getMemDC(), 100 + UPDATEPOSX, 300 + UPDATEPOSY);
-	if (_imgBattleIdle) _imgBattleAtk->render(getMemDC(), 100 + UPDATEPOSX, 400 + UPDATEPOSY);
-	if (_imgBattleSpc)  _imgBattleAtk->render(getMemDC(), 100 + UPDATEPOSX, 500 + UPDATEPOSY);
+	if (_imgBattleIdle) _imgBattleIdle->render(getMemDC(), 100 + UPDATEPOSX, 300+256 + UPDATEPOSY);
+	if (_imgBattleSpc)  _imgBattleSpc->render(getMemDC(), 100 + UPDATEPOSX, 300+256+96 + UPDATEPOSY);
 }
 void sceneUnitEditor::atkRangeRender(void)
 {
@@ -926,26 +926,44 @@ void sceneUnitEditor::selectImgFace(void)
 
 void sceneUnitEditor::selectImgBattleAtk(void)
 {
-	_imgBattleAtk = NULL;
-	//TCHAR strNormalKey[100];
-	//_stprintf(strNormalKey, L"평조 %05d", _normalNum);
-	//IMAGEMANAGER->findImage(strNormalKey)->render(getMemDC(), 100 + UPDATEPOSX, 300 + UPDATEPOSY);
-	//IMAGEMANAGER->findImage(strNormalKey)->frameRender(getMemDC(), 100, 300, 0, 0);
-
-	//TCHAR strCombatKey[100];
-	//_stprintf(strCombatKey, L"전조 %05d", _combatNum);
-	//IMAGEMANAGER->findImage(strCombatKey)->render(getMemDC(), 100 + UPDATEPOSX, 500 + UPDATEPOSY);
-	//IMAGEMANAGER->findImage(strCombatKey)->frameRender(getMemDC(), 100, 300, 0, 0);
+	TCHAR strKey[100];
+	if (_normalNum < UNIT_BATTLE_IMAGE1)
+	{
+		_stprintf(strKey, L"unit%d-atk", _normalNum);
+	}
+	else
+	{
+		_stprintf(strKey, L"unit%d-%d-atk", _normalNum, _team);
+	}
+	_imgBattleAtk = IMAGEMANAGER->findImage(strKey);
 }
 
 void sceneUnitEditor::selectImgBattleIdle(void)
 {
-	_imgBattleIdle = NULL;
+	TCHAR strKey[100];
+	if (_normalNum < UNIT_BATTLE_IMAGE1)
+	{
+		_stprintf(strKey, L"unit%d-idle", _normalNum);
+	}
+	else
+	{
+		_stprintf(strKey, L"unit%d-%d-idle", _normalNum, _team);
+	}
+	_imgBattleIdle = IMAGEMANAGER->findImage(strKey);
 }
 
 void sceneUnitEditor::selectImgBattleSpc(void)
 {
-	_imgBattleSpc = NULL;
+	TCHAR strKey[100];
+	if (_normalNum < UNIT_BATTLE_IMAGE1)
+	{
+		_stprintf(strKey, L"unit%d-spc", _normalNum);
+	}
+	else
+	{
+		_stprintf(strKey, L"unit%d-%d-spc", _normalNum, _team);
+	}
+	_imgBattleSpc = IMAGEMANAGER->findImage(strKey);
 }
 
 //~other functions
