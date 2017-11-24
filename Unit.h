@@ -30,6 +30,20 @@ struct tagStatus
 	int Dex;		//민첩
 	int Luk;		//운
 
+	//기본 수치
+	int InitHPMax;
+	int InitMPMax;
+	int InitAtk;		//공격력
+	int InitDep;		//방어력
+	int InitRes;		//정신력
+	int InitAgl;		//순발력
+	int InitFig;		//사기
+	int InitPwr;		//무력
+	int InitLds;		//통솔
+	int InitInt;		//지력
+	int InitDex;		//민첩
+	int InitLuk;		//운
+
 	//레벨당 증가하는 수치
 	int LvPerHPMax;
 	int LvPerMPMax;
