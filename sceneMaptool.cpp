@@ -43,6 +43,10 @@ HRESULT sceneMaptool::init(void)
 	_alphaValueBox->setRect(RectMake(1050, 180, 100, 30));
 	_alphaValueBox->setOnlyNum(TRUE);
 
+	_tileObj = new editbox;
+	_tileObj->init();
+	_tileObj->setRect(RectMake(WINSIZEX - 3 * TILESIZE, 14 * TILESIZE, 100, 30));
+
 	_alphaValueBox->setStrNum(_alphaValue / 255 * 100);
 
 	_stprintf(_saveSize, L"0 x 0");
@@ -63,17 +67,36 @@ void sceneMaptool::update(void)
 	if (_editBox->getStrNum() > 57)	_editBox->setStrNum(57);
 	else if (_editBox->getStrNum() < 0) _editBox->setStrNum(0);
 
+	_tileObj->update();
+
 	for (int i = 0; i < CTRL_END; i++)
 	{
 		_ctrlButton[i]->update();
 	}
 
-	for (int i = 0; i < OBJECTSELECT_MAX; i++)
-	{
-		_objectSelect[i]->update();
-	}
+	//for (int i = 0; i < OBJECTSELECT_MAX; i++)
+	//{
+	//	_objectSelect[i]->update();
+	//}
 
 	if (KEYMANAGER->isOnceKeyDown(MK_LBUTTON) || KEYMANAGER->isStayKeyDown(MK_LBUTTON))	setMap();
+	if (KEYMANAGER->isOnceKeyUp(MK_LBUTTON))
+	{
+		if (PtInRect(&RectMake(0, 0, TILEVIEWX * TILESIZE, TILEVIEWY * TILESIZE), _ptMouse))
+		{
+			for (int i = 0; i < TILEX * TILEY; i++)
+			{
+				 _tiles[i].isClick = false;
+			}
+			for (int i = 0; i < TILEVIEWX; i++)
+			{
+				for (int j = 0; j < TILEVIEWY; j++)
+				{
+					if (PtInRect(&_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].rc, _ptMouse) && _tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleObjectSelectIdx != OBJECTSELECT_NONE) _tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].isClick = true;
+				}
+			}
+		}
+	}
 
 	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
 	{
@@ -202,38 +225,32 @@ void sceneMaptool::update(void)
 
 void sceneMaptool::render(void)	
 {
-	RectangleMake(getMemDC(), WINSIZEX - 3 * TILESIZE - 1, 0, TILESIZE * 3 + 1, TILESIZE * 10 + 1);
-
 	//샘플타일
-	if (_ctrSelect == CTRL_TERRAINDRAW)
+	RectangleMake(getMemDC(), WINSIZEX - 3 * TILESIZE - 1, 0, TILESIZE * 3 + 1, TILESIZE * 10 + 21);
+	TextOut(getMemDC(), WINSIZEX - (3 * TILESIZE) / 2 - 20, 1, L"지형", _tcslen(L"지형"));
+
 	for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
 	{
 		if (_sampleTiles[i].img == NULL) continue;
 		_sampleTiles[i].img->render(getMemDC(), _sampleTiles[i].rcTile.left, _sampleTiles[i].rcTile.top);
 	}
 
-	//오브젝트 타일
-	if (_ctrSelect == CTRL_OBJDRAW)
+	//샘플 오브젝트 타일
+	RectangleMake(getMemDC(), WINSIZEX - 3 * TILESIZE - 1, TILESIZE * 11 + 21, TILESIZE * 3 + 1, TILESIZE + 41);
+	RectangleMake(getMemDC(), WINSIZEX - 3 * TILESIZE - 1, TILESIZE * 11 + 40, TILESIZE + 1, TILESIZE + 22);
+	RectangleMake(getMemDC(), WINSIZEX - 2 * TILESIZE - 1, TILESIZE * 11 + 40, TILESIZE + 1, TILESIZE + 22);
+	RectangleMake(getMemDC(), WINSIZEX - 1 * TILESIZE - 1, TILESIZE * 11 + 40, TILESIZE + 1, TILESIZE + 22);
+
+	TextOut(getMemDC(), WINSIZEX - (3 * TILESIZE) / 2 - 20, TILESIZE * 11 + 22, L"유닛", _tcslen(L"유닛"));
+	TextOut(getMemDC(), WINSIZEX - 3 * TILESIZE + 6, TILESIZE * 11 + 22 + TILESIZE + 20, L"아군", _tcslen(L"아군"));
+	TextOut(getMemDC(), WINSIZEX - (3 * TILESIZE) / 2 - 20, TILESIZE * 11 + 22 + TILESIZE + 20, L"적군", _tcslen(L"적군"));
+	TextOut(getMemDC(), WINSIZEX - TILESIZE + 2, TILESIZE * 11 + 22 + TILESIZE + 20, L"player", _tcslen(L"player"));
+
+	for (int i = 0; i < OBJECTSELECT_MAX; i++)
 	{
-		if (_ctrObjectSelect == OBJECTSELECT_AILY)
-				for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
-				{
-					if (_TroopObj[OBJECTSELECT_AILY][i].img == NULL || _TroopObj[OBJECTSELECT_AILY][i].obj == OBJECT_NONE) continue;
-					_TroopObj[OBJECTSELECT_AILY][i].img->render(getMemDC(), _sampleTiles[i].rcTile.left, _sampleTiles[i].rcTile.top);
-				}
-		if (_ctrObjectSelect == OBJECTSELECT_ENEMY)
-				for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
-				{
-					if (_TroopObj[OBJECTSELECT_ENEMY][i].img == NULL || _TroopObj[OBJECTSELECT_ENEMY][i].obj == OBJECT_NONE) continue;
-					_TroopObj[OBJECTSELECT_ENEMY][i].img->render(getMemDC(), _sampleTiles[i].rcTile.left, _sampleTiles[i].rcTile.top);
-				}
-		if (_ctrObjectSelect == OBJECTSELECT_PLAYER)
-				for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
-				{
-					if (_TroopObj[OBJECTSELECT_PLAYER][i].img == NULL || _TroopObj[OBJECTSELECT_PLAYER][i].obj == OBJECT_NONE) continue;
-					_TroopObj[OBJECTSELECT_PLAYER][i].img->render(getMemDC(), _sampleTiles[i].rcTile.left, _sampleTiles[i].rcTile.top);
-				}
+		_objTiles[i].img->render(getMemDC(), _objTiles[i].rcTile.left, _objTiles[i].rcTile.top);
 	}
+
 
 	//에딧박스 및 정보
 	TCHAR text[128];
@@ -255,6 +272,10 @@ void sceneMaptool::render(void)
 	TextOut(getMemDC(), 1050, 160, text, wcslen(text));
 	_alphaValueBox->render();
 
+	_stprintf(text, L"유닛 이름");
+	TextOut(getMemDC(), WINSIZEX - 3 * TILESIZE, 650, text, wcslen(text));
+	_tileObj->render();
+
 	//지형
 	for (int i = 0; i < TILEVIEWX; i++)
 	{
@@ -269,26 +290,31 @@ void sceneMaptool::render(void)
 	{
 		for (int j = 0; j < TILEVIEWY; j++)
 		{
-			if (_tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].obj == OBJECT_NONE) continue;
+			if (_tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].sampleObjectSelectIdx == OBJECTSELECT_NONE) continue;
 
-			IMAGEMANAGER->alphaRender(_TroopObj[_tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].sampleObjectSelectIdx][_tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].sampleObjectIdx].strImgKey, getMemDC(), _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.left, _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.top, 128);
+			IMAGEMANAGER->alphaRender(_objTiles[_tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].sampleObjectSelectIdx].strImgKey, getMemDC(), _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.left, _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.top, 128);
+			if (_tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].isClick) 
+				IMAGEMANAGER->findImage(L"타일선택")->render(getMemDC(), _tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].rc.left, _tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].rc.top);
+			//IMAGEMANAGER->alphaRender(_TroopObj[_tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].sampleObjectSelectIdx][_tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].sampleObjectIdx].strImgKey, getMemDC(), _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.left, _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.top, 128);
 		}
 	}
 
+	//맵툴 기능 버튼
 	for (int i = 0; i < CTRL_END; i++)
 	{
 		_ctrlButton[i]->render();
 		TextOut(getMemDC(), _ctrlButton[i]->getRect().left, _ctrlButton[i]->getRect().top, _strButton[i], _tcslen(_strButton[i]));
 	}
 
-	if (_ctrSelect == CTRL_OBJDRAW)
-	{
-		for (int i = 0; i < OBJECTSELECT_MAX; i++)
-		{
-			_objectSelect[i]->render();
-			TextOut(getMemDC(), _objectSelect[i]->getRect().left, _objectSelect[i]->getRect().top, _strObjectSelect[i], _tcslen(_strObjectSelect[i]));
-		}
-	}
+	//맵툴 오브젝트 버튼
+	//if (_ctrSelect == CTRL_OBJDRAW)
+	//{
+	//	for (int i = 0; i < OBJECTSELECT_MAX; i++)
+	//	{
+	//		_objectSelect[i]->render();
+	//		TextOut(getMemDC(), _objectSelect[i]->getRect().left, _objectSelect[i]->getRect().top, _strObjectSelect[i], _tcslen(_strObjectSelect[i]));
+	//	}
+	//}
 
 	//스페이스바 누르면 TERRAIN 번호 보여주기
 	if (_viewTERRAIN)
@@ -315,6 +341,7 @@ void sceneMaptool::getChar(WPARAM wParam)
 {
 	_editBox->getChar(wParam);
 	_alphaValueBox->getChar(wParam);
+	_tileObj->getChar(wParam);
 }
 
 //-----------------------------------------------------------------------------------------
@@ -402,22 +429,21 @@ void sceneMaptool::setup(void)
 	_ctrSelect = CTRL_TERRAINDRAW;
 
 	//오브젝트 버튼 생성
-	_objectSelect[OBJECTSELECT_AILY] = new button;
-	_objectSelect[OBJECTSELECT_ENEMY] = new button;
-	_objectSelect[OBJECTSELECT_PLAYER] = new button;
-
-	_objectSelect[OBJECTSELECT_AILY]->init(L"맵툴버튼", WINSIZEX - TILESIZE * 3 - IMAGEMANAGER->findImage(L"맵툴버튼")->getWidth() / 2, 15, { 0, 0 }, { 0, 1 }, ctrlObjectSelectAily, this);
-	_objectSelect[OBJECTSELECT_ENEMY]->init(L"맵툴버튼", WINSIZEX - TILESIZE * 3 - IMAGEMANAGER->findImage(L"맵툴버튼")->getWidth() / 2, 46, { 0, 0 }, { 0, 1 }, ctrlObjectSelectEnemy, this);
-	_objectSelect[OBJECTSELECT_PLAYER]->init(L"맵툴버튼", WINSIZEX - TILESIZE * 3 - IMAGEMANAGER->findImage(L"맵툴버튼")->getWidth() / 2, 77, { 0, 0 }, { 0, 1 }, ctrlObjectSelectPlayer, this);
-
-	_stprintf(_strObjectSelect[OBJECTSELECT_AILY], L"아군");
-	_stprintf(_strObjectSelect[OBJECTSELECT_ENEMY], L"적군");
-	_stprintf(_strObjectSelect[OBJECTSELECT_PLAYER], L"플레이어");
-
-	_ctrObjectSelect = OBJECTSELECT_PLAYER;
+	//_objectSelect[OBJECTSELECT_AILY] = new button;
+	//_objectSelect[OBJECTSELECT_ENEMY] = new button;
+	//_objectSelect[OBJECTSELECT_PLAYER] = new button;
+	//
+	//_objectSelect[OBJECTSELECT_AILY]->init(L"맵툴버튼", WINSIZEX - TILESIZE * 3 - IMAGEMANAGER->findImage(L"맵툴버튼")->getWidth() / 2, 15, { 0, 0 }, { 0, 1 }, ctrlObjectSelectAily, this);
+	//_objectSelect[OBJECTSELECT_ENEMY]->init(L"맵툴버튼", WINSIZEX - TILESIZE * 3 - IMAGEMANAGER->findImage(L"맵툴버튼")->getWidth() / 2, 46, { 0, 0 }, { 0, 1 }, ctrlObjectSelectEnemy, this);
+	//_objectSelect[OBJECTSELECT_PLAYER]->init(L"맵툴버튼", WINSIZEX - TILESIZE * 3 - IMAGEMANAGER->findImage(L"맵툴버튼")->getWidth() / 2, 77, { 0, 0 }, { 0, 1 }, ctrlObjectSelectPlayer, this);
+	//
+	//_stprintf(_strObjectSelect[OBJECTSELECT_AILY], L"아군");
+	//_stprintf(_strObjectSelect[OBJECTSELECT_ENEMY], L"적군");
+	//_stprintf(_strObjectSelect[OBJECTSELECT_PLAYER], L"플레이어");
+	//
 
 	//샘플타일 시작점
-	POINT ptSampleStart = { WINSIZEX - TILESIZE * SAMPLETILEX, 0 };
+	POINT ptSampleStart = { WINSIZEX - TILESIZE * SAMPLETILEX, 20 };
 
 	//샘플 타일셋 셋팅
 	for (int i = 0; i < SAMPLETILEY; i++)
@@ -433,28 +459,46 @@ void sceneMaptool::setup(void)
 	}
 
 	//오브젝트 타일셋 셋팅
-	for (int i = 0; i < SAMPLETILEY; i++)
-	{
-		for (int j = 0; j < SAMPLETILEX; j++)
-		{
-			int index = i * SAMPLETILEX + j;
-			_stprintf(_TroopObj[OBJECTSELECT_AILY][index].strImgKey, L"아군 (%02d)", index + 1);
+	//for (int i = 0; i < SAMPLETILEY; i++)
+	//{
+	//	for (int j = 0; j < SAMPLETILEX; j++)
+	//	{
+	//		int index = i * SAMPLETILEX + j;
+	//		_stprintf(_TroopObj[OBJECTSELECT_AILY][index].strImgKey, L"아군 (%02d)", index + 1);
+	//
+	//		_TroopObj[OBJECTSELECT_AILY][index].img = IMAGEMANAGER->findImage(_TroopObj[OBJECTSELECT_AILY][index].strImgKey);
+	//		_TroopObj[OBJECTSELECT_AILY][index].rcTile = RectMake(ptSampleStart.x + j*TILESIZE, ptSampleStart.y + i * TILESIZE, TILESIZE, TILESIZE);
+	//
+	//		_stprintf(_TroopObj[OBJECTSELECT_ENEMY][index].strImgKey, L"적군 (%02d)", index + 1);
+	//
+	//		_TroopObj[OBJECTSELECT_ENEMY][index].img = IMAGEMANAGER->findImage(_TroopObj[OBJECTSELECT_ENEMY][index].strImgKey);
+	//		_TroopObj[OBJECTSELECT_ENEMY][index].rcTile = RectMake(ptSampleStart.x + j*TILESIZE, ptSampleStart.y + i * TILESIZE, TILESIZE, TILESIZE);
+	//
+	//		_stprintf(_TroopObj[OBJECTSELECT_PLAYER][index].strImgKey, L"플레이어 (%02d)", index + 1);
+	//
+	//		_TroopObj[OBJECTSELECT_PLAYER][index].img = IMAGEMANAGER->findImage(_TroopObj[OBJECTSELECT_PLAYER][index].strImgKey);
+	//		_TroopObj[OBJECTSELECT_PLAYER][index].rcTile = RectMake(ptSampleStart.x + j*TILESIZE, ptSampleStart.y + i * TILESIZE, TILESIZE, TILESIZE);
+	//	}
+	//}
 
-			_TroopObj[OBJECTSELECT_AILY][index].img = IMAGEMANAGER->findImage(_TroopObj[OBJECTSELECT_AILY][index].strImgKey);
-			_TroopObj[OBJECTSELECT_AILY][index].rcTile = RectMake(ptSampleStart.x + j*TILESIZE, ptSampleStart.y + i * TILESIZE, TILESIZE, TILESIZE);
+	//샘플 오브젝트타일 시작점
+	POINT ptSampleObjStart = { WINSIZEX - TILESIZE * 3, TILESIZE * 11 + 41 };
 
-			_stprintf(_TroopObj[OBJECTSELECT_ENEMY][index].strImgKey, L"적군 (%02d)", index + 1);
+	//오브젝트 타일셋 셋팅
+	_objTiles[OBJECTSELECT_AILY].img = IMAGEMANAGER->findImage(L"아군");
+	_objTiles[OBJECTSELECT_AILY].rcTile = RectMake(ptSampleObjStart.x, ptSampleObjStart.y, TILESIZE, TILESIZE);
+	_stprintf(_objTiles[OBJECTSELECT_AILY].strImgKey, L"아군");
 
-			_TroopObj[OBJECTSELECT_ENEMY][index].img = IMAGEMANAGER->findImage(_TroopObj[OBJECTSELECT_ENEMY][index].strImgKey);
-			_TroopObj[OBJECTSELECT_ENEMY][index].rcTile = RectMake(ptSampleStart.x + j*TILESIZE, ptSampleStart.y + i * TILESIZE, TILESIZE, TILESIZE);
+	_objTiles[OBJECTSELECT_ENEMY].img = IMAGEMANAGER->findImage(L"적군");
+	_objTiles[OBJECTSELECT_ENEMY].rcTile = RectMake(ptSampleObjStart.x + TILESIZE, ptSampleObjStart.y, TILESIZE, TILESIZE);
+	_stprintf(_objTiles[OBJECTSELECT_ENEMY].strImgKey, L"적군");
 
-			_stprintf(_TroopObj[OBJECTSELECT_PLAYER][index].strImgKey, L"플레이어 (%02d)", index + 1);
+	_objTiles[OBJECTSELECT_PLAYER].img = IMAGEMANAGER->findImage(L"플레이어");
+	_objTiles[OBJECTSELECT_PLAYER].rcTile = RectMake(ptSampleObjStart.x + TILESIZE * 2, ptSampleObjStart.y, TILESIZE, TILESIZE);
+	_stprintf(_objTiles[OBJECTSELECT_PLAYER].strImgKey, L"플레이어");
 
-			_TroopObj[OBJECTSELECT_PLAYER][index].img = IMAGEMANAGER->findImage(_TroopObj[OBJECTSELECT_PLAYER][index].strImgKey);
-			_TroopObj[OBJECTSELECT_PLAYER][index].rcTile = RectMake(ptSampleStart.x + j*TILESIZE, ptSampleStart.y + i * TILESIZE, TILESIZE, TILESIZE);
-		}
-	}
-
+	_ctrObjectSelect = OBJECTSELECT_PLAYER;
+	
 	//샘플타일 시작점
 	POINT ptTileStart = { 0, 0 };
 
@@ -472,49 +516,51 @@ void sceneMaptool::setup(void)
 	for (int i = 0; i < TILEX * TILEY; i++)
 	{
 		_tiles[i].sampleTerrainIdx = 0;
+		_tiles[i].sampleObjectSelectIdx = OBJECTSELECT_NONE;
 		_tiles[i].terrain = terrainSelect(_tiles[i].sampleTerrainIdx);
-		_tiles[i].obj = OBJECT_NONE;
+		_tiles[i].isClick = false;
+		_stprintf(_tiles[i].obj, L"");
 	}
 
 	//여기는 노가다다 각오하고 볼것
-	for (int i = 0; i < OBJECTSELECT_MAX; i++)
-	{
-		_TroopObj[i][0].obj = OBJECT_INFANTRY;
-		_TroopObj[i][1].obj = OBJECT_CAVALRY;
-		_TroopObj[i][2].obj = OBJECT_ARCHER;
-		_TroopObj[i][3].obj = OBJECT_HORSEARCHER;
-		_TroopObj[i][4].obj = OBJECT_FIGHTER;
-		_TroopObj[i][5].obj = OBJECT_THEIF;
-		_TroopObj[i][6].obj = OBJECT_TACTICIAN;
-		_TroopObj[i][7].obj = OBJECT_WIZARD;
-		_TroopObj[i][8].obj = OBJECT_CATAPULT;
-		_TroopObj[i][9].obj = OBJECT_NONE;
-		_TroopObj[i][10].obj = OBJECT_NONE;
-		_TroopObj[i][11].obj = OBJECT_NONE;
-		_TroopObj[i][12].obj = OBJECT_HERO01;
-		_TroopObj[i][13].obj = OBJECT_HERO02;
-		_TroopObj[i][14].obj = OBJECT_HERO03;
-		_TroopObj[i][15].obj = OBJECT_HERO04;
-		_TroopObj[i][16].obj = OBJECT_HERO05;
-		_TroopObj[i][17].obj = OBJECT_HERO06;
-		_TroopObj[i][18].obj = OBJECT_HERO07;
-		_TroopObj[i][19].obj = OBJECT_HERO08;
-		_TroopObj[i][20].obj = OBJECT_HERO09;
-		_TroopObj[i][21].obj = OBJECT_HERO10;
-		_TroopObj[i][22].obj = OBJECT_NONE;
-		_TroopObj[i][23].obj = OBJECT_NONE;
-		_TroopObj[i][24].obj = OBJECT_NONE;
-		_TroopObj[i][25].obj = OBJECT_NONE;
-		_TroopObj[i][26].obj = OBJECT_NONE;
-		_TroopObj[i][27].obj = OBJECT_NONE;
-		_TroopObj[i][28].obj = OBJECT_NONE;
-		_TroopObj[i][29].obj = OBJECT_NONE;
-	}
+	//for (int i = 0; i < OBJECTSELECT_MAX; i++)
+	//{
+	//	_TroopObj[i][0].obj = OBJECT_INFANTRY;
+	//	_TroopObj[i][1].obj = OBJECT_CAVALRY;
+	//	_TroopObj[i][2].obj = OBJECT_ARCHER;
+	//	_TroopObj[i][3].obj = OBJECT_HORSEARCHER;
+	//	_TroopObj[i][4].obj = OBJECT_FIGHTER;
+	//	_TroopObj[i][5].obj = OBJECT_THEIF;
+	//	_TroopObj[i][6].obj = OBJECT_TACTICIAN;
+	//	_TroopObj[i][7].obj = OBJECT_WIZARD;
+	//	_TroopObj[i][8].obj = OBJECT_CATAPULT;
+	//	_TroopObj[i][9].obj = OBJECT_NONE;
+	//	_TroopObj[i][10].obj = OBJECT_NONE;
+	//	_TroopObj[i][11].obj = OBJECT_NONE;
+	//	_TroopObj[i][12].obj = OBJECT_HERO01;
+	//	_TroopObj[i][13].obj = OBJECT_HERO02;
+	//	_TroopObj[i][14].obj = OBJECT_HERO03;
+	//	_TroopObj[i][15].obj = OBJECT_HERO04;
+	//	_TroopObj[i][16].obj = OBJECT_HERO05;
+	//	_TroopObj[i][17].obj = OBJECT_HERO06;
+	//	_TroopObj[i][18].obj = OBJECT_HERO07;
+	//	_TroopObj[i][19].obj = OBJECT_HERO08;
+	//	_TroopObj[i][20].obj = OBJECT_HERO09;
+	//	_TroopObj[i][21].obj = OBJECT_HERO10;
+	//	_TroopObj[i][22].obj = OBJECT_NONE;
+	//	_TroopObj[i][23].obj = OBJECT_NONE;
+	//	_TroopObj[i][24].obj = OBJECT_NONE;
+	//	_TroopObj[i][25].obj = OBJECT_NONE;
+	//	_TroopObj[i][26].obj = OBJECT_NONE;
+	//	_TroopObj[i][27].obj = OBJECT_NONE;
+	//	_TroopObj[i][28].obj = OBJECT_NONE;
+	//	_TroopObj[i][29].obj = OBJECT_NONE;
+	//}
 }
 
 void sceneMaptool::setMap(void)
 {
-	if (PtInRect(&RectMake(WINSIZEX - 3 * TILESIZE, 0, 3 * TILESIZE, 10 * TILESIZE), _ptMouse))
+	if (PtInRect(&RectMake(WINSIZEX - 3 * TILESIZE, 20, 3 * TILESIZE, 10 * TILESIZE + 20), _ptMouse))
 	{
 		if (_ctrSelect == CTRL_TERRAINDRAW)
 			for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
@@ -525,34 +571,45 @@ void sceneMaptool::setMap(void)
 					break;
 				}
 			}
-		else if (_ctrSelect == CTRL_OBJDRAW)
-			for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
+		//else if (_ctrSelect == CTRL_OBJDRAW)
+		//	for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
+		//	{
+		//		if (_ctrObjectSelect == OBJECTSELECT_AILY)
+		//		{
+		//			if (PtInRect(&_TroopObj[OBJECTSELECT_AILY][i].rcTile, _ptMouse))
+		//			{
+		//				_selectSampleIndex = i;
+		//				break;
+		//			}
+		//		}
+		//		else if (_ctrObjectSelect == OBJECTSELECT_ENEMY)
+		//		{
+		//			if (PtInRect(&_TroopObj[OBJECTSELECT_ENEMY][i].rcTile, _ptMouse))
+		//			{
+		//				_selectSampleIndex = i;
+		//				break;
+		//			}
+		//		}
+		//		else if (_ctrObjectSelect == OBJECTSELECT_PLAYER)
+		//		{
+		//			if (PtInRect(&_TroopObj[OBJECTSELECT_PLAYER][i].rcTile, _ptMouse))
+		//			{
+		//				_selectSampleIndex = i;
+		//				break;
+		//			}
+		//		}
+		//	}
+	}
+
+	if (PtInRect(&RectMake(WINSIZEX - 3 * TILESIZE, TILESIZE * 11 + 41, TILESIZE * 3, TILESIZE), _ptMouse))
+	{
+		if (_ctrSelect == CTRL_OBJDRAW)
+		{
+			for (int i = 0; i < OBJECTSELECT_MAX; i++)
 			{
-				if (_ctrObjectSelect == OBJECTSELECT_AILY)
-				{
-					if (PtInRect(&_TroopObj[OBJECTSELECT_AILY][i].rcTile, _ptMouse))
-					{
-						_selectSampleIndex = i;
-						break;
-					}
-				}
-				else if (_ctrObjectSelect == OBJECTSELECT_ENEMY)
-				{
-					if (PtInRect(&_TroopObj[OBJECTSELECT_ENEMY][i].rcTile, _ptMouse))
-					{
-						_selectSampleIndex = i;
-						break;
-					}
-				}
-				else if (_ctrObjectSelect == OBJECTSELECT_PLAYER)
-				{
-					if (PtInRect(&_TroopObj[OBJECTSELECT_PLAYER][i].rcTile, _ptMouse))
-					{
-						_selectSampleIndex = i;
-						break;
-					}
-				}
+				if (PtInRect(&_objTiles[i].rcTile, _ptMouse))	_ctrObjectSelect = i;
 			}
+		}
 	}
 
 	if (PtInRect(&RectMake(0, 0, 20 * TILESIZE, 20 * TILESIZE), _ptMouse))
@@ -571,30 +628,33 @@ void sceneMaptool::setMap(void)
 					}
 					else if (_ctrSelect == CTRL_OBJDRAW)
 					{
-						if (_ctrObjectSelect == OBJECTSELECT_AILY)
-						{
-							_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleObjectSelectIdx = OBJECTSELECT_AILY;
-							_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleObjectIdx = _selectSampleIndex;
-							_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].obj = _TroopObj[OBJECTSELECT_AILY][_selectSampleIndex].obj;
-						}
-						else if (_ctrObjectSelect == OBJECTSELECT_ENEMY)
-						{
-							_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleObjectSelectIdx = OBJECTSELECT_ENEMY;
-							_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleObjectIdx = _selectSampleIndex;
-							_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].obj = _TroopObj[OBJECTSELECT_ENEMY][_selectSampleIndex].obj;
-						}
-						else if (_ctrObjectSelect == OBJECTSELECT_PLAYER)
-						{
-							_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleObjectSelectIdx = OBJECTSELECT_PLAYER;
-							_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleObjectIdx = _selectSampleIndex;
-							_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].obj = _TroopObj[OBJECTSELECT_PLAYER][_selectSampleIndex].obj;
-						}
+						//if (_ctrObjectSelect == OBJECTSELECT_AILY)
+						//{
+						//	_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleObjectSelectIdx = OBJECTSELECT_AILY;
+						//	_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleObjectIdx = _selectSampleIndex;
+						//	_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].obj = _TroopObj[OBJECTSELECT_AILY][_selectSampleIndex].obj;
+						//}
+						//else if (_ctrObjectSelect == OBJECTSELECT_ENEMY)
+						//{
+						//	_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleObjectSelectIdx = OBJECTSELECT_ENEMY;
+						//	_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleObjectIdx = _selectSampleIndex;
+						//	_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].obj = _TroopObj[OBJECTSELECT_ENEMY][_selectSampleIndex].obj;
+						//}
+						//else if (_ctrObjectSelect == OBJECTSELECT_PLAYER)
+						//{
+						//	_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleObjectSelectIdx = OBJECTSELECT_PLAYER;
+						//	_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleObjectIdx = _selectSampleIndex;
+						//	_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].obj = _TroopObj[OBJECTSELECT_PLAYER][_selectSampleIndex].obj;
+						//}
+						if (_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleObjectSelectIdx != OBJECTSELECT_NONE) continue;
+						_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleObjectSelectIdx = _ctrObjectSelect;
 					}
 					else if (_ctrSelect == CTRL_ERASER)
 					{
 						//_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleTerrainIdx = NULL;
 						//_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].terrain = terrainSelect(_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleTerrainIdx);
-						_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].obj = OBJECT_NONE;
+						_stprintf(_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].obj, L"");
+						_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleObjectSelectIdx = OBJECTSELECT_NONE;
 					}
 
 					break;

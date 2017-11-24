@@ -80,7 +80,7 @@ void mainGame::initScene(void)
 	_sceneBattle->setLinkAdressFriend(_friend);
 	SCENEMANAGER->addScene(L"¿¸≈ıæ¿", _sceneBattle);
 
-	SCENEMANAGER->changeScene(L"∏ ≈¯æ¿");
+	SCENEMANAGER->changeScene(L"º±≈√æ¿");
 }
 
 
