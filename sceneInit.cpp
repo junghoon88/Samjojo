@@ -70,45 +70,53 @@ void sceneInit::initImageMapTool(void)
 	}
 
 	//오브젝트 타일 셋팅
+	IMAGEMANAGER->addImage(L"아군", L"image/tiles/object/아군.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
+	IMAGEMANAGER->addImage(L"적군", L"image/tiles/object/적군.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
+	IMAGEMANAGER->addImage(L"플레이어", L"image/tiles/object/플레이어.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
+
+	//선택타일 체크 창
+	IMAGEMANAGER->addImage(L"타일선택", L"image/tileSelect.bmp", TILESIZE, TILESIZE, true, RGB(255, 0, 255), false);
+
 	//아군 셋팅
-	for (int i = 0; i < SAMPLETILEY; i++)
-	{
-		for (int j = 0; j < SAMPLETILEX; j++)
-		{
-			int index = i * SAMPLETILEX + j;
-			TCHAR strImgKey[100], strName[100];
-			_stprintf(strImgKey, L"아군 (%02d)", index + 1);
-			_stprintf(strName, L"image/tiles/aily/아군 (%02d).bmp", index + 1);
-			IMAGEMANAGER->addImage(strImgKey, strName, TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
-		}
-	}
+	//for (int i = 0; i < SAMPLETILEY; i++)
+	//{
+	//	for (int j = 0; j < SAMPLETILEX; j++)
+	//	{
+	//		int index = i * SAMPLETILEX + j;
+	//		TCHAR strImgKey[100], strName[100];
+	//		_stprintf(strImgKey, L"아군 (%02d)", index + 1);
+	//		_stprintf(strName, L"image/tiles/aily/아군 (%02d).bmp", index + 1);
+	//		IMAGEMANAGER->addImage(strImgKey, strName, TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
+	//	}
+	//}
+	//
+	////적군 셋팅
+	//for (int i = 0; i < SAMPLETILEY; i++)
+	//{
+	//	for (int j = 0; j < SAMPLETILEX; j++)
+	//	{
+	//		int index = i * SAMPLETILEX + j;
+	//		TCHAR strImgKey[100], strName[100];
+	//		_stprintf(strImgKey, L"적군 (%02d)", index + 1);
+	//		_stprintf(strName, L"image/tiles/enemy/적군 (%02d).bmp", index + 1);
+	//		IMAGEMANAGER->addImage(strImgKey, strName, TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
+	//	}
+	//}
+	//
+	////플레이어 셋팅
+	//for (int i = 0; i < SAMPLETILEY; i++)
+	//{
+	//	for (int j = 0; j < SAMPLETILEX; j++)
+	//	{
+	//		int index = i * SAMPLETILEX + j;
+	//		TCHAR strImgKey[100], strName[100];
+	//		_stprintf(strImgKey, L"플레이어 (%02d)", index + 1);
+	//		_stprintf(strName, L"image/tiles/player/플레이어 (%02d).bmp", index + 1);
+	//		IMAGEMANAGER->addImage(strImgKey, strName, TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
+	//	}
+	//}
 
-	//적군 셋팅
-	for (int i = 0; i < SAMPLETILEY; i++)
-	{
-		for (int j = 0; j < SAMPLETILEX; j++)
-		{
-			int index = i * SAMPLETILEX + j;
-			TCHAR strImgKey[100], strName[100];
-			_stprintf(strImgKey, L"적군 (%02d)", index + 1);
-			_stprintf(strName, L"image/tiles/enemy/적군 (%02d).bmp", index + 1);
-			IMAGEMANAGER->addImage(strImgKey, strName, TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
-		}
-	}
-
-	//플레이어 셋팅
-	for (int i = 0; i < SAMPLETILEY; i++)
-	{
-		for (int j = 0; j < SAMPLETILEX; j++)
-		{
-			int index = i * SAMPLETILEX + j;
-			TCHAR strImgKey[100], strName[100];
-			_stprintf(strImgKey, L"플레이어 (%02d)", index + 1);
-			_stprintf(strName, L"image/tiles/player/플레이어 (%02d).bmp", index + 1);
-			IMAGEMANAGER->addImage(strImgKey, strName, TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
-		}
-	}
-
+	//버튼 이미지
 	IMAGEMANAGER->addFrameImage(L"맵툴버튼", L"image/button.bmp", 100, 60, 1, 2);
 	IMAGEMANAGER->addFrameImage(L"맵툴버튼2", L"image/button2.bmp", 50, 60, 1, 2);
 

@@ -26,7 +26,7 @@ class sceneMaptool : public gameNode
 private:
 	int _selectSampleIndex;
 	tagSampleTile _sampleTiles[SAMPLETILEX * SAMPLETILEY];
-	tagSampleObject _TroopObj[OBJECTSELECT_MAX][SAMPLETILEX * SAMPLETILEY];
+	tagSampleObject _objTiles[OBJECTSELECT_MAX];
 	tagTile _tiles[TILEX * TILEY];
 
 	button* _ctrlButton[CTRL_END];
@@ -38,6 +38,7 @@ private:
 
 	editbox* _editBox;
 	editbox* _alphaValueBox;
+	editbox* _tileObj;
 
 	int _ctrSelect;
 	int _ctrObjectSelect;

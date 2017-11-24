@@ -97,6 +97,7 @@ enum OBJECT
 
 enum OBJECTSELECT
 {
+	OBJECTSELECT_NONE = -1,
 	OBJECTSELECT_ENEMY,
 	OBJECTSELECT_AILY,
 	OBJECTSELECT_PLAYER,
@@ -108,12 +109,12 @@ enum OBJECTSELECT
 struct tagTile
 {
 	TERRAIN terrain;
-	OBJECT obj;
+	TCHAR obj[128];
 	RECT rc;
 
 	int sampleTerrainIdx;		//샘플 터레인 인덱스
 	int sampleObjectSelectIdx;	//오브젝트 case 인덱스
-	int sampleObjectIdx;		//샘플 오브젝트 인덱스
+	bool isClick;
 };
 
 struct tagSampleTile
@@ -128,7 +129,6 @@ struct tagSampleObject
 	RECT rcTile;
 	image* img;
 	TCHAR strImgKey[100];
-	OBJECT obj;
 };
 
 struct tagCurrentTile
