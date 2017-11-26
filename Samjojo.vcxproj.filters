@@ -246,10 +246,6 @@
     <ClInclude Include="scanDialog.h">
       <Filter>MainGame\sceneStory</Filter>
     </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="scaneStorymap.h">
-      <Filter>MainGame\sceneStory</Filter>
-=======
     <ClInclude Include="sceneReadybase.h">
       <Filter>MainGame\sceneReady</Filter>
     </ClInclude>
@@ -261,7 +257,9 @@
     </ClInclude>
     <ClInclude Include="sceneSell.h">
       <Filter>MainGame\sceneReady</Filter>
->>>>>>> 182785aae7b79c2b25cfb7005a3e90087e9be940
+    </ClInclude>
+    <ClInclude Include="scaneStorymap.h">
+      <Filter>MainGame\sceneStory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -394,10 +392,6 @@
     <ClCompile Include="scanDialog.cpp">
       <Filter>MainGame\sceneStory</Filter>
     </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="scaneStorymap.cpp">
-      <Filter>MainGame\sceneStory</Filter>
-=======
     <ClCompile Include="sceneReadybase.cpp">
       <Filter>MainGame\sceneReady</Filter>
     </ClCompile>
@@ -409,7 +403,9 @@
     </ClCompile>
     <ClCompile Include="sceneSell.cpp">
       <Filter>MainGame\sceneReady</Filter>
->>>>>>> 182785aae7b79c2b25cfb7005a3e90087e9be940
+    </ClCompile>
+    <ClCompile Include="scaneStorymap.cpp">
+      <Filter>MainGame\sceneStory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
