@@ -35,6 +35,8 @@ private:
 	tagTile _tiles[TILEX * TILEY];
 
 	button* _ctrlButton[CTRL_END];
+	button* _exit;
+	TCHAR _strExit[100];
 	TCHAR _strButton[CTRL_END][100];
 	TCHAR _fileName[100];
 	TCHAR _saveSize[100];
@@ -66,6 +68,7 @@ private:
 	static void ctrlSelectTerrain(void* obj);
 	static void ctrlSelectObject(void* obj);
 	static void ctrlSelectEraser(void* obj);
+	static void exit(void* obj);
 
 	void setup(void);
 	void setMap(void);
