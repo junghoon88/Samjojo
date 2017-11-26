@@ -5,6 +5,7 @@
 class Player;
 class Enemy;
 class gameMap;
+class infoCursor;
 
 class Friend : public gameNode
 {
@@ -14,7 +15,7 @@ private:
 	Player*		_player;	//플레이어
 	Enemy*		_enemy;		//적군
 	gameMap*	_map;
-
+	infoCursor* info;
 public:
 	Friend();
 	~Friend();
@@ -34,5 +35,6 @@ public:
 	inline void setLinkAdressPlayer(Player* player) { _player = player; }
 	inline void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
 	inline void setLinkAdressMap(gameMap* map) { _map = map; }
+	inline void setLinkCursor(infoCursor* cursor) { info = cursor; }
 };
 

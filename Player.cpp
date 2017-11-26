@@ -3,7 +3,7 @@
 #include "Friend.h"
 #include "Enemy.h"
 #include "gameMap.h"
-
+#include "infoCursor.h"
 
 Player::Player()
 {

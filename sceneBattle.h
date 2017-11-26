@@ -4,6 +4,15 @@
 #include "Enemy.h"
 #include "Friend.h"
 #include "gameMap.h"
+#include "infoCursor.h"
+
+enum tagPhase
+{
+	playerPhase,
+	alliPhase,
+	enemyPhase // 이 순으로 전투 진행
+};
+
 
 class sceneBattle : public gameNode
 {
@@ -13,6 +22,10 @@ private:
 	Enemy*		_enemy;		//적군
 
 	gameMap*	_map;		//게임 맵
+
+
+	infoCursor* _cursor;	//커서 정보
+	tagPhase Phase;
 
 private:
 	void initImage(void);
@@ -33,6 +46,8 @@ public:
 	inline void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
 	inline void setLinkAdressFriend(Friend* friends) { _friend = friends; }
 	inline void setLinkAdressMap(gameMap* map) { _map = map; }
+
+	void phaseControl(void);
 
 };
 

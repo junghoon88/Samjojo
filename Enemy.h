@@ -6,6 +6,7 @@
 class Player;
 class Friend;
 class gameMap;
+class infoCursor; //벡터정보 직접 전달용
 
 class Enemy : public gameNode
 {
@@ -16,6 +17,8 @@ private:
 	Player*		_player;	//플레이어
 	Friend*		_friend;	//아군
 	gameMap*	_map;
+
+	infoCursor* info;
 
 public:
 	Enemy();
@@ -37,5 +40,6 @@ public:
 	inline void setLinkAdressPlayer(Player* player) { _player = player; }
 	inline void setLinkAdressFriend(Friend* friends) { _friend = friends; }
 	inline void setLinkAdressMap(gameMap* map) { _map = map; }
+	inline void setLinkCursor(infoCursor* cursor) { info = cursor; }
 };
 

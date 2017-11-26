@@ -59,6 +59,7 @@ void sceneInit::initImage(void)
 
 	initImageUnits();
 
+	initImageUI();
 }
 
 void sceneInit::initImageSlect(void)
@@ -525,6 +526,17 @@ void sceneInit::initImageStory(void)
 
 }
 
+void sceneInit::initImageUI(void)
+{
+	IMAGEMANAGER->addImage(L"拳加己", L"image/icon/fire.bmp", 24, 24, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage(L"拳加己厚劝己", L"image/icon/un_fire.bmp", 24, 24, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage(L"顶加己", L"image/icon/earth.bmp", 24, 24, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage(L"顶加己厚劝己", L"image/icon/un_earth.bmp", 24, 24, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage(L"浅加己", L"image/icon/wind.bmp", 24, 24, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage(L"浅加己厚劝己", L"image/icon/un_wind.bmp", 24, 24, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage(L"荐加己", L"image/icon/water.bmp", 24, 24, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage(L"荐加己厚劝己", L"image/icon/un_water.bmp", 24, 24, true, RGB(255, 0, 255));
+}
 
 
 

@@ -5,6 +5,7 @@
 class Friend;
 class Enemy;
 class gameMap;
+class infoCursor;
 
 class Player : public gameNode
 {
@@ -15,6 +16,7 @@ private:
 	Enemy*		_enemy;		//Àû±º
 	gameMap*	_map;
 
+	infoCursor* info;
 
 public:
 	Player();
@@ -30,10 +32,9 @@ public:
 
 public:
 	inline vUnits getUnits(void) { return _vUnits; }
-
 	inline void setLinkAdressFriend(Friend* friends) { _friend = friends; }
 	inline void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
 	inline void setLinkAdressMap(gameMap* map) { _map = map; }
-
+	inline void setLinkCursor(infoCursor* cursor) { info = cursor; }
 };
 
