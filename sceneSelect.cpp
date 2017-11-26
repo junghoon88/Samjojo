@@ -151,7 +151,6 @@ void sceneSelect::selectScenario(void)
 			_friend->loadUnits();
 			_enemy->loadUnits();
 
-
 			//SCENEMANAGER->changeScene(L"´ëÈ­¾À");
 			//SCENEMANAGER->changeScene(L"»óÁ¡¾À");
 			SCENEMANAGER->changeScene(L"ÀüÅõ¾À");

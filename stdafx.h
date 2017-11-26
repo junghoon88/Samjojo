@@ -48,6 +48,8 @@ using namespace IOTA_UTIL;
 #define WINSIZEY 960
 #define WINSTYLE WS_CAPTION | WS_SYSMENU
 
+#define SIDEWINSIZE 144
+
 #define RND randomFunction::getSingleton()
 #define KEYMANAGER keyManager::getSingleton()
 #define IMAGEMANAGER imageManager::getSingleton()

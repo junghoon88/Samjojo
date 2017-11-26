@@ -3,10 +3,14 @@
 #include "Unit.h"
 #include "aStar.h"
 
+class infoCursor; //벡터정보 직접 전달용
+
 class Enemy : public gameNode
 {
 private:
 	vUnits _vUnits;
+
+	infoCursor* info;
 
 public:
 	Enemy();
@@ -23,5 +27,6 @@ public:
 
 public:
 	inline vUnits getUnits(void) { return _vUnits; }
+	inline void setLinkCursor(infoCursor* cursor) { info = cursor; }
 };
 

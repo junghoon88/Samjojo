@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Enemy.h"
-
+#include "infoCursor.h"
 
 Enemy::Enemy()
 {
