@@ -3,7 +3,6 @@
 #include "gameNode.h"
 #include "gameMap.h"
 
-#define INTERFACESIZEX 200
 #define INTERFACESIZEY 150
 
 class infoCursor : public gameNode

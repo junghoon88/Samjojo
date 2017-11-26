@@ -16,9 +16,9 @@ HRESULT infoCursor::init(void)
 	isShow = false;
 	isUnit = false;
 
-	rc = { WINSIZEX - INTERFACESIZEX,0,WINSIZEX,WINSIZEY };//인터페이스 간이 렉트
-	tileImgRect = RectMakeCenter(rc.left + INTERFACESIZEX / 2, 80, 100, 100);
-	unitImgRect = RectMakeCenter(rc.left + INTERFACESIZEX / 2, WINSIZEY/2 , 100, 100);
+	rc = { WINSIZEX - SIDEWINSIZE,0,WINSIZEX,WINSIZEY };//인터페이스 간이 렉트
+	tileImgRect = RectMakeCenter(rc.left + SIDEWINSIZE / 2, 80, SIDEWINSIZE - SIDEWINSIZE/10, SIDEWINSIZE - SIDEWINSIZE/10);
+	unitImgRect = RectMakeCenter(rc.left + SIDEWINSIZE / 2, WINSIZEY/2 , SIDEWINSIZE - SIDEWINSIZE/10, SIDEWINSIZE - SIDEWINSIZE/10);
 
 
 	unit = L"유닛이름정보";
