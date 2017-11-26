@@ -32,6 +32,12 @@ HRESULT sceneSelect::init(void)
 
 	setuptButtons();
 
+	//저장된 유닛 데이터들을 불러온다.
+	_player->loadUnits();
+	_friend->loadUnits();
+	_enemy->loadUnits();
+
+
 	return S_OK;
 }
 
@@ -152,10 +158,7 @@ void sceneSelect::selectScenario(void)
 			DATABASE->setSlectScenario(i);
 
 			_map->loadData(i);
-			_player->loadUnits();
-			_friend->loadUnits();
-			_enemy->loadUnits();
-			
+			_enemy->locateUnits();
 
 
 			//SCENEMANAGER->changeScene(L"대화씬");

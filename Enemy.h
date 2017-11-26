@@ -10,7 +10,8 @@ class gameMap;
 class Enemy : public gameNode
 {
 private:
-	vUnits _vUnits;
+	vUnits		_vUnitsInFile;		//폴더 내 유닛데이터들 전체
+	vUnits		_vUnits;			//전투에 출전되는 유닛들
 
 	Player*		_player;	//플레이어
 	Friend*		_friend;	//아군
@@ -26,6 +27,7 @@ public:
 	void render(void);
 
 	void loadUnits(void);
+	void locateUnits(void);
 	void deleteUnits(void);
 
 

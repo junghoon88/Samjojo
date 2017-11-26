@@ -29,6 +29,10 @@ void Enemy::update(void)
 
 void Enemy::render(void)
 {
+	for (int i = 0; i < _vUnits.size(); i++)
+	{
+		_vUnits[i]->render();
+	}
 }
 
 void Enemy::loadUnits(void)
@@ -54,7 +58,7 @@ void Enemy::loadUnits(void)
 		_unit->init();
 		ReadFile(file, _unit, sizeof(Unit), &read, NULL);
 
-		_vUnits.push_back(_unit);
+		_vUnitsInFile.push_back(_unit);
 
 		CloseHandle(file);
 
@@ -67,6 +71,43 @@ void Enemy::loadUnits(void)
 	}
 	// 파일 찾기 핸들 값 닫기   
 	FindClose(handle);
+}
+
+void Enemy::locateUnits(void)
+{
+	//맵에 있는 오브젝트에 유닛을 넣자
+	int tileSizeX = _map->getTileSizeX();
+	int tileSizeY = _map->getTileSizeY();
+
+	for (int i = 0; i < tileSizeY; i++)
+	{
+		for (int j = 0; j < tileSizeX; j++)
+		{
+			//오브젝트의 이름을 받아서
+			TCHAR* obj = _map->getTile()[j + i * tileSizeX].obj;
+			int len = _tcslen(obj);
+			if (len > 0)
+			{
+				for (int v = 0; v < _vUnitsInFile.size(); v++)
+				{
+					//파일중에 이름이 같은 유닛을 찾고
+					TCHAR* name = _vUnitsInFile[v]->getStatus().name;
+					if (0 == _tcscmp(obj, name))
+					{
+						//찾았으면 출전목록에 넣는다.
+						Unit* unit = _vUnitsInFile[v];
+						tagBattleState bState = unit->getBattleState();
+						bState.tilePt = { j, i };
+						bState.rc = RectMake(j * TILESIZE, i * TILESIZE, TILESIZE, TILESIZE);
+						bState.pt = { (LONG)((bState.rc.left + bState.rc.right) * 0.5f), (LONG)((bState.rc.top + bState.rc.bottom) * 0.5f) };
+						unit->setBattleState(bState);
+						_vUnits.push_back(unit);
+						break;
+					}
+				}
+			}
+		}
+	}
 }
 
 void Enemy::deleteUnits(void)

@@ -1,4 +1,5 @@
 #pragma once
+#include "gameNode.h"
 #include "Item.h"
 
 #define UNIT_ATTACK_RANGE_MAX 7
@@ -133,6 +134,8 @@ struct tagBattleState
 	RECT			rc;
 	POINT			tilePt;	//타일 번호
 
+	DIRECTION		dir;
+
 	UNITSTATE		unitState;
 	UNITCONDITION   unitCondition;
 
@@ -146,7 +149,7 @@ struct tagBattleState
 };
 
 
-class Unit
+class Unit : public gameNode
 {
 private:
 	typedef BOOL(*Temp)[UNIT_ATTACK_RANGE_MAX];
@@ -172,7 +175,10 @@ public:
 	Unit();
 	~Unit();
 
-	void init(void);
+	HRESULT init(void);
+	void release(void);
+	void update(void);
+	void render(void);
 
 public:
 	inline tagStatus getStatus(void) { return _status; }

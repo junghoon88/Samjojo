@@ -34,6 +34,7 @@ void sceneBattle::update(void)
 
 void sceneBattle::render(void)
 {
+	_map->render();
 }
 
 void sceneBattle::initImage(void)

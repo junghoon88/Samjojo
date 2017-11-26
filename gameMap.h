@@ -16,6 +16,10 @@ private:
 
 	TCHAR _objImage[OBJECTSELECT_MAX][100];
 
+	image*		_imgMap;		//실제 보여줄 맵
+	int			_tilesizeX;		//타일크기(맵에 타일이 총 몇개인지)
+	int			_tilesizeY;		//타일크기(맵에 타일이 총 몇개인지)
+
 
 	Player*		_player;	//플레이어
 	Friend*		_friend;	//아군
@@ -44,5 +48,7 @@ public:
 	inline void setLinkAdressFriend(Friend* friends) { _friend = friends; }
 	inline void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
 
+	inline int getTileSizeX(void) { return _tilesizeX; }
+	inline int getTileSizeY(void) { return _tilesizeY; }
 };
 
