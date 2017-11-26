@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "gameMap.h"
-
+#include "Player.h"
+#include "Friend.h"
+#include "Enemy.h"
 
 gameMap::gameMap()
 {

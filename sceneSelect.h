@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Friend.h"
+#include "gameMap.h"
 
 enum SELECTLEVEL
 {
@@ -41,6 +42,7 @@ private:
 	Player*		_player;	//플레이어
 	Friend*		_friend;	//아군
 	Enemy*		_enemy;		//적군
+	gameMap*	_map;
 
 	
 private:
@@ -61,6 +63,7 @@ public:
 	inline void setLinkAdressPlayer(Player* player) { _player = player; }
 	inline void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
 	inline void setLinkAdressFriend(Friend* friends) { _friend = friends; }
+	inline void setLinkAdressMap(gameMap* map) { _map = map; }
 
 	inline void setNextLevel(void) { _selectLevel = SELECTLEVEL2; }
 	inline void setPrevLevel(void) { _selectLevel = SELECTLEVEL1; }

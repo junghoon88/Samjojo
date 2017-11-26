@@ -3,6 +3,7 @@
 
 
 sceneSelect::sceneSelect()
+	: _map(NULL)
 {
 	_background = NULL;
 	for (int i = 0; i < BTNSELECT1_MAX; i++)
@@ -150,6 +151,7 @@ void sceneSelect::selectScenario(void)
 			_player->loadUnits();
 			_friend->loadUnits();
 			_enemy->loadUnits();
+			
 
 
 			//SCENEMANAGER->changeScene(L"¥Î»≠æ¿");

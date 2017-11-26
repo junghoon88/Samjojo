@@ -3,6 +3,7 @@
 
 
 sceneBattle::sceneBattle()
+	: _map(NULL)
 {
 
 
@@ -16,9 +17,6 @@ sceneBattle::~sceneBattle()
 
 HRESULT sceneBattle::init(void)
 {
-	_map = new gameMap;
-	_map->init();
-
 	DATABASE->getSlectScenario();
 
 
@@ -28,17 +26,14 @@ HRESULT sceneBattle::init(void)
 
 void sceneBattle::release(void)
 {
-	_map->release();
 }
 
 void sceneBattle::update(void)
 {
-	_map->update();
 }
 
 void sceneBattle::render(void)
 {
-	_map->render();
 }
 
 void sceneBattle::initImage(void)

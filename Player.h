@@ -2,11 +2,19 @@
 #include "gameNode.h"
 #include "Unit.h"
 
+class Friend;
+class Enemy;
+class gameMap;
 
 class Player : public gameNode
 {
 private:
 	vUnits _vUnits;
+
+	Friend*		_friend;	//아군
+	Enemy*		_enemy;		//적군
+	gameMap*	_map;
+
 
 public:
 	Player();
@@ -22,5 +30,10 @@ public:
 
 public:
 	inline vUnits getUnits(void) { return _vUnits; }
+
+	inline void setLinkAdressFriend(Friend* friends) { _friend = friends; }
+	inline void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
+	inline void setLinkAdressMap(gameMap* map) { _map = map; }
+
 };
 
