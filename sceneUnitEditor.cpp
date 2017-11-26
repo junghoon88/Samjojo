@@ -3,7 +3,20 @@
 
 
 sceneUnitEditor::sceneUnitEditor()
+	: _unit(NULL), _imgFace(NULL), _imgBattleAtk(NULL), _imgBattleIdle(NULL), _imgBattleSpc(NULL)
 {
+	for (int i = 0; i < UNITEDITOR_BUTTON_MAX; i++)
+	{
+		_ctrlButton[i] = NULL;
+	}
+	for (int i = 0; i < UNITEDITOR_NUMEDITBOX_MAX; i++)
+	{
+		_numEditBox[i] = NULL;
+	}
+	for (int i = 0; i < UNITEDITOR_STREDITBOX_MAX; i++)
+	{
+		_strEditBox[i] = NULL;
+	}
 }
 
 
@@ -16,11 +29,14 @@ HRESULT sceneUnitEditor::init(void)
 {
 	_unit = new Unit;
 	_unit->init();
-	
+
 	initButton();
 	initValues();
+	initImage();
 	initEditbox();
 	initRangeRect();
+	initTeamButton();
+
 
 	loadUnitFiles();
 
@@ -30,6 +46,8 @@ HRESULT sceneUnitEditor::init(void)
 	hBrushRange = CreateSolidBrush(RGB(64, 64, 64));
 	hBrushPlayer = CreateSolidBrush(RGB(32, 32, 240));
 	hBrushAttack = CreateSolidBrush(RGB(240, 32, 32));
+
+	_exit = false;
 
 	return S_OK;
 }
@@ -41,7 +59,21 @@ void sceneUnitEditor::loadUnitFiles(void)
 	int filenum = 0;
 	//모든 파일 스캔 test
 	WIN32_FIND_DATA wfd;
-	HANDLE handle = FindFirstFile(L"UnitData/*.dat", &wfd);
+	HANDLE handle = NULL;
+
+	switch (_team)
+	{
+		case TEAM_PLAYER:
+			handle = FindFirstFile(L"UnitData/player/*.dat", &wfd);
+		break;
+		case TEAM_FRIEND:
+			handle = FindFirstFile(L"UnitData/friend/*.dat", &wfd);
+		break;
+		case TEAM_ENEMY:
+			handle = FindFirstFile(L"UnitData/enemy/*.dat", &wfd);
+		break;
+	}
+
 	// 찾는 파일이 있다면,
 	while (handle != INVALID_HANDLE_VALUE)
 	{
@@ -83,6 +115,9 @@ void sceneUnitEditor::release(void)
 
 	DeleteObject(hBrushWhite);
 	DeleteObject(hBrushBlue);
+	DeleteObject(hBrushRange);
+	DeleteObject(hBrushPlayer);
+	DeleteObject(hBrushAttack);
 }
 
 void sceneUnitEditor::update(void)
@@ -102,23 +137,10 @@ void sceneUnitEditor::update(void)
 		_strEditBox[i]->update();
 	}
 
-	RECT temp = RectMake(FILENAME_STARTX, FILENAME_STARTY, FILENAME_WIDTH, FILENAME_HEIGHT * _vUnits.size());
-	if (PtInRect(&temp, _ptMouse))
-	{
-		for (int i = 0; i < _vUnits.size(); i++)
-		{
-			if (PtInRect(&_vUnits[i].rc, _ptMouse))
-			{
-				if (!_vUnits[i].clicked && KEYMANAGER->isStayKeyDown(VK_LBUTTON))
-					_vUnits[i].clicked = true;
-			}
-			else
-			{
-				if (_vUnits[i].clicked && KEYMANAGER->isStayKeyDown(VK_LBUTTON))
-					_vUnits[i].clicked = false;
-			}
-		}
-	}
+	filesUpdate();
+	teamButtonUpdate();
+
+
 
 	for (int i = 0; i < RANGESIZEX; i++)
 	{
@@ -136,6 +158,11 @@ void sceneUnitEditor::update(void)
 			}
 		}
 	}
+
+	if (_exit)
+	{
+		SCENEMANAGER->changeScene(L"선택씬");
+	}
 }
 
 void sceneUnitEditor::render(void)
@@ -150,25 +177,20 @@ void sceneUnitEditor::render(void)
 		TextOut(getMemDC(), _ctrlButton[i]->getRect().left, _ctrlButton[i]->getRect().top, _strButton[i], _tcslen(_strButton[i]));
 	}
 
-	HBRUSH oldBrush;
-	for (int i = 0; i < _vUnits.size(); i++)
-	{
-		if (_vUnits[i].clicked)
-		{
-			oldBrush = (HBRUSH)SelectObject(getMemDC(), hBrushBlue);
-		}
-		else
-		{
-			oldBrush = (HBRUSH)SelectObject(getMemDC(), hBrushWhite);
-		}
-		Rectangle(getMemDC(), _vUnits[i].rc.left, _vUnits[i].rc.top, _vUnits[i].rc.right, _vUnits[i].rc.bottom);
-		TextOut(getMemDC(), _vUnits[i].rc.left, _vUnits[i].rc.top, _vUnits[i].str, _tcslen(_vUnits[i].str));
-		SelectObject(getMemDC(), oldBrush);
-	}
-	DeleteObject(oldBrush);
+	filesRender();
 
 	atkRangeRender();
 
+	//팀선택 버튼
+	teamButtonRender();
+}
+
+void sceneUnitEditor::initImage(void)
+{
+	selectImgFace();
+	selectImgBattleAtk();
+	selectImgBattleIdle();
+	selectImgBattleSpc();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -182,7 +204,7 @@ void sceneUnitEditor::initButton(void)
 	
 	//label
 
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FILELIST]->init(L"맵툴버튼", 64 + 50 - UPDATEPOSX + UPDATEPOSX, 100 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FILELIST]->init(L"맵툴버튼", 64 + 50 - 144 + UPDATEPOSX, 100 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
 
 	_ctrlButton[UNITEDITOR_BUTTON_LABEL_NAME]->init(L"맵툴버튼2", 350 + 25 + UPDATEPOSX, 100 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
 
@@ -258,7 +280,7 @@ void sceneUnitEditor::initButton(void)
 	_ctrlButton[UNITEDITOR_BUTTON_DATA_NEW]->init(L"맵툴버튼", 1175 + 50 + UPDATEPOSX, 470 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectDataNew, this);
 	_ctrlButton[UNITEDITOR_BUTTON_DATA_LOAD]->init(L"맵툴버튼", 1175 + 50 + UPDATEPOSX, 510 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectDataLoad, this);
 	_ctrlButton[UNITEDITOR_BUTTON_DATA_SAVE]->init(L"맵툴버튼", 1175 + 50 + UPDATEPOSX, 550 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectDataSave, this);
-	_ctrlButton[UNITEDITOR_BUTTON_DATA_EXIT]->init(L"맵툴버튼", 1175 + 50 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_DATA_EXIT]->init(L"맵툴버튼", 1175 + 50 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectExit, this);
 
 
 	//--------------------------------------------------------------------------------------------
@@ -418,14 +440,93 @@ void sceneUnitEditor::initRangeRect(void)
 	}
 }
 
+void sceneUnitEditor::initTeamButton(void)
+{
+	for (int i = 0; i < TEAM_MAX; i++)
+	{
+		_teamButton[i].rc = RectMake(-30 + UPDATEPOSX, 150 + 15 + UPDATEPOSY + 35 * i, 100, 30);
+		_teamButton[i].img = NULL;
+		_teamButton[i].clicked = false;
+
+		switch (i)
+		{
+		case TEAM_PLAYER:
+			_stprintf(_teamButton[i].str, L"플레이어");
+		break;
+		case TEAM_FRIEND:
+			_stprintf(_teamButton[i].str, L"아군");
+		break;
+		case TEAM_ENEMY:
+			_stprintf(_teamButton[i].str, L"적군");
+		break;
+		}
+	}
+
+	_teamButton[TEAM_PLAYER].clicked = true;
+	_team = TEAM_PLAYER;
+}
+
+void sceneUnitEditor::filesUpdate(void)
+{
+	RECT temp = RectMake(FILENAME_STARTX, FILENAME_STARTY, FILENAME_WIDTH, FILENAME_HEIGHT * _vUnits.size());
+	if (PtInRect(&temp, _ptMouse))
+	{
+		for (int i = 0; i < _vUnits.size(); i++)
+		{
+			if (PtInRect(&_vUnits[i].rc, _ptMouse))
+			{
+				if (!_vUnits[i].clicked && KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+					_vUnits[i].clicked = true;
+			}
+			else
+			{
+				if (_vUnits[i].clicked && KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+					_vUnits[i].clicked = false;
+			}
+		}
+	}
+}
+
+void sceneUnitEditor::teamButtonUpdate(void)
+{
+	for (int i = 0; i < TEAM_MAX; i++)
+	{
+		if (PtInRect(&_teamButton[i].rc, _ptMouse))
+		{
+			if (!_teamButton[i].clicked && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				if (i == TEAM_PLAYER)
+				{
+					_teamButton[TEAM_PLAYER].clicked = true;
+					_teamButton[TEAM_FRIEND].clicked = false;
+					_teamButton[TEAM_ENEMY].clicked = false;
+					_team = TEAM_PLAYER;
+					loadUnitFiles();
+				}
+				else if (i == TEAM_FRIEND)
+				{
+					_teamButton[TEAM_PLAYER].clicked = false;
+					_teamButton[TEAM_FRIEND].clicked = true;
+					_teamButton[TEAM_ENEMY].clicked = false;
+					_team = TEAM_FRIEND;
+					loadUnitFiles();
+				}
+				else if (i == TEAM_ENEMY)
+				{
+					_teamButton[TEAM_PLAYER].clicked = false;
+					_teamButton[TEAM_FRIEND].clicked = false;
+					_teamButton[TEAM_ENEMY].clicked = true;
+					_team = TEAM_ENEMY;
+					loadUnitFiles();
+				}
+			}
+		}
+	}
+}
+
 //~init functions
 //-----------------------------------------------------------------------------------------
 //other functions
-void sceneUnitEditor::btnSetup(void)
-{
-	//_btnSave = CreateWindow("button", "저장", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 700, 500, 100, 30,
-	//	_hWnd, HMENU(0), _hInstance, NULL);
-}
 
 void sceneUnitEditor::rectSketch(void)
 {
@@ -519,22 +620,10 @@ void sceneUnitEditor::editBoxRender(void)
 }
 void sceneUnitEditor::unitImageRender(void)			// 해야될 것: 프레임 이미지로 입력받아 프레임렌더로 출력
 {
-	TCHAR strFaceKey[100];
-	_stprintf(strFaceKey, L"face %05d", _faceNum);
-	//image* img = IMAGEMANAGER->findImage(strFaceKey);	
-	IMAGEMANAGER->findImage(strFaceKey)->render(getMemDC(), 100 + UPDATEPOSX, 100 + UPDATEPOSY);
-
-	TCHAR strNormalKey[100];
-	_stprintf(strNormalKey, L"평조 %05d", _normalNum);
-	IMAGEMANAGER->findImage(strNormalKey)->render(getMemDC(), 100 + UPDATEPOSX, 300 + UPDATEPOSY);
-	//IMAGEMANAGER->findImage(strNormalKey)->frameRender(getMemDC(), 100, 300, 0, 0);
-
-	TCHAR strCombatKey[100];
-	_stprintf(strCombatKey, L"전조 %05d", _combatNum);
-	IMAGEMANAGER->findImage(strCombatKey)->render(getMemDC(), 100 + UPDATEPOSX, 500 + UPDATEPOSY);
-	//IMAGEMANAGER->findImage(strCombatKey)->frameRender(getMemDC(), 100, 300, 0, 0);
-
-	_unit->setImages(strFaceKey, strNormalKey, strCombatKey);		// 이미지 셋
+	if (_imgFace)		_imgFace->render(getMemDC(), 100 + UPDATEPOSX, 100 + UPDATEPOSY);
+	if (_imgBattleAtk)  _imgBattleAtk->render(getMemDC(), 100 + UPDATEPOSX, 300 + UPDATEPOSY);
+	if (_imgBattleIdle) _imgBattleIdle->render(getMemDC(), 100 + UPDATEPOSX, 300+256 + UPDATEPOSY);
+	if (_imgBattleSpc)  _imgBattleSpc->render(getMemDC(), 100 + UPDATEPOSX, 300+256+96 + UPDATEPOSY);
 }
 void sceneUnitEditor::atkRangeRender(void)
 {
@@ -543,6 +632,8 @@ void sceneUnitEditor::atkRangeRender(void)
 	{
 		for (int j = 0; j < RANGESIZEY; j++)
 		{
+			if (i == RANGESIZEX / 2 && j == RANGESIZEY / 2) continue;
+
 			if (_atkRange[i][j].clicked)
 			{
 				oldBrushRange = (HBRUSH)SelectObject(getMemDC(), hBrushAttack);
@@ -566,9 +657,55 @@ void sceneUnitEditor::atkRangeRender(void)
 	DeleteObject(oldBrushPlayer);
 }
 
+void sceneUnitEditor::filesRender(void)
+{
+	if (_vUnits.size() == 0)
+		return;
+
+	HBRUSH oldBrush;
+	for (int i = 0; i < _vUnits.size(); i++)
+	{
+		if (_vUnits[i].clicked)
+		{
+			oldBrush = (HBRUSH)SelectObject(getMemDC(), hBrushBlue);
+		}
+		else
+		{
+			oldBrush = (HBRUSH)SelectObject(getMemDC(), hBrushWhite);
+		}
+		Rectangle(getMemDC(), _vUnits[i].rc.left, _vUnits[i].rc.top, _vUnits[i].rc.right, _vUnits[i].rc.bottom);
+		TextOut(getMemDC(), _vUnits[i].rc.left, _vUnits[i].rc.top, _vUnits[i].str, _tcslen(_vUnits[i].str));
+		SelectObject(getMemDC(), oldBrush);
+	}
+	DeleteObject(oldBrush);
+}
+
+void sceneUnitEditor::teamButtonRender(void)
+{
+	HBRUSH oldBrush;
+	for (int i = 0; i < TEAM_MAX; i++)
+	{
+		if (_teamButton[i].clicked)
+		{
+			oldBrush = (HBRUSH)SelectObject(getMemDC(), hBrushBlue);
+		}
+		else
+		{
+			oldBrush = (HBRUSH)SelectObject(getMemDC(), hBrushWhite);
+		}
+
+		Rectangle(getMemDC(), _teamButton[i].rc.left, _teamButton[i].rc.top, _teamButton[i].rc.right, _teamButton[i].rc.bottom);
+		TextOut(getMemDC(), _teamButton[i].rc.left, _teamButton[i].rc.top, _teamButton[i].str, _tcslen(_teamButton[i].str));
+		SelectObject(getMemDC(), oldBrush);
+	}
+	DeleteObject(oldBrush);
+
+}
+
 void sceneUnitEditor::newUnit(void)
 {
-	this->init();
+	//this->init();
+	_unit->init();
 
 	for (int i = 0; i < UNITEDITOR_NUMEDITBOX_MAX; i++)
 	{
@@ -603,13 +740,28 @@ void sceneUnitEditor::loadUnit(void)		// 로드유닛 일단 보류
 		return;
 
 	bool find = false;
-	TCHAR filename[100] = L"UnitData/";
+	TCHAR filename[100] = L"";
+	int index = 0;
+
+	switch (_team)
+	{
+		case TEAM_PLAYER:
+			_stprintf(filename, L"UnitData/player/");
+		break;
+		case TEAM_FRIEND:
+			_stprintf(filename, L"UnitData/friend/");
+		break;
+		case TEAM_ENEMY:
+			_stprintf(filename, L"UnitData/enemy/");
+		break;
+	}
 
 	for (int i = 0; i < _vUnits.size(); i++)
 	{
 		if (_vUnits[i].clicked)
 		{
 			_tcscat(filename, _vUnits[i].str);
+			index = i;
 			find = true;
 			break;
 		}
@@ -623,7 +775,7 @@ void sceneUnitEditor::loadUnit(void)		// 로드유닛 일단 보류
 
 	file = CreateFile(filename, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	_unit->init(); //혹시모르니 초기화 한번
+	newUnit();
 
 	ReadFile(file, _unit, sizeof(Unit), &read, NULL);
 
@@ -635,6 +787,9 @@ void sceneUnitEditor::loadUnit(void)		// 로드유닛 일단 보류
 
 	_strEditBox[UNITEDITOR_STREDITBOX_DATA_FAMILY]->setStr(_unit->getStatus().family);
 	_strEditBox[UNITEDITOR_STREDITBOX_DATA_AOS]->setStr(_unit->getStatus().aos);
+
+	_tcscpy(filename, _vUnits[index].str);
+	_strEditBox[UNITEDITOR_STREDITBOX_DATA_FILENAME]->setStr(_tcstok(filename, L"."));
 
 	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_HP]->setStrNum(_unit->getStatus().HPMax);
 	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MP]->setStrNum(_unit->getStatus().MPMax);
@@ -671,6 +826,14 @@ void sceneUnitEditor::loadUnit(void)		// 로드유닛 일단 보류
 	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERINT]->setStrNum(_unit->getStatus().Int);
 	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERDEX]->setStrNum(_unit->getStatus().Dex);
 	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERLUK]->setStrNum(_unit->getStatus().Luk);
+
+	for (int i = 0; i < RANGESIZEX; i++)
+	{
+		for (int j = 0; j < RANGESIZEY; j++)
+		{
+			_atkRange[i][j].clicked = (_unit->getAtkRange())[i][j];
+		}
+	}
 }
 void sceneUnitEditor::saveUnit(void)
 {
@@ -712,11 +875,38 @@ void sceneUnitEditor::saveUnit(void)
 	_tempStatus.LvPerDex		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERDEX]->getStrNum();
 	_tempStatus.LvPerLuk		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERLUK]->getStrNum();
 
+	
+
+	BOOL tempRange[RANGESIZEX][RANGESIZEY];
+	for (int i = 0; i < RANGESIZEX; i++)
+	{
+		for (int j = 0; j < RANGESIZEY; j++)
+		{
+			tempRange[i][j] = _atkRange[i][j].clicked;
+		}
+	}
+
 	_unit->setStatus(_tempStatus);
+	_unit->setAtkRange(tempRange);
+	_unit->setTeam(_team);
 
 	HANDLE file;
 	DWORD write;
 	TCHAR tempStr[1024] = L"UnitData/";
+
+	switch (_team)
+	{
+	case TEAM_PLAYER:
+		_stprintf(tempStr, L"UnitData/player/");
+	break;
+	case TEAM_FRIEND:
+		_stprintf(tempStr, L"UnitData/friend/");
+	break;
+	case TEAM_ENEMY:
+		_stprintf(tempStr, L"UnitData/enemy/");
+	break;
+	}
+
 	_tcscat(tempStr, _strEditBox[UNITEDITOR_STREDITBOX_DATA_FILENAME]->getStr());
 	_tcscat(tempStr, L".dat");
 
@@ -725,6 +915,55 @@ void sceneUnitEditor::saveUnit(void)
 	WriteFile(file, _unit, sizeof(Unit), &write, NULL);
 
 	CloseHandle(file);
+}
+
+void sceneUnitEditor::selectImgFace(void)
+{
+	TCHAR strFaceKey[100];
+	_stprintf(strFaceKey, L"face %05d", _faceNum);
+	_imgFace = IMAGEMANAGER->findImage(strFaceKey);
+}
+
+void sceneUnitEditor::selectImgBattleAtk(void)
+{
+	TCHAR strKey[100];
+	if (_normalNum < UNIT_BATTLE_IMAGE1)
+	{
+		_stprintf(strKey, L"unit%d-atk", _normalNum);
+	}
+	else
+	{
+		_stprintf(strKey, L"unit%d-%d-atk", _normalNum, _team);
+	}
+	_imgBattleAtk = IMAGEMANAGER->findImage(strKey);
+}
+
+void sceneUnitEditor::selectImgBattleIdle(void)
+{
+	TCHAR strKey[100];
+	if (_normalNum < UNIT_BATTLE_IMAGE1)
+	{
+		_stprintf(strKey, L"unit%d-idle", _normalNum);
+	}
+	else
+	{
+		_stprintf(strKey, L"unit%d-%d-idle", _normalNum, _team);
+	}
+	_imgBattleIdle = IMAGEMANAGER->findImage(strKey);
+}
+
+void sceneUnitEditor::selectImgBattleSpc(void)
+{
+	TCHAR strKey[100];
+	if (_normalNum < UNIT_BATTLE_IMAGE1)
+	{
+		_stprintf(strKey, L"unit%d-spc", _normalNum);
+	}
+	else
+	{
+		_stprintf(strKey, L"unit%d-%d-spc", _normalNum, _team);
+	}
+	_imgBattleSpc = IMAGEMANAGER->findImage(strKey);
 }
 
 //~other functions
@@ -746,25 +985,38 @@ void sceneUnitEditor::ctrlSelectDataSave(void* obj)
 	unitEditor->saveUnit();
 	unitEditor->loadUnitFiles();
 }
+void sceneUnitEditor::ctrlSelectExit(void * obj)
+{
+	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
+	unitEditor->setExit();
+}
 void sceneUnitEditor::ctrlSelectFacePrev(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setFacePrev();
+	unitEditor->selectImgFace();
 }
 void sceneUnitEditor::ctrlSelectFaceNext(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setFaceNext();
+	unitEditor->selectImgFace();
 }
 void sceneUnitEditor::ctrlSelectNormalPrev(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setNormalPrev();
+	unitEditor->selectImgBattleAtk();
+	unitEditor->selectImgBattleIdle();
+	unitEditor->selectImgBattleSpc();
 }
 void sceneUnitEditor::ctrlSelectNormalNext(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setNormalNext();
+	unitEditor->selectImgBattleAtk();
+	unitEditor->selectImgBattleIdle();
+	unitEditor->selectImgBattleSpc();
 }
 void sceneUnitEditor::ctrlSelectCombatPrev(void* obj)
 {
@@ -805,6 +1057,21 @@ void sceneUnitEditor::ctrlSelectSubitemNext(void* obj)
 {
 	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 	unitEditor->setSubitemNext();
+}
+
+void sceneUnitEditor::cbFuncChangeTeamPlayer(void * obj)
+{
+	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
+}
+
+void sceneUnitEditor::cbFuncChangeTeamFriend(void * obj)
+{
+	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
+}
+
+void sceneUnitEditor::cbFuncChangeTeamEnemy(void * obj)
+{
+	sceneUnitEditor* unitEditor = (sceneUnitEditor*)obj;
 }
 
 //~callback functions

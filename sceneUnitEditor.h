@@ -9,14 +9,22 @@
 #define UPDATEPOSY 0
 
 #define FILENAME_STARTX		64
-#define FILENAME_STARTY		150
+#define FILENAME_STARTY		260
 #define FILENAME_WIDTH		128
 #define FILENAME_HEIGHT		30
 
-#define RANGESIZEX	7
-#define RANGESIZEY	7
+#define RANGESIZEX	UNIT_ATTACK_RANGE_MAX
+#define RANGESIZEY	UNIT_ATTACK_RANGE_MAX
 #define TILEWIDTH	48
 #define TILEHEIGHT	48
+
+struct tagTeamInfo
+{
+	RECT rc;
+	image* img;
+	TCHAR str[100];
+	bool clicked;
+};
 
 
 struct tagUnitFileInfo
@@ -24,6 +32,13 @@ struct tagUnitFileInfo
 	RECT rc;
 	image* img;
 	TCHAR str[100];
+	bool clicked;
+};
+
+
+struct tagRange
+{
+	RECT rc;
 	bool clicked;
 };
 
@@ -170,6 +185,9 @@ private:
 
 	tagStatus _tempStatus;
 
+	TEAM _team;
+	tagTeamInfo _teamButton[TEAM_MAX];
+
 	button* _ctrlButton[UNITEDITOR_BUTTON_MAX];
 	TCHAR _strButton[UNITEDITOR_BUTTON_MAX][100];
 	
@@ -179,6 +197,13 @@ private:
 	TCHAR* _filename;
 
 	tagRange _atkRange[RANGESIZEX][RANGESIZEY];
+
+	image* _imgFace;
+	image* _imgBattleAtk;
+	image* _imgBattleIdle;
+	image* _imgBattleSpc;
+
+	bool _exit;
 
 
 private:
@@ -205,6 +230,7 @@ private:
 	static void ctrlSelectDataNew(void* obj);
 	static void ctrlSelectDataLoad(void* obj);
 	static void ctrlSelectDataSave(void* obj);
+	static void ctrlSelectExit(void* obj);
 
 	static void ctrlSelectFacePrev(void* obj);
 	static void ctrlSelectFaceNext(void* obj);
@@ -224,6 +250,10 @@ private:
 	static void ctrlSelectSubitemPrev(void* obj);
 	static void ctrlSelectSubitemNext(void* obj);
 
+	static void cbFuncChangeTeamPlayer(void* obj);
+	static void cbFuncChangeTeamFriend(void* obj);
+	static void cbFuncChangeTeamEnemy(void* obj);
+
 
 public:
 	sceneUnitEditor();
@@ -236,29 +266,41 @@ public:
 	void getChar(WPARAM wParam);
 
 public:
+	void initImage(void);
 	void initButton(void);
 	void initValues(void);
 	void initEditbox(void);
 	void initRangeRect(void);
+	void initTeamButton(void);
 
 public:
-	void btnSetup(void);
+	void filesUpdate(void);
+	void teamButtonUpdate(void);
 
+public:
 	void rectSketch(void);
 	void editBoxRender(void);
 	void unitImageRender(void);
 	void atkRangeRender(void);
+	void filesRender(void);
+	void teamButtonRender(void);
 
 	void newUnit(void);
 	void loadUnit(void);
 	void saveUnit(void);
 
+	void selectImgFace(void);
+	void selectImgBattleAtk(void);
+	void selectImgBattleIdle(void);
+	void selectImgBattleSpc(void);
+
+
 public:
 	inline void setFacePrev(void) { _faceNum = _faceNum == 0 ? FACE_MAX : _faceNum - 1; }
 	inline void setFaceNext(void) { _faceNum = _faceNum == FACE_MAX ? 0 : _faceNum + 1; }
 
-	inline void setNormalPrev(void) { _normalNum = _normalNum == 0 ? NORMAL_IMAGE_MAX : _normalNum - 1; }
-	inline void setNormalNext(void) { _normalNum = _normalNum == NORMAL_IMAGE_MAX ? 0 : _normalNum + 1; }
+	inline void setNormalPrev(void) { _normalNum = _normalNum == 0 ? UNIT_BATTLE_IMAGE_MAX - 1 : _normalNum - 1; }
+	inline void setNormalNext(void) { _normalNum = _normalNum == UNIT_BATTLE_IMAGE_MAX - 1 ? 0 : _normalNum + 1; }
 
 	inline void setCombatPrev(void) { _combatNum = _combatNum == 0 ? COMBAT_IMAGE_MAX : _combatNum - 1; }
 	inline void setCombatNext(void) { _combatNum = _combatNum == COMBAT_IMAGE_MAX ? 0 : _combatNum + 1; }
@@ -271,5 +313,7 @@ public:
 
 	inline void setSubitemPrev(void) { _subitemNum = _subitemNum == 0 ? SUBITEM_IMAGE_MAX : _subitemNum - 1; }
 	inline void setSubitemNext(void) { _subitemNum = _subitemNum == SUBITEM_IMAGE_MAX ? 0 : _subitemNum + 1; }
+
+	inline void setExit(void) { _exit = true; }
 };
 

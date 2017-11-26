@@ -2,11 +2,11 @@
 #include "mainGame.h"
 
 #include "sceneInit.h"
-#include "sceneLoading.h"
 #include "sceneSelect.h"
 #include "sceneStory.h"
 #include "sceneBattle.h"
-#include "sceneShop.h"
+#include "sceneBuy.h"
+#include "sceneSell.h"
 #include "sceneMaptool.h"
 #include "sceneUnitEditor.h"
 
@@ -45,8 +45,8 @@ HRESULT mainGame::init(void)
 void mainGame::initScene(void)
 {
 	gameNode* node = SCENEMANAGER->addScene(L"ÃÊ±âÈ­¾À", new sceneInit);  //°ÔÀÓ ¸®¼Ò½º ÃÊ±âÈ­
-	node->init();
-	SCENEMANAGER->addScene(L"·Îµù¾À", new sceneLoading);				//¸Êµ¥ÀÌÅÍ, À¯´Öµ¥ÀÌÅÍ ÆÄÀÏ ·Îµù¾À
+	//node->init();
+	
 	SCENEMANAGER->addScene(L"¸ÊÅø¾À", new sceneMaptool);				//¸ÊÅø
 	SCENEMANAGER->addScene(L"À¯´Ö¿¡µðÅÍ", new sceneUnitEditor);		//À¯´Ö»ý¼º
 
@@ -60,11 +60,18 @@ void mainGame::initScene(void)
 
 	SCENEMANAGER->addScene(L"´ëÈ­¾À", new sceneStory);				//½ºÅä¸®
 
-	sceneShop* _sceneShop = new sceneShop;							//»óÁ¡
-	_sceneShop->setLinkAdressPlayer(_player);
-	_sceneShop->setLinkAdressEnemy(_enemy);
-	_sceneShop->setLinkAdressFriend(_friend);
-	SCENEMANAGER->addScene(L"»óÁ¡¾À", _sceneShop);
+
+	sceneBuy* _sceneBuy = new sceneBuy;							    //±¸¸Å»óÁ¡
+	_sceneBuy->setLinkAdressPlayer(_player);
+	_sceneBuy->setLinkAdressEnemy(_enemy);
+	_sceneBuy->setLinkAdressFriend(_friend);
+	SCENEMANAGER->addScene(L"±¸¸Å»óÁ¡¾À", _sceneBuy);
+
+	sceneSell* _sceneSell = new sceneSell;							//ÆÇ¸Å»óÁ¡
+	_sceneSell->setLinkAdressPlayer(_player);
+	_sceneSell->setLinkAdressEnemy(_enemy);
+	_sceneSell->setLinkAdressFriend(_friend);
+	SCENEMANAGER->addScene(L"ÆÇ¸Å»óÁ¡¾À", _sceneSell);
 
 
 	sceneBattle* _sceneBattle = new sceneBattle;					//ÀüÅõ
@@ -73,7 +80,7 @@ void mainGame::initScene(void)
 	_sceneBattle->setLinkAdressFriend(_friend);
 	SCENEMANAGER->addScene(L"ÀüÅõ¾À", _sceneBattle);
 
-	SCENEMANAGER->changeScene(L"¼±ÅÃ¾À");
+	SCENEMANAGER->changeScene(L"ÃÊ±âÈ­¾À");
 }
 
 
@@ -123,6 +130,10 @@ void mainGame::render(void)
 void mainGame::getChar(WPARAM wParam)
 {
 	if (SCENEMANAGER->isCurScene(L"À¯´Ö¿¡µðÅÍ"))
+	{
+		SCENEMANAGER->getChar(wParam);
+	}
+	else if (SCENEMANAGER->isCurScene(L"¸ÊÅø¾À"))
 	{
 		SCENEMANAGER->getChar(wParam);
 	}

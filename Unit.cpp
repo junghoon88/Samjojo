@@ -26,9 +26,8 @@ void Unit::init(void)
 
 	//¿ÃπÃ¡ˆ
 	_imgFace = NULL;
-	_imgStory = NULL;
-	_imgBattle = NULL;
+
+	ZeroMemory(&_battleState, sizeof(tagBattleState));
 
 	ZeroMemory(&_atkRange, sizeof(_atkRange));
-
 }
