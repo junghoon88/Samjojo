@@ -1,5 +1,6 @@
 #pragma once
 #include "gameNode.h"
+#include "loading.h"
 #include "tileNode.h"
 
 #define UNITSIZE_ATKX 256
@@ -22,6 +23,9 @@
 class sceneInit : public gameNode
 {
 private:
+	loading* _loading;
+
+private:
 	void initImage(void);
 	void initSound(void);
 
@@ -29,7 +33,11 @@ private:
 	void initImageSlect(void);
 	void initImageMapTool(void);
 	void initImageUnitEditor(void);
+
+	void initImageStory(void);
+
 	void initImageUnits(void);
+
 
 public:
 	HRESULT init(void);

@@ -3,13 +3,19 @@
 
 #define STRING_MAX 1024
 
+
 class scanDialog : public gameNode
 {
 private:
 	FILE* _fp;
 	char _strName[100];
 	vector</*char[STRING_MAX]*/string> _vScripts;
+	RECT story;
+	image* _story;
+	image* _face;
+	
 
+	int next;
 public:
 	scanDialog();
 	~scanDialog();
@@ -21,5 +27,6 @@ public:
 
 	void loadDialog(void);
 
+	inline int getNext(void) { return next; }
 };
 

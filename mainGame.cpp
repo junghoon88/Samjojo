@@ -45,7 +45,7 @@ HRESULT mainGame::init(void)
 void mainGame::initScene(void)
 {
 	gameNode* node = SCENEMANAGER->addScene(L"√ ±‚»≠æ¿", new sceneInit);  //∞‘¿” ∏Æº“Ω∫ √ ±‚»≠
-	node->init();
+	//node->init();
 	
 	SCENEMANAGER->addScene(L"∏ ≈¯æ¿", new sceneMaptool);				//∏ ≈¯
 	SCENEMANAGER->addScene(L"¿Ø¥÷ø°µ≈Õ", new sceneUnitEditor);		//¿Ø¥÷ª˝º∫
@@ -80,7 +80,7 @@ void mainGame::initScene(void)
 	_sceneBattle->setLinkAdressFriend(_friend);
 	SCENEMANAGER->addScene(L"¿¸≈ıæ¿", _sceneBattle);
 
-	SCENEMANAGER->changeScene(L"∏ ≈¯æ¿");
+	SCENEMANAGER->changeScene(L"√ ±‚»≠æ¿");
 }
 
 
