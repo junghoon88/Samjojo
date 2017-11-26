@@ -33,7 +33,11 @@ private:
 	void initImageSlect(void);
 	void initImageMapTool(void);
 	void initImageUnitEditor(void);
+
+	void initImageStory(void);
+
 	void initImageUnits(void);
+
 
 public:
 	HRESULT init(void);

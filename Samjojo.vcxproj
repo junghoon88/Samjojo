@@ -112,6 +112,7 @@
     <ClInclude Include="RenderManager.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="scanDialog.h" />
+    <ClInclude Include="scaneStorymap.h" />
     <ClInclude Include="sceneBattle.h" />
     <ClInclude Include="sceneBuy.h" />
     <ClInclude Include="sceneEquip.h" />
@@ -163,6 +164,7 @@
     <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="scanDialog.cpp" />
+    <ClCompile Include="scaneStorymap.cpp" />
     <ClCompile Include="sceneBattle.cpp" />
     <ClCompile Include="sceneBuy.cpp" />
     <ClCompile Include="sceneEquip.cpp" />

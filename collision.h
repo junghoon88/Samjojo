@@ -37,6 +37,7 @@ namespace IOTA_UTIL
 	}
 
 
+
 	typedef struct tagMYCIRCLE
 	{
 		float x;

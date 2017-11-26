@@ -50,7 +50,7 @@ public:
 	void aniRender(wstring strKey, HDC hdc, int destX, int destY, animation* ani);
 	void aniAlphaRender(wstring strKey, HDC hdc, int destX, int destY, animation* ani, BYTE alpha);
 
-
+	
 
 
 

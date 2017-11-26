@@ -10,7 +10,8 @@ HRESULT loadItem::initForImage(wstring keyName, int width, int height, bool blen
 
 	memset(&_imageResource, 0, sizeof(tagImageResource));
 
-	_imageResource.keyName = keyName;
+	//_imageResource.keyName = keyName;
+	_stprintf(_imageResource.keyName, L"%s", keyName.c_str());
 	_imageResource.width = width;
 	_imageResource.height = height;
 	_imageResource.blend = blend;
@@ -24,8 +25,10 @@ HRESULT loadItem::initForImage(wstring keyName, const TCHAR* fileName, int width
 
 	memset(&_imageResource, 0, sizeof(tagImageResource));
 
-	_imageResource.keyName = keyName;
-	_imageResource.fileName = fileName;
+	//_imageResource.keyName = keyName;
+	 _stprintf(_imageResource.keyName, L"%s", keyName.c_str());
+	//_imageResource.fileName = fileName;
+	_stprintf(_imageResource.fileName, L"%s", fileName);
 	_imageResource.width = width;
 	_imageResource.height = height;
 	_imageResource.trans = trans;
@@ -41,8 +44,10 @@ HRESULT loadItem::initForImage(wstring keyName, const TCHAR* fileName, float x, 
 
 	memset(&_imageResource, 0, sizeof(tagImageResource));
 
-	_imageResource.keyName = keyName;
-	_imageResource.fileName = fileName;
+	//_imageResource.keyName = keyName;
+	 _stprintf(_imageResource.keyName, L"%s", keyName.c_str());
+	//_imageResource.fileName = fileName;
+	_stprintf(_imageResource.fileName, L"%s", fileName);
 	_imageResource.x = x;
 	_imageResource.y = y;
 	_imageResource.width = width;
@@ -60,8 +65,10 @@ HRESULT loadItem::initForFrameImage(wstring keyName, const TCHAR* fileName, int 
 
 	memset(&_imageResource, 0, sizeof(tagImageResource));
 
-	_imageResource.keyName = keyName;
-	_imageResource.fileName = fileName;
+	//_imageResource.keyName = keyName;
+	 _stprintf(_imageResource.keyName, L"%s", keyName.c_str());
+	//_imageResource.fileName = fileName;
+	_stprintf(_imageResource.fileName, L"%s", fileName);
 	_imageResource.width = width;
 	_imageResource.height = height;
 	_imageResource.frameX = frameX;
@@ -80,8 +87,10 @@ HRESULT loadItem::initForFrameImage(wstring keyName, const TCHAR* fileName, floa
 
 	memset(&_imageResource, 0, sizeof(tagImageResource));
 
-	_imageResource.keyName = keyName;
-	_imageResource.fileName = fileName;
+	//_imageResource.keyName = keyName;
+	 _stprintf(_imageResource.keyName, L"%s", keyName.c_str());
+	//_imageResource.fileName = fileName;
+	_stprintf(_imageResource.fileName, L"%s", fileName);
 	_imageResource.width = width;
 	_imageResource.height = height;
 	_imageResource.x = x;
@@ -108,10 +117,10 @@ loading::~loading()
 
 HRESULT loading::init()
 {
-	_background = IMAGEMANAGER->addImage(L"로딩백그라운드", L"롤로딩.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 0, 255));
+	_background = IMAGEMANAGER->addImage(L"로딩백그라운드", L"image/loading/loadingBG.bmp", 640, 400);
 
 	_loadingBar = new progressBar;
-	_loadingBar->init(L"loadingBarTop", L"loadingBarBottom", WINSIZEX / 2, WINSIZEY - 20, WINSIZEX, 20);
+	_loadingBar->init(L"progressbarT", L"progressbarB", /*80*/WINSIZEX / 2, WINSIZEY - 100, 800, 48);
 	_loadingBar->setGauge(0, 0);
 
 	_currentGauge = 0;
@@ -131,7 +140,7 @@ void loading::update()
 
 void loading::render() 
 {
-	_background->render(getMemDC(), 0, 0);
+	if(_background)	_background->render(getMemDC(), 0, 0);
 	_loadingBar->render();
 }
 
@@ -192,31 +201,31 @@ BOOL loading::loadingImageDone()
 		case LOAD_KIND_IMAGE_0:
 		{
 			tagImageResource img = item->getImageResource();
-			IMAGEMANAGER->addImage(img.keyName, img.width, img.height);
+			IMAGEMANAGER->addImage(img.keyName, img.width, img.height, img.blend);
 		}
 		break;
 		case LOAD_KIND_IMAGE_1:
 		{
 			tagImageResource img = item->getImageResource();
-			IMAGEMANAGER->addImage(img.keyName, img.fileName, img.width, img.height, img.trans, img.transColor);
+			IMAGEMANAGER->addImage(img.keyName, img.fileName, img.width, img.height, img.trans, img.transColor, img.blend);
 		}
 		break;
 		case LOAD_KIND_IMAGE_2:
 		{
 			tagImageResource img = item->getImageResource();
-			IMAGEMANAGER->addImage(img.keyName, img.fileName, img.x, img.y, img.width, img.height, img.trans, img.transColor);
+			IMAGEMANAGER->addImage(img.keyName, img.fileName, img.x, img.y, img.width, img.height, img.trans, img.transColor, img.blend);
 		}
 		break;
 		case LOAD_KIND_FRAMEIMAGE_0:
 		{
 			tagImageResource img = item->getImageResource();
-			IMAGEMANAGER->addFrameImage(img.keyName, img.fileName, img.width, img.height, img.frameX, img.frameY, img.trans, img.transColor);
+			IMAGEMANAGER->addFrameImage(img.keyName, img.fileName, img.width, img.height, img.frameX, img.frameY, img.trans, img.transColor, img.blend);
 		}
 		break;
 		case LOAD_KIND_FRAMEIMAGE_1:
 		{
 			tagImageResource img = item->getImageResource();
-			IMAGEMANAGER->addFrameImage(img.keyName, img.fileName, img.x, img.y, img.width, img.height, img.frameX, img.frameY, img.trans, img.transColor);
+			IMAGEMANAGER->addFrameImage(img.keyName, img.fileName, img.x, img.y, img.width, img.height, img.frameX, img.frameY, img.trans, img.transColor, img.blend);
 		}
 		break;
 		case LOAD_KIND_SOUND:
