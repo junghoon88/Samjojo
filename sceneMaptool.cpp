@@ -60,7 +60,7 @@ void sceneMaptool::release(void)
 
 }
 
-void sceneMaptool::update(void)	
+void sceneMaptool::update(void)
 {
 	//맵이름 정하기 or 불러오는 맵 이름 쓰기
 	_editBox->update();
@@ -86,39 +86,46 @@ void sceneMaptool::update(void)
 		{
 			for (int i = 0; i < TILEX * TILEY; i++)
 			{
-				 _tiles[i].isClick = false;
+				_tiles[i].isClick = false;
 			}
 			for (int i = 0; i < TILEVIEWX; i++)
 			{
 				for (int j = 0; j < TILEVIEWY; j++)
 				{
-					if (PtInRect(&_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].rc, _ptMouse) && _tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleObjectSelectIdx != OBJECTSELECT_NONE) _tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].isClick = true;
+					if (PtInRect(&_tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc, _ptMouse)
+						&& _tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].sampleObjectSelectIdx != OBJECTSELECT_NONE)
+					{
+						_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].isClick = true;
+						_tileObj->setStr(_tiles[(i + _countY) * 20 * (TILEX / 20) + j + _countX].obj);
+					}
 				}
 			}
 		}
 	}
 
-	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
+	if (PtInRect(&RectMake(0, 0, TILEVIEWX * TILESIZE, TILEVIEWY * TILESIZE), _ptMouse))
 	{
-		_countX--;
-		if (_countX < 0) _countX = 0;
+		if (KEYMANAGER->isStayKeyDown(VK_LEFT))
+		{
+			_countX--;
+			if (_countX < 0) _countX = 0;
+		}
+		if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
+		{
+			_countX++;
+			if (_countX + 20 > _tileSizeX[_selectSizeX]) _countX = _tileSizeX[_selectSizeX] - 20;
+		}
+		if (KEYMANAGER->isStayKeyDown(VK_UP))
+		{
+			_countY--;
+			if (_countY < 0) _countY = 0;
+		}
+		if (KEYMANAGER->isStayKeyDown(VK_DOWN))
+		{
+			_countY++;
+			if (_countY + 20 > _tileSizeY[_selectSizeY]) _countY = _tileSizeY[_selectSizeY] - 20;
+		}
 	}
-	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
-	{
-		_countX++;
-		if (_countX + 20 > _tileSizeX[_selectSizeX]) _countX = _tileSizeX[_selectSizeX] - 20;
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_UP))
-	{
-		_countY--;
-		if (_countY < 0) _countY = 0;
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_DOWN))
-	{
-		_countY++;
-		if (_countY + 20 > _tileSizeY[_selectSizeY]) _countY = _tileSizeY[_selectSizeY] - 20;
-	}
-
 
 	if (PtInRect(&RectMake(0, 0, 20 * TILESIZE, 20 * TILESIZE), _ptMouse))
 	{
@@ -221,10 +228,25 @@ void sceneMaptool::update(void)
 	if (_alphaValueBox->getStrNum() > 100) _alphaValueBox->setStrNum(100);
 	else if (_alphaValueBox->getStrNum() < 0) _alphaValueBox->setStrNum(0);
 	_alphaValue = (int)(((float)_alphaValueBox->getStrNum() / 100) * (float)255);
+
+	//오브젝트에 값넣기
+	if (KEYMANAGER->isOnceKeyDown(MK_RBUTTON)
+		&& PtInRect(&RectMake(WINSIZEX - 37, 672, 34, 18), _ptMouse))
+	{
+		for (int i = 0; i < TILEVIEWX; i++)
+		{
+			for (int j = 0; j < TILEVIEWY; j++)
+			{
+				if (_tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].isClick)
+					_stprintf(_tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].obj, _tileObj->getStr());
+			}
+		}
+	}
 }
 
 void sceneMaptool::render(void)	
 {
+	SetBkMode(getMemDC(), TRANSPARENT);
 	//샘플타일
 	RectangleMake(getMemDC(), WINSIZEX - 3 * TILESIZE - 1, 0, TILESIZE * 3 + 1, TILESIZE * 10 + 21);
 	TextOut(getMemDC(), WINSIZEX - (3 * TILESIZE) / 2 - 20, 1, L"지형", _tcslen(L"지형"));
@@ -276,6 +298,10 @@ void sceneMaptool::render(void)
 	TextOut(getMemDC(), WINSIZEX - 3 * TILESIZE, 650, text, wcslen(text));
 	_tileObj->render();
 
+	IMAGEMANAGER->findImage(L"맵툴버튼")->render(getMemDC(), WINSIZEX - 37, 672, 0, 0, 34, 18);
+	_stprintf(text, L"save");
+	TextOut(getMemDC(), WINSIZEX - 36, 673, text, wcslen(text));
+
 	//지형
 	for (int i = 0; i < TILEVIEWX; i++)
 	{
@@ -294,7 +320,8 @@ void sceneMaptool::render(void)
 
 			IMAGEMANAGER->alphaRender(_objTiles[_tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].sampleObjectSelectIdx].strImgKey, getMemDC(), _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.left, _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.top, 128);
 			if (_tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].isClick) 
-				IMAGEMANAGER->findImage(L"타일선택")->render(getMemDC(), _tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].rc.left, _tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].rc.top);
+				IMAGEMANAGER->findImage(L"타일선택")->render(getMemDC(), _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.left, _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.top);
+			TextOut(getMemDC(), _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.left, _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.bottom - 18, _tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].obj, _tcslen(_tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].obj));
 			//IMAGEMANAGER->alphaRender(_TroopObj[_tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].sampleObjectSelectIdx][_tiles[(i + _countY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countX].sampleObjectIdx].strImgKey, getMemDC(), _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.left, _tiles[i * TILEVIEWY * (TILEX / TILEVIEWY) + j].rc.top, 128);
 		}
 	}
@@ -401,6 +428,10 @@ void sceneMaptool::ctrlObjectSelectPlayer(void * obj)
 
 	maptool->setCtrlObjectSelect(OBJECTSELECT_PLAYER);
 }
+static void saveObject(void* obj)
+{
+	sceneMaptool* maptool = (sceneMaptool*)obj;
+}
 //~callback functions
 //-----------------------------------------------------------------------------------------
 
@@ -418,7 +449,6 @@ void sceneMaptool::setup(void)
 	_ctrlButton[CTRL_TERRAINDRAW]->init(L"맵툴버튼",  1100, 500, { 0, 0 }, { 0, 1 }, ctrlSelectTerrain, this);
 	_ctrlButton[CTRL_OBJDRAW]->init(L"맵툴버튼",      1100, 600, { 0, 0 }, { 0, 1 }, ctrlSelectObject, this);
 	_ctrlButton[CTRL_ERASER]->init(L"맵툴버튼",       1100, 700, { 0, 0 }, { 0, 1 }, ctrlSelectEraser, this);
-
 	
 	_stprintf(_strButton[CTRL_SAVE], L"SAVE");
 	_stprintf(_strButton[CTRL_LOAD], L"LOAD");
