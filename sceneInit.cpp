@@ -110,7 +110,7 @@ void sceneInit::initImageMapTool(void)
 	}
 
 	IMAGEMANAGER->addFrameImage(L"맵툴버튼", L"image/button.bmp", 100, 60, 1, 2);
-	IMAGEMANAGER->addFrameImage(L"맵툴버튼2", L"image/button2.bmp", 50, 60, 1, 2);
+	IMAGEMANAGER->addFrameImage(L"맵툴버튼2", L"image/button.bmp", 50, 60, 1, 2);
 
 	//이것은 뭐시다냐
 	IMAGEMANAGER->addFrameImage(L"평조테스트", L"image/combat_unit_test1.bmp", 48, 49, 1, 1);

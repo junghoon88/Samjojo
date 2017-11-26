@@ -5,9 +5,9 @@
 
 struct tagStatus
 {
-	TCHAR name[30];
-	TCHAR family[30];	//부대
-	TCHAR aos[30];		//병과
+	TCHAR name[32];
+	TCHAR family[32];	//부대
+	TCHAR aos[32];		//병과
 
 	bool isLive;
 	int enterScenario; //출전 가능한 시나리오(이 수치 이후 시나리오 출전가능)
@@ -117,7 +117,6 @@ struct tagBattleState
 	FRAME_SPC		frameSpc;
 };
 
-
 class Unit
 {
 private:
@@ -125,6 +124,7 @@ private:
 
 protected:
 	tagStatus		_status;
+
 	ItemWeapon*		_itemW;
 	ItemArmor*		_itemA;
 	ItemSpecial*	_itemS;

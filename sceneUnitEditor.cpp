@@ -248,39 +248,41 @@ void sceneUnitEditor::initButton(void)
 	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERLUK]->init(L"맵툴버튼2", 600 + 25 + UPDATEPOSX, 650 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
 
 
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_WEAPON]->init(L"맵툴버튼2", 850 + 25 + UPDATEPOSX, 470 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_ARMOR]->init(L"맵툴버튼2", 850 + 25 + UPDATEPOSX, 540 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_SUBITEM]->init(L"맵툴버튼2", 850 + 25 + UPDATEPOSX, 610 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_RANGE]->init(L"맵툴버튼", 850 + 50 + UPDATEPOSX, 100 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
+
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_WEAPON]->init(L"맵툴버튼", 850 + 50 + UPDATEPOSX, 345 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_ARMOR]->init(L"맵툴버튼", 850 + 50 + UPDATEPOSX, 460 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_SUBITEM]->init(L"맵툴버튼", 850 + 50 + UPDATEPOSX, 575 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
 
 
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FILENAME]->init(L"맵툴버튼2", 1025 + 25 + UPDATEPOSX, 430 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FILENAME]->init(L"맵툴버튼", 500 + 50 + UPDATEPOSX, 710 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, NULL);
 
 
 	//prev, next
 	_ctrlButton[UNITEDITOR_BUTTON_FACE_PREV]->init(L"맵툴버튼", 100 + 50 + UPDATEPOSX, 240 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectFacePrev, this);
 	_ctrlButton[UNITEDITOR_BUTTON_FACE_NEXT]->init(L"맵툴버튼", 200 + 50 + UPDATEPOSX, 240 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectFaceNext, this);
 
-	_ctrlButton[UNITEDITOR_BUTTON_NORMAL_PREV]->init(L"맵툴버튼", 100 + 50 + UPDATEPOSX, 440 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectNormalPrev, this);
-	_ctrlButton[UNITEDITOR_BUTTON_NORMAL_NEXT]->init(L"맵툴버튼", 200 + 50 + UPDATEPOSX, 440 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectNormalNext, this);
+	_ctrlButton[UNITEDITOR_BUTTON_NORMAL_PREV]->init(L"맵툴버튼", 100 + 50 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectNormalPrev, this);
+	_ctrlButton[UNITEDITOR_BUTTON_NORMAL_NEXT]->init(L"맵툴버튼", 200 + 50 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectNormalNext, this);
 	
-	_ctrlButton[UNITEDITOR_BUTTON_COMBAT_PREV]->init(L"맵툴버튼", 100 + 50 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectCombatPrev, this);
-	_ctrlButton[UNITEDITOR_BUTTON_COMBAT_NEXT]->init(L"맵툴버튼", 200 + 50 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectCombatNext, this);
+	//_ctrlButton[UNITEDITOR_BUTTON_COMBAT_PREV]->init(L"맵툴버튼", 100 + 50 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectCombatPrev, this);
+	//_ctrlButton[UNITEDITOR_BUTTON_COMBAT_NEXT]->init(L"맵툴버튼", 200 + 50 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectCombatNext, this);
 
 
-	_ctrlButton[UNITEDITOR_BUTTON_WEAPON_PREV]->init(L"맵툴버튼2", 950 + 25 + UPDATEPOSX, 500 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectWeaponPrev, this);
-	_ctrlButton[UNITEDITOR_BUTTON_WEAPON_NEXT]->init(L"맵툴버튼2", 1000 + 25 + UPDATEPOSX, 500 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectWeaponNext, this);
+	_ctrlButton[UNITEDITOR_BUTTON_WEAPON_PREV]->init(L"맵툴버튼2", 850 + 25 + UPDATEPOSX, 410 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectWeaponPrev, this);
+	_ctrlButton[UNITEDITOR_BUTTON_WEAPON_NEXT]->init(L"맵툴버튼2", 900 + 25 + UPDATEPOSX, 410 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectWeaponNext, this);
 
-	_ctrlButton[UNITEDITOR_BUTTON_ARMOR_PREV]->init(L"맵툴버튼2", 950 + 25 + UPDATEPOSX, 570 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectArmorPrev, this);
-	_ctrlButton[UNITEDITOR_BUTTON_ARMOR_NEXT]->init(L"맵툴버튼2", 1000 + 25 + UPDATEPOSX, 570 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectArmorNext, this);
+	_ctrlButton[UNITEDITOR_BUTTON_ARMOR_PREV]->init(L"맵툴버튼2", 850 + 25 + UPDATEPOSX, 525 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectArmorPrev, this);
+	_ctrlButton[UNITEDITOR_BUTTON_ARMOR_NEXT]->init(L"맵툴버튼2", 900 + 25 + UPDATEPOSX, 525 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectArmorNext, this);
 
-	_ctrlButton[UNITEDITOR_BUTTON_SUBITEM_PREV]->init(L"맵툴버튼2", 950 + 25 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectSubitemPrev, this);
-	_ctrlButton[UNITEDITOR_BUTTON_SUBITEM_NEXT]->init(L"맵툴버튼2", 1000 + 25 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectSubitemNext, this);
+	_ctrlButton[UNITEDITOR_BUTTON_SUBITEM_PREV]->init(L"맵툴버튼2", 850 + 25 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectSubitemPrev, this);
+	_ctrlButton[UNITEDITOR_BUTTON_SUBITEM_NEXT]->init(L"맵툴버튼2", 900 + 25 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectSubitemNext, this);
 
 	//new, save, load, exit
-	_ctrlButton[UNITEDITOR_BUTTON_DATA_NEW]->init(L"맵툴버튼", 1175 + 50 + UPDATEPOSX, 470 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectDataNew, this);
-	_ctrlButton[UNITEDITOR_BUTTON_DATA_LOAD]->init(L"맵툴버튼", 1175 + 50 + UPDATEPOSX, 510 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectDataLoad, this);
-	_ctrlButton[UNITEDITOR_BUTTON_DATA_SAVE]->init(L"맵툴버튼", 1175 + 50 + UPDATEPOSX, 550 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectDataSave, this);
-	_ctrlButton[UNITEDITOR_BUTTON_DATA_EXIT]->init(L"맵툴버튼", 1175 + 50 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectExit, this);
+	_ctrlButton[UNITEDITOR_BUTTON_DATA_NEW]->init(L"맵툴버튼", 900 + 50 + UPDATEPOSX, 710 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectDataNew, this);
+	_ctrlButton[UNITEDITOR_BUTTON_DATA_LOAD]->init(L"맵툴버튼", 900 + 50 + UPDATEPOSX, 750 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectDataLoad, this);
+	_ctrlButton[UNITEDITOR_BUTTON_DATA_SAVE]->init(L"맵툴버튼", 900 + 50 + UPDATEPOSX, 790 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectDataSave, this);
+	_ctrlButton[UNITEDITOR_BUTTON_DATA_EXIT]->init(L"맵툴버튼", 900 + 50 + UPDATEPOSX, 850 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectExit, this);
 
 
 	//--------------------------------------------------------------------------------------------
@@ -289,8 +291,8 @@ void sceneUnitEditor::initButton(void)
 
 	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_NAME], L"이름");
 
-	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_FAMILY], L"부대");
-	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_AOS], L"속성");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_FAMILY], L"소속");
+	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_AOS], L"병과");
 
 	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_HP], L"체력");
 	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_MP], L"마력");
@@ -329,6 +331,8 @@ void sceneUnitEditor::initButton(void)
 	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_LVPERLUK], L"레벨당행운");
 
 
+	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_RANGE], L"공격범위");
+
 	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_WEAPON], L"무기");
 	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_ARMOR], L"방어구");
 	_stprintf(_strButton[UNITEDITOR_BUTTON_LABEL_SUBITEM], L"보조");
@@ -345,8 +349,8 @@ void sceneUnitEditor::initButton(void)
 	_stprintf(_strButton[UNITEDITOR_BUTTON_FACE_NEXT], L"NEXT");
 	_stprintf(_strButton[UNITEDITOR_BUTTON_NORMAL_PREV], L"PREV");
 	_stprintf(_strButton[UNITEDITOR_BUTTON_NORMAL_NEXT], L"NEXT");
-	_stprintf(_strButton[UNITEDITOR_BUTTON_COMBAT_PREV], L"PREV");
-	_stprintf(_strButton[UNITEDITOR_BUTTON_COMBAT_NEXT], L"NEXT");
+	//_stprintf(_strButton[UNITEDITOR_BUTTON_COMBAT_PREV], L"PREV");
+	//_stprintf(_strButton[UNITEDITOR_BUTTON_COMBAT_NEXT], L"NEXT");
 	_stprintf(_strButton[UNITEDITOR_BUTTON_WEAPON_PREV], L"　◀");
 	_stprintf(_strButton[UNITEDITOR_BUTTON_WEAPON_NEXT], L"　▶");
 	_stprintf(_strButton[UNITEDITOR_BUTTON_ARMOR_PREV], L"　◀");
@@ -377,7 +381,7 @@ void sceneUnitEditor::initEditbox(void)
 	_strEditBox[UNITEDITOR_STREDITBOX_DATA_AOS]->setRect(RectMake(450 + UPDATEPOSX, 185 + UPDATEPOSY, 100, 30));
 
 
-	_strEditBox[UNITEDITOR_STREDITBOX_DATA_FILENAME]->setRect(RectMake(1125 + UPDATEPOSX, 430 + UPDATEPOSY, 150, 30));
+	_strEditBox[UNITEDITOR_STREDITBOX_DATA_FILENAME]->setRect(RectMake(650 + UPDATEPOSX, 710 + UPDATEPOSY, 150, 30));
 
 
 	for (int i = 0; i < UNITEDITOR_NUMEDITBOX_MAX; i++)
@@ -431,7 +435,7 @@ void sceneUnitEditor::initRangeRect(void)
 		{
 			_atkRange[i][j].rc = RectMake(
 				850 + i * TILEWIDTH / 2 + UPDATEPOSX,
-				100 + j * TILEHEIGHT / 2 + UPDATEPOSY,
+				135 + j * TILEHEIGHT / 2 + UPDATEPOSY,
 				TILEWIDTH / 2,
 				TILEHEIGHT / 2);
 
@@ -444,7 +448,7 @@ void sceneUnitEditor::initTeamButton(void)
 {
 	for (int i = 0; i < TEAM_MAX; i++)
 	{
-		_teamButton[i].rc = RectMake(-30 + UPDATEPOSX, 150 + 15 + UPDATEPOSY + 35 * i, 100, 30);
+		_teamButton[i].rc = RectMake(-80 + UPDATEPOSX, 150 + UPDATEPOSY + 35 * i, 100, 30);
 		_teamButton[i].img = NULL;
 		_teamButton[i].clicked = false;
 
@@ -531,12 +535,13 @@ void sceneUnitEditor::teamButtonUpdate(void)
 void sceneUnitEditor::rectSketch(void)
 {
 	Rectangle(getMemDC(), 100 + UPDATEPOSX, 100 + UPDATEPOSY, 300 + UPDATEPOSX, 228 + UPDATEPOSY);	//얼굴이미지
-	Rectangle(getMemDC(), 100 + UPDATEPOSX, 300 + UPDATEPOSY, 300 + UPDATEPOSX, 428 + UPDATEPOSY);	//평조이미지
-	Rectangle(getMemDC(), 100 + UPDATEPOSX, 500 + UPDATEPOSY, 300 + UPDATEPOSX, 628 + UPDATEPOSY);	//전조이미지
+	Rectangle(getMemDC(), 100 + UPDATEPOSX, 290 + UPDATEPOSY, 300 + UPDATEPOSX, 400 + UPDATEPOSY);	//평조이미지
+	Rectangle(getMemDC(), 100 + UPDATEPOSX, 405 + UPDATEPOSY, 300 + UPDATEPOSX, 515 + UPDATEPOSY);	//평조이미지
+	Rectangle(getMemDC(), 100 + UPDATEPOSX, 520 + UPDATEPOSY, 300 + UPDATEPOSX, 630 + UPDATEPOSY);	//전조이미지
 
 	Rectangle(getMemDC(), 100 + UPDATEPOSX, 240 + UPDATEPOSY, 300 + UPDATEPOSX, 270 + UPDATEPOSY);	//이전다음버튼
-	Rectangle(getMemDC(), 100 + UPDATEPOSX, 440 + UPDATEPOSY, 300 + UPDATEPOSX, 470 + UPDATEPOSY);	//이전다음버튼
 	Rectangle(getMemDC(), 100 + UPDATEPOSX, 640 + UPDATEPOSY, 300 + UPDATEPOSX, 670 + UPDATEPOSY);	//이전다음버튼
+	//Rectangle(getMemDC(), 100 + UPDATEPOSX, 640 + UPDATEPOSY, 300 + UPDATEPOSX, 670 + UPDATEPOSY);	//이전다음버튼
 
 
 	Rectangle(getMemDC(), 350 + UPDATEPOSX, 100 + UPDATEPOSY, 414 + UPDATEPOSX, 130 + UPDATEPOSY);	//이름
@@ -581,17 +586,17 @@ void sceneUnitEditor::rectSketch(void)
 	Rectangle(getMemDC(), 450 + UPDATEPOSX, 650 + UPDATEPOSY, 550 + UPDATEPOSX, 680 + UPDATEPOSY);	//데이터입력
 
 
-	Rectangle(getMemDC(), 850 + UPDATEPOSX, 470 + UPDATEPOSY, 914 + UPDATEPOSX, 500 + UPDATEPOSY);		//무기
-	Rectangle(getMemDC(), 850 + UPDATEPOSX, 540 + UPDATEPOSY, 914 + UPDATEPOSX, 570 + UPDATEPOSY);		//방어구
-	Rectangle(getMemDC(), 850 + UPDATEPOSX, 610 + UPDATEPOSY, 914 + UPDATEPOSX, 640 + UPDATEPOSY);		//보조
+	Rectangle(getMemDC(), 850 + UPDATEPOSX, 345 + UPDATEPOSY, 914 + UPDATEPOSX, 375 + UPDATEPOSY);		//무기
+	Rectangle(getMemDC(), 850 + UPDATEPOSX, 505 + UPDATEPOSY, 914 + UPDATEPOSX, 535 + UPDATEPOSY);		//방어구
+	Rectangle(getMemDC(), 850 + UPDATEPOSX, 575 + UPDATEPOSY, 914 + UPDATEPOSX, 605 + UPDATEPOSY);		//보조
 
-	Rectangle(getMemDC(), 950 + UPDATEPOSX, 470 + UPDATEPOSY, 1050 + UPDATEPOSX, 530 + UPDATEPOSY);		//이름
-	Rectangle(getMemDC(), 950 + UPDATEPOSX, 540 + UPDATEPOSY, 1050 + UPDATEPOSX, 600 + UPDATEPOSY);		//이름
-	Rectangle(getMemDC(), 950 + UPDATEPOSX, 610 + UPDATEPOSY, 1050 + UPDATEPOSX, 670 + UPDATEPOSY);		//이름
+	Rectangle(getMemDC(), 850 + UPDATEPOSX, 380 + UPDATEPOSY, 950 + UPDATEPOSX, 440 + UPDATEPOSY);		//이름
+	Rectangle(getMemDC(), 850 + UPDATEPOSX, 495 + UPDATEPOSY, 950 + UPDATEPOSX, 555 + UPDATEPOSY);		//이름
+	Rectangle(getMemDC(), 850 + UPDATEPOSX, 610 + UPDATEPOSY, 950 + UPDATEPOSX, 670 + UPDATEPOSY);		//이름
 
-	Rectangle(getMemDC(), 1055 + UPDATEPOSX, 470 + UPDATEPOSY, 1115 + UPDATEPOSX, 530 + UPDATEPOSY);	//이미지
-	Rectangle(getMemDC(), 1055 + UPDATEPOSX, 540 + UPDATEPOSY, 1115 + UPDATEPOSX, 600 + UPDATEPOSY);	//이미지
-	Rectangle(getMemDC(), 1055 + UPDATEPOSX, 610 + UPDATEPOSY, 1115 + UPDATEPOSX, 670 + UPDATEPOSY);	//이미지
+	Rectangle(getMemDC(), 955 + UPDATEPOSX, 380 + UPDATEPOSY, 1015 + UPDATEPOSX, 440 + UPDATEPOSY);		//이미지
+	Rectangle(getMemDC(), 955 + UPDATEPOSX, 495 + UPDATEPOSY, 1015 + UPDATEPOSX, 555 + UPDATEPOSY);		//이미지
+	Rectangle(getMemDC(), 955 + UPDATEPOSX, 610 + UPDATEPOSY, 1015 + UPDATEPOSX, 670 + UPDATEPOSY);		//이미지
 
 	//Rectangle(getMemDC(), 700 + UPDATEPOSX, 470 + UPDATEPOSY, 1000 + UPDATEPOSX, 670 + UPDATEPOSY);		//유닛설명
 	//
@@ -599,10 +604,10 @@ void sceneUnitEditor::rectSketch(void)
 	//
 	//Rectangle(getMemDC(), 1040 + UPDATEPOSX, 430 + UPDATEPOSY, 1240 + UPDATEPOSX, 670 + UPDATEPOSY);	//스킬셋
 
-	Rectangle(getMemDC(), 1175 + UPDATEPOSX, 470 + UPDATEPOSY, 1275 + UPDATEPOSX, 500 + UPDATEPOSY);	//새로만들기
-	Rectangle(getMemDC(), 1175 + UPDATEPOSX, 510 + UPDATEPOSY, 1275 + UPDATEPOSX, 540 + UPDATEPOSY);	//세이브
-	Rectangle(getMemDC(), 1175 + UPDATEPOSX, 550 + UPDATEPOSY, 1275 + UPDATEPOSX, 580 + UPDATEPOSY);	//로드
-	Rectangle(getMemDC(), 1175 + UPDATEPOSX, 640 + UPDATEPOSY, 1275 + UPDATEPOSX, 670 + UPDATEPOSY);	//종료
+	Rectangle(getMemDC(), 900 + UPDATEPOSX, 710 + UPDATEPOSY, 1000 + UPDATEPOSX, 740 + UPDATEPOSY);	//새로만들기
+	Rectangle(getMemDC(), 900 + UPDATEPOSX, 750 + UPDATEPOSY, 1000 + UPDATEPOSX, 780 + UPDATEPOSY);	//세이브
+	Rectangle(getMemDC(), 900 + UPDATEPOSX, 790 + UPDATEPOSY, 1000 + UPDATEPOSX, 820 + UPDATEPOSY);	//로드
+	Rectangle(getMemDC(), 900 + UPDATEPOSX, 850 + UPDATEPOSY, 1000 + UPDATEPOSX, 880 + UPDATEPOSY);	//종료
 
 
 }
