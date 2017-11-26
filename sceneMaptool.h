@@ -16,7 +16,7 @@ enum CTRL
 	CTRL_END = 3
 };
 
-struct ctrlOption
+struct ctrlSave
 {
 	tagTile tile[TILEX * TILEY];
 	TCHAR _fileName[100];
@@ -24,6 +24,18 @@ struct ctrlOption
 
 	int ctrSelect;
 	int ctrObjectSelect;
+	int _selectSampleIndex;
+
+	int _countMapX;
+	int _countMapY;
+
+	int _selectSizeX, _selectSizeY;
+
+	float _alphaValue;
+
+	bool _mapView;
+	bool _viewTERRAIN;
+	bool _isMapLoad;
 };
 
 class sceneMaptool : public gameNode
