@@ -54,7 +54,7 @@ void gameMap::load(void)
 	HANDLE file;
 	DWORD read;
 
-	file = CreateFile(L"MapData/M000.map", GENERIC_READ, 0, NULL,
+	file = CreateFile(L"MapData/M003.map", GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
