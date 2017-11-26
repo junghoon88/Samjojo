@@ -146,8 +146,12 @@ void sceneSelect::selectScenario(void)
 	{
 		if (PtInRect(&_button2[i]->getRect(), _ptMouse))
 		{
+			//debug
+			i = 3;
+
 			DATABASE->setSlectScenario(i);
 
+			_map->loadData(i);
 			_player->loadUnits();
 			_friend->loadUnits();
 			_enemy->loadUnits();

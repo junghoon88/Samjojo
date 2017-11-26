@@ -15,16 +15,14 @@ gameMap::~gameMap()
 
 HRESULT gameMap::init(void)
 {
-	load();
-
 	for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
 	{
-		_stprintf(_strSampleImgKey[i], L"tile (%02d)", i + 1);
+		_stprintf(_strSampleImgKey[i], L"tile (%02d)", i);
 	}
 
-	_stprintf(_objImage[OBJECTSELECT_AILY], L"아군");
-	_stprintf(_objImage[OBJECTSELECT_ENEMY], L"적군");
-	_stprintf(_objImage[OBJECTSELECT_PLAYER], L"플레이어");
+	_stprintf(_objImage[OBJECTSELECT_AILY], L"objAliy");
+	_stprintf(_objImage[OBJECTSELECT_ENEMY], L"objEnemy");
+	_stprintf(_objImage[OBJECTSELECT_PLAYER], L"objPlayer");
 
 	return S_OK;
 }
@@ -43,20 +41,29 @@ void gameMap::render(void)
 	//지형
 	for (int i = 0; i < TILEX * TILEY; i++)
 	{
-		IMAGEMANAGER->render(_strSampleImgKey[_tiles[i].sampleTerrainIdx], getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top);
+		image* img = IMAGEMANAGER->findImage(_strSampleImgKey[_tiles[i].sampleTerrainIdx]);
+		if (img)
+		{
+			img->render(getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top);
+		}
 		if (_tiles[i].sampleObjectSelectIdx != OBJECTSELECT_NONE)
-		IMAGEMANAGER->alphaRender(_objImage[_tiles[i].sampleObjectSelectIdx], getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top, 128);
+		{
+			IMAGEMANAGER->alphaRender(_objImage[_tiles[i].sampleObjectSelectIdx], getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top, 128);
+		}
 		TextOut(getMemDC(), _tiles[i].rc.left, _tiles[i].rc.bottom - 20, _tiles[i].obj, _tcslen(_tiles[i].obj));
 	}
 
 }
 
-void gameMap::load(void)
+void gameMap::loadData(int num)
 {
 	HANDLE file;
 	DWORD read;
 
-	file = CreateFile(L"MapData/M000.map", GENERIC_READ, 0, NULL,
+	TCHAR strMapName[100];
+	_stprintf(strMapName, L"MapData/M%03d.map", num);
+
+	file = CreateFile(strMapName, GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
@@ -65,6 +72,7 @@ void gameMap::load(void)
 
 	for (int i = 0; i < TILEX * TILEY; i++)
 	{
+
 		//if (_tiles[i].terrain == TR_WALL || _tiles[i].terrain == TR_BORDER)
 		//{
 		//	_attribute[i] |= ATTR_UNMOVE;

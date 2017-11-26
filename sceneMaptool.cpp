@@ -439,17 +439,17 @@ void sceneMaptool::setup(void)
 	POINT ptSampleObjStart = { WINSIZEX - TILESIZE * 3, TILESIZE * 10 + 41 };
 
 	//오브젝트 타일셋 셋팅
-	_objTiles[OBJECTSELECT_AILY].img = IMAGEMANAGER->findImage(L"아군");
+	_objTiles[OBJECTSELECT_AILY].img = IMAGEMANAGER->findImage(L"objAliy");
 	_objTiles[OBJECTSELECT_AILY].rcTile = RectMake(ptSampleObjStart.x, ptSampleObjStart.y, TILESIZE, TILESIZE);
-	_stprintf(_objTiles[OBJECTSELECT_AILY].strImgKey, L"아군");
+	_stprintf(_objTiles[OBJECTSELECT_AILY].strImgKey, L"objAliy");
 
-	_objTiles[OBJECTSELECT_ENEMY].img = IMAGEMANAGER->findImage(L"적군");
+	_objTiles[OBJECTSELECT_ENEMY].img = IMAGEMANAGER->findImage(L"objEnemy");
 	_objTiles[OBJECTSELECT_ENEMY].rcTile = RectMake(ptSampleObjStart.x + TILESIZE, ptSampleObjStart.y, TILESIZE, TILESIZE);
-	_stprintf(_objTiles[OBJECTSELECT_ENEMY].strImgKey, L"적군");
+	_stprintf(_objTiles[OBJECTSELECT_ENEMY].strImgKey, L"objEnemy");
 
-	_objTiles[OBJECTSELECT_PLAYER].img = IMAGEMANAGER->findImage(L"플레이어");
+	_objTiles[OBJECTSELECT_PLAYER].img = IMAGEMANAGER->findImage(L"objPlayer");
 	_objTiles[OBJECTSELECT_PLAYER].rcTile = RectMake(ptSampleObjStart.x + TILESIZE * 2, ptSampleObjStart.y, TILESIZE, TILESIZE);
-	_stprintf(_objTiles[OBJECTSELECT_PLAYER].strImgKey, L"플레이어");
+	_stprintf(_objTiles[OBJECTSELECT_PLAYER].strImgKey, L"objPlayer");
 	
 	//샘플타일 시작점
 	POINT ptTileStart = { 0, 0 };
