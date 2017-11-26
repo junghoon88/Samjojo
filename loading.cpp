@@ -135,7 +135,7 @@ void loading::update()
 
 void loading::render() 
 {
-	_background->render(getMemDC(), 0, 0);
+	if(_background)	_background->render(getMemDC(), 0, 0);
 	_loadingBar->render();
 }
 
