@@ -65,14 +65,19 @@ void progressBar::update(void)
 
 void progressBar::render(void)
 {
-	_progressBarBottom->render(getMemDC(), _rcProgress.left, _pt.y, 0, 0,
-		(int)_progressBarBottom->getWidth(),
-		(int)_progressBarBottom->getHeight());
+	if (_progressBarBottom)
+	{
+		_progressBarBottom->render(getMemDC(), _rcProgress.left, _pt.y, 0, 0,
+			(int)_progressBarBottom->getWidth(),
+			(int)_progressBarBottom->getHeight());
+	}
 
-	_progressBarTop->render(getMemDC(), _rcProgress.left, _pt.y, 0, 0,
-		(int)_width,
-		(int)_progressBarTop->getHeight());
-
+	if (_progressBarTop)
+	{
+		_progressBarTop->render(getMemDC(), _rcProgress.left, _pt.y, 0, 0,
+			(int)_width,
+			(int)_progressBarTop->getHeight());
+	}
 }
 
 void progressBar::render(TCHAR* name)
