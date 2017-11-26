@@ -30,6 +30,20 @@ struct tagStatus
 	int Dex;		//민첩
 	int Luk;		//운
 
+	//기본 수치
+	int InitHPMax;
+	int InitMPMax;
+	int InitAtk;		//공격력
+	int InitDep;		//방어력
+	int InitRes;		//정신력
+	int InitAgl;		//순발력
+	int InitFig;		//사기
+	int InitPwr;		//무력
+	int InitLds;		//통솔
+	int InitInt;		//지력
+	int InitDex;		//민첩
+	int InitLuk;		//운
+
 	//레벨당 증가하는 수치
 	int LvPerHPMax;
 	int LvPerMPMax;
@@ -43,6 +57,20 @@ struct tagStatus
 	int LvPerInt;		//지력
 	int LvPerDex;		//민첩
 	int LvPerLuk;		//운
+
+	//아이템 증가 수치
+	int ItemPlusHPMax;
+	int ItemPlusMPMax;
+	int ItemPlusAtk;		//공격력
+	int ItemPlusDep;		//방어력
+	int ItemPlusRes;		//정신력
+	int ItemPlusAgl;		//순발력
+	int ItemPlusFig;		//사기
+	int ItemPlusPwr;		//무력
+	int ItemPlusLds;		//통솔
+	int ItemPlusInt;		//지력
+	int ItemPlusDex;		//민첩
+	int ItemPlusLuk;		//운
 };
 
 enum FRAME_ATK

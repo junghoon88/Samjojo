@@ -302,8 +302,8 @@ public:
 	inline void setFacePrev(void) { _faceNum = _faceNum == 0 ? FACE_MAX : _faceNum - 1; }
 	inline void setFaceNext(void) { _faceNum = _faceNum == FACE_MAX ? 0 : _faceNum + 1; }
 
-	inline void setNormalPrev(void) { _normalNum = _normalNum == 0 ? NORMAL_IMAGE_MAX : _normalNum - 1; }
-	inline void setNormalNext(void) { _normalNum = _normalNum == NORMAL_IMAGE_MAX ? 0 : _normalNum + 1; }
+	inline void setNormalPrev(void) { _normalNum = _normalNum == 0 ? UNIT_BATTLE_IMAGE_MAX - 1 : _normalNum - 1; }
+	inline void setNormalNext(void) { _normalNum = _normalNum == UNIT_BATTLE_IMAGE_MAX - 1 ? 0 : _normalNum + 1; }
 
 	inline void setCombatPrev(void) { _combatNum = _combatNum == 0 ? COMBAT_IMAGE_MAX : _combatNum - 1; }
 	inline void setCombatNext(void) { _combatNum = _combatNum == COMBAT_IMAGE_MAX ? 0 : _combatNum + 1; }

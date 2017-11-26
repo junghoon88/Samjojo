@@ -64,9 +64,6 @@
     <Filter Include="MainGame\sceneBattle">
       <UniqueIdentifier>{ffc585b7-bb05-42cd-a1cc-8ada6f66b578}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainGame\sceneLoading">
-      <UniqueIdentifier>{9497417e-2d0d-4682-8eb7-0bbaf7345ecc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MainGame\sceneMaptool">
       <UniqueIdentifier>{0303a749-075b-4790-b490-5cb8ede1aa7a}</UniqueIdentifier>
     </Filter>
@@ -94,8 +91,8 @@
     <Filter Include="2DFramework\editbox">
       <UniqueIdentifier>{1dec7e4c-1646-401a-8435-9ca07918e97d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainGame\sceneShop">
-      <UniqueIdentifier>{38383b26-74d5-42c8-9bb6-2b43ae5f1080}</UniqueIdentifier>
+    <Filter Include="MainGame\sceneReady">
+      <UniqueIdentifier>{cd4f2a5f-7c92-4a24-9ce8-f57c7651afa1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -198,9 +195,6 @@
     <ClInclude Include="loading.h">
       <Filter>2DFramework\loading</Filter>
     </ClInclude>
-    <ClInclude Include="sceneLoading.h">
-      <Filter>MainGame\sceneLoading</Filter>
-    </ClInclude>
     <ClInclude Include="sceneMaptool.h">
       <Filter>MainGame\sceneMaptool</Filter>
     </ClInclude>
@@ -249,10 +243,22 @@
     <ClInclude Include="editboxManager.h">
       <Filter>2DFramework\editbox</Filter>
     </ClInclude>
-    <ClInclude Include="sceneShop.h">
-      <Filter>MainGame\sceneShop</Filter>
-    </ClInclude>
     <ClInclude Include="scanDialog.h">
+      <Filter>MainGame\sceneStory</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneReadybase.h">
+      <Filter>MainGame\sceneReady</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneEquip.h">
+      <Filter>MainGame\sceneReady</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneBuy.h">
+      <Filter>MainGame\sceneReady</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneSell.h">
+      <Filter>MainGame\sceneReady</Filter>
+    </ClInclude>
+    <ClInclude Include="scaneStorymap.h">
       <Filter>MainGame\sceneStory</Filter>
     </ClInclude>
   </ItemGroup>
@@ -335,9 +341,6 @@
     <ClCompile Include="loading.cpp">
       <Filter>2DFramework\loading</Filter>
     </ClCompile>
-    <ClCompile Include="sceneLoading.cpp">
-      <Filter>MainGame\sceneLoading</Filter>
-    </ClCompile>
     <ClCompile Include="sceneMaptool.cpp">
       <Filter>MainGame\sceneMaptool</Filter>
     </ClCompile>
@@ -386,10 +389,22 @@
     <ClCompile Include="editboxManager.cpp">
       <Filter>2DFramework\editbox</Filter>
     </ClCompile>
-    <ClCompile Include="sceneShop.cpp">
-      <Filter>MainGame\sceneShop</Filter>
-    </ClCompile>
     <ClCompile Include="scanDialog.cpp">
+      <Filter>MainGame\sceneStory</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneReadybase.cpp">
+      <Filter>MainGame\sceneReady</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneEquip.cpp">
+      <Filter>MainGame\sceneReady</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneBuy.cpp">
+      <Filter>MainGame\sceneReady</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneSell.cpp">
+      <Filter>MainGame\sceneReady</Filter>
+    </ClCompile>
+    <ClCompile Include="scaneStorymap.cpp">
       <Filter>MainGame\sceneStory</Filter>
     </ClCompile>
   </ItemGroup>

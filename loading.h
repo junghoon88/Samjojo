@@ -16,7 +16,8 @@ enum LOAD_KIND
 struct tagImageResource
 {
 	wstring keyName;
-	const TCHAR* fileName;
+	//const TCHAR* fileName;
+	TCHAR fileName[256];
 	float x, y;
 	int width, height;
 	int frameX, frameY;

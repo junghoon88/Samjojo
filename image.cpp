@@ -352,6 +352,9 @@ void image::setTransColor(BOOL trans, COLORREF transColor)
 
 void image::render(HDC hdc)
 {
+	if (!_imageInfo)
+		return;
+
 	if (_trans)
 	{
 		//특정색상을 DC영역에서 제외해주는 함수
@@ -437,6 +440,9 @@ void image::render(HDC hdc, int destX, int destY, int sourX, int sourY, int sour
 
 void image::frameRender(HDC hdc, int destX, int destY)
 {
+	if (!_imageInfo)
+		return;
+
 	if (_trans)
 	{
 		GdiTransparentBlt(hdc,
@@ -465,6 +471,9 @@ void image::frameRender(HDC hdc, int destX, int destY)
 
 void image::frameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY)
 {
+	if (!_imageInfo)
+		return;
+
 	_imageInfo->currentFrameX = currentFrameX;
 	_imageInfo->currentFrameY = currentFrameY;
 
@@ -496,6 +505,9 @@ void image::frameRender(HDC hdc, int destX, int destY, int currentFrameX, int cu
 
 void image::loopRender(HDC hdc, const LPRECT drawArea, int offsetX, int offsetY)
 {
+	if (!_imageInfo)
+		return;
+
 	//정밀보정
 	if (offsetX < 0) offsetX = _imageInfo->width + (offsetX % _imageInfo->width);
 	if (offsetY < 0) offsetY = _imageInfo->height + (offsetY % _imageInfo->height);
@@ -552,6 +564,9 @@ void image::loopRender(HDC hdc, const LPRECT drawArea, int offsetX, int offsetY)
 
 void image::alphaRender(HDC hdc, BYTE alpha)
 {
+	if (!_imageInfo)
+		return;
+
 	if (!_useBlend)
 	{
 		render(hdc);
@@ -583,6 +598,9 @@ void image::alphaRender(HDC hdc, BYTE alpha)
 
 void image::alphaRender(HDC hdc, int destX, int destY, BYTE alpha)
 {
+	if (!_imageInfo)
+		return;
+
 	if (!_useBlend)
 	{
 		render(hdc, destX, destY);
@@ -613,6 +631,9 @@ void image::alphaRender(HDC hdc, int destX, int destY, BYTE alpha)
 
 void image::alphaRender(HDC hdc, int destX, int destY, int sourX, int sourY, int sourWidth, int sourHeight, BYTE alpha)
 {
+	if (!_imageInfo)
+		return;
+
 	if (!_useBlend)
 	{
 		render(hdc, destX, destY, sourX, sourY, sourWidth, sourHeight);
@@ -643,6 +664,9 @@ void image::alphaRender(HDC hdc, int destX, int destY, int sourX, int sourY, int
 
 void image::alphaFrameRender(HDC hdc, int destX, int destY, BYTE alpha)
 {
+	if (!_imageInfo)
+		return;
+
 	if (!_useBlend)
 	{
 		frameRender(hdc, destX, destY);
@@ -687,6 +711,9 @@ void image::alphaFrameRender(HDC hdc, int destX, int destY, BYTE alpha)
 
 void image::alphaFrameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, BYTE alpha)
 {
+	if (!_imageInfo)
+		return;
+
 	_imageInfo->currentFrameX = currentFrameX;
 	_imageInfo->currentFrameY = currentFrameY;
 
