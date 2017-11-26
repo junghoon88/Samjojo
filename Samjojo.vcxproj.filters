@@ -100,6 +100,9 @@
     <Filter Include="MainGame\sceneBattle\info - hyunjun">
       <UniqueIdentifier>{b83708b4-a485-4097-9ba0-c277e28550ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\SIDEINTERFACE - hyunjun">
+      <UniqueIdentifier>{35199bcb-83e6-4f1b-be61-4b97f3b2aa3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -270,6 +273,9 @@
     <ClInclude Include="sceneSell.h">
       <Filter>MainGame\sceneReady</Filter>
     </ClInclude>
+    <ClInclude Include="sideInterface.h">
+      <Filter>MainGame\SIDEINTERFACE - hyunjun</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -418,6 +424,9 @@
     </ClCompile>
     <ClCompile Include="sceneSell.cpp">
       <Filter>MainGame\sceneReady</Filter>
+    </ClCompile>
+    <ClCompile Include="sideInterface.cpp">
+      <Filter>MainGame\SIDEINTERFACE - hyunjun</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

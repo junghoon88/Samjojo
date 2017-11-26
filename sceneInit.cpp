@@ -71,7 +71,7 @@ void sceneInit::initImageSlect(void)
 		_loading->loadImage(strKey, strName, 640, 400);
 	}
 
-	_loading->loadFrameImage(L"SELECT-선택버튼", L"image/button.bmp", 100, 60, 1, 2);
+	_loading->loadFrameImage(L"SELECT-선택버튼", L"image/button2.bmp", 100, 60, 1, 2);
 }
 
 void sceneInit::initImageMapTool(void)
@@ -97,45 +97,6 @@ void sceneInit::initImageMapTool(void)
 	//선택타일 체크 창
 	_loading->loadImage(L"타일선택", L"image/tileSelect.bmp", TILESIZE, TILESIZE, true, RGB(255, 0, 255), false);
 
-	//아군 셋팅
-	//for (int i = 0; i < SAMPLETILEY; i++)
-	//{
-	//	for (int j = 0; j < SAMPLETILEX; j++)
-	//	{
-	//		int index = i * SAMPLETILEX + j;
-	//		TCHAR strImgKey[100], strName[100];
-	//		_stprintf(strImgKey, L"아군 (%02d)", index + 1);
-	//		_stprintf(strName, L"image/tiles/aily/아군 (%02d).bmp", index + 1);
-	//		_loading->loadImage(strImgKey, strName, TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
-	//	}
-	//}
-	//
-	////적군 셋팅
-	//for (int i = 0; i < SAMPLETILEY; i++)
-	//{
-	//	for (int j = 0; j < SAMPLETILEX; j++)
-	//	{
-	//		int index = i * SAMPLETILEX + j;
-	//		TCHAR strImgKey[100], strName[100];
-	//		_stprintf(strImgKey, L"적군 (%02d)", index + 1);
-	//		_stprintf(strName, L"image/tiles/enemy/적군 (%02d).bmp", index + 1);
-	//		_loading->loadImage(strImgKey, strName, TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
-	//	}
-	//}
-	//
-	////플레이어 셋팅
-	//for (int i = 0; i < SAMPLETILEY; i++)
-	//{
-	//	for (int j = 0; j < SAMPLETILEX; j++)
-	//	{
-	//		int index = i * SAMPLETILEX + j;
-	//		TCHAR strImgKey[100], strName[100];
-	//		_stprintf(strImgKey, L"플레이어 (%02d)", index + 1);
-	//		_stprintf(strName, L"image/tiles/player/플레이어 (%02d).bmp", index + 1);
-	//		_loading->loadImage(strImgKey, strName, TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
-	//	}
-	//}
-
 	//버튼 이미지
 	_loading->loadFrameImage(L"맵툴버튼", L"image/button.bmp", 100, 60, 1, 2);
 	_loading->loadFrameImage(L"맵툴버튼2", L"image/button.bmp", 50, 60, 1, 2);
@@ -145,9 +106,6 @@ void sceneInit::initImageMapTool(void)
 	_loading->loadFrameImage(L"전조테스트", L"image/normal_unit_test1.bmp", 48, 49, 1, 1);
 	_loading->loadFrameImage(L"평조테스트", L"image/combat_unit_test2.bmp", 48, 49, 1, 1);
 	_loading->loadFrameImage(L"전조테스트", L"image/normal_unit_test2.bmp", 48, 49, 1, 1);
-
-	//아무것도 로드 안했을 때의 이미지
-	_loading->loadImage(L"빈공간", L"image/Map/빈공간.bmp", 1920, 1920, true, RGB(255, 0, 255), true);
 
 	//원본맵 이미지 추가하기
 	_loading->loadImage(L"M000", L"image/Map/M000.bmp", 960, 960, false, RGB(255, 0, 255), true);

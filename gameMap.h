@@ -10,6 +10,8 @@ private:
 
 	TCHAR _strSampleImgKey[SAMPLETILEX * SAMPLETILEY][100];
 
+	TCHAR _objImage[OBJECTSELECT_MAX][100];
+
 	int _pos[2];
 
 

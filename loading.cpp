@@ -10,7 +10,8 @@ HRESULT loadItem::initForImage(wstring keyName, int width, int height, bool blen
 
 	memset(&_imageResource, 0, sizeof(tagImageResource));
 
-	_imageResource.keyName = keyName;
+	//_imageResource.keyName = keyName;
+	_stprintf(_imageResource.keyName, L"%s", keyName.c_str());
 	_imageResource.width = width;
 	_imageResource.height = height;
 	_imageResource.blend = blend;
@@ -24,7 +25,8 @@ HRESULT loadItem::initForImage(wstring keyName, const TCHAR* fileName, int width
 
 	memset(&_imageResource, 0, sizeof(tagImageResource));
 
-	_imageResource.keyName = keyName;
+	//_imageResource.keyName = keyName;
+	 _stprintf(_imageResource.keyName, L"%s", keyName.c_str());
 	//_imageResource.fileName = fileName;
 	_stprintf(_imageResource.fileName, L"%s", fileName);
 	_imageResource.width = width;
@@ -42,7 +44,8 @@ HRESULT loadItem::initForImage(wstring keyName, const TCHAR* fileName, float x, 
 
 	memset(&_imageResource, 0, sizeof(tagImageResource));
 
-	_imageResource.keyName = keyName;
+	//_imageResource.keyName = keyName;
+	 _stprintf(_imageResource.keyName, L"%s", keyName.c_str());
 	//_imageResource.fileName = fileName;
 	_stprintf(_imageResource.fileName, L"%s", fileName);
 	_imageResource.x = x;
@@ -62,7 +65,8 @@ HRESULT loadItem::initForFrameImage(wstring keyName, const TCHAR* fileName, int 
 
 	memset(&_imageResource, 0, sizeof(tagImageResource));
 
-	_imageResource.keyName = keyName;
+	//_imageResource.keyName = keyName;
+	 _stprintf(_imageResource.keyName, L"%s", keyName.c_str());
 	//_imageResource.fileName = fileName;
 	_stprintf(_imageResource.fileName, L"%s", fileName);
 	_imageResource.width = width;
@@ -83,7 +87,8 @@ HRESULT loadItem::initForFrameImage(wstring keyName, const TCHAR* fileName, floa
 
 	memset(&_imageResource, 0, sizeof(tagImageResource));
 
-	_imageResource.keyName = keyName;
+	//_imageResource.keyName = keyName;
+	 _stprintf(_imageResource.keyName, L"%s", keyName.c_str());
 	//_imageResource.fileName = fileName;
 	_stprintf(_imageResource.fileName, L"%s", fileName);
 	_imageResource.width = width;

@@ -20,6 +20,10 @@ HRESULT gameMap::init(void)
 		_stprintf(_strSampleImgKey[i], L"tile (%02d)", i + 1);
 	}
 
+	_stprintf(_objImage[OBJECTSELECT_AILY], L"아군");
+	_stprintf(_objImage[OBJECTSELECT_ENEMY], L"적군");
+	_stprintf(_objImage[OBJECTSELECT_PLAYER], L"플레이어");
+
 	return S_OK;
 }
 
@@ -33,10 +37,14 @@ void gameMap::update(void)
 
 void gameMap::render(void)
 {
+	SetBkMode(getMemDC(), TRANSPARENT);
 	//지형
 	for (int i = 0; i < TILEX * TILEY; i++)
 	{
 		IMAGEMANAGER->render(_strSampleImgKey[_tiles[i].sampleTerrainIdx], getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top);
+		if (_tiles[i].sampleObjectSelectIdx != OBJECTSELECT_NONE)
+		IMAGEMANAGER->alphaRender(_objImage[_tiles[i].sampleObjectSelectIdx], getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top, 128);
+		TextOut(getMemDC(), _tiles[i].rc.left, _tiles[i].rc.bottom - 20, _tiles[i].obj, _tcslen(_tiles[i].obj));
 	}
 
 }
