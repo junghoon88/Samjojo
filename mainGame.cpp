@@ -2,11 +2,11 @@
 #include "mainGame.h"
 
 #include "sceneInit.h"
-#include "sceneLoading.h"
 #include "sceneSelect.h"
 #include "sceneStory.h"
 #include "sceneBattle.h"
-#include "sceneShop.h"
+#include "sceneBuy.h"
+#include "sceneSell.h"
 #include "sceneMaptool.h"
 #include "sceneUnitEditor.h"
 
@@ -46,7 +46,7 @@ void mainGame::initScene(void)
 {
 	gameNode* node = SCENEMANAGER->addScene(L"초기화씬", new sceneInit);  //게임 리소스 초기화
 	node->init();
-	SCENEMANAGER->addScene(L"로딩씬", new sceneLoading);				//맵데이터, 유닛데이터 파일 로딩씬
+	
 	SCENEMANAGER->addScene(L"맵툴씬", new sceneMaptool);				//맵툴
 	SCENEMANAGER->addScene(L"유닛에디터", new sceneUnitEditor);		//유닛생성
 
@@ -60,11 +60,18 @@ void mainGame::initScene(void)
 
 	SCENEMANAGER->addScene(L"대화씬", new sceneStory);				//스토리
 
-	sceneShop* _sceneShop = new sceneShop;							//상점
-	_sceneShop->setLinkAdressPlayer(_player);
-	_sceneShop->setLinkAdressEnemy(_enemy);
-	_sceneShop->setLinkAdressFriend(_friend);
-	SCENEMANAGER->addScene(L"상점씬", _sceneShop);
+
+	sceneBuy* _sceneBuy = new sceneBuy;							    //구매상점
+	_sceneBuy->setLinkAdressPlayer(_player);
+	_sceneBuy->setLinkAdressEnemy(_enemy);
+	_sceneBuy->setLinkAdressFriend(_friend);
+	SCENEMANAGER->addScene(L"구매상점씬", _sceneBuy);
+
+	sceneSell* _sceneSell = new sceneSell;							//판매상점
+	_sceneSell->setLinkAdressPlayer(_player);
+	_sceneSell->setLinkAdressEnemy(_enemy);
+	_sceneSell->setLinkAdressFriend(_friend);
+	SCENEMANAGER->addScene(L"판매상점씬", _sceneSell);
 
 
 	sceneBattle* _sceneBattle = new sceneBattle;					//전투

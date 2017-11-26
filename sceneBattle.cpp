@@ -25,7 +25,7 @@ HRESULT sceneBattle::init(void)
 
 	DATABASE->getSlectScenario();
 
-	nowPhase = playerPhase;
+	Phase = playerPhase;
 	return S_OK;
 }
 
@@ -38,8 +38,8 @@ void sceneBattle::release(void)
 
 void sceneBattle::update(void)
 {
-	_map->update();
-	_cursor->update();
+	_map->update(); 
+	if(Phase == playerPhase)_cursor->update();
 }
 
 void sceneBattle::render(void)

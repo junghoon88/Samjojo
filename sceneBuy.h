@@ -4,7 +4,7 @@
 #include "Enemy.h"
 #include "Friend.h"
 
-class sceneShop : public gameNode
+class sceneBuy : public gameNode
 {
 private:
 	Player*		_player;	//플레이어
@@ -12,8 +12,8 @@ private:
 	Enemy*		_enemy;		//적군
 
 public:
-	sceneShop();
-	~sceneShop();
+	sceneBuy();
+	~sceneBuy();
 
 	HRESULT init(void);
 	void release(void);
