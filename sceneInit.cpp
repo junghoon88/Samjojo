@@ -71,7 +71,7 @@ void sceneInit::initImageSlect(void)
 		_loading->loadImage(strKey, strName, 640, 400);
 	}
 
-	_loading->loadFrameImage(L"SELECT-선택버튼", L"image/button2.bmp", 100, 60, 1, 2);
+	_loading->loadFrameImage(L"SELECT-선택버튼", L"image/button.bmp", 100, 60, 1, 2);
 }
 
 void sceneInit::initImageMapTool(void)
@@ -101,11 +101,6 @@ void sceneInit::initImageMapTool(void)
 	_loading->loadFrameImage(L"맵툴버튼", L"image/button.bmp", 100, 60, 1, 2);
 	_loading->loadFrameImage(L"맵툴버튼2", L"image/button.bmp", 50, 60, 1, 2);
 
-	//이것은 뭐시다냐
-	_loading->loadFrameImage(L"평조테스트", L"image/combat_unit_test1.bmp", 48, 49, 1, 1);
-	_loading->loadFrameImage(L"전조테스트", L"image/normal_unit_test1.bmp", 48, 49, 1, 1);
-	_loading->loadFrameImage(L"평조테스트", L"image/combat_unit_test2.bmp", 48, 49, 1, 1);
-	_loading->loadFrameImage(L"전조테스트", L"image/normal_unit_test2.bmp", 48, 49, 1, 1);
 
 	//원본맵 이미지 추가하기
 	_loading->loadImage(L"M000", L"image/Map/M000.bmp", 960, 960, false, RGB(255, 0, 255), true);
