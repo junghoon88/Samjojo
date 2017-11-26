@@ -90,9 +90,9 @@ void sceneInit::initImageMapTool(void)
 	}
 
 	//오브젝트 타일 셋팅
-	_loading->loadImage(L"아군", L"image/tiles/object/아군.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
-	_loading->loadImage(L"적군", L"image/tiles/object/적군.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
-	_loading->loadImage(L"플레이어", L"image/tiles/object/플레이어.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
+	_loading->loadImage(L"objAliy", L"image/tiles/object/아군.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
+	_loading->loadImage(L"objEnemy", L"image/tiles/object/적군.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
+	_loading->loadImage(L"objPlayer", L"image/tiles/object/플레이어.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
 
 	//선택타일 체크 창
 	_loading->loadImage(L"타일선택", L"image/tileSelect.bmp", TILESIZE, TILESIZE, true, RGB(255, 0, 255), false);
