@@ -140,6 +140,11 @@ struct tagBattleState
 	image*			imgBattleAtk;
 	image*			imgBattleIdle;
 	image*			imgBattleSpc;
+
+	int				numImgBattleAtk;
+	int				numImgBattleIdle;
+	int				numImgBattleSpc;
+
 	FRAME_ATK		frameAtk;
 	FRAME_IDLE		frameIdle;
 	FRAME_SPC		frameSpc;
@@ -161,6 +166,7 @@ protected:
 
 	//ÀÌ¹ÌÁö
 	image*			_imgFace;
+	int				_numImagFace;
 
 	BOOL			_atkRange[UNIT_ATTACK_RANGE_MAX][UNIT_ATTACK_RANGE_MAX];
 	
@@ -185,7 +191,64 @@ public:
 	inline void setItemS(ItemSpecial* items) { _itemS = items; }
 	inline TEAM getTeam(void) { return _team; }
 	inline void setTeam(TEAM team) { _team = team; }
-	inline void setImageFace(TCHAR* filename) { }
+
+	inline int getImgFace(void) { return _numImagFace; }
+	inline int getImgNormal(void) {}
+	inline int getImgBattleIdle(void) { return _battleState.numImgBattleAtk; }
+	inline int getImgBattleAtk(void) { return _battleState.numImgBattleAtk; }
+	inline int getImgBattleSpc(void) { return _battleState.numImgBattleSpc; }
+
+	inline void setImgFace(int num)
+	{
+		_numImagFace = num;
+		TCHAR strFaceKey[100];
+		_stprintf(strFaceKey, L"face %05d", _numImagFace);
+		_imgFace = IMAGEMANAGER->findImage(strFaceKey);
+	}
+	inline void setImgNormal(int num) {  }
+	inline void setImgBattleIdle(int num)
+	{
+		_battleState.numImgBattleIdle = num;
+		TCHAR strKey[100];
+		if (num < UNIT_BATTLE_IMAGE1)
+		{
+			_stprintf(strKey, L"unit%d-atk", _battleState.numImgBattleIdle);
+		}
+		else
+		{
+			_stprintf(strKey, L"unit%d-%d-atk", _battleState.numImgBattleIdle, _team);
+		}
+		_battleState.imgBattleAtk = IMAGEMANAGER->findImage(strKey);
+	}
+	inline void setImgBattleAtk(int num)
+	{
+		_battleState.numImgBattleAtk = num;
+		TCHAR strKey[100];
+		if (num < UNIT_BATTLE_IMAGE1)
+		{
+			_stprintf(strKey, L"unit%d-atk", _battleState.numImgBattleAtk);
+		}
+		else
+		{
+			_stprintf(strKey, L"unit%d-%d-atk", _battleState.numImgBattleAtk, _team);
+		}
+		_battleState.imgBattleAtk = IMAGEMANAGER->findImage(strKey);
+	}
+	inline void setImgBattleSpc(int num)
+	{
+		_battleState.numImgBattleSpc = num;
+		TCHAR strKey[100];
+		if (num < UNIT_BATTLE_IMAGE1)
+		{
+			_stprintf(strKey, L"unit%d-atk", _battleState.numImgBattleSpc);
+		}
+		else
+		{
+			_stprintf(strKey, L"unit%d-%d-atk", _battleState.numImgBattleSpc, _team);
+		}
+		_battleState.imgBattleAtk = IMAGEMANAGER->findImage(strKey);
+	}
+
 
 	inline Temp getAtkRange(void) { return _atkRange; }
 	inline void setAtkRange(BOOL(*range)[UNIT_ATTACK_RANGE_MAX]) { memcpy(_atkRange, range, sizeof(BOOL) * UNIT_ATTACK_RANGE_MAX* UNIT_ATTACK_RANGE_MAX); }

@@ -5,10 +5,10 @@
 #include "editbox.h"
 
 
-#define UPDATEPOSX 144
+#define UPDATEPOSX 16
 #define UPDATEPOSY 0
 
-#define FILENAME_STARTX		64
+#define FILENAME_STARTX		UPDATEPOSX
 #define FILENAME_STARTY		260
 #define FILENAME_WIDTH		128
 #define FILENAME_HEIGHT		30
