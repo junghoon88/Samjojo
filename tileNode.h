@@ -67,34 +67,7 @@ enum TERRAIN
 	TERRAIN_MAX			//이거 나오면 이상한거임 나올수가 없음
 };
 
-//오브젝트의 대한 정의
-enum OBJECT
-{
-	OBJECT_NONE = -1,
-	OBJECT_INFANTRY,		//보병
-	OBJECT_CAVALRY,			//기병
-	OBJECT_ARCHER,			//궁병
-	OBJECT_HORSEARCHER,		//궁기병
-	OBJECT_FIGHTER,			//무도가
-	OBJECT_THEIF,			//도적
-	OBJECT_TACTICIAN,		//책사
-	OBJECT_WIZARD,			//도사
-	OBJECT_CATAPULT,		//투석기
-	
-	OBJECT_HERO01 = 0,		//영웅
-	OBJECT_HERO02,
-	OBJECT_HERO03,
-	OBJECT_HERO04,
-	OBJECT_HERO05,
-	OBJECT_HERO06,
-	OBJECT_HERO07,
-	OBJECT_HERO08,
-	OBJECT_HERO09,
-	OBJECT_HERO10,
-
-	OBJECT_MAX
-};
-
+//오브젝트 선택
 enum OBJECTSELECT
 {
 	OBJECTSELECT_NONE = -1,
@@ -114,7 +87,7 @@ struct tagTile
 
 	int sampleTerrainIdx;		//샘플 터레인 인덱스
 	int sampleObjectSelectIdx;	//오브젝트 case 인덱스
-	bool isClick;
+	bool isClick;				//오브젝트 선택했니?
 };
 
 struct tagSampleTile
