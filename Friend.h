@@ -2,11 +2,14 @@
 #include "gameNode.h"
 #include "Unit.h"
 
+class infoCursor;
+
 class Friend : public gameNode
 {
 private:
 	vUnits _vUnits;
 
+	infoCursor* info;
 public:
 	Friend();
 	~Friend();
@@ -22,5 +25,6 @@ public:
 
 public:
 	inline vUnits getUnits(void) { return _vUnits; }
+	inline void setLinkCursor(infoCursor* cursor) { info = cursor; }
 };
 

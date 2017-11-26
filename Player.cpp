@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Player.h"
-
+#include "infoCursor.h"
 
 Player::Player()
 {

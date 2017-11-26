@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "infoCursor.h"
-
+#include "Player.h"
+#include "Enemy.h"
+#include "Friend.h"
 //전투씬 내에서 플레이어 인터페이스 제공 클래스로 쓸겁니다.
 
 
@@ -23,6 +25,10 @@ HRESULT infoCursor::init(void)
 	rc = { WINSIZEX - SIDEWINSIZE,0,WINSIZEX,WINSIZEY };//인터페이스 간이 렉트
 	tileImgRect = RectMakeCenter(rc.left + SIDEWINSIZE / 2, 80, SIDEWINSIZE - SIDEWINSIZE/10, SIDEWINSIZE - SIDEWINSIZE/10);
 	unitImgRect = RectMakeCenter(rc.left + SIDEWINSIZE / 2, WINSIZEY/2 , SIDEWINSIZE - SIDEWINSIZE/10, SIDEWINSIZE - SIDEWINSIZE/10);
+	for (int i = 0; i < 4; i++)
+	{
+		element[i] = RectMakeCenter(rc.left + TILESIZE/2 + ((TILESIZE / 2 + (TILESIZE / 2 * 0.25)) * i), tileImgRect.bottom + TILESIZE / 2, TILESIZE / 2, TILESIZE / 2);
+	}
 
 	unit = L"유닛이름정보";
 	tilename = L"타일이름정보";
@@ -44,13 +50,13 @@ void infoCursor::release(void)
 }
 void infoCursor::update(void) 
 {
-	Scanning();//지형 타일 갱신 및 클릭 신호 받을 곳.
+	mouse_Scanning();//지형 타일 갱신 및 클릭 신호 받을 곳.
 
 	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON)) dataClean();  //윈도우 닫기
 	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
 	{
 		if (isShow) dataClean();
-		else Click();//지형 클릭 시 
+		else mouse_Click();//지형 클릭 시 
 	}
 }
 void infoCursor::render(void) 
@@ -66,7 +72,7 @@ void infoCursor::render(void)
 
 }
 
-void infoCursor::Scanning(void)
+void infoCursor::mouse_Scanning(void)
 {
 	if (!isShow)
 	{
@@ -82,31 +88,31 @@ void infoCursor::Scanning(void)
 
 }
 
-void infoCursor::Click(void)
+void infoCursor::mouse_Click(void)
 {
-	for (int i = 0; i < _player->getUnits().size(); i++)
-	{
-		if (PtInRect(&_player->getUnits()[i]->getRect(), _ptMouse))
-		{
-			unit = L"유닛있음";
-		}
-	}
-
-	for (int i = 0; i < _friend->getUnits().size(); i++)
-	{
-		if (PtInRect(&_friend->getUnits()[i]->getRect(), _ptMouse))
-		{
-			unit = L"유닛있음";
-		}
-	}
-
-	for (int i = 0; i < _enemy->getUnits().size(); i++)
-	{
-		if (PtInRect(&_enemy->getUnits()[i]->getRect(), _ptMouse))
-		{
-			unit = L"유닛있음";
-		}
-	}
+	//for (int i = 0; i < _player->getUnits().size(); i++)
+	//{
+	//	if (PtInRect(&_player->getUnits()[i]->getRect(), _ptMouse))
+	//	{
+	//		unit = L"유닛있음";
+	//	}
+	//}
+	//
+	//for (int i = 0; i < _friend->getUnits().size(); i++)
+	//{
+	//	if (PtInRect(&_friend->getUnits()[i]->getRect(), _ptMouse))
+	//	{
+	//		unit = L"유닛있음";
+	//	}
+	//}
+	//
+	//for (int i = 0; i < _enemy->getUnits().size(); i++)
+	//{
+	//	if (PtInRect(&_enemy->getUnits()[i]->getRect(), _ptMouse))
+	//	{
+	//		unit = L"유닛있음";
+	//	}
+	//}
 
 
 
@@ -395,10 +401,19 @@ void infoCursor::Click(void)
 				break;
 
 			}
+			//지형정보 스위치문!
 			isUnit = false;//지형은 false로
 		}
 	}
 	isShow = true;
+}
+
+void infoCursor::mouse_moveCamera(void)
+{
+	if (_ptMouse.x > WINSIZEX - 48 - 144 && _ptMouse.x <= WINSIZEX - 144) MAINCAMERA->moveCamera(DIRECTION_RG); // 마우스가 오른쪽  //화면 최대 조건 걸어야함.
+	if (_ptMouse.x < 48 && _ptMouse.x >= 0) MAINCAMERA->moveCamera(DIRECTION_LF); //마우스가 왼쪽
+	if (_ptMouse.y > WINSIZEY - 48 && _ptMouse.y <= WINSIZEY) MAINCAMERA->moveCamera(DIRECTION_DN); //마우스가 화면 아래쪽
+	if (_ptMouse.y < 48 && _ptMouse.y >= 0) MAINCAMERA->moveCamera(DIRECTION_UP); //마우스가 화면 윗쪽
 }
 
 void infoCursor::dataClean(void)//마우스 우클릭 시 현재 인터페이스의 정보를 초기화 해주는 역할을 할 것.
@@ -423,20 +438,26 @@ void infoCursor::tileLineDraw(void)
 void infoCursor::infoDraw(void)
 {
 
-		if (isUnit) //유닛을 눌렀을때 표시할 것들
-		{
-			Rectangle(getMemDC(), tileImgRect.left, tileImgRect.top, tileImgRect.right, tileImgRect.bottom);
-			Rectangle(getMemDC(), unitImgRect.left, unitImgRect.top, unitImgRect.right, unitImgRect.bottom);
-			TextOut(getMemDC(), unitImgRect.left, unitImgRect.bottom + 20, unit, _tcslen(unit));
-			TextOut(getMemDC(), tileImgRect.left, tileImgRect.bottom + 20, tilename, _tcslen(tilename));
-			TextOut(getMemDC(), tileImgRect.left, tileImgRect.bottom + 40, prop, _tcslen(prop));
-		}
-		else//지형을 눌렀을때 표시할 것들
-		{
-			Rectangle(getMemDC(), tileImgRect.left, tileImgRect.top, tileImgRect.right, tileImgRect.bottom);
-			TextOut(getMemDC(), tileImgRect.left, tileImgRect.bottom + 20, tilename, _tcslen(tilename));
-			TextOut(getMemDC(), tileImgRect.left, tileImgRect.bottom + 40, prop, _tcslen(prop));
-		}
+	if (isUnit) //유닛을 눌렀을때 표시할 것들
+	{
+		Rectangle(getMemDC(), unitImgRect.left, unitImgRect.top, unitImgRect.right, unitImgRect.bottom); // 디버그용 렉트출력
+		TextOut(getMemDC(), unitImgRect.left, unitImgRect.bottom + 24, unit, _tcslen(unit));
+	}
+	Rectangle(getMemDC(), tileImgRect.left, tileImgRect.top, tileImgRect.right, tileImgRect.bottom); // 디버그용 렉트출력
+	TextOut(getMemDC(), tileImgRect.left, tileImgRect.bottom + 50, tilename, _tcslen(tilename));
+	TextOut(getMemDC(), tileImgRect.left, tileImgRect.bottom + 80, prop, _tcslen(prop));
+	
+	for (int i = 0; i < 4; i++) // 디버그용 렉트출력
+	{
+		Rectangle(getMemDC(), element[i].left, element[i].top, element[i].right, element[i].bottom);
+	}
 
-
+	if (fire) IMAGEMANAGER->findImage(L"화속성")->render(getMemDC(), element[0].left, element[0].top);
+	else if(!fire) IMAGEMANAGER->findImage(L"화속성비활성")->render(getMemDC(), element[0].left, element[0].top);
+	if (water) IMAGEMANAGER->findImage(L"수속성")->render(getMemDC(), element[1].left, element[1].top);
+	else if (!water) IMAGEMANAGER->findImage(L"수속성비활성")->render(getMemDC(), element[1].left, element[1].top);
+	if (wind) IMAGEMANAGER->findImage(L"풍속성")->render(getMemDC(), element[2].left, element[2].top);
+	else if (!wind) IMAGEMANAGER->findImage(L"풍속성비활성")->render(getMemDC(), element[2].left, element[2].top);
+	if (earth) IMAGEMANAGER->findImage(L"땅속성")->render(getMemDC(), element[3].left, element[3].top);
+	else if (!earth) IMAGEMANAGER->findImage(L"땅속성비활성")->render(getMemDC(), element[3].left, element[3].top);
 }

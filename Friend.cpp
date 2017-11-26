@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Friend.h"
-
+#include "infoCursor.h"
 
 Friend::Friend()
 {

@@ -16,9 +16,14 @@ enum CTRL
 	CTRL_END = 3
 };
 
-enum MAPTOOLEDITBOX
+struct ctrlOption
 {
+	tagTile tile[TILEX * TILEY];
+	TCHAR _fileName[100];
+	TCHAR saveSize[100];
 
+	int ctrSelect;
+	int ctrObjectSelect;
 };
 
 class sceneMaptool : public gameNode

@@ -20,9 +20,9 @@ HRESULT gameMap::init(void)
 		_stprintf(_strSampleImgKey[i], L"tile (%02d)", i + 1);
 	}
 
-	_stprintf(_objImage[OBJECTSELECT_AILY], L"아군");
-	_stprintf(_objImage[OBJECTSELECT_ENEMY], L"적군");
-	_stprintf(_objImage[OBJECTSELECT_PLAYER], L"플레이어");
+	_stprintf(_objImage[OBJECTSELECT_AILY], L"objAliy");
+	_stprintf(_objImage[OBJECTSELECT_ENEMY], L"objEnemy");
+	_stprintf(_objImage[OBJECTSELECT_PLAYER], L"objPlayer");
 
 	return S_OK;
 }
@@ -54,7 +54,7 @@ void gameMap::load(void)
 	HANDLE file;
 	DWORD read;
 
-	file = CreateFile(L"MapData/M000.map", GENERIC_READ, 0, NULL,
+	file = CreateFile(L"MapData/M003.map", GENERIC_READ, 0, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);

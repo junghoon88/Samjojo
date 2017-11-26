@@ -1,12 +1,13 @@
 #pragma once
 #include "tileNode.h"
 #include "gameNode.h"
-#include "Player.h"
-#include "Enemy.h"
-#include "Friend.h"
 #include "gameMap.h"
 
 #define INTERFACESIZEY 150
+
+class Player;
+class Enemy;
+class Friend;
 
 class infoCursor : public gameNode
 {
@@ -22,7 +23,9 @@ private:
 
 	RECT tileImgRect;
 	RECT unitImgRect;
-	
+	RECT element[4];
+
+
 	//유닛 정보 표시용
 	TCHAR* unit;
 	TCHAR* utype;//클래스
@@ -62,7 +65,14 @@ public:
 	void dataClean(void);//마우스 우클릭시 클리어 용
 	void tileLineDraw(void);
 	void infoDraw(void);
-	void Scanning(void);
-	void Click(void);
+	void mouse_moveCamera(void);
+	void mouse_Scanning(void);
+	void mouse_Click(void);
+
+public:
+	inline void setLinkPlyer(Player* player) { _player = player; }
+	inline void setLinkEnemy(Enemy* enm) { _enemy = enm; }
+	inline void setLinkFriend(Friend* fri) { _friend = fri; }
+
 };
 
