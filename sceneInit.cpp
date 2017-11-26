@@ -261,17 +261,17 @@ void sceneInit::initImageUnits(void)
 		_stprintf(strKey, L"unit%d-atk", unitNum);
 		_stprintf(strName, L"image/unitImage/atk/");
 		_tcscat(strName, strTemp);
-		_loading->loadFrameImage(strKey, strName, UNITSIZE_ATKX, UNITSIZE_ATKY, UNITFRAME_ATKX, UNITFRAME_ATKY);
+		_loading->loadFrameImage(strKey, strName, UNITSIZE_ATKX, UNITSIZE_ATKY, UNITFRAME_ATKX, UNITFRAME_ATKY, true, RGB(255, 0, 255));
 
 		_stprintf(strKey, L"unit%d-idle", unitNum);
 		_stprintf(strName, L"image/unitImage/idle/");
 		_tcscat(strName, strTemp);
-		_loading->loadFrameImage(strKey, strName, UNITSIZE_IDLEX, UNITSIZE_IDLEY, UNITFRAME_IDLEX, UNITFRAME_IDLEY);
+		_loading->loadFrameImage(strKey, strName, UNITSIZE_IDLEX, UNITSIZE_IDLEY, UNITFRAME_IDLEX, UNITFRAME_IDLEY, true, RGB(255, 0, 255));
 
 		_stprintf(strKey, L"unit%d-spc", unitNum);
 		_stprintf(strName, L"image/unitImage/spc/");
 		_tcscat(strName, strTemp);
-		_loading->loadFrameImage(strKey, strName, UNITSIZE_SPCX, UNITSIZE_SPCY, UNITFRAME_SPCX, UNITFRAME_SPCY);
+		_loading->loadFrameImage(strKey, strName, UNITSIZE_SPCX, UNITSIZE_SPCY, UNITFRAME_SPCX, UNITFRAME_SPCY, true, RGB(255, 0, 255));
 
 		unitNum++;
 	}
@@ -283,17 +283,17 @@ void sceneInit::initImageUnits(void)
 		_stprintf(strKey, L"unit%d-atk", unitNum);
 		_stprintf(strName, L"image/unitImage/atk/");
 		_tcscat(strName, strTemp);
-		_loading->loadFrameImage(strKey, strName, UNITSIZE_ATKX, UNITSIZE_ATKY, UNITFRAME_ATKX, UNITFRAME_ATKY);
+		_loading->loadFrameImage(strKey, strName, UNITSIZE_ATKX, UNITSIZE_ATKY, UNITFRAME_ATKX, UNITFRAME_ATKY, true, RGB(255, 0, 255));
 
 		_stprintf(strKey, L"unit%d-idle", unitNum);
 		_stprintf(strName, L"image/unitImage/idle/");
 		_tcscat(strName, strTemp);
-		_loading->loadFrameImage(strKey, strName, UNITSIZE_IDLEX, UNITSIZE_IDLEY, UNITFRAME_IDLEX, UNITFRAME_IDLEY);
+		_loading->loadFrameImage(strKey, strName, UNITSIZE_IDLEX, UNITSIZE_IDLEY, UNITFRAME_IDLEX, UNITFRAME_IDLEY, true, RGB(255, 0, 255));
 
 		_stprintf(strKey, L"unit%d-spc", unitNum);
 		_stprintf(strName, L"image/unitImage/spc/");
 		_tcscat(strName, strTemp);
-		_loading->loadFrameImage(strKey, strName, UNITSIZE_SPCX, UNITSIZE_SPCY, UNITFRAME_SPCX, UNITFRAME_SPCY);
+		_loading->loadFrameImage(strKey, strName, UNITSIZE_SPCX, UNITSIZE_SPCY, UNITFRAME_SPCX, UNITFRAME_SPCY, true, RGB(255, 0, 255));
 
 		unitNum++;
 	}
@@ -305,17 +305,17 @@ void sceneInit::initImageUnits(void)
 		_stprintf(strKey, L"unit%d-atk", unitNum);
 		_stprintf(strName, L"image/unitImage/atk/");
 		_tcscat(strName, strTemp);
-		_loading->loadFrameImage(strKey, strName, UNITSIZE_ATKX, UNITSIZE_ATKY, UNITFRAME_ATKX, UNITFRAME_ATKY);
+		_loading->loadFrameImage(strKey, strName, UNITSIZE_ATKX, UNITSIZE_ATKY, UNITFRAME_ATKX, UNITFRAME_ATKY, true, RGB(255, 0, 255));
 
 		_stprintf(strKey, L"unit%d-idle", unitNum);
 		_stprintf(strName, L"image/unitImage/idle/");
 		_tcscat(strName, strTemp);
-		_loading->loadFrameImage(strKey, strName, UNITSIZE_IDLEX, UNITSIZE_IDLEY, UNITFRAME_IDLEX, UNITFRAME_IDLEY);
+		_loading->loadFrameImage(strKey, strName, UNITSIZE_IDLEX, UNITSIZE_IDLEY, UNITFRAME_IDLEX, UNITFRAME_IDLEY, true, RGB(255, 0, 255));
 
 		_stprintf(strKey, L"unit%d-spc", unitNum);
 		_stprintf(strName, L"image/unitImage/spc/");
 		_tcscat(strName, strTemp);
-		_loading->loadFrameImage(strKey, strName, UNITSIZE_SPCX, UNITSIZE_SPCY, UNITFRAME_SPCX, UNITFRAME_SPCY);
+		_loading->loadFrameImage(strKey, strName, UNITSIZE_SPCX, UNITSIZE_SPCY, UNITFRAME_SPCX, UNITFRAME_SPCY, true, RGB(255, 0, 255));
 
 		unitNum++;
 	}

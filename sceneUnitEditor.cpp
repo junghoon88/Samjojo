@@ -534,13 +534,13 @@ void sceneUnitEditor::teamButtonUpdate(void)
 
 void sceneUnitEditor::rectSketch(void)
 {
-	Rectangle(getMemDC(), 100 + UPDATEPOSX, 100 + UPDATEPOSY, 300 + UPDATEPOSX, 228 + UPDATEPOSY);	//얼굴이미지
-	Rectangle(getMemDC(), 100 + UPDATEPOSX, 290 + UPDATEPOSY, 300 + UPDATEPOSX, 400 + UPDATEPOSY);	//평조이미지
-	Rectangle(getMemDC(), 100 + UPDATEPOSX, 405 + UPDATEPOSY, 300 + UPDATEPOSX, 515 + UPDATEPOSY);	//평조이미지
-	Rectangle(getMemDC(), 100 + UPDATEPOSX, 520 + UPDATEPOSY, 300 + UPDATEPOSX, 630 + UPDATEPOSY);	//전조이미지
+	Rectangle(getMemDC(), 100 + UPDATEPOSX, 100 + UPDATEPOSY, 300 + UPDATEPOSX, 228 + UPDATEPOSY);		//얼굴이미지
+	Rectangle(getMemDC(), 100 + UPDATEPOSX, 290 + UPDATEPOSY, 300 + UPDATEPOSX, 400 + UPDATEPOSY);		//평조이미지
+	Rectangle(getMemDC(), 100 + UPDATEPOSX, 405 + UPDATEPOSY, 300 + UPDATEPOSX, 515 + UPDATEPOSY);		//평조이미지
+	Rectangle(getMemDC(), 100 + UPDATEPOSX, 520 + UPDATEPOSY, 300 + UPDATEPOSX, 630 + UPDATEPOSY);		//전조이미지
 
-	Rectangle(getMemDC(), 100 + UPDATEPOSX, 240 + UPDATEPOSY, 300 + UPDATEPOSX, 270 + UPDATEPOSY);	//이전다음버튼
-	Rectangle(getMemDC(), 100 + UPDATEPOSX, 640 + UPDATEPOSY, 300 + UPDATEPOSX, 670 + UPDATEPOSY);	//이전다음버튼
+	Rectangle(getMemDC(), 100 + UPDATEPOSX, 240 + UPDATEPOSY, 300 + UPDATEPOSX, 270 + UPDATEPOSY);		//이전다음버튼
+	Rectangle(getMemDC(), 100 + UPDATEPOSX, 640 + UPDATEPOSY, 300 + UPDATEPOSX, 670 + UPDATEPOSY);		//이전다음버튼
 	//Rectangle(getMemDC(), 100 + UPDATEPOSX, 640 + UPDATEPOSY, 300 + UPDATEPOSX, 670 + UPDATEPOSY);	//이전다음버튼
 
 
@@ -625,14 +625,15 @@ void sceneUnitEditor::editBoxRender(void)
 }
 void sceneUnitEditor::unitImageRender(void)			// 해야될 것: 프레임 이미지로 입력받아 프레임렌더로 출력
 {
-	if (_imgFace)		_imgFace->render(getMemDC(), 100 + UPDATEPOSX, 100 + UPDATEPOSY);
-	if (_imgBattleAtk)  _imgBattleAtk->render(getMemDC(), 100 + UPDATEPOSX, 300 + UPDATEPOSY);
-	if (_imgBattleIdle) _imgBattleIdle->render(getMemDC(), 100 + UPDATEPOSX, 300+256 + UPDATEPOSY);
-	if (_imgBattleSpc)  _imgBattleSpc->render(getMemDC(), 100 + UPDATEPOSX, 300+256+96 + UPDATEPOSY);
+	if (_imgFace)		_imgFace->frameRender(getMemDC(), 100 + UPDATEPOSX, 100 + UPDATEPOSY);
+	if (_imgBattleAtk)  _imgBattleAtk->frameRender(getMemDC(), 100 + UPDATEPOSX + 100 - _imgBattleAtk->getFrameWidth() / 2, 300 + UPDATEPOSY + 55 - _imgBattleAtk->getFrameHeight() / 2);
+	if (_imgBattleIdle) _imgBattleIdle->frameRender(getMemDC(), 100 + UPDATEPOSX + 100 - _imgBattleAtk->getFrameWidth() / 2, 300 + 105 + UPDATEPOSY + 55 - _imgBattleIdle->getFrameHeight() / 2);
+	if (_imgBattleSpc)  _imgBattleSpc->frameRender(getMemDC(), 100 + UPDATEPOSX + 100 - _imgBattleAtk->getFrameWidth() / 2, 300 + 105 + 115 + UPDATEPOSY + 55 - _imgBattleSpc->getFrameHeight() / 2);
 }
 void sceneUnitEditor::atkRangeRender(void)
 {
 	HBRUSH oldBrushRange;
+
 	for (int i = 0; i < RANGESIZEX; i++)
 	{
 		for (int j = 0; j < RANGESIZEY; j++)
