@@ -73,6 +73,7 @@ void sceneMaptool::update(void)
 	{
 		_ctrlButton[i]->update();
 	}
+	_exit->update();
 
 	if (PtInRect(&RectMake(WINSIZEX - 3 * TILESIZE, 20, 3 * TILESIZE, 10 * TILESIZE + 20), _ptMouse)
 		|| PtInRect(&RectMake(WINSIZEX - 3 * TILESIZE, TILESIZE * 10 + 41, TILESIZE * 3, TILESIZE), _ptMouse)
@@ -329,6 +330,8 @@ void sceneMaptool::render(void)
 		_ctrlButton[i]->render();
 		TextOut(getMemDC(), _ctrlButton[i]->getRect().left, _ctrlButton[i]->getRect().top, _strButton[i], _tcslen(_strButton[i]));
 	}
+	_exit->render();
+	TextOut(getMemDC(), _exit->getRect().left, _exit->getRect().top, _strExit, _tcslen(_strExit));
 
 	//스페이스바 누르면 TERRAIN 번호 보여주기
 	if (_viewTERRAIN)
@@ -397,6 +400,10 @@ void sceneMaptool::ctrlSelectEraser(void* obj)
 
 	maptool->setCtrlSelect(CTRL_ERASER);
 }
+void sceneMaptool::exit(void * obj)
+{
+	SCENEMANAGER->changeScene(L"선택씬");
+}
 //~callback functions
 //-----------------------------------------------------------------------------------------
 
@@ -407,13 +414,17 @@ void sceneMaptool::setup(void)
 	_ctrlButton[CTRL_LOAD] = new button;
 	_ctrlButton[CTRL_ERASER] = new button;
 	
-	_ctrlButton[CTRL_SAVE]->init(L"맵툴버튼",	WINSIZEX - (3 * TILESIZE) / 2, WINSIZEY - 90, { 0, 0 }, { 0, 1 }, ctrlSelectSave, this);
-	_ctrlButton[CTRL_LOAD]->init(L"맵툴버튼",	WINSIZEX - (3 * TILESIZE) / 2, WINSIZEY - 40, { 0, 0 }, { 0, 1 }, ctrlSelectLoad, this);
+	_ctrlButton[CTRL_SAVE]->init(L"맵툴버튼",	WINSIZEX - (3 * TILESIZE) / 2, WINSIZEY - 100, { 0, 0 }, { 0, 1 }, ctrlSelectSave, this);
+	_ctrlButton[CTRL_LOAD]->init(L"맵툴버튼",	WINSIZEX - (3 * TILESIZE) / 2, WINSIZEY - 60, { 0, 0 }, { 0, 1 }, ctrlSelectLoad, this);
 	_ctrlButton[CTRL_ERASER]->init(L"맵툴버튼",	WINSIZEX - (3 * TILESIZE) / 2, TILESIZE * 14 - 10, { 0, 0 }, { 0, 1 }, ctrlSelectEraser, this);
 	
 	_stprintf(_strButton[CTRL_SAVE], L"SAVE");
 	_stprintf(_strButton[CTRL_LOAD], L"LOAD");
 	_stprintf(_strButton[CTRL_ERASER], L"ERASER");
+
+	_exit = new button;
+	_exit->init(L"맵툴버튼", WINSIZEX - (3 * TILESIZE) / 2, WINSIZEY - 20, { 0, 0 }, { 0, 1 }, exit, this);
+	_stprintf(_strExit, L"EXIT");
 
 	_ctrSelect = CTRL_TERRAINDRAW;
 
@@ -582,5 +593,5 @@ void sceneMaptool::load(void)
 TERRAIN sceneMaptool::terrainSelect(int index)
 {
 
-	return TERRAIN_NONE;
+	return TERRAIN_RIVER;
 }
