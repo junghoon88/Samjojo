@@ -13,7 +13,6 @@ sideInterface::~sideInterface()
 
 HRESULT sideInterface::init(void)
 {
-
 	for (int i = 0; i < 5; i++)
 	{
 		button[i].onOff = false;
@@ -25,7 +24,6 @@ HRESULT sideInterface::init(void)
 	button[2].type = inven;
 	button[3].type = save;
 	button[4].type = load;
-
 
 	return S_OK;
 }

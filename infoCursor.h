@@ -1,6 +1,9 @@
 #pragma once
 #include "tileNode.h"
 #include "gameNode.h"
+#include "Player.h"
+#include "Enemy.h"
+#include "Friend.h"
 #include "gameMap.h"
 
 #define INTERFACESIZEY 150
@@ -8,6 +11,9 @@
 class infoCursor : public gameNode
 {
 private:
+	Player*		_player;
+	Friend*		_friend;
+	Enemy*		_enemy;
 	gameMap* findtile;
 
 	RECT rc;//정보 제공용 박스

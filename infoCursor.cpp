@@ -6,20 +6,23 @@
 
 
 
-infoCursor::infoCursor(){}
+infoCursor::infoCursor()
+	:_player(NULL), _friend(NULL), _enemy(NULL)
+{}
 infoCursor::~infoCursor(){}
 
 HRESULT infoCursor::init(void) 
 {
 	findtile = new gameMap;
 	findtile->init();
+
+
 	isShow = false;
 	isUnit = false;
 
 	rc = { WINSIZEX - SIDEWINSIZE,0,WINSIZEX,WINSIZEY };//인터페이스 간이 렉트
 	tileImgRect = RectMakeCenter(rc.left + SIDEWINSIZE / 2, 80, SIDEWINSIZE - SIDEWINSIZE/10, SIDEWINSIZE - SIDEWINSIZE/10);
 	unitImgRect = RectMakeCenter(rc.left + SIDEWINSIZE / 2, WINSIZEY/2 , SIDEWINSIZE - SIDEWINSIZE/10, SIDEWINSIZE - SIDEWINSIZE/10);
-
 
 	unit = L"유닛이름정보";
 	tilename = L"타일이름정보";
@@ -29,7 +32,6 @@ HRESULT infoCursor::init(void)
 	wind = false;
 	earth = false;
 	water = false;
-
 
 	drawLine = { findtile->getTile()[0].rc.left,findtile->getTile()[0].rc.top,findtile->getTile()[0].rc.right,findtile->getTile()[0].rc.bottom };
 	oPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
@@ -57,7 +59,6 @@ void infoCursor::render(void)
 	Rectangle(getMemDC(), rc.left, rc.top, rc.right, rc.bottom);
 	if (isShow)
 	{
-
 		infoDraw();// 정보 표시
 	}
 		
@@ -83,6 +84,32 @@ void infoCursor::Scanning(void)
 
 void infoCursor::Click(void)
 {
+	for (int i = 0; i < _player->getUnits().size(); i++)
+	{
+		if (PtInRect(&_player->getUnits()[i]->getRect(), _ptMouse))
+		{
+			unit = L"유닛있음";
+		}
+	}
+
+	for (int i = 0; i < _friend->getUnits().size(); i++)
+	{
+		if (PtInRect(&_friend->getUnits()[i]->getRect(), _ptMouse))
+		{
+			unit = L"유닛있음";
+		}
+	}
+
+	for (int i = 0; i < _enemy->getUnits().size(); i++)
+	{
+		if (PtInRect(&_enemy->getUnits()[i]->getRect(), _ptMouse))
+		{
+			unit = L"유닛있음";
+		}
+	}
+
+
+
 	for (int i = 0; i < TILEX * TILEY; i++)//한번 더 돌리는 이유 = 평상시에 타일만 돌면서 테두리그리다가 클릭했을때만 유닛이 있는지 한번 더 체크하기 위해?
 	{
 		if (PtInRect(&findtile->getTile()[i].rc, _ptMouse))//이 조건 위에 유닛조건 걸자. 유닛이 없을 시 지형 검출하게
