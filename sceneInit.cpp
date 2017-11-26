@@ -39,6 +39,7 @@ void sceneInit::initImage(void)
 	initImageSlect();
 	initImageMapTool();
 	initImageUnitEditor();
+	initImageStory();
 }
 
 void sceneInit::initImageSlect(void)
@@ -114,6 +115,27 @@ void sceneInit::initImageUnitEditor(void)
 		IMAGEMANAGER->addFrameImage(strKey, strName, 48, 49, 1, 1);
 	}
 }
+void sceneInit::initImageStory(void)
+{
+	TCHAR strKey[100], strName[100];
+	//대화 face
+	
+
+	
+	//대화창
+	IMAGEMANAGER->addImage(L"좌대화창", L"image/좌측대화창.bmp", 464, 120,true,RGB(255,0,255));
+	IMAGEMANAGER->addImage(L"우대화창", L"image/우측대화창.bmp", 464, 120,true,RGB(255,0,255));
+	for (int i = 0; i <= 3; i++)
+	{
+		_stprintf(strKey, L"smap %04d", i);
+		_stprintf(strName, L"image/map %04d.bmp", i);
+		IMAGEMANAGER->addImage(strKey, strName, 640, 400);
+	}
+	memset(strKey, NULL, _tcslen(strKey));
+	memset(strName, NULL, _tcslen(strName)); 
+
+}
+
 
 
 
