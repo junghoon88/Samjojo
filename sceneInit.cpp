@@ -90,9 +90,9 @@ void sceneInit::initImageMapTool(void)
 	}
 
 	//오브젝트 타일 셋팅
-	_loading->loadImage(L"아군", L"image/tiles/object/아군.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
-	_loading->loadImage(L"적군", L"image/tiles/object/적군.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
-	_loading->loadImage(L"플레이어", L"image/tiles/object/플레이어.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
+	_loading->loadImage(L"objAliy", L"image/tiles/object/아군.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
+	_loading->loadImage(L"objEnemy", L"image/tiles/object/적군.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
+	_loading->loadImage(L"objPlayer", L"image/tiles/object/플레이어.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
 
 	//선택타일 체크 창
 	_loading->loadImage(L"타일선택", L"image/tileSelect.bmp", TILESIZE, TILESIZE, true, RGB(255, 0, 255), false);
@@ -144,11 +144,6 @@ void sceneInit::initImageMapTool(void)
 	_loading->loadFrameImage(L"맵툴버튼", L"image/button.bmp", 100, 60, 1, 2);
 	_loading->loadFrameImage(L"맵툴버튼2", L"image/button.bmp", 50, 60, 1, 2);
 
-	//이것은 뭐시다냐
-	_loading->loadFrameImage(L"평조테스트", L"image/combat_unit_test1.bmp", 48, 49, 1, 1);
-	_loading->loadFrameImage(L"전조테스트", L"image/normal_unit_test1.bmp", 48, 49, 1, 1);
-	_loading->loadFrameImage(L"평조테스트", L"image/combat_unit_test2.bmp", 48, 49, 1, 1);
-	_loading->loadFrameImage(L"전조테스트", L"image/normal_unit_test2.bmp", 48, 49, 1, 1);
 
 	//원본맵 이미지 추가하기
 	_loading->loadImage(L"M000", L"image/Map/M000.bmp", 960, 960, false, RGB(255, 0, 255), true);
