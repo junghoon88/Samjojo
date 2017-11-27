@@ -162,15 +162,12 @@ void sceneSelect::selectScenario(void)
 
 
 			
-			//SCENEMANAGER->changeScene(L"´ëÈ­¾À");
+			SCENEMANAGER->changeScene(L"´ëÈ­¾À");
 			//SCENEMANAGER->changeScene(L"»óÁ¡¾À");
 			//SCENEMANAGER->changeScene(L"ÀüÅõ¾À");
-			SCENEMANAGER->changeScene(L"ÁØºñ±âº»¾À");
+			//SCENEMANAGER->changeScene(L"ÁØºñ±âº»¾À");
 
 
-			//SCENEMANAGER->changeScene(L"´ëÈ­¾À");
-			////SCENEMANAGER->changeScene(L"»óÁ¡¾À");
-			////SCENEMANAGER->changeScene(L"ÀüÅõ¾À");
 
 			break;
 		}
