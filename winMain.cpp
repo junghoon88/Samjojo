@@ -65,6 +65,16 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	//PeekMessage : 메시지 정보가 들어오든 말든 무조건 반응(상시 루프돌고있음)
 	while (true)
 	{
+		if (_mg.getStop())
+		{
+			setWindowsSize(WINSTARTX, WINSTARTY, _mg.getWinSize().x, _mg.getWinSize().y);
+
+			//윈도우 창을 모니터에 띄워줌
+			ShowWindow(_hWnd, cmdShow);
+			
+			_mg.setStop(false);
+		}
+
 		if (PeekMessage(&message, NULL, 0, 0, PM_REMOVE))
 		{
 			if (message.message == WM_QUIT) break;

@@ -16,7 +16,8 @@
 mainGame::mainGame()
 	: _player(NULL), _friend(NULL), _enemy(NULL), _map(NULL)
 {
-
+	_stop = false;
+	_winsize = { WINSIZEX, WINSIZEY };
 }
 
 
@@ -24,6 +25,7 @@ mainGame::~mainGame()
 {
 
 }
+
 
 //ÃÊ±âÈ­
 HRESULT mainGame::init(void)
@@ -122,6 +124,31 @@ void mainGame::update(void)
 {
 	gameNode::update();
 
+	if (SCENEMANAGER->isCurScene(L"ÃÊ±âÈ­¾À"))
+	{
+		setWindowResize({ WINSIZEX2, WINSIZEY2 });
+	}
+	else if (SCENEMANAGER->isCurScene(L"¼±ÅÃ¾À"))
+	{
+		setWindowResize({ WINSIZEX2, WINSIZEY2 });
+	}
+	else if (SCENEMANAGER->isCurScene(L"¸ÊÅø¾À"))
+	{
+		setWindowResize({ WINSIZEX, WINSIZEY });
+	}
+	else if (SCENEMANAGER->isCurScene(L"À¯´Ö¿¡µðÅÍ"))
+	{
+		setWindowResize({ WINSIZEX, WINSIZEY });
+	}
+	else if (SCENEMANAGER->isCurScene(L"´ëÈ­¾À"))
+	{
+		setWindowResize({ WINSIZEX2, WINSIZEY2 });
+	}
+	else if (SCENEMANAGER->isCurScene(L"ÀüÅõ¾À"))
+	{
+		setWindowResize({ WINSIZEX, WINSIZEY });
+	}
+
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))
 	{
 		SCENEMANAGER->changeScene(L"¼±ÅÃ¾À");
@@ -161,5 +188,14 @@ void mainGame::getChar(WPARAM wParam)
 	{
 		SCENEMANAGER->getChar(wParam);
 	}
+}
+
+void mainGame::setWindowResize(POINT size)
+{
+	if (_winsize.x == size.x && _winsize.y == size.y)
+		return;
+
+	_stop = true; 
+	_winsize = size;
 }
 

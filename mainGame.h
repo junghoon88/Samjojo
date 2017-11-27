@@ -14,6 +14,10 @@ private:
 	Enemy*		_enemy;		//Àû±º
 	gameMap*	_map;
 
+	bool		_stop;
+	POINT		_winsize;
+
+
 private:
 	void initScene(void);
 
@@ -26,5 +30,12 @@ public:
 
 	mainGame();
 	~mainGame();
+
+	void setWindowResize(POINT size);
+
+public:
+	inline bool getStop(void) { return _stop; }
+	inline void setStop(bool stop) { _stop = stop; }
+	inline POINT getWinSize(void) { return _winsize; }
 };
 

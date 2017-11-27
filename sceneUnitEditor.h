@@ -192,7 +192,6 @@ private:
 	tagTeamInfo _teamButton[TEAM_MAX];
 
 	button* _ctrlButton[UNITEDITOR_BUTTON_MAX];
-	TCHAR _strButton[UNITEDITOR_BUTTON_MAX][100];
 	
 	editbox* _numEditBox[UNITEDITOR_NUMEDITBOX_MAX];
 	editbox* _strEditBox[UNITEDITOR_STREDITBOX_MAX];

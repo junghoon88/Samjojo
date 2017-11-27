@@ -20,6 +20,13 @@ enum BUTTONDIRECTION
 	BUTTONDIRECTION_DOWN
 };
 
+enum FONTVERSION
+{
+	FONTVERSION_SAMJOJO,
+
+	FONTVERSION_MAX
+};
+
 class button : public gameNode
 {
 private:
@@ -30,6 +37,11 @@ private:
 	RECT _rc;
 	float _x, _y;
 
+	TCHAR _strText[1024];
+	HFONT _font[FONTVERSION_MAX];
+	FONTVERSION _fontNum;
+	
+
 	POINT _btnDownFramePoint;
 	POINT _btnUpFramePoint;
 
@@ -37,6 +49,8 @@ private:
 	CALLBACK_FUNCTION _callbackFunction;
 	CALLBACK_FUNCTION_PARAMETER _callbackFunctionParameter;
 
+private:
+	void setFontAll(void);
 
 public:
 	HRESULT init(const TCHAR* imageName, int x, int y,
@@ -45,16 +59,27 @@ public:
 	HRESULT init(const TCHAR* imageName, int x, int y,
 		POINT btnDownFramePoint, POINT btnUpFramePoint,
 		void* cbFunction, void* obj);
+
+	HRESULT init(const TCHAR* imageName, const TCHAR* text, int x, int y,
+		POINT btnDownFramePoint, POINT btnUpFramePoint,
+		CALLBACK_FUNCTION cbFunction);
+	HRESULT init(const TCHAR* imageName, const TCHAR* text, int x, int y,
+		POINT btnDownFramePoint, POINT btnUpFramePoint,
+		void* cbFunction, void* obj);
+
 	void release(void);
 	void update(void);
 	void render(void);
-
-
 
 	button();
 	~button();
 
 public:
+	void setText(const TCHAR* text);
+
+
+public:
 	inline RECT getRect(void) { return _rc; }
+	inline void setFontNum(FONTVERSION fontNum) { _fontNum = fontNum; }
 };
 

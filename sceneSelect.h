@@ -32,10 +32,8 @@ private:
 
 
 	button*		_button1[BTNSELECT1_MAX];
-	TCHAR		_strButton1[BTNSELECT1_MAX][100];
 		
 	button*		_button2[SCENARIO_MAX + 1];
-	TCHAR		_strButton2[SCENARIO_MAX + 1][100];
 
 		
 			
