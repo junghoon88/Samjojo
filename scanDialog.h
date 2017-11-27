@@ -30,6 +30,7 @@ public:
 	void nextDialog(void);
 	inline int getNext(void) { return next; }
 
+	
 
 };
 

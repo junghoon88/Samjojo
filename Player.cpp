@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "Player.h"
-
+#include "Friend.h"
+#include "Enemy.h"
+#include "gameMap.h"
+#include "infoCursor.h"
 
 Player::Player()
 {
@@ -44,9 +47,15 @@ void Player::loadUnits(void)
 
 		file = CreateFile(wfd.cFileName, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
+		tagUnitSaveInfo unitInfo;
+		ZeroMemory(&unitInfo, sizeof(tagUnitSaveInfo));
+		ReadFile(file, &unitInfo, sizeof(tagUnitSaveInfo), &read, NULL);
+
 		Unit* _unit = new Unit;
 		_unit->init();
-		ReadFile(file, _unit, sizeof(Unit), &read, NULL);
+		_unit->loadUnitData(unitInfo);
+
+
 		
 		_vUnits.push_back(_unit);
 

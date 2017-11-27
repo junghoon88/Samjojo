@@ -9,16 +9,33 @@ enum CTRL
 	CTRL_NONE = -1,
 	CTRL_SAVE,
 	CTRL_LOAD,
+	CTRL_ERASER,
 	CTRL_TERRAINDRAW,
 	CTRL_OBJDRAW,
-	CTRL_ERASER,
 
-	CTRL_END
+	CTRL_END = 3
 };
 
-enum MAPTOOLEDITBOX
+struct ctrlSave
 {
+	tagTile tile[TILEX * TILEY];
+	TCHAR _fileName[100];
+	TCHAR saveSize[100];
 
+	int ctrSelect;
+	int ctrObjectSelect;
+	int _selectSampleIndex;
+
+	int _countMapX;
+	int _countMapY;
+
+	int _selectSizeX, _selectSizeY;
+
+	float _alphaValue;
+
+	bool _mapView;
+	bool _viewTERRAIN;
+	bool _isMapLoad;
 };
 
 class sceneMaptool : public gameNode
@@ -26,13 +43,13 @@ class sceneMaptool : public gameNode
 private:
 	int _selectSampleIndex;
 	tagSampleTile _sampleTiles[SAMPLETILEX * SAMPLETILEY];
-	tagSampleObject _objTiles[OBJECTSELECT_MAX];
+	tagSampleObject _objTiles[CTRL_END];
 	tagTile _tiles[TILEX * TILEY];
 
 	button* _ctrlButton[CTRL_END];
-	button* _objectSelect[OBJECTSELECT_MAX];
+	button* _exit;
+	TCHAR _strExit[100];
 	TCHAR _strButton[CTRL_END][100];
-	TCHAR _strObjectSelect[OBJECTSELECT_MAX][100];
 	TCHAR _fileName[100];
 	TCHAR _saveSize[100];
 
@@ -43,8 +60,8 @@ private:
 	int _ctrSelect;
 	int _ctrObjectSelect;
 
-	int _countX;
-	int _countY;
+	int _countMapX;
+	int _countMapY;
 
 	int _tileSizeX[6];
 	int _tileSizeY[6];
@@ -55,7 +72,7 @@ private:
 
 	bool _mapView;
 	bool _viewTERRAIN;
-	bool _isload;
+	bool _isMapLoad;
 
 private:
 	static void ctrlSelectSave(void* obj);
@@ -63,10 +80,7 @@ private:
 	static void ctrlSelectTerrain(void* obj);
 	static void ctrlSelectObject(void* obj);
 	static void ctrlSelectEraser(void* obj);
-
-	static void ctrlObjectSelectAily(void* obj);
-	static void ctrlObjectSelectEnemy(void* obj);
-	static void ctrlObjectSelectPlayer(void* obj);
+	static void exit(void* obj);
 
 	void setup(void);
 	void setMap(void);
@@ -82,12 +96,10 @@ public:
 	sceneMaptool();
 	~sceneMaptool();
 
-
 	void save(void);
 	void load(void);
 
 	TERRAIN terrainSelect(int index);
-	OBJECT objSelect(int index);
 
 	inline int getCtrlSelect(void) { return _ctrSelect; }
 	inline void setCtrlSelect(int select) { _ctrSelect = select; }

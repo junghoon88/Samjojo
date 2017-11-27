@@ -99,6 +99,7 @@
     <ClInclude Include="globalMacroVariables.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="imageManager.h" />
+    <ClInclude Include="infoCursor.h" />
     <ClInclude Include="iniDataManager.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="keyAniManager.h" />
@@ -124,6 +125,7 @@
     <ClInclude Include="sceneSell.h" />
     <ClInclude Include="sceneStory.h" />
     <ClInclude Include="sceneUnitEditor.h" />
+    <ClInclude Include="sideInterface.h" />
     <ClInclude Include="singletonBase.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stdafx.h" />
@@ -153,6 +155,7 @@
     <ClCompile Include="gameNode.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="imageManager.cpp" />
+    <ClCompile Include="infoCursor.cpp" />
     <ClCompile Include="iniDataManager.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="keyAniManager.cpp" />
@@ -176,6 +179,7 @@
     <ClCompile Include="sceneSell.cpp" />
     <ClCompile Include="sceneStory.cpp" />
     <ClCompile Include="sceneUnitEditor.cpp" />
+    <ClCompile Include="sideInterface.cpp" />
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

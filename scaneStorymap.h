@@ -6,6 +6,7 @@
 #define STILESIZEX 8
 #define STILESIZEY 4
 
+#define CHARMAX 6
 //Å¸ÀÏ°¹¼ö
 #define STILEX 200
 #define STILEY 200
@@ -20,6 +21,12 @@ struct tagIso
 	POINT poly[4];
 	HRGN region;
 };
+struct tagChar
+{
+	int x;
+	int y;
+	image* etc;
+};
 class scaneStorymap : public gameNode
 {
 
@@ -30,10 +37,10 @@ private:
 
 	tagIso iso[STILEX][STILEY];
 	image* storymap;
-	image* test;
-	image* test1;
+	tagChar img[CHARMAX];
+	
 
-	int x, y;
+	
 public:
 	scaneStorymap();
 	~scaneStorymap();

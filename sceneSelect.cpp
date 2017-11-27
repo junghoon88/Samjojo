@@ -3,6 +3,7 @@
 
 
 sceneSelect::sceneSelect()
+	: _map(NULL)
 {
 	_background = NULL;
 	for (int i = 0; i < BTNSELECT1_MAX; i++)
@@ -30,6 +31,12 @@ HRESULT sceneSelect::init(void)
 	_selectLevel = SELECTLEVEL1;
 
 	setuptButtons();
+
+	//저장된 유닛 데이터들을 불러온다.
+	_player->loadUnits();
+	_friend->loadUnits();
+	_enemy->loadUnits();
+
 
 	return S_OK;
 }
@@ -145,12 +152,13 @@ void sceneSelect::selectScenario(void)
 	{
 		if (PtInRect(&_button2[i]->getRect(), _ptMouse))
 		{
+			//debug
+			i = 3;
+
 			DATABASE->setSlectScenario(i);
 
-			_player->loadUnits();
-			_friend->loadUnits();
-			_enemy->loadUnits();
-
+			_map->loadData(i);
+			_enemy->locateUnits();
 
 			SCENEMANAGER->changeScene(L"대화씬");
 			//SCENEMANAGER->changeScene(L"상점씬");

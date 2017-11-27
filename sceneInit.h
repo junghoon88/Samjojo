@@ -10,7 +10,7 @@
 
 #define UNITSIZE_IDLEX 240
 #define UNITSIZE_IDLEY 96
-#define UNITFRAME_IDLEX 4
+#define UNITFRAME_IDLEX 5
 #define UNITFRAME_IDLEY 2
 
 #define UNITSIZE_SPCX 288
@@ -38,6 +38,7 @@ private:
 
 	void initImageUnits(void);
 
+	void initImageUI(void);
 
 public:
 	HRESULT init(void);

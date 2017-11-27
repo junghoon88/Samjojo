@@ -45,8 +45,11 @@ using namespace IOTA_UTIL;
 #define WINSTARTX 0
 #define WINSTARTY 0
 #define WINSIZEX (960+144)
+#define WINSIZEX 1104
 #define WINSIZEY 960
 #define WINSTYLE WS_CAPTION | WS_SYSMENU
+
+#define SIDEWINSIZE 144
 
 #define RND randomFunction::getSingleton()
 #define KEYMANAGER keyManager::getSingleton()
