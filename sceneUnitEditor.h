@@ -5,10 +5,10 @@
 #include "editbox.h"
 
 
-#define UPDATEPOSX 144
+#define UPDATEPOSX 16
 #define UPDATEPOSY 0
 
-#define FILENAME_STARTX		64
+#define FILENAME_STARTX		UPDATEPOSX
 #define FILENAME_STARTY		260
 #define FILENAME_WIDTH		128
 #define FILENAME_HEIGHT		30
@@ -89,6 +89,9 @@ enum UNITEDITOR_BUTTON
 	UNITEDITOR_BUTTON_LABEL_LVPERLUK,
 
 
+	UNITEDITOR_BUTTON_LABEL_RANGE,
+
+
 	UNITEDITOR_BUTTON_LABEL_WEAPON,
 	UNITEDITOR_BUTTON_LABEL_ARMOR,
 	UNITEDITOR_BUTTON_LABEL_SUBITEM,
@@ -108,8 +111,8 @@ enum UNITEDITOR_BUTTON
 	UNITEDITOR_BUTTON_NORMAL_PREV,		//대화 이전 이미지
 	UNITEDITOR_BUTTON_NORMAL_NEXT,		//대화 다음 이미지
 	
-	UNITEDITOR_BUTTON_COMBAT_PREV,		//전투 이전 이미지
-	UNITEDITOR_BUTTON_COMBAT_NEXT,		//전투 다음 이미지
+	//UNITEDITOR_BUTTON_COMBAT_PREV,		//전투 이전 이미지
+	//UNITEDITOR_BUTTON_COMBAT_NEXT,		//전투 다음 이미지
 	
 	UNITEDITOR_BUTTON_WEAPON_PREV,		//무기 이전 이미지
 	UNITEDITOR_BUTTON_WEAPON_NEXT,		//무기 다음 이미지
@@ -181,9 +184,9 @@ enum UNITEDITOR_STREDITBOX
 class sceneUnitEditor : public gameNode
 {
 private:
-	Unit* _unit;
+	tagUnitSaveInfo	_unitInfo;
+	//Unit* _unit;
 
-	tagStatus _tempStatus;
 
 	TEAM _team;
 	tagTeamInfo _teamButton[TEAM_MAX];

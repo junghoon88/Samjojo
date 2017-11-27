@@ -91,8 +91,17 @@
     <Filter Include="2DFramework\editbox">
       <UniqueIdentifier>{1dec7e4c-1646-401a-8435-9ca07918e97d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\sceneShop">
+      <UniqueIdentifier>{38383b26-74d5-42c8-9bb6-2b43ae5f1080}</UniqueIdentifier>
+    </Filter>
     <Filter Include="MainGame\sceneReady">
       <UniqueIdentifier>{cd4f2a5f-7c92-4a24-9ce8-f57c7651afa1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\sceneBattle\info - hyunjun">
+      <UniqueIdentifier>{b83708b4-a485-4097-9ba0-c277e28550ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\SIDEINTERFACE - hyunjun">
+      <UniqueIdentifier>{35199bcb-83e6-4f1b-be61-4b97f3b2aa3f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -219,9 +228,6 @@
     <ClInclude Include="tile.h">
       <Filter>MainGame\sceneBattle\aStar</Filter>
     </ClInclude>
-    <ClInclude Include="gameMap.h">
-      <Filter>MainGame\sceneBattle\aStar</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>MainGame\Units</Filter>
     </ClInclude>
@@ -243,7 +249,13 @@
     <ClInclude Include="editboxManager.h">
       <Filter>2DFramework\editbox</Filter>
     </ClInclude>
+    <ClInclude Include="infoCursor.h">
+      <Filter>MainGame\sceneBattle\info - hyunjun</Filter>
+    </ClInclude>
     <ClInclude Include="scanDialog.h">
+      <Filter>MainGame\sceneStory</Filter>
+    </ClInclude>
+    <ClInclude Include="scaneStorymap.h">
       <Filter>MainGame\sceneStory</Filter>
     </ClInclude>
     <ClInclude Include="sceneReadybase.h">
@@ -258,8 +270,11 @@
     <ClInclude Include="sceneSell.h">
       <Filter>MainGame\sceneReady</Filter>
     </ClInclude>
-    <ClInclude Include="scaneStorymap.h">
-      <Filter>MainGame\sceneStory</Filter>
+    <ClInclude Include="sideInterface.h">
+      <Filter>MainGame\SIDEINTERFACE - hyunjun</Filter>
+    </ClInclude>
+    <ClInclude Include="gameMap.h">
+      <Filter>MainGame</Filter>
     </ClInclude>
     <ClInclude Include="scenePos.h">
       <Filter>MainGame\sceneReady</Filter>
@@ -368,9 +383,6 @@
     <ClCompile Include="tile.cpp">
       <Filter>MainGame\sceneBattle\aStar</Filter>
     </ClCompile>
-    <ClCompile Include="gameMap.cpp">
-      <Filter>MainGame\sceneBattle\aStar</Filter>
-    </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>MainGame\Units</Filter>
     </ClCompile>
@@ -392,7 +404,13 @@
     <ClCompile Include="editboxManager.cpp">
       <Filter>2DFramework\editbox</Filter>
     </ClCompile>
+    <ClCompile Include="infoCursor.cpp">
+      <Filter>MainGame\sceneBattle\info - hyunjun</Filter>
+    </ClCompile>
     <ClCompile Include="scanDialog.cpp">
+      <Filter>MainGame\sceneStory</Filter>
+    </ClCompile>
+    <ClCompile Include="scaneStorymap.cpp">
       <Filter>MainGame\sceneStory</Filter>
     </ClCompile>
     <ClCompile Include="sceneReadybase.cpp">
@@ -407,8 +425,11 @@
     <ClCompile Include="sceneSell.cpp">
       <Filter>MainGame\sceneReady</Filter>
     </ClCompile>
-    <ClCompile Include="scaneStorymap.cpp">
-      <Filter>MainGame\sceneStory</Filter>
+    <ClCompile Include="sideInterface.cpp">
+      <Filter>MainGame\SIDEINTERFACE - hyunjun</Filter>
+    </ClCompile>
+    <ClCompile Include="gameMap.cpp">
+      <Filter>MainGame</Filter>
     </ClCompile>
     <ClCompile Include="scenePos.cpp">
       <Filter>MainGame\sceneReady</Filter>

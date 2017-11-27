@@ -192,13 +192,6 @@ POINT aStar::pathFinder(tile* currentTile)
 
 	if (tempTile->getAttribute() == L"end")
 	{
-#if 0
-		while (_curTile->getParentNode() != NULL)
-		{
-			//_currentTile->setColor(RGB(22, 14, 128));
-			_curTile = _currentTile->getParentNode();
-		}
-#endif
 		while (_curTile->getParentNode() != _staTile && _curTile->getParentNode() != NULL)
 		{
 			_curTile = _curTile->getParentNode();

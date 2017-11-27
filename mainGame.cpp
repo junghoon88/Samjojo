@@ -14,6 +14,7 @@
 
 
 mainGame::mainGame()
+	: _player(NULL), _friend(NULL), _enemy(NULL), _map(NULL)
 {
 
 }
@@ -35,11 +36,26 @@ HRESULT mainGame::init(void)
 	_friend->init();
 	_enemy = new Enemy;
 	_enemy->init();
+	_map = new gameMap;
+	_map->init();
 
+	_player->setLinkAdressFriend(_friend);
+	_player->setLinkAdressEnemy(_enemy);
+	_player->setLinkAdressMap(_map);
+
+	_friend->setLinkAdressPlayer(_player);
+	_friend->setLinkAdressEnemy(_enemy);
+	_friend->setLinkAdressMap(_map);
+
+	_enemy->setLinkAdressPlayer(_player);
+	_enemy->setLinkAdressFriend(_friend);
+	_enemy->setLinkAdressMap(_map);
+
+	_map->setLinkAdressPlayer(_player);
+	_map->setLinkAdressFriend(_friend);
+	_map->setLinkAdressEnemy(_enemy);
 
 	initScene();
-
-
 
 	return S_OK;
 }
@@ -56,6 +72,7 @@ void mainGame::initScene(void)
 	_sceneSelect->setLinkAdressPlayer(_player);
 	_sceneSelect->setLinkAdressEnemy(_enemy);
 	_sceneSelect->setLinkAdressFriend(_friend);
+	_sceneSelect->setLinkAdressMap(_map);
 	SCENEMANAGER->addScene(L"º±≈√æ¿", _sceneSelect);
 
 
@@ -84,6 +101,7 @@ void mainGame::initScene(void)
 	_sceneBattle->setLinkAdressPlayer(_player);
 	_sceneBattle->setLinkAdressEnemy(_enemy);
 	_sceneBattle->setLinkAdressFriend(_friend);
+	_sceneBattle->setLinkAdressMap(_map);
 	SCENEMANAGER->addScene(L"¿¸≈ıæ¿", _sceneBattle);
 
 	SCENEMANAGER->changeScene(L"√ ±‚»≠æ¿");
