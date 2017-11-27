@@ -52,8 +52,7 @@ void scaneStorymap::update(void)
 }
 void scaneStorymap::render(void) 
 {
-
-	storymap->render(getMemDC(), 0, 0);
+	if(storymap) storymap->render(getMemDC(), 0, 0);
 
 	for (int i = 0; i < STILEY; i++)
 	{

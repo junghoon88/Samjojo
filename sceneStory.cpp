@@ -37,7 +37,7 @@ void sceneStory::update(void)
 
 	_dialog->update();
 	
-	if (KEYMANAGER->isOnceKeyDown(VK_SPACE)||KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	if (KEYMANAGER->isOnceKeyDown(VK_SPACE) || KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
 		_dialog->loadDialog();
 	}

@@ -32,6 +32,7 @@ HRESULT scanDialog::init(const char* filename)
 
 void scanDialog::release(void)
 {
+	fclose(_fp);
 	SAFE_DELETE(_fp);
 }
  
@@ -130,9 +131,41 @@ void scanDialog::loadDialog(void)
 		{
 			next++;
 		}
-		else if (str[0] == '=' && str[1] == '=')
+		else if (str[0] == '=')
 		{
-			return;
+			if (str[1] == '=')
+			{
+				return;
+			}
+			else if (str[1] == '>')
+			{
+				int len = strlen(str);
+				char nextFileName[100] = "";
+				for (int i = 0; i < len; i++)
+				{
+					if (str[i + 1] == '\n' || str[i + 1] == '\0')
+					{
+						nextFileName[i] = '\0';
+						break;
+					}
+					nextFileName[i] = str[i + 1];
+				}
+
+				fclose(_fp);
+				SAFE_DELETE(_fp);
+				this->init(nextFileName);
+				
+				return;
+			}
+		}
+		else if (str[0] == '*')
+		{
+			char *temp;
+			temp = strtok(str, ",");
+			int posx = atoi(temp);
+			int posy = atoi(temp);
+
+			printf("");
 		}
 		
 		/////페이스 결정전
@@ -174,5 +207,4 @@ void scanDialog::loadDialog(void)
 			_face = IMAGEMANAGER->findImage(L"face 00109");
 		}
 	}
-
 }

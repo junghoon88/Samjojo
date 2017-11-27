@@ -160,9 +160,9 @@ void sceneSelect::selectScenario(void)
 			_map->loadData(i);
 			_enemy->locateUnits();
 
-			//SCENEMANAGER->changeScene(L"´ëÈ­¾À");
+			SCENEMANAGER->changeScene(L"´ëÈ­¾À");
 			//SCENEMANAGER->changeScene(L"»óÁ¡¾À");
-			SCENEMANAGER->changeScene(L"ÀüÅõ¾À");
+			//SCENEMANAGER->changeScene(L"ÀüÅõ¾À");
 			break;
 		}
 	}
