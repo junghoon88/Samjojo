@@ -1,4 +1,5 @@
 #pragma once
+#include "gameNode.h"
 #include "Item.h"
 
 #define UNIT_ATTACK_RANGE_MAX 7
@@ -8,6 +9,12 @@ struct tagStatus
 	TCHAR name[32];
 	TCHAR family[32];	//부대
 	TCHAR aos[32];		//병과
+
+	TEAM team;
+
+	//이미지
+	image*			imgFace;
+	int				numImagFace;
 
 	bool isLive;
 	int enterScenario; //출전 가능한 시나리오(이 수치 이후 시나리오 출전가능)
@@ -71,6 +78,8 @@ struct tagStatus
 	int ItemPlusInt;		//지력
 	int ItemPlusDex;		//민첩
 	int ItemPlusLuk;		//운
+
+	BOOL			atkRange[UNIT_ATTACK_RANGE_MAX][UNIT_ATTACK_RANGE_MAX];
 };
 
 enum FRAME_ATK
@@ -96,8 +105,8 @@ enum FRAME_IDLE
 
 enum FRAME_SPC
 {
-	FRAME_SPC_DEF_UP,
 	FRAME_SPC_DEF_DOWN,
+	FRAME_SPC_DEF_UP,
 	FRAME_SPC_DEF_LEFT,
 	FRAME_SPC_DEF_RIGHT,
 	FRAME_SPC_HIT,
@@ -129,9 +138,12 @@ struct tagBattleState
 {
 	BOOL			valid; //행동 가능하면 true, 행동 했으면 false
 
+
 	POINT			pt;
 	RECT			rc;
 	POINT			tilePt;	//타일 번호
+
+	DIRECTION		dir;
 
 	UNITSTATE		unitState;
 	UNITCONDITION   unitCondition;
@@ -148,9 +160,28 @@ struct tagBattleState
 	FRAME_ATK		frameAtk;
 	FRAME_IDLE		frameIdle;
 	FRAME_SPC		frameSpc;
+
+	BOOL			isHiding;	//은신상태 여부
 };
 
-class Unit
+//유닛에디터에서 저장할 정보들 모음
+struct tagUnitSaveInfo
+{
+	//기본 정보
+	tagStatus		status;
+
+	//아이템 번호
+	ITEMW_NUMBER	wNum;
+	ITEMA_NUMBER	aNum;
+	ITEMS_NUMBER	sNum;
+
+
+	//battle 관련 변수
+	int				numImgBattle;
+};
+
+
+class Unit : public gameNode
 {
 private:
 	typedef BOOL(*Temp)[UNIT_ATTACK_RANGE_MAX];
@@ -162,14 +193,6 @@ protected:
 	ItemArmor*		_itemA;
 	ItemSpecial*	_itemS;
 
-	TEAM			_team;
-
-	//이미지
-	image*			_imgFace;
-	int				_numImagFace;
-
-	BOOL			_atkRange[UNIT_ATTACK_RANGE_MAX][UNIT_ATTACK_RANGE_MAX];
-	
 
 	//battle 관련 변수
 	tagBattleState	_battleState;
@@ -178,7 +201,13 @@ public:
 	Unit();
 	~Unit();
 
-	void init(void);
+	HRESULT init(void);
+	void release(void);
+	void update(void);
+	void render(void);
+
+	void loadUnitData(tagUnitSaveInfo &info);
+	void copyUnitData(Unit* unit);
 
 public:
 	inline tagStatus getStatus(void) { return _status; }
@@ -189,23 +218,11 @@ public:
 	inline void setItemA(ItemArmor* itema) { _itemA = itema; }
 	inline ItemSpecial*	getItemS(void) { return _itemS; }
 	inline void setItemS(ItemSpecial* items) { _itemS = items; }
-	inline TEAM getTeam(void) { return _team; }
-	inline void setTeam(TEAM team) { _team = team; }
 
-	inline int getImgFace(void) { return _numImagFace; }
-	inline int getImgNormal(void) {}
 	inline int getImgBattleIdle(void) { return _battleState.numImgBattleAtk; }
 	inline int getImgBattleAtk(void) { return _battleState.numImgBattleAtk; }
 	inline int getImgBattleSpc(void) { return _battleState.numImgBattleSpc; }
 
-	inline void setImgFace(int num)
-	{
-		_numImagFace = num;
-		TCHAR strFaceKey[100];
-		_stprintf(strFaceKey, L"face %05d", _numImagFace);
-		_imgFace = IMAGEMANAGER->findImage(strFaceKey);
-	}
-	inline void setImgNormal(int num) {  }
 	inline void setImgBattleIdle(int num)
 	{
 		_battleState.numImgBattleIdle = num;
@@ -216,7 +233,7 @@ public:
 		}
 		else
 		{
-			_stprintf(strKey, L"unit%d-%d-atk", _battleState.numImgBattleIdle, _team);
+			_stprintf(strKey, L"unit%d-%d-atk", _battleState.numImgBattleIdle, _status.team);
 		}
 		_battleState.imgBattleAtk = IMAGEMANAGER->findImage(strKey);
 	}
@@ -230,7 +247,7 @@ public:
 		}
 		else
 		{
-			_stprintf(strKey, L"unit%d-%d-atk", _battleState.numImgBattleAtk, _team);
+			_stprintf(strKey, L"unit%d-%d-atk", _battleState.numImgBattleAtk, _status.team);
 		}
 		_battleState.imgBattleAtk = IMAGEMANAGER->findImage(strKey);
 	}
@@ -244,13 +261,10 @@ public:
 		}
 		else
 		{
-			_stprintf(strKey, L"unit%d-%d-atk", _battleState.numImgBattleSpc, _team);
+			_stprintf(strKey, L"unit%d-%d-atk", _battleState.numImgBattleSpc, _status.team);
 		}
 		_battleState.imgBattleAtk = IMAGEMANAGER->findImage(strKey);
 	}
-
-	inline Temp getAtkRange(void) { return _atkRange; }
-	inline void setAtkRange(BOOL(*range)[UNIT_ATTACK_RANGE_MAX]) { memcpy(_atkRange, range, sizeof(BOOL) * UNIT_ATTACK_RANGE_MAX* UNIT_ATTACK_RANGE_MAX); }
 
 	inline tagBattleState getBattleState(void) { return _battleState; }
 	inline RECT getRect(void) { return _battleState.rc; }

@@ -228,9 +228,6 @@
     <ClInclude Include="tile.h">
       <Filter>MainGame\sceneBattle\aStar</Filter>
     </ClInclude>
-    <ClInclude Include="gameMap.h">
-      <Filter>MainGame\sceneBattle\aStar</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>MainGame\Units</Filter>
     </ClInclude>
@@ -275,6 +272,9 @@
     </ClInclude>
     <ClInclude Include="sideInterface.h">
       <Filter>MainGame\SIDEINTERFACE - hyunjun</Filter>
+    </ClInclude>
+    <ClInclude Include="gameMap.h">
+      <Filter>MainGame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -380,9 +380,6 @@
     <ClCompile Include="tile.cpp">
       <Filter>MainGame\sceneBattle\aStar</Filter>
     </ClCompile>
-    <ClCompile Include="gameMap.cpp">
-      <Filter>MainGame\sceneBattle\aStar</Filter>
-    </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>MainGame\Units</Filter>
     </ClCompile>
@@ -427,6 +424,9 @@
     </ClCompile>
     <ClCompile Include="sideInterface.cpp">
       <Filter>MainGame\SIDEINTERFACE - hyunjun</Filter>
+    </ClCompile>
+    <ClCompile Include="gameMap.cpp">
+      <Filter>MainGame</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

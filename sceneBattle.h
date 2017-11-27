@@ -42,9 +42,10 @@ public:
 	~sceneBattle();
 
 public:
-	void setLinkAdressPlayer(Player* player) { _player = player; }
-	void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
-	void setLinkAdressFriend(Friend* friends) { _friend = friends; }
+	inline void setLinkAdressPlayer(Player* player) { _player = player; }
+	inline void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
+	inline void setLinkAdressFriend(Friend* friends) { _friend = friends; }
+	inline void setLinkAdressMap(gameMap* map) { _map = map; }
 
 	void phaseControl(void);
 

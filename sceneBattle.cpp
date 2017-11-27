@@ -3,6 +3,7 @@
 
 
 sceneBattle::sceneBattle()
+	: _map(NULL)
 {
 
 
@@ -16,14 +17,10 @@ sceneBattle::~sceneBattle()
 
 HRESULT sceneBattle::init(void)
 {
-	_map = new gameMap;
-	_map->init();
+	DATABASE->getSlectScenario();
 
 	_cursor = new infoCursor;
 	_cursor->init();
-
-
-	DATABASE->getSlectScenario();
 
 	Phase = playerPhase;
 	return S_OK;
@@ -32,7 +29,6 @@ HRESULT sceneBattle::init(void)
 
 void sceneBattle::release(void)
 {
-	_map->release();
 	_cursor->release();
 }
 
@@ -46,6 +42,10 @@ void sceneBattle::render(void)
 {
 	_map->render();
 	_cursor->render();
+
+	_player->render();
+	_friend->render();
+	_enemy->render();
 }
 
 void sceneBattle::initImage(void)
