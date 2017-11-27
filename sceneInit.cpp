@@ -515,11 +515,19 @@ void sceneInit::initImageStory(void)
 	//대화창
 	IMAGEMANAGER->addImage(L"좌대화창", L"image/좌측대화창.bmp", 464, 120,true,RGB(255,0,255));
 	IMAGEMANAGER->addImage(L"우대화창", L"image/우측대화창.bmp", 464, 120,true,RGB(255,0,255));
+	
+
 	for (int i = 0; i <= 3; i++)
 	{
 		_stprintf(strKey, L"smap %04d", i);
 		_stprintf(strName, L"image/map %04d.bmp", i);
 		IMAGEMANAGER->addImage(strKey, strName, 640, 400);
+	}
+	for (int i = 0; i <= 5; i++)
+	{
+		_stprintf(strKey, L"story_%02d", i);
+		_stprintf(strName, L"image/story/story_%02d.bmp", i);
+		IMAGEMANAGER->addImage(strKey, strName, 48, 64,true,RGB(255,0,255));
 	}
 	memset(strKey, NULL, _tcslen(strKey));
 	memset(strName, NULL, _tcslen(strName)); 

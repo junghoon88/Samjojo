@@ -9,13 +9,14 @@ class scanDialog : public gameNode
 private:
 	FILE* _fp;
 	char _strName[100];
-	vector</*char[STRING_MAX]*/string> _vScripts;
+	vector<string> _vScripts;
 	RECT story;
 	image* _story;
 	image* _face;
 	
 
 	int next;
+	char tmpName[100];
 public:
 	scanDialog();
 	~scanDialog();
@@ -26,7 +27,14 @@ public:
 	void render(void);
 
 	void loadDialog(void);
+	void nextDialog(void);
+	void nextFile(const char* filename);
 
+
+public:
 	inline int getNext(void) { return next; }
+
+	
+
 };
 

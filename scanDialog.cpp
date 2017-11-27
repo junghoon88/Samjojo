@@ -15,11 +15,9 @@ scanDialog::~scanDialog()
 
 HRESULT scanDialog::init(const char* filename)
 {
-	SAFE_DELETE(_fp);
-
 	if (fopen_s(&_fp, filename, "r") == EINVAL)
 	{
-		SAFE_DELETE(_fp);
+		_fp = NULL;
 	}
 
 	story = RectMake(100, 100, 464, 120);
@@ -27,30 +25,35 @@ HRESULT scanDialog::init(const char* filename)
 	_face = IMAGEMANAGER->findImage(L"face 00000");
 	next = 0;
 	
+	_face->setX(100);
+	_face->setY(100);
 	return S_OK;
 }
 
 void scanDialog::release(void)
 {
 	fclose(_fp);
-	SAFE_DELETE(_fp);
+	_fp = NULL;
 }
  
 void scanDialog::update(void)
 {
 	
 
-	if (_tcscmp(_face->getFileName(), L"좌측대화창.bmp"))
-	{
+	//if (_tcscmp(_face->getFileName(), L"좌측대화창.bmp"))
+	//{
 		_face->setX(story.left);
 		_face->setY(story.top);
 	
-	}
+	//}
 	//else if (_tcscmp(_face->getFileName(), L"우측대화창.bmp"))
 	//{
 	//	_face->setX(story.right - 120);
 	//	_face->setY(story.top);
 	//}
+	
+
+	//sprintf(tmpName, "scripts/script %2d.txt", next);
 
 	_face->setX(_face->getX());
 	_face->setY(_face->getY());
@@ -105,7 +108,7 @@ void scanDialog::loadDialog(void)
 					_strName[i] = '\0';
 					break;
 				}
-
+				 
 				_strName[i] = str[i + 1];
 			}
 		
@@ -130,6 +133,7 @@ void scanDialog::loadDialog(void)
 		else if (str[0] == '/')
 		{
 			next++;
+			
 		}
 		else if (str[0] == '=')
 		{
@@ -140,30 +144,34 @@ void scanDialog::loadDialog(void)
 			else if (str[1] == '>')
 			{
 				int len = strlen(str);
-				char nextFileName[100] = "";
+				char temp[100] = "";
+				char nextFileName[100] = "scripts/";
 				for (int i = 0; i < len; i++)
 				{
-					if (str[i + 1] == '\n' || str[i + 1] == '\0')
+					if (str[i + 2] == '\n' || str[i + 2] == '\0')
 					{
-						nextFileName[i] = '\0';
+						temp[i] = '\0';
 						break;
 					}
-					nextFileName[i] = str[i + 1];
+					temp[i] = str[i + 2];
 				}
+				strcat(nextFileName, temp);
 
-				fclose(_fp);
-				SAFE_DELETE(_fp);
-				this->init(nextFileName);
-				
+				nextFile(nextFileName);
+
 				return;
 			}
 		}
 		else if (str[0] == '*')
 		{
 			char *temp;
-			temp = strtok(str, ",");
+			temp = strtok(str, "*");
+			temp = strtok(temp, ",");
 			int posx = atoi(temp);
+			temp = strtok(NULL, ",");
 			int posy = atoi(temp);
+			temp = strtok(NULL, ",");
+			int isLeft = atoi(temp);
 
 			printf("");
 		}
@@ -208,3 +216,20 @@ void scanDialog::loadDialog(void)
 		}
 	}
 }
+
+void scanDialog::nextDialog(void)
+{
+
+}
+
+void scanDialog::nextFile(const char * filename)
+{
+	fclose(_fp);
+	_fp = NULL;
+	if (fopen_s(&_fp, filename, "r") == EINVAL)
+	{
+		_fp = NULL;
+	}
+}
+
+
