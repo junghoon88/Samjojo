@@ -27,6 +27,8 @@ HRESULT scanDialog::init(const char* filename)
 	_face = IMAGEMANAGER->findImage(L"face 00000");
 	next = 0;
 	
+	_face->setX(100);
+	_face->setY(100);
 	return S_OK;
 }
 
@@ -39,17 +41,20 @@ void scanDialog::update(void)
 {
 	
 
-	if (_tcscmp(_face->getFileName(), L"좌측대화창.bmp"))
-	{
+	//if (_tcscmp(_face->getFileName(), L"좌측대화창.bmp"))
+	//{
 		_face->setX(story.left);
 		_face->setY(story.top);
 	
-	}
+	//}
 	//else if (_tcscmp(_face->getFileName(), L"우측대화창.bmp"))
 	//{
 	//	_face->setX(story.right - 120);
 	//	_face->setY(story.top);
 	//}
+	
+
+	//sprintf(tmpName, "scripts/script %2d.txt", next);
 
 	_face->setX(_face->getX());
 	_face->setY(_face->getY());
@@ -104,7 +109,7 @@ void scanDialog::loadDialog(void)
 					_strName[i] = '\0';
 					break;
 				}
-
+				 
 				_strName[i] = str[i + 1];
 			}
 		
@@ -129,6 +134,7 @@ void scanDialog::loadDialog(void)
 		else if (str[0] == '/')
 		{
 			next++;
+			
 		}
 		else if (str[0] == '=' && str[1] == '=')
 		{
@@ -176,3 +182,10 @@ void scanDialog::loadDialog(void)
 	}
 
 }
+
+void scanDialog::nextDialog(void)
+{
+
+}
+
+
