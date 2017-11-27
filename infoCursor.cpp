@@ -5,9 +5,6 @@
 #include "Friend.h"
 //전투씬 내에서 플레이어 인터페이스 제공 클래스로 쓸겁니다.
 
-
-
-
 infoCursor::infoCursor()
 	:_player(NULL), _friend(NULL), _enemy(NULL)
 {}
