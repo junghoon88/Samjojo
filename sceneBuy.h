@@ -7,9 +7,8 @@
 class sceneBuy : public gameNode
 {
 private:
-	Player*		_player;	//플레이어
-	Friend*		_friend;	//아군
-	Enemy*		_enemy;		//적군
+	Player*		_player;
+
 
 public:
 	sceneBuy();
@@ -20,10 +19,6 @@ public:
 	void update(void);
 	void render(void);
 
-public:
-	void setLinkAdressPlayer(Player* player) { _player = player; }
-	void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
-	void setLinkAdressFriend(Friend* friends) { _friend = friends; }
 
 };
 

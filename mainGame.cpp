@@ -5,6 +5,8 @@
 #include "sceneSelect.h"
 #include "sceneStory.h"
 #include "sceneBattle.h"
+#include "sceneReadybase.h"
+#include "scenePos.h"
 #include "sceneBuy.h"
 #include "sceneSell.h"
 #include "sceneMaptool.h"
@@ -78,16 +80,20 @@ void mainGame::initScene(void)
 	SCENEMANAGER->addScene(L"대화씬", new sceneStory);				//스토리
 
 
+
+	
+	sceneReadybase* _sceneReadybase = new sceneReadybase;          //준비기본씬
+	_sceneReadybase->setLinkAdressPlayer(_player);
+	SCENEMANAGER->addScene(L"준비기본씬", _sceneReadybase);
+
+
+	scenePos* _scenePos = new scenePos;                            //출진씬
+	SCENEMANAGER->addScene(L"출진씬", _scenePos);
+
 	sceneBuy* _sceneBuy = new sceneBuy;							    //구매상점
-	_sceneBuy->setLinkAdressPlayer(_player);
-	_sceneBuy->setLinkAdressEnemy(_enemy);
-	_sceneBuy->setLinkAdressFriend(_friend);
 	SCENEMANAGER->addScene(L"구매상점씬", _sceneBuy);
 
 	sceneSell* _sceneSell = new sceneSell;							//판매상점
-	_sceneSell->setLinkAdressPlayer(_player);
-	_sceneSell->setLinkAdressEnemy(_enemy);
-	_sceneSell->setLinkAdressFriend(_friend);
 	SCENEMANAGER->addScene(L"판매상점씬", _sceneSell);
 
 
