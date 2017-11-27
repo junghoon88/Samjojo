@@ -3,12 +3,12 @@
 #include "scanDialog.h"
 
 //타일 규격
-#define STILESIZEX 16
-#define STILESIZEY 10
+#define STILESIZEX 8
+#define STILESIZEY 4
 
 //타일갯수
-#define STILEX 100
-#define STILEY 100
+#define STILEX 200
+#define STILEY 200
 
 #define STILESIZEXHALF STILESIZEX/2
 #define STILESIZEYHALF STILESIZEY/2
@@ -27,9 +27,13 @@ private:
 	
 	scanDialog* sDl;
 
+
 	tagIso iso[STILEX][STILEY];
 	image* storymap;
+	image* test;
+	image* test1;
 
+	int x, y;
 public:
 	scaneStorymap();
 	~scaneStorymap();
@@ -39,5 +43,6 @@ public:
 	void update(void);
 	void render(void);
 
+	void setAdreessLinkDialog(scanDialog* sD) { sDl = sD; }
 };
 

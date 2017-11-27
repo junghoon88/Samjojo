@@ -518,6 +518,9 @@ void sceneInit::initImageStory(void)
 	//대화창
 	IMAGEMANAGER->addImage(L"좌대화창", L"image/좌측대화창.bmp", 464, 120,true,RGB(255,0,255));
 	IMAGEMANAGER->addImage(L"우대화창", L"image/우측대화창.bmp", 464, 120,true,RGB(255,0,255));
+	IMAGEMANAGER->addImage(L"리동탁", L"image/test.bmp", 48, 64, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage(L"테스트", L"image/test1.bmp", 48, 64, true, RGB(255, 0, 255));
+
 	for (int i = 0; i <= 3; i++)
 	{
 		_stprintf(strKey, L"smap %04d", i);

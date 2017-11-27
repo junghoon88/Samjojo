@@ -16,13 +16,18 @@ HRESULT sceneStory::init(void)
 {
 	DATABASE->getSlectScenario();
 	
-
+	
+	
 	_dialog = new scanDialog;
+	
+	
 	_dialog->init("scripts/script 00.txt");
+	
 	
 	_sSmap = new scaneStorymap;
 	_sSmap->init();
 
+	_sSmap->setAdreessLinkDialog(_dialog);
 	return S_OK;
 }
 
@@ -37,10 +42,12 @@ void sceneStory::update(void)
 
 	_dialog->update();
 	
-	if (KEYMANAGER->isOnceKeyDown(VK_SPACE)||KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
 		_dialog->loadDialog();
+		
 	}
+	
 	_sSmap->update();
 }
 

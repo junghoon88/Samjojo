@@ -16,6 +16,7 @@ private:
 	
 
 	int next;
+	char tmpName[100];
 public:
 	scanDialog();
 	~scanDialog();
@@ -26,7 +27,9 @@ public:
 	void render(void);
 
 	void loadDialog(void);
-
+	void nextDialog(void);
 	inline int getNext(void) { return next; }
+
+
 };
 

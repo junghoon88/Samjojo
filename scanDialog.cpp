@@ -50,6 +50,9 @@ void scanDialog::update(void)
 	//	_face->setX(story.right - 120);
 	//	_face->setY(story.top);
 	//}
+	
+
+	//sprintf(tmpName, "scripts/script %2d.txt", next);
 
 	_face->setX(_face->getX());
 	_face->setY(_face->getY());
@@ -104,7 +107,7 @@ void scanDialog::loadDialog(void)
 					_strName[i] = '\0';
 					break;
 				}
-
+				 
 				_strName[i] = str[i + 1];
 			}
 		
@@ -129,6 +132,7 @@ void scanDialog::loadDialog(void)
 		else if (str[0] == '/')
 		{
 			next++;
+			nextDialog();
 		}
 		else if (str[0] == '=' && str[1] == '=')
 		{
@@ -175,4 +179,10 @@ void scanDialog::loadDialog(void)
 		}
 	}
 
+}
+
+void scanDialog::nextDialog(void)
+{
+
+	init("scripts/script 01.txt");
 }
