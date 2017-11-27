@@ -34,9 +34,9 @@ HRESULT scaneStorymap::init(void)
 		}
 	}
 	
-	img[0].x = 102; //동탁 위치 y가 작아지면 위로감
+	img[0].x = 102; //동탁 위치       y가 작아지면 위로감
 	img[0].y = 45;
-	img[1].x = 85; //이유 위치 x가 작아지면 오른쪽으로감
+	img[1].x = 85; //이유 위치        x가 작아지면 오른쪽으로감
 	img[1].y = 45;
 	img[2].x = 80; //문관1 위치
 	img[2].y = 75;
@@ -46,6 +46,17 @@ HRESULT scaneStorymap::init(void)
 	img[4].y = 90;
 	img[5].x = 135; //모르는병사2
 	img[5].y = 75;
+	img[6].x = 116; //왕윤
+	img[6].y = 108; 
+	img[7].x = 95; //초선
+	img[7].y = 108;
+	img[8].x = 85; //조조
+	img[8].y = 55;
+	img[9].x = 72; //원소
+	img[9].y = 78;
+	img[10].x = 135; //병사
+	img[10].y = 75;
+	
 	
 	for (int i = 0; i < CHARMAX; i++)
 	{
@@ -124,12 +135,32 @@ void scaneStorymap::render(void)
 	}
 
 	if (sDl->getNext() == 0)
-	{		for (int i = 0; i < CHARMAX; i++)
+	{		for (int i = 0; i < 6; i++)
 		{
 			img[i].etc->render(getMemDC(), img[i].etc->getX(), img[i].etc->getY());
 		}
 	}
-
+	else if (sDl->getNext() == 1)
+	{
+		for (int i = 6; i < 8; i++)
+		{
+			img[i].etc->render(getMemDC(), img[i].etc->getX(), img[i].etc->getY());
+		}
+	}
+	else if (sDl->getNext() == 2)
+	{
+		for (int i = 8; i < 10; i++)
+		{
+			img[i].etc->render(getMemDC(), img[i].etc->getX(), img[i].etc->getY());
+		}
+	}
+	else if (sDl->getNext() == 3)
+	{
+		for (int i = 0; i < CHARMAX; i++)
+		{
+			img[i].etc->render(getMemDC(), img[i].etc->getX(), img[i].etc->getY());
+		}
+	}
 	for (int i = 0; i < STILEY; i++)
 	{
 		for (int j = 0; j < STILEX; j++)

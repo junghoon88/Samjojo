@@ -27,8 +27,8 @@ HRESULT scanDialog::init(const char* filename)
 	_face = IMAGEMANAGER->findImage(L"face 00000");
 	next = 0;
 	
-	_face->setX(100);
-	_face->setY(100);
+	_face->setX(story.left);
+	_face->setY(story.top);
 	return S_OK;
 }
 
@@ -41,23 +41,24 @@ void scanDialog::update(void)
 {
 	
 
-	//if (_tcscmp(_face->getFileName(), L"좌측대화창.bmp"))
-	//{
+	_face->setX(_face->getX());
+	_face->setY(_face->getY());
+
+	if (_tcscmp(_story->getFileName(), L"image/좌측대화창.bmp")==0)
+	{
 		_face->setX(story.left);
 		_face->setY(story.top);
 	
-	//}
-	//else if (_tcscmp(_face->getFileName(), L"우측대화창.bmp"))
-	//{
-	//	_face->setX(story.right - 120);
-	//	_face->setY(story.top);
-	//}
+	}
+	else if (_tcscmp(_story->getFileName(), L"image/우측대화창.bmp")==0)
+	{
+		_face->setX(story.right - 120);
+		_face->setY(story.top);
+	}
 	
 
-	//sprintf(tmpName, "scripts/script %2d.txt", next);
+	
 
-	_face->setX(_face->getX());
-	_face->setY(_face->getY());
 }
 
 void scanDialog::render(void)
@@ -72,15 +73,33 @@ void scanDialog::render(void)
 		_face->render(getMemDC(), _face->getX(), _face->getY());
 	}
 
-	TextOut(getMemDC(), story.left+150, story.top+30, ss.c_str(), len);
-
-	for (int i = 0; i < _vScripts.size(); i++)
+	if (_tcscmp(_story->getFileName(), L"image/좌측대화창.bmp") == 0)
 	{
-		ss = convert_wc(_vScripts[i]);
-		len = _tcslen(ss.c_str());
+		TextOut(getMemDC(), story.left + 150, story.top + 30, ss.c_str(), len);
+		for (int i = 0; i < _vScripts.size(); i++)
+		{
+			ss = convert_wc(_vScripts[i]);
+			len = _tcslen(ss.c_str());
 
-		TextOut(getMemDC(), story.left + 150, story.top + 35+15 * (i + 1), ss.c_str(), len);
+			TextOut(getMemDC(), story.left + 150, story.top + 35 + 15 * (i + 1), ss.c_str(), len);
+		}
+
 	}
+	else if (_tcscmp(_story->getFileName(), L"image/우측대화창.bmp") == 0)
+	{
+		TextOut(getMemDC(), story.left+10, story.top + 30, ss.c_str(), len);
+		for (int i = 0; i < _vScripts.size(); i++)
+		{
+			ss = convert_wc(_vScripts[i]);
+			len = _tcslen(ss.c_str());
+
+			TextOut(getMemDC(), story.left +10 , story.top + 35 + 15 * (i + 1), ss.c_str(), len);
+		}
+	}
+	
+
+	
+	
 	
 }
 
@@ -165,19 +184,22 @@ void scanDialog::loadDialog(void)
 		else if (strcmp(_strName, "왕윤") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00161");
-
+			_story = IMAGEMANAGER->findImage(L"좌대화창");
 		}
 		else if (strcmp(_strName, "초선") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00025");
+			_story = IMAGEMANAGER->findImage(L"우대화창");
 		}
 		else if (strcmp(_strName, "병사") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00181");
+			_story = IMAGEMANAGER->findImage(L"우대화창");
 		}
 		else if (strcmp(_strName, "원소") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00109");
+			_story = IMAGEMANAGER->findImage(L"우대화창");
 		}
 	}
 

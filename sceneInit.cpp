@@ -523,7 +523,7 @@ void sceneInit::initImageStory(void)
 		_stprintf(strName, L"image/map %04d.bmp", i);
 		IMAGEMANAGER->addImage(strKey, strName, 640, 400);
 	}
-	for (int i = 0; i <= 5; i++)
+	for (int i = 0; i <= 10; i++)
 	{
 		_stprintf(strKey, L"story_%02d", i);
 		_stprintf(strName, L"image/story/story_%02d.bmp", i);
