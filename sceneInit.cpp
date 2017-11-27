@@ -56,7 +56,7 @@ void sceneInit::initImage(void)
 	initImageUnitEditor();
 
 	initImageStory();
-
+	initImageReady();
 	initImageUnits();
 
 }
@@ -482,7 +482,17 @@ void sceneInit::initImageStory(void)
 
 }
 
+void sceneInit::initImageReady(void) {
+	IMAGEMANAGER->addImage(L"레디UI", L"image/ready/readyUI.bmp", 960, 960, false, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage(L"출진UI", L"image/ready/posUI.bmp", 960, 960, false, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage(L"출진눌림", L"image/ready/출진눌림버튼.bmp", 75, 117, false, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage(L"결정비활성버튼", L"image/ready/결정비활성버튼.bmp", 127, 33, false, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage(L"결정활성버튼", L"image/ready/결정활성버튼.bmp", 127, 33, false, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage(L"결정눌림버튼", L"image/ready/결정눌림버튼.bmp", 127, 33, false, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage(L"취소버튼", L"image/ready/취소버튼.bmp", 127, 33, false, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage(L"취소눌림버튼", L"image/ready/취소눌림버튼.bmp", 127, 33, false, RGB(255, 0, 255));
 
+}
 
 
 void sceneInit::initSound(void)

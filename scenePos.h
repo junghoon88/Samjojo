@@ -3,14 +3,28 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Friend.h"
-class sceneReadybase : public gameNode
+#include "button.h"
+
+class scenePos : public gameNode
 {
-	image* _baseImg;
+private:
+	image* _posImg;
 	POINT _pt;
-	RECT _rcPosUI, _rcEquipUI, _rcBuyUI, _rcSellUI;
+
+	RECT _rcCancel;
+	RECT _rcOK;
+
+	//HWND _btnOk;
+	//HWND _btnCancel;
+
+	
 	Player* _player;
 
-	bool _posClicking;
+	bool _availableOK;
+	bool _okClicking;
+	bool _cancelClicking;
+
+
 public:
 
 	HRESULT init(void);
@@ -21,7 +35,7 @@ public:
 public:
 	void setLinkAdressPlayer(Player* player) { _player = player; }
 
-	sceneReadybase();
-	~sceneReadybase();
+	scenePos();
+	~scenePos();
 };
 

@@ -152,9 +152,12 @@ void sceneSelect::selectScenario(void)
 			_enemy->loadUnits();
 
 
+			
 			//SCENEMANAGER->changeScene(L"¥Î»≠æ¿");
 			//SCENEMANAGER->changeScene(L"ªÛ¡°æ¿");
-			SCENEMANAGER->changeScene(L"¿¸≈ıæ¿");
+			//SCENEMANAGER->changeScene(L"¿¸≈ıæ¿");
+			SCENEMANAGER->changeScene(L"¡ÿ∫Ò±‚∫ªæ¿");
+
 			break;
 		}
 	}

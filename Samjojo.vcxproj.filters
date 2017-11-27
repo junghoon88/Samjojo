@@ -261,6 +261,9 @@
     <ClInclude Include="scaneStorymap.h">
       <Filter>MainGame\sceneStory</Filter>
     </ClInclude>
+    <ClInclude Include="scenePos.h">
+      <Filter>MainGame\sceneReady</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -406,6 +409,9 @@
     </ClCompile>
     <ClCompile Include="scaneStorymap.cpp">
       <Filter>MainGame\sceneStory</Filter>
+    </ClCompile>
+    <ClCompile Include="scenePos.cpp">
+      <Filter>MainGame\sceneReady</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
