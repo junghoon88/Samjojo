@@ -15,11 +15,9 @@ scanDialog::~scanDialog()
 
 HRESULT scanDialog::init(const char* filename)
 {
-	SAFE_DELETE(_fp);
-
 	if (fopen_s(&_fp, filename, "r") == EINVAL)
 	{
-		SAFE_DELETE(_fp);
+		_fp = NULL;
 	}
 
 	story = RectMake(100, 100, 464, 120);
@@ -34,7 +32,8 @@ HRESULT scanDialog::init(const char* filename)
 
 void scanDialog::release(void)
 {
-	SAFE_DELETE(_fp);
+	fclose(_fp);
+	_fp = NULL;
 }
  
 void scanDialog::update(void)
@@ -155,9 +154,45 @@ void scanDialog::loadDialog(void)
 			next++;
 			
 		}
-		else if (str[0] == '=' && str[1] == '=')
+		else if (str[0] == '=')
 		{
-			return;
+			if (str[1] == '=')
+			{
+				return;
+			}
+			else if (str[1] == '>')
+			{
+				int len = strlen(str);
+				char temp[100] = "";
+				char nextFileName[100] = "scripts/";
+				for (int i = 0; i < len; i++)
+				{
+					if (str[i + 2] == '\n' || str[i + 2] == '\0')
+					{
+						temp[i] = '\0';
+						break;
+					}
+					temp[i] = str[i + 2];
+				}
+				strcat(nextFileName, temp);
+
+				nextFile(nextFileName);
+
+				return;
+			}
+		}
+		else if (str[0] == '*')
+		{
+			char *temp;
+			temp = strtok(str, "*");
+			temp = strtok(temp, ",");
+			int posx = atoi(temp);
+			temp = strtok(NULL, ",");
+			int posy = atoi(temp);
+			temp = strtok(NULL, ",");
+			int isLeft = atoi(temp);
+
+			printf("");
 		}
 		
 		/////페이스 결정전
@@ -202,12 +237,21 @@ void scanDialog::loadDialog(void)
 			_story = IMAGEMANAGER->findImage(L"우대화창");
 		}
 	}
-
 }
 
 void scanDialog::nextDialog(void)
 {
 
+}
+
+void scanDialog::nextFile(const char * filename)
+{
+	fclose(_fp);
+	_fp = NULL;
+	if (fopen_s(&_fp, filename, "r") == EINVAL)
+	{
+		_fp = NULL;
+	}
 }
 
 

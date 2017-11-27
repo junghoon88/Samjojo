@@ -55,9 +55,7 @@ void Player::loadUnits(void)
 		_unit->init();
 		_unit->loadUnitData(unitInfo);
 
-
-		
-		_vUnits.push_back(_unit);
+		_vUnitsInFile.push_back(_unit);
 
 		CloseHandle(file);
 
@@ -74,9 +72,11 @@ void Player::loadUnits(void)
 
 void Player::deleteUnits(void)
 {
-	for (int i = 0; i < _vUnits.size(); i++)
-	{
-		SAFE_DELETE(_vUnits[i]);
-	}
 	_vUnits.clear();
+
+	for (int i = 0; i < _vUnitsInFile.size(); i++)
+	{
+		SAFE_DELETE(_vUnitsInFile[i]);
+	}
+	_vUnitsInFile.clear();
 }

@@ -9,7 +9,7 @@ class scanDialog : public gameNode
 private:
 	FILE* _fp;
 	char _strName[100];
-	vector</*char[STRING_MAX]*/string> _vScripts;
+	vector<string> _vScripts;
 	RECT story;
 	image* _story;
 	image* _face;
@@ -28,6 +28,10 @@ public:
 
 	void loadDialog(void);
 	void nextDialog(void);
+	void nextFile(const char* filename);
+
+
+public:
 	inline int getNext(void) { return next; }
 
 	

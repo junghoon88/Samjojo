@@ -121,7 +121,6 @@ void scaneStorymap::render(void)
 
 	storymap->render(getMemDC(), 0, 0);
 
-
 	for (int i = 0; i < STILEY; i++)
 	{
 		for (int j = 0; j < STILEX; j++)
