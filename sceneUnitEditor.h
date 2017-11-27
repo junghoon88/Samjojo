@@ -184,9 +184,9 @@ enum UNITEDITOR_STREDITBOX
 class sceneUnitEditor : public gameNode
 {
 private:
-	Unit* _unit;
+	tagUnitSaveInfo	_unitInfo;
+	//Unit* _unit;
 
-	tagStatus _tempStatus;
 
 	TEAM _team;
 	tagTeamInfo _teamButton[TEAM_MAX];

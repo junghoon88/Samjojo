@@ -19,9 +19,6 @@ HRESULT sceneBattle::init(void)
 {
 	DATABASE->getSlectScenario();
 
-	_map = new gameMap;
-	_map->init();
-
 	_cursor = new infoCursor;
 	_cursor->init();
 
@@ -45,6 +42,10 @@ void sceneBattle::render(void)
 {
 	_map->render();
 	_cursor->render();
+
+	_player->render();
+	_friend->render();
+	_enemy->render();
 }
 
 void sceneBattle::initImage(void)

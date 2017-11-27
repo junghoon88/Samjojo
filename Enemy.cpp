@@ -21,6 +21,7 @@ HRESULT Enemy::init(void)
 
 void Enemy::release(void)
 {
+	deleteUnits();
 }
 
 void Enemy::update(void)
@@ -39,12 +40,10 @@ void Enemy::loadUnits(void)
 {
 	deleteUnits();
 
-	//시나리오 번호를 받고, 해당 시나리오에 필요한 유닛만 로딩하도록 해야함!
-	int scenario = DATABASE->getSlectScenario();
 
 	//모든 파일 스캔 test
 	WIN32_FIND_DATA wfd;
-	HANDLE handle = FindFirstFile(L"UnitData/player/*.dat", &wfd);
+	HANDLE handle = FindFirstFile(L"UnitData/enemy/*.dat", &wfd);
 
 	// 찾는 파일이 있다면,
 	while (handle != INVALID_HANDLE_VALUE)
@@ -52,11 +51,17 @@ void Enemy::loadUnits(void)
 		HANDLE file;
 		DWORD read;
 
-		file = CreateFile(wfd.cFileName, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		TCHAR strFileName[100] = L"UnitData/enemy/";
+		_tcscat(strFileName, wfd.cFileName);
+		file = CreateFile(strFileName, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+		tagUnitSaveInfo unitInfo;
+		ZeroMemory(&unitInfo, sizeof(tagUnitSaveInfo));
+		ReadFile(file, &unitInfo, sizeof(tagUnitSaveInfo), &read, NULL);
 
 		Unit* _unit = new Unit;
 		_unit->init();
-		ReadFile(file, _unit, sizeof(Unit), &read, NULL);
+		_unit->loadUnitData(unitInfo);
 
 		_vUnitsInFile.push_back(_unit);
 
@@ -83,8 +88,11 @@ void Enemy::locateUnits(void)
 	{
 		for (int j = 0; j < tileSizeX; j++)
 		{
+			if (_map->getTile()[j + i * TILEY].sampleObjectSelectIdx != OBJECTSELECT_ENEMY)
+				continue;
+
 			//오브젝트의 이름을 받아서
-			TCHAR* obj = _map->getTile()[j + i * tileSizeX].obj;
+			TCHAR* obj = _map->getTile()[j + i * TILEY].obj;
 			int len = _tcslen(obj);
 			if (len > 0)
 			{
@@ -95,7 +103,10 @@ void Enemy::locateUnits(void)
 					if (0 == _tcscmp(obj, name))
 					{
 						//찾았으면 출전목록에 넣는다.
-						Unit* unit = _vUnitsInFile[v];
+						Unit* unit = new Unit;
+						unit->init();
+						unit->copyUnitData(_vUnitsInFile[v]);
+
 						tagBattleState bState = unit->getBattleState();
 						bState.tilePt = { j, i };
 						bState.rc = RectMake(j * TILESIZE, i * TILESIZE, TILESIZE, TILESIZE);
@@ -117,4 +128,11 @@ void Enemy::deleteUnits(void)
 		SAFE_DELETE(_vUnits[i]);
 	}
 	_vUnits.clear();
+
+	for (int i = 0; i < _vUnitsInFile.size(); i++)
+	{
+		SAFE_DELETE(_vUnitsInFile[i]);
+	}
+	_vUnitsInFile.clear();
+
 }

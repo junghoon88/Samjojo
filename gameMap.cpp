@@ -54,11 +54,12 @@ void gameMap::render(void)
 		{
 			img->render(getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top);
 		}
+
 		if (_tiles[i].sampleObjectSelectIdx != OBJECTSELECT_NONE)
 		{
 			IMAGEMANAGER->alphaRender(_objImage[_tiles[i].sampleObjectSelectIdx], getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top, 128);
+			TextOut(getMemDC(), _tiles[i].rc.left, _tiles[i].rc.bottom - 20, _tiles[i].obj, _tcslen(_tiles[i].obj));
 		}
-		TextOut(getMemDC(), _tiles[i].rc.left, _tiles[i].rc.bottom - 20, _tiles[i].obj, _tcslen(_tiles[i].obj));
 	}
 
 	if (_imgMap)

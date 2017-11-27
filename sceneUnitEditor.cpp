@@ -3,7 +3,7 @@
 
 
 sceneUnitEditor::sceneUnitEditor()
-	: _unit(NULL), _imgFace(NULL), _imgBattleAtk(NULL), _imgBattleIdle(NULL), _imgBattleSpc(NULL)
+	: _imgFace(NULL), _imgBattleAtk(NULL), _imgBattleIdle(NULL), _imgBattleSpc(NULL)
 {
 	for (int i = 0; i < UNITEDITOR_BUTTON_MAX; i++)
 	{
@@ -27,8 +27,7 @@ sceneUnitEditor::~sceneUnitEditor()
 
 HRESULT sceneUnitEditor::init(void)
 {
-	_unit = new Unit;
-	_unit->init();
+	ZeroMemory(&_unitInfo, sizeof(tagUnitSaveInfo));
 
 	initButton();
 	initValues();
@@ -99,8 +98,6 @@ void sceneUnitEditor::loadUnitFiles(void)
 
 void sceneUnitEditor::release(void)
 {
-	SAFE_DELETE(_unit);
-
 	for (int i = 0; i < UNITEDITOR_NUMEDITBOX_MAX; i++)
 	{
 		_numEditBox[i]->release();
@@ -710,11 +707,7 @@ void sceneUnitEditor::teamButtonRender(void)
 
 void sceneUnitEditor::newUnit(void)
 {
-	//this->init();
-	//_unit->release();
-	SAFE_DELETE(_unit);
-	_unit = new Unit;
-	_unit->init();
+	ZeroMemory(&_unitInfo, sizeof(tagUnitSaveInfo));
 
 	for (int i = 0; i < UNITEDITOR_NUMEDITBOX_MAX; i++)
 	{
@@ -786,15 +779,20 @@ void sceneUnitEditor::loadUnit(void)		// 로드유닛 일단 보류
 
 	newUnit();
 
-	ReadFile(file, _unit, sizeof(Unit), &read, NULL);
+	ReadFile(file, &_unitInfo, sizeof(tagUnitSaveInfo), &read, NULL);
 
 	CloseHandle(file);
 
 	//로드 끝나면 화면 갱신 한번 해줘야함 아래 이름 보여주듯이 갱신 함수 만들어서 호출하도록
 	//test
 
-	_faceNum = _unit->getImgFace();
-	_normalNum = _unit->getImgBattleAtk();
+	_faceNum = _unitInfo.status.numImagFace;
+
+	TCHAR strFaceKey[100];
+	_stprintf(strFaceKey, L"face %05d", _faceNum);
+	_imgFace = IMAGEMANAGER->findImage(strFaceKey);
+
+	_normalNum = _unitInfo.numImgBattle;
 	
 
 	selectImgFace();
@@ -803,117 +801,107 @@ void sceneUnitEditor::loadUnit(void)		// 로드유닛 일단 보류
 	selectImgBattleSpc();
 
 
-	_strEditBox[UNITEDITOR_STREDITBOX_DATA_NAME]->setStr(_unit->getStatus().name);
+	_strEditBox[UNITEDITOR_STREDITBOX_DATA_NAME]->setStr(_unitInfo.status.name);
 
-	_strEditBox[UNITEDITOR_STREDITBOX_DATA_FAMILY]->setStr(_unit->getStatus().family);
-	_strEditBox[UNITEDITOR_STREDITBOX_DATA_AOS]->setStr(_unit->getStatus().aos);
+	_strEditBox[UNITEDITOR_STREDITBOX_DATA_FAMILY]->setStr(_unitInfo.status.family);
+	_strEditBox[UNITEDITOR_STREDITBOX_DATA_AOS]->setStr(_unitInfo.status.aos);
 
 	_tcscpy(filename, _vUnits[index].str);
 	_strEditBox[UNITEDITOR_STREDITBOX_DATA_FILENAME]->setStr(_tcstok(filename, L"."));
 
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_HP]->setStrNum(_unit->getStatus().HPMax);
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MP]->setStrNum(_unit->getStatus().MPMax);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_HP]->setStrNum(_unitInfo.status.InitHPMax);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MP]->setStrNum(_unitInfo.status.InitMPMax);
 
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_ATK]->setStrNum(_unit->getStatus().Atk);
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_DEP]->setStrNum(_unit->getStatus().Dep);
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_RES]->setStrNum(_unit->getStatus().Res);
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_AGL]->setStrNum(_unit->getStatus().Agl);
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_FIG]->setStrNum(_unit->getStatus().Fig);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_ATK]->setStrNum(_unitInfo.status.InitAtk);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_DEP]->setStrNum(_unitInfo.status.InitDep);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_RES]->setStrNum(_unitInfo.status.InitRes);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_AGL]->setStrNum(_unitInfo.status.InitAgl);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_FIG]->setStrNum(_unitInfo.status.InitFig);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_PWR]->setStrNum(_unitInfo.status.InitPwr);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LDS]->setStrNum(_unitInfo.status.InitLds);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_INT]->setStrNum(_unitInfo.status.InitInt);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_DEX]->setStrNum(_unitInfo.status.InitDex);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LUK]->setStrNum(_unitInfo.status.InitLuk);
 
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_PWR]->setStrNum(_unit->getStatus().Pwr);
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LDS]->setStrNum(_unit->getStatus().Lds);
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_INT]->setStrNum(_unit->getStatus().Int);
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_DEX]->setStrNum(_unit->getStatus().Dex);
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LUK]->setStrNum(_unit->getStatus().Luk);
 
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_ENTERSCENARIO]->setStrNum(_unitInfo.status.enterScenario);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LV]->setStrNum(_unitInfo.status.level);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MOVE]->setStrNum(_unitInfo.status.movePoint);
 
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_ENTERSCENARIO]->setStrNum(_unit->getStatus().enterScenario);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERHP]->setStrNum(_unitInfo.status.LvPerHPMax);;
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERMP]->setStrNum(_unitInfo.status.LvPerMPMax);;
 
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LV]->setStrNum(_unit->getStatus().level);
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MOVE]->setStrNum(_unit->getStatus().movePoint);
-
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERHP]->setStrNum(_unit->getStatus().LvPerHPMax);;
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERMP]->setStrNum(_unit->getStatus().LvPerMPMax);;
-
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERATK]->setStrNum(_unit->getStatus().Atk);
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERDEP]->setStrNum(_unit->getStatus().Dep);
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERRES]->setStrNum(_unit->getStatus().Res);
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERAGL]->setStrNum(_unit->getStatus().Agl);
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERFIG]->setStrNum(_unit->getStatus().Fig);
-
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERPWR]->setStrNum(_unit->getStatus().Pwr);
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERLDS]->setStrNum(_unit->getStatus().Lds);
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERINT]->setStrNum(_unit->getStatus().Int);
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERDEX]->setStrNum(_unit->getStatus().Dex);
-	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERLUK]->setStrNum(_unit->getStatus().Luk);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERATK]->setStrNum(_unitInfo.status.LvPerAtk);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERDEP]->setStrNum(_unitInfo.status.LvPerDep);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERRES]->setStrNum(_unitInfo.status.LvPerRes);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERAGL]->setStrNum(_unitInfo.status.LvPerAgl);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERFIG]->setStrNum(_unitInfo.status.LvPerFig);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERPWR]->setStrNum(_unitInfo.status.LvPerPwr);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERLDS]->setStrNum(_unitInfo.status.LvPerLds);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERINT]->setStrNum(_unitInfo.status.LvPerInt);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERDEX]->setStrNum(_unitInfo.status.LvPerDex);
+	_numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERLUK]->setStrNum(_unitInfo.status.LvPerLuk);
 
 	for (int i = 0; i < RANGESIZEX; i++)
 	{
 		for (int j = 0; j < RANGESIZEY; j++)
 		{
-			_atkRange[i][j].clicked = (_unit->getAtkRange())[i][j];
+			_atkRange[i][j].clicked = _unitInfo.status.atkRange[i][j];
 		}
 	}
 }
 void sceneUnitEditor::saveUnit(void)
 {
-	if (_imgFace)		_unit->setImgFace(_faceNum);
-	if (_imgBattleAtk)  _unit->setImgBattleAtk(_normalNum);
-	if (_imgBattleIdle) _unit->setImgBattleIdle(_normalNum);
-	if (_imgBattleSpc)  _unit->setImgBattleSpc(_normalNum);
+	if (_imgBattleAtk)  _unitInfo.numImgBattle = _normalNum;
 
-	_tcscpy_s(_tempStatus.name, _strEditBox[UNITEDITOR_STREDITBOX_DATA_NAME]->getStr());
-	_tcscpy_s(_tempStatus.family, _strEditBox[UNITEDITOR_STREDITBOX_DATA_FAMILY]->getStr());
-	_tcscpy_s(_tempStatus.aos, _strEditBox[UNITEDITOR_STREDITBOX_DATA_AOS]->getStr());
+	_tcscpy_s(_unitInfo.status.name, _strEditBox[UNITEDITOR_STREDITBOX_DATA_NAME]->getStr());
+	_tcscpy_s(_unitInfo.status.family, _strEditBox[UNITEDITOR_STREDITBOX_DATA_FAMILY]->getStr());
+	_tcscpy_s(_unitInfo.status.aos, _strEditBox[UNITEDITOR_STREDITBOX_DATA_AOS]->getStr());
 
-	_tempStatus.isLive			= TRUE;
-	_tempStatus.exp				= 0;
-	_tempStatus.expMax			= 100;
-	_tempStatus.HP				= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_HP]->getStrNum();
-	_tempStatus.InitHPMax		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_HP]->getStrNum();
-	_tempStatus.MP				= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MP]->getStrNum();
-	_tempStatus.InitMPMax		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MP]->getStrNum();
-	_tempStatus.InitAtk			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_ATK]->getStrNum();
-	_tempStatus.InitDep			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_DEP]->getStrNum();
-	_tempStatus.InitRes			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_RES]->getStrNum();
-	_tempStatus.InitAgl			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_AGL]->getStrNum();
-	_tempStatus.InitFig			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_FIG]->getStrNum();
-	_tempStatus.InitPwr			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_PWR]->getStrNum();
-	_tempStatus.InitLds			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LDS]->getStrNum();
-	_tempStatus.InitInt			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_INT]->getStrNum();
-	_tempStatus.InitDex			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_DEX]->getStrNum();
-	_tempStatus.InitLuk			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LUK]->getStrNum();
+	_unitInfo.status.numImagFace		= _faceNum;
+	_unitInfo.status.team				= _team;
+	_unitInfo.status.isLive				= TRUE;
+	_unitInfo.status.exp				= 0;
+	_unitInfo.status.expMax				= 100;
+	_unitInfo.status.InitHPMax			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_HP]->getStrNum();
+	_unitInfo.status.InitMPMax			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MP]->getStrNum();
+	_unitInfo.status.InitAtk			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_ATK]->getStrNum();
+	_unitInfo.status.InitDep			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_DEP]->getStrNum();
+	_unitInfo.status.InitRes			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_RES]->getStrNum();
+	_unitInfo.status.InitAgl			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_AGL]->getStrNum();
+	_unitInfo.status.InitFig			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_FIG]->getStrNum();
+	_unitInfo.status.InitPwr			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_PWR]->getStrNum();
+	_unitInfo.status.InitLds			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LDS]->getStrNum();
+	_unitInfo.status.InitInt			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_INT]->getStrNum();
+	_unitInfo.status.InitDex			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_DEX]->getStrNum();
+	_unitInfo.status.InitLuk			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LUK]->getStrNum();
 
-	_tempStatus.enterScenario	= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_ENTERSCENARIO]->getStrNum();
-	_tempStatus.level			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LV]->getStrNum();
-	_tempStatus.movePoint		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MOVE]->getStrNum();
-	_tempStatus.LvPerHPMax		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERHP]->getStrNum();;
-	_tempStatus.LvPerMPMax		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERMP]->getStrNum();;
-	_tempStatus.LvPerAtk		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERATK]->getStrNum();
-	_tempStatus.LvPerDep		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERDEP]->getStrNum();
-	_tempStatus.LvPerRes		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERRES]->getStrNum();
-	_tempStatus.LvPerAgl		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERAGL]->getStrNum();
-	_tempStatus.LvPerFig		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERFIG]->getStrNum();
-	_tempStatus.LvPerPwr		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERPWR]->getStrNum();
-	_tempStatus.LvPerLds		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERLDS]->getStrNum();
-	_tempStatus.LvPerInt		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERINT]->getStrNum();
-	_tempStatus.LvPerDex		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERDEX]->getStrNum();
-	_tempStatus.LvPerLuk		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERLUK]->getStrNum();
+	_unitInfo.status.enterScenario		= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_ENTERSCENARIO]->getStrNum();
+	_unitInfo.status.level				= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LV]->getStrNum();
+	_unitInfo.status.movePoint			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_MOVE]->getStrNum();
+	_unitInfo.status.LvPerHPMax			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERHP]->getStrNum();;
+	_unitInfo.status.LvPerMPMax			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERMP]->getStrNum();;
+	_unitInfo.status.LvPerAtk			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERATK]->getStrNum();
+	_unitInfo.status.LvPerDep			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERDEP]->getStrNum();
+	_unitInfo.status.LvPerRes			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERRES]->getStrNum();
+	_unitInfo.status.LvPerAgl			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERAGL]->getStrNum();
+	_unitInfo.status.LvPerFig			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERFIG]->getStrNum();
+	_unitInfo.status.LvPerPwr			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERPWR]->getStrNum();
+	_unitInfo.status.LvPerLds			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERLDS]->getStrNum();
+	_unitInfo.status.LvPerInt			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERINT]->getStrNum();
+	_unitInfo.status.LvPerDex			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERDEX]->getStrNum();
+	_unitInfo.status.LvPerLuk			= _numEditBox[UNITEDITOR_NUMEDITBOX_DATA_LVPERLUK]->getStrNum();
 
 	
 
-	BOOL tempRange[RANGESIZEX][RANGESIZEY];
 	for (int i = 0; i < RANGESIZEX; i++)
 	{
 		for (int j = 0; j < RANGESIZEY; j++)
 		{
-			tempRange[i][j] = _atkRange[i][j].clicked;
+			_unitInfo.status.atkRange[i][j] = _atkRange[i][j].clicked;
 		}
 	}
 
-	_unit->setStatus(_tempStatus);
-	_unit->setAtkRange(tempRange);
-	_unit->setTeam(_team);
 
 	HANDLE file;
 	DWORD write;
@@ -937,7 +925,7 @@ void sceneUnitEditor::saveUnit(void)
 
 	file = CreateFile(tempStr, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	WriteFile(file, _unit, sizeof(Unit), &write, NULL);
+	WriteFile(file, &_unitInfo, sizeof(tagUnitSaveInfo), &write, NULL);
 
 	CloseHandle(file);
 }

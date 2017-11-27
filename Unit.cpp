@@ -18,18 +18,15 @@ HRESULT Unit::init(void)
 	_status.enterScenario = 1;
 	_status.level = 1;
 
+	//이미지
+	_status.imgFace = NULL;
+
 	_itemW = NULL;
 	_itemA = NULL;
 	_itemS = NULL;
 
-	_team = TEAM_NONE;
-
-	//이미지
-	_imgFace = NULL;
 
 	ZeroMemory(&_battleState, sizeof(tagBattleState));
-
-	ZeroMemory(&_atkRange, sizeof(_atkRange));
 
 	return S_OK;
 }
@@ -85,4 +82,54 @@ void Unit::render(void)
 			_battleState.imgBattleSpc->frameRender(getMemDC(), _battleState.rc.left, _battleState.rc.top, _battleState.frameSpc, 0);
 		break;
 	}
+}
+
+void Unit::loadUnitData(tagUnitSaveInfo &info)
+{
+	//기본 정보
+	memcpy(&_status, &info.status, sizeof(tagStatus));
+
+	TCHAR strFaceKey[100];
+	_stprintf(strFaceKey, L"face %05d", _status.numImagFace);
+	_status.imgFace = IMAGEMANAGER->findImage(strFaceKey);
+
+	//아이템 번호
+	_itemW = NULL; //wNum 으로 로딩하도록 변경
+	_itemA = NULL; //aNum 으로 로딩하도록 변경
+	_itemS = NULL; //sNum 으로 로딩하도록 변경
+
+	//battle 관련 변수
+	TCHAR strKey[100];
+	if (info.numImgBattle < UNIT_BATTLE_IMAGE1)
+	{
+		_stprintf(strKey, L"unit%d-atk", info.numImgBattle);
+		_battleState.imgBattleAtk = IMAGEMANAGER->findImage(strKey);
+		_stprintf(strKey, L"unit%d-idle", info.numImgBattle);
+		_battleState.imgBattleIdle = IMAGEMANAGER->findImage(strKey);
+		_stprintf(strKey, L"unit%d-spc", info.numImgBattle);
+		_battleState.imgBattleSpc = IMAGEMANAGER->findImage(strKey);
+	}
+	else
+	{
+		_stprintf(strKey, L"unit%d-%d-atk", info.numImgBattle, _status.team);
+		_battleState.imgBattleAtk = IMAGEMANAGER->findImage(strKey);
+		_stprintf(strKey, L"unit%d-%d-idle", info.numImgBattle, _status.team);
+		_battleState.imgBattleIdle = IMAGEMANAGER->findImage(strKey);
+		_stprintf(strKey, L"unit%d-%d-spc", info.numImgBattle, _status.team);
+		_battleState.imgBattleSpc = IMAGEMANAGER->findImage(strKey);
+	}
+}
+
+void Unit::copyUnitData(Unit* unit)
+{
+	//기본 정보
+	memcpy(&_status, &unit->getStatus(), sizeof(tagStatus));
+
+	//아이템 번호
+	_itemW = unit->getItemW();
+	_itemA = unit->getItemA();
+	_itemS = unit->getItemS();
+
+	//battle 관련 변수
+	memcpy(&_battleState, &unit->getBattleState(), sizeof(tagBattleState));
 }
