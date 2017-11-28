@@ -44,7 +44,9 @@ void Player::loadUnits(void)
 		HANDLE file;
 		DWORD read;
 
-		file = CreateFile(wfd.cFileName, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		TCHAR strFileName[100] = L"UnitData/player/";
+		_tcscat(strFileName, wfd.cFileName);
+		file = CreateFile(strFileName, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 		tagUnitSaveInfo unitInfo;
 		ZeroMemory(&unitInfo, sizeof(tagUnitSaveInfo));
