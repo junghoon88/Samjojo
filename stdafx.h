@@ -51,6 +51,9 @@ using namespace IOTA_UTIL;
 #define WINSIZEX2 640	//작은창
 #define WINSIZEY2 400	//
 
+#define WINSIZEX3 960   //출진씬전용
+#define WINSIZEY3 960   //
+
 #define WINSTYLE WS_CAPTION | WS_SYSMENU
 
 #define SIDEWINSIZE 144
