@@ -19,7 +19,7 @@ HRESULT sceneInit::init(void)
 
 
 	initImage();
-	//initSound();
+	initSound();
 
 	return S_OK;
 }
@@ -497,33 +497,25 @@ void sceneInit::initSound(void)
 {
 	TCHAR strKey[256], strName[256];
 
-	//SOUNDMANAGER->addSound(L"Se_e_00", L"Wav/Se_e_00.wav", false, false);
-	//_loading->loadSound(L"Se_e_00", L"Wav/Se_e_00.wav", false, false);
-
-	return;
-
 	for (int i = 0; i <= 8; i++)
 	{
 		_stprintf(strKey, L"Se_e_%02d", i);
 		_stprintf(strName, L"Wav/Se_e_%02d.wav", i);
-		//_loading->loadSound(strKey, strName, false, false);
-		SOUNDMANAGER->addSound(strKey, strName, false, false);
+		_loading->loadSound(strKey, strName, false, false);
 	}
 
-	for (int i = 21; i <= 40; i++)
+	for (int i = 0; i <= 40; i++)
 	{
-		_stprintf(strKey, L"Se_m_(%02d)", i);
-		_stprintf(strName, L"Wav/Se_m_(%02d).wav", i);
-		//_loading->loadSound(strKey, strName, false, false);
-		SOUNDMANAGER->addSound(strKey, strName, false, false);
+		_stprintf(strKey, L"Se_m_%02d", i);
+		_stprintf(strName, L"Wav/Se_m_%02d.wav", i);
+		_loading->loadSound(strKey, strName, false, false);
 	}
 
 	for (int i = 1; i <= 58; i++)
 	{
-		_stprintf(strKey, L"Se (%02d)", i);
-		_stprintf(strName, L"Wav/Se (%02d).wav", i);
-		//_loading->loadSound(strKey, strName, false, false);
-		SOUNDMANAGER->addSound(strKey, strName, false, false);
+		_stprintf(strKey, L"Se%02d", i);
+		_stprintf(strName, L"Wav/Se%02d.wav", i);
+		_loading->loadSound(strKey, strName, false, false);
 	}
 }
 
