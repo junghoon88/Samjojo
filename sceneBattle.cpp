@@ -32,6 +32,7 @@ HRESULT sceneBattle::init(void)
 void sceneBattle::release(void)
 {
 	_cursor->release();
+	SAFE_DELETE(_cursor);
 }
 
 void sceneBattle::update(void)

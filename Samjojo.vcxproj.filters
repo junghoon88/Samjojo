@@ -276,6 +276,12 @@
     <ClInclude Include="gameMap.h">
       <Filter>MainGame</Filter>
     </ClInclude>
+    <ClInclude Include="scenePos.h">
+      <Filter>MainGame\sceneReady</Filter>
+    </ClInclude>
+    <ClInclude Include="globalTools.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -427,6 +433,12 @@
     </ClCompile>
     <ClCompile Include="gameMap.cpp">
       <Filter>MainGame</Filter>
+    </ClCompile>
+    <ClCompile Include="scenePos.cpp">
+      <Filter>MainGame\sceneReady</Filter>
+    </ClCompile>
+    <ClCompile Include="globalTools.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

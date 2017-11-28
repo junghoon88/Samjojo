@@ -19,8 +19,6 @@ HRESULT editbox::init(void)
 	_clicked = false;
 	_onlyNum = false;
 
-	_hBrushGray = CreateSolidBrush(RGB(200, 200, 200));
-	_hBrushWhite = CreateSolidBrush(RGB(255, 255, 255));
 
 	_minNum = 0;
 	_maxNum = 99999;
@@ -31,8 +29,6 @@ HRESULT editbox::init(void)
 
 void editbox::release(void)
 {
-	DeleteObject(_hBrushGray);
-	DeleteObject(_hBrushWhite);
 }
 
 void editbox::update(void)
@@ -75,11 +71,11 @@ void editbox::render(int textOffsetX, int textOffsetY)
 		HBRUSH oldBrush;
 		if (_clicked)
 		{
-			oldBrush = (HBRUSH)SelectObject(getMemDC(), _hBrushGray);
+			oldBrush = (HBRUSH)SelectObject(getMemDC(), _gBrush[BRUSHVERSION_GRAY]);
 		}
 		else
 		{
-			oldBrush = (HBRUSH)SelectObject(getMemDC(), _hBrushWhite);
+			oldBrush = (HBRUSH)SelectObject(getMemDC(), _gBrush[BRUSHVERSION_WHITE]);
 		}
 		Rectangle(getMemDC(), _rc.left, _rc.top, _rc.right, _rc.bottom);
 		SelectObject(getMemDC(), oldBrush);

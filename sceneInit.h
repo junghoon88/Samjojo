@@ -29,7 +29,7 @@ private:
 	void initImage(void);
 	void initSound(void);
 
-
+	void initImageReady(void);
 	void initImageSlect(void);
 	void initImageMapTool(void);
 	void initImageUnitEditor(void);
