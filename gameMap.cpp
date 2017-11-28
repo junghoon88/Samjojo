@@ -3,6 +3,8 @@
 #include "Player.h"
 #include "Friend.h"
 #include "Enemy.h"
+#include "infoCursor.h"
+
 
 gameMap::gameMap()
 	: _imgMap(NULL)

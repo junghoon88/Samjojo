@@ -5,6 +5,7 @@
 class Player;
 class Friend;
 class Enemy;
+class infoCursor;
 
 class gameMap : public gameNode
 {
@@ -24,7 +25,7 @@ private:
 	Player*		_player;	//플레이어
 	Friend*		_friend;	//아군
 	Enemy*		_enemy;		//적군
-
+	infoCursor* _cursor;
 
 public:
 	gameMap();
@@ -47,6 +48,8 @@ public:
 	inline void setLinkAdressPlayer(Player* player) { _player = player; }
 	inline void setLinkAdressFriend(Friend* friends) { _friend = friends; }
 	inline void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
+	inline void setLinkAdressCursor(infoCursor* info) { _cursor = info; }
+
 
 	inline int getTileSizeX(void) { return _tilesizeX; }
 	inline int getTileSizeY(void) { return _tilesizeY; }

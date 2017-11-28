@@ -3,25 +3,22 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Friend.h"
+#include "gameMap.h"
 //전투씬 내에서 플레이어 인터페이스 제공 클래스로 쓸겁니다.
 
 infoCursor::infoCursor()
-	:_player(NULL), _friend(NULL), _enemy(NULL)
+	:_player(NULL), _friend(NULL), _enemy(NULL), findtile(NULL)
 {}
 infoCursor::~infoCursor(){}
 
 HRESULT infoCursor::init(void) 
 {
-	findtile = new gameMap;
-	findtile->init();
-
-
 	isShow = false;
 	isUnit = false;
 
 	rc = { WINSIZEX - SIDEWINSIZE,0,WINSIZEX,WINSIZEY };//인터페이스 간이 렉트
-	tileImgRect = RectMakeCenter(rc.left + SIDEWINSIZE / 2, 80, SIDEWINSIZE - SIDEWINSIZE/10, SIDEWINSIZE - SIDEWINSIZE/10);
-	unitImgRect = RectMakeCenter(rc.left + SIDEWINSIZE / 2, WINSIZEY/2 , SIDEWINSIZE - SIDEWINSIZE/10, SIDEWINSIZE - SIDEWINSIZE/10);
+	tileImgRect = RectMakeCenter(rc.left + SIDEWINSIZE / 2, 80, FROFILEIMAGE, FROFILEIMAGE);
+	unitImgRect = RectMakeCenter(rc.left + SIDEWINSIZE / 2, WINSIZEY/2 , FROFILEIMAGE, FROFILEIMAGE);
 	for (int i = 0; i < 4; i++)
 	{
 		element[i] = RectMakeCenter(rc.left + TILESIZE/2 + ((TILESIZE / 2 + (TILESIZE / 2 * 0.25)) * i), tileImgRect.bottom + TILESIZE / 2, TILESIZE / 2, TILESIZE / 2);
@@ -36,10 +33,13 @@ HRESULT infoCursor::init(void)
 	earth = false;
 	water = false;
 
-	drawLine = { findtile->getTile()[0].rc.left,findtile->getTile()[0].rc.top,findtile->getTile()[0].rc.right,findtile->getTile()[0].rc.bottom };
+	unitImg = IMAGEMANAGER->findImage(L"보병");
+	tileImg = IMAGEMANAGER->findImage(L"보병");
+	drawLine = {0,0,0,0 };
 	oPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
 	linePen = CreatePen(PS_SOLID, 3, RGB(255, 0, 0));
 	return S_OK;
+	
 }
 void infoCursor::release(void)
 {
@@ -78,7 +78,7 @@ void infoCursor::mouse_Scanning(void)
 			if (PtInRect(&findtile->getTile()[i].rc, _ptMouse))
 			{
 				drawLine = { findtile->getTile()[i].rc.left,findtile->getTile()[i].rc.top,findtile->getTile()[i].rc.right,findtile->getTile()[i].rc.bottom };
-				
+			
 			}
 		}
 	}
@@ -87,35 +87,41 @@ void infoCursor::mouse_Scanning(void)
 
 void infoCursor::mouse_Click(void)
 {
-	//for (int i = 0; i < _player->getUnits().size(); i++)
-	//{
-	//	if (PtInRect(&_player->getUnits()[i]->getRect(), _ptMouse))
-	//	{
-	//		unit = L"유닛있음";
-	//	}
-	//}
-	//
-	//for (int i = 0; i < _friend->getUnits().size(); i++)
-	//{
-	//	if (PtInRect(&_friend->getUnits()[i]->getRect(), _ptMouse))
-	//	{
-	//		unit = L"유닛있음";
-	//	}
-	//}
-	//
-	//for (int i = 0; i < _enemy->getUnits().size(); i++)
-	//{
-	//	if (PtInRect(&_enemy->getUnits()[i]->getRect(), _ptMouse))
-	//	{
-	//		unit = L"유닛있음";
-	//	}
-	//}
-
-
-
-	for (int i = 0; i < TILEX * TILEY; i++)//한번 더 돌리는 이유 = 평상시에 타일만 돌면서 테두리그리다가 클릭했을때만 유닛이 있는지 한번 더 체크하기 위해?
+	for (int i = 0; i < _player->getUnits().size(); i++)
 	{
-		if (PtInRect(&findtile->getTile()[i].rc, _ptMouse))//이 조건 위에 유닛조건 걸자. 유닛이 없을 시 지형 검출하게
+		if (PtInRect(&_player->getUnits()[i]->getRect(), _ptMouse))
+		{
+			isUnit = true;
+			unit = _player->getUnits()[i]->getStatus().name;
+		//	unitImg = _player->getUnits()[i]->getImgBattleIdle();//여기
+		}
+	}
+
+	for (int i = 0; i < _friend->getUnits().size(); i++)
+	{
+		if (PtInRect(&_friend->getUnits()[i]->getRect(), _ptMouse))
+		{
+			isUnit = true;
+			unit = _friend->getUnits()[i]->getStatus().name;
+
+		}
+	}
+
+	for (int i = 0; i < _enemy->getUnits().size(); i++)
+	{
+		if (PtInRect(&_enemy->getUnits()[i]->getRect(), _ptMouse))
+		{
+			isUnit = true;
+			unit = _enemy->getUnits()[i]->getStatus().name;
+
+		}
+
+	}
+
+	for (int i = 0; i < TILEX * TILEY; i++)
+	{
+		tagTile* tile = findtile->getTile();
+		if (PtInRect(&findtile->getTile()[i].rc, _ptMouse))
 		{
 			//지형정보 넣을 곳
 			switch (findtile->getTile()[i].terrain)
@@ -398,8 +404,8 @@ void infoCursor::mouse_Click(void)
 				break;
 
 			}
+			tileNum = findtile->getTile()[i].terrain;//해당번호를 키값으로 찾으면 된다. 이미지를!
 			//지형정보 스위치문!
-			isUnit = false;//지형은 false로
 		}
 	}
 	isShow = true;

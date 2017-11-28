@@ -34,7 +34,6 @@ void Player::render(void)
 void Player::loadUnits(void)
 {
 	deleteUnits();
-
 	//모든 파일 스캔 test
 	WIN32_FIND_DATA wfd;
 	HANDLE handle = FindFirstFile(L"UnitData/player/*.dat", &wfd);
