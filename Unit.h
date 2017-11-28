@@ -2,6 +2,7 @@
 #include "gameNode.h"
 #include "Item.h"
 #include "aStar.h"
+#include "gameMap.h"
 
 #define UNIT_ATTACK_RANGE_MAX 7
 
@@ -209,6 +210,8 @@ public:
 
 	void loadUnitData(tagUnitSaveInfo &info);
 	void copyUnitData(Unit* unit);
+
+	void move(gameMap* map, DIRECTION dir);
 
 public:
 	inline tagStatus getStatus(void) { return _status; }

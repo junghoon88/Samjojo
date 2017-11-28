@@ -30,6 +30,11 @@ private:
 	RECT element[4];
 	
 
+	//타일 검출용//
+	int indexTile;
+	//타일 검출용//
+
+
 	//유닛 정보 표시용
 	TCHAR* unit;
 	TCHAR* utype;//클래스

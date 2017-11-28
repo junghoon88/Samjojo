@@ -206,6 +206,14 @@ void mainGame::checkWindowSize(void)
 	{
 		setWindowResize({ WINSIZEX, WINSIZEY });
 	}
+	else if (SCENEMANAGER->isCurScene(L"준비기본씬"))
+	{
+		setWindowResize({ WINSIZEX,WINSIZEY });
+	}
+	else if (SCENEMANAGER->isCurScene(L"출진씬"))
+	{
+		setWindowResize({ WINSIZEX3,WINSIZEY3 });
+	}
 }
 
 void mainGame::controlFPS(void)

@@ -1,5 +1,7 @@
 #pragma once
-class sceneEquip
+#include "sceneReadybase.h"
+
+class sceneEquip : public sceneReadybase
 {
 public:
 	sceneEquip();
