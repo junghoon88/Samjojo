@@ -48,6 +48,6 @@ public:
 	inline void setLinkAdressMap(gameMap* map) { _map = map; }
 
 	void phaseControl(void);
-
+	void linkClass(void);
 };
 

@@ -22,6 +22,8 @@ HRESULT sceneBattle::init(void)
 	_cursor = new infoCursor;
 	_cursor->init();
 
+	linkClass();
+
 	Phase = playerPhase;
 	return S_OK;
 }
@@ -35,6 +37,8 @@ void sceneBattle::release(void)
 
 void sceneBattle::update(void)
 {
+	
+
 	_map->update(); 
 	if(Phase == playerPhase)_cursor->update();
 }
@@ -63,4 +67,18 @@ void sceneBattle::initSound(void)
 void sceneBattle::phaseControl(void)
 {
 
+}
+
+
+void sceneBattle::linkClass(void)
+{
+	_cursor->setLinkEnemy(_enemy);
+	_cursor->setLinkFriend(_friend);
+	_cursor->setLinkPlyer(_player);
+	_cursor->setLinkAdressMap(_map);
+
+	_player->setLinkCursor(_cursor);
+	_enemy->setLinkCursor(_cursor);
+	_friend->setLinkCursor(_cursor);
+	_map->setLinkAdressCursor(_cursor);
 }
