@@ -1,7 +1,7 @@
 #pragma once
 #include "tileNode.h"
 #include "gameNode.h"
-
+#include "progressBar.h"
 
 #define INTERFACESIZEY 150
 #define FROFILEIMAGE 120
@@ -39,13 +39,15 @@ private:
 	TCHAR* unit;
 	TCHAR* utype;//클래스
 	TCHAR* faction;//진영(아군적군)
-	TCHAR* land;//유닛이 밟은 땅
 	TCHAR* showExp;//플레이어는 아군적군대신 경험치 표시됨
+	TCHAR* showAtk;//A.K.A 공격력
 	
 	int bonus;//밟은 땅에 따른 전투력 증감표시
 	int exp;
 	int lv;
+	progressBar hpBar;
 	int curHp, maxHp;
+	progressBar mpBar;
 	int curMp, maxMp;
 	//유닛 정보 표시용
 
@@ -58,7 +60,6 @@ private:
 	bool earth;
 	bool water;
 	//지형 정보 표시용
-
 
 	bool isUnit;//Unit은 true. 지형은 false
 	bool isShow;//클릭하면 true로

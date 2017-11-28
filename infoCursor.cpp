@@ -31,7 +31,7 @@ HRESULT infoCursor::init(void)
 	unit = L"유닛이름정보";
 	tilename = L"타일이름정보";
 	prop = L"지형속성정보";
-
+	showExp = L"경험치";
 	fire = false;
 	wind = false;
 	earth = false;
@@ -52,7 +52,7 @@ void infoCursor::release(void)
 void infoCursor::update(void) 
 {
 	mouse_Scanning();//지형 타일 갱신
-
+	mouse_moveCamera();
 	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON)) dataClean();  //윈도우 닫기
 	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
 	{
@@ -68,9 +68,6 @@ void infoCursor::render(void)
 	{
 		infoDraw();// 정보 표시
 	}
-		
-
-
 }
 
 void infoCursor::mouse_Scanning(void)
@@ -87,7 +84,7 @@ void infoCursor::mouse_Scanning(void)
 //		}
 
 	//for문을 현재 위치 기반으로 타일을 찾자 그냥 너무 부하가 큼
-		indexTile = _ptMouse.x / TILESIZE + _ptMouse.y / TILESIZE * TILEX;
+		indexTile = (((int)_ptMouse.x + MAINCAMERA->getCameraX())) / TILESIZE + (((int)_ptMouse.y + MAINCAMERA->getCameraY())) / TILESIZE * TILEX;
 
 		if (PtInRect(&findtile->getTile()[indexTile].rc, _ptMouse))
 		{
@@ -131,13 +128,18 @@ void infoCursor::mouse_Click(void)
 	}
 
 
-	for (int i = 0; i < TILEX * TILEY; i++)
+	//for (int i = 0; i < TILEX * TILEY; i++)
+	//{
+	//	tagTile* tile = findtile->getTile();
+	//	if (PtInRect(&findtile->getTile()[i].rc, _ptMouse))
+	//	{
+	//
+	//	}
+	//}
+	if (PtInRect(&findtile->getTile()[indexTile].rc, _ptMouse))
 	{
-		tagTile* tile = findtile->getTile();
-		if (PtInRect(&findtile->getTile()[i].rc, _ptMouse))
-		{
 			//지형정보 넣을 곳
-			switch (findtile->getTile()[i].terrain)
+			switch (findtile->getTile()[indexTile].terrain)
 			{
 			case TERRAIN_RIVER:
 				tilename = L"강";
@@ -417,20 +419,20 @@ void infoCursor::mouse_Click(void)
 				break;
 
 			}
-			tileNum = findtile->getTile()[i].terrain;//해당번호를 키값으로 찾으면 된다. 이미지를!
-			//지형정보 스위치문!
+			tileNum = findtile->getTile()[indexTile].terrain;//해당번호를 키값으로 찾으면 된다. 이미지를!
+													 //지형정보 스위치문!
 			isShow = true;
-		}
+		
 	}
 
 }
 
 void infoCursor::mouse_moveCamera(void)
 {
-	if (_ptMouse.x > WINSIZEX - 48 - 144 && _ptMouse.x <= WINSIZEX - 144) MAINCAMERA->moveCamera(DIRECTION_RG); // 마우스가 오른쪽  //화면 최대 조건 걸어야함.
-	if (_ptMouse.x < 48 && _ptMouse.x >= 0) MAINCAMERA->moveCamera(DIRECTION_LF); //마우스가 왼쪽
-	if (_ptMouse.y > WINSIZEY - 48 && _ptMouse.y <= WINSIZEY) MAINCAMERA->moveCamera(DIRECTION_DN); //마우스가 화면 아래쪽
-	if (_ptMouse.y < 48 && _ptMouse.y >= 0) MAINCAMERA->moveCamera(DIRECTION_UP); //마우스가 화면 윗쪽
+	if (_ptMouse.x > WINSIZEX - TILESIZE - 144 && _ptMouse.x <= WINSIZEX - 144 && MAINCAMERA->getCameraX() < TILEX * TILESIZE - TILESIZE * 20) MAINCAMERA->setCameraX(MAINCAMERA->getCameraX() + TILESIZE); // 마우스가 오른쪽  //화면 최대 조건 걸어야함.
+	if (_ptMouse.x < TILESIZE && _ptMouse.x >= 0 && MAINCAMERA->getCameraX() > 0) MAINCAMERA->setCameraX(MAINCAMERA->getCameraX() - TILESIZE); //마우스가 왼쪽
+	if (_ptMouse.y > WINSIZEY - TILESIZE && _ptMouse.y <= WINSIZEY && MAINCAMERA->getCameraY() <= TILEY * TILESIZE - TILESIZE * 20)MAINCAMERA->setCameraY(MAINCAMERA->getCameraY() + TILESIZE); //마우스가 화면 아래쪽
+	if (_ptMouse.y < TILESIZE && _ptMouse.y >= 0 && MAINCAMERA->getCameraY() > 0) MAINCAMERA->setCameraY(MAINCAMERA->getCameraY() - TILESIZE); //마우스가 화면 윗쪽
 }
 
 void infoCursor::dataClean(void)//마우스 우클릭 시 현재 인터페이스의 정보를 초기화 해주는 역할을 할 것.

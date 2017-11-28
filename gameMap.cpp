@@ -54,7 +54,7 @@ void gameMap::render(void)
 		image* img = IMAGEMANAGER->findImage(_strSampleImgKey[_tiles[i].sampleTerrainIdx]);
 		if (img)
 		{
-			img->render(getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top);
+			img->render(getMemDC(), _tiles[i].rc.left - MAINCAMERA->getCameraX(), _tiles[i].rc.top - MAINCAMERA->getCameraY());
 		}
 
 		if (_tiles[i].sampleObjectSelectIdx != OBJECTSELECT_NONE)

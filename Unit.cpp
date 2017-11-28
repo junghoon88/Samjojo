@@ -71,7 +71,7 @@ void Unit::render(void)
 	{
 		case UNITSTATE_IDLE:	  //기본상태
 		case UNITSTATE_TIRED:
-			_battleState.imgBattleIdle->frameRender(getMemDC(), _battleState.rc.left, _battleState.rc.top, _battleState.frameIdle, 0);
+			_battleState.imgBattleIdle->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY(), _battleState.frameIdle, 0);
 		break;
 		case UNITSTATE_ATK:	  //공격상태
 			_battleState.imgBattleAtk->frameRender(getMemDC(), _battleState.rc.left, _battleState.rc.top, _battleState.frameAtk, 0);

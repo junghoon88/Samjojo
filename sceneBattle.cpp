@@ -39,7 +39,7 @@ void sceneBattle::update(void)
 {
 	
 
-	_map->update(); 
+	//_map->update(); 
 	if(Phase == playerPhase)_cursor->update();
 }
 
