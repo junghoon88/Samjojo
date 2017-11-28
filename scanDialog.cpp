@@ -32,6 +32,7 @@ HRESULT scanDialog::init(const char* filename)
 
 void scanDialog::release(void)
 {
+	_vScripts.clear();
 	fclose(_fp);
 	_fp = NULL;
 }

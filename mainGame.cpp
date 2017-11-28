@@ -16,7 +16,10 @@
 mainGame::mainGame()
 	: _player(NULL), _friend(NULL), _enemy(NULL), _map(NULL)
 {
+	_stop = false;
+	_winsize = { WINSIZEX, WINSIZEY };
 
+	_FPS = 60.0f;
 }
 
 
@@ -24,6 +27,7 @@ mainGame::~mainGame()
 {
 
 }
+
 
 //√ ±‚»≠
 HRESULT mainGame::init(void)
@@ -118,9 +122,13 @@ void mainGame::release(void)
 }
 
 //ø¨ªÍ∞¸∑√(≈∏¿Ã∏”)
-void mainGame::update(void)	
+void mainGame::update(void)
 {
 	gameNode::update();
+
+	checkWindowSize();
+	controlFPS();
+
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))
 	{
@@ -163,3 +171,51 @@ void mainGame::getChar(WPARAM wParam)
 	}
 }
 
+void mainGame::setWindowResize(POINT size)
+{
+	if (_winsize.x == size.x && _winsize.y == size.y)
+		return;
+
+	_stop = true; 
+	_winsize = size;
+}
+
+void mainGame::checkWindowSize(void)
+{
+	if (SCENEMANAGER->isCurScene(L"√ ±‚»≠æ¿"))
+	{
+		setWindowResize({ WINSIZEX2, WINSIZEY2 });
+	}
+	else if (SCENEMANAGER->isCurScene(L"º±≈√æ¿"))
+	{
+		setWindowResize({ WINSIZEX2, WINSIZEY2 });
+	}
+	else if (SCENEMANAGER->isCurScene(L"∏ ≈¯æ¿"))
+	{
+		setWindowResize({ WINSIZEX, WINSIZEY });
+	}
+	else if (SCENEMANAGER->isCurScene(L"¿Ø¥÷ø°µ≈Õ"))
+	{
+		setWindowResize({ WINSIZEX, WINSIZEY });
+	}
+	else if (SCENEMANAGER->isCurScene(L"¥Î»≠æ¿"))
+	{
+		setWindowResize({ WINSIZEX2, WINSIZEY2 });
+	}
+	else if (SCENEMANAGER->isCurScene(L"¿¸≈ıæ¿"))
+	{
+		setWindowResize({ WINSIZEX, WINSIZEY });
+	}
+}
+
+void mainGame::controlFPS(void)
+{
+	if (SCENEMANAGER->isCurScene(L"√ ±‚»≠æ¿"))
+	{
+		_FPS = 300.0f;
+	}
+	else
+	{
+		_FPS = 60.0f;
+	}
+}
