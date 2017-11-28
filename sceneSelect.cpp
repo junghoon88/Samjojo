@@ -217,8 +217,6 @@ void sceneSelect::selectScenario(void)
 			_friend->locateUnits();
 			_enemy->locateUnits();
 
-
-			
 			//SCENEMANAGER->changeScene(L"대화씬");
 			//SCENEMANAGER->changeScene(L"준비기본씬");
 			SCENEMANAGER->changeScene(L"전투씬");

@@ -49,6 +49,7 @@ void gameMap::render(void)
 	SetBkMode(getMemDC(), TRANSPARENT);
 
 	//ÁöÇü
+#if 0
 	for (int i = 0; i < TILEX * TILEY; i++)
 	{
 		image* img = IMAGEMANAGER->findImage(_strSampleImgKey[_tiles[i].sampleTerrainIdx]);
@@ -71,6 +72,11 @@ void gameMap::render(void)
 			_imgMap->alphaRender(getMemDC(), 0, 0, 180);
 		}
 	}
+#else
+	_imgMap->render(getMemDC());
+
+#endif
+
 }
 
 void gameMap::loadData(int num)
