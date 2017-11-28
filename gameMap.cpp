@@ -71,9 +71,6 @@ void gameMap::render(void)
 			_imgMap->alphaRender(getMemDC(), 0, 0, 180);
 		}
 	}
-
-
-
 }
 
 void gameMap::loadData(int num)
