@@ -544,6 +544,15 @@ void sceneInit::initImageReady(void) {
 	IMAGEMANAGER->addImage(L"결정눌림버튼", L"image/ready/결정눌림버튼.bmp", 127, 33, false, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage(L"취소버튼", L"image/ready/취소버튼.bmp", 127, 33, false, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage(L"취소눌림버튼", L"image/ready/취소눌림버튼.bmp", 127, 33, false, RGB(255, 0, 255));
+
+	//출진유닛
+	IMAGEMANAGER->addImage(L"조조출진", L"image/ready/조조.bmp", 84, 84, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage(L"하후돈출진", L"image/ready/하후돈.bmp", 84, 84, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage(L"하후연출진", L"image/ready/하후연.bmp", 84, 84, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage(L"이악조출진", L"image/ready/이악조.bmp", 84, 84, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage(L"조인출진", L"image/ready/조인.bmp", 84, 84, true, RGB(255, 0, 255));
+
+
 }
 void sceneInit::initImageUI(void)
 {

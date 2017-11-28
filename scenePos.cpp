@@ -67,19 +67,30 @@ void scenePos::render(void){
 
 	_posImg->render(getMemDC(), 0, 0);
 
+	IMAGEMANAGER->findImage(L"조조출진")->render(getMemDC(), 5, 679);
+	IMAGEMANAGER->findImage(L"하후돈출진")->render(getMemDC(), 5+84, 679);
+
+
+
+
+
+
+
 	if (_availableOK) {          //활성비활성
 		IMAGEMANAGER->findImage(L"결정활성버튼")->render(getMemDC(), 655, 915);
+
+		if (_okClicking) {         //눌림비눌림
+			IMAGEMANAGER->findImage(L"결정눌림버튼")->render(getMemDC(), 655, 915);
+		}
+		else {
+			IMAGEMANAGER->findImage(L"결정활성버튼")->render(getMemDC(), 655, 915);
+		}
 	}
 	else {
 		IMAGEMANAGER->findImage(L"결정비활성버튼")->render(getMemDC(), 655, 915);
 	}
 
-	if (_okClicking) {         //눌림비눌림
-		IMAGEMANAGER->findImage(L"결정눌림버튼")->render(getMemDC(), 655, 915);
-	}
-	else {
-		IMAGEMANAGER->findImage(L"결정활성버튼")->render(getMemDC(), 655, 915);
-	}
+
 
 
 	if (_cancelClicking) {
