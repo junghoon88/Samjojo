@@ -57,7 +57,8 @@ HRESULT sceneMaptool::init(void)
 
 void sceneMaptool::release(void)
 {
-
+	_lSave.clear();
+	_lBackUp.clear();
 }
 
 void sceneMaptool::update(void)
@@ -102,6 +103,7 @@ void sceneMaptool::update(void)
 					}
 				}
 		}
+		if (!PtInRect(&RectMake(WINSIZEX - 3 * TILESIZE, 0, TILESIZE * 3, TILESIZE * 12), _ptMouse))	ctrlSave();
 	}
 
 	if (PtInRect(&RectMake(0, 0, TILEVIEWX * TILESIZE, TILEVIEWY * TILESIZE), _ptMouse))
@@ -206,6 +208,8 @@ void sceneMaptool::update(void)
 	{
 		if (_mapView)	_mapView = false;
 		else			_mapView = true;
+
+		ctrlSave();
 	}
 
 	//TERRAIN 보기 on/off
@@ -213,6 +217,8 @@ void sceneMaptool::update(void)
 	{
 		if (_viewTERRAIN)	_viewTERRAIN = false;
 		else				_viewTERRAIN = true;
+
+		ctrlSave();
 	}
 
 	//원본맵그림 X, Y 업데이트하기
@@ -239,6 +245,12 @@ void sceneMaptool::update(void)
 					_stprintf(_tiles[(i + _countMapY) * TILEVIEWY * (TILEX / TILEVIEWY) + j + _countMapX].obj, _tileObj->getStr());
 			}
 		}
+	}
+	//ctrl + Z && ctrl + Y 처리
+	if (KEYMANAGER->isStayKeyDown(VK_CONTROL))
+	{
+		if (KEYMANAGER->isOnceKeyDown('Z')) ctrlZ();
+		else if (KEYMANAGER->isOnceKeyDown('Y')) ctrlY();
 	}
 }
 
@@ -270,6 +282,15 @@ void sceneMaptool::render(void)
 	for (int i = 0; i < OBJECTSELECT_MAX; i++)
 	{
 		_objTiles[i].img->render(getMemDC(), _objTiles[i].rcTile.left, _objTiles[i].rcTile.top);
+	}
+
+	if (_ctrSelect == CTRL_TERRAINDRAW)
+	{
+		IMAGEMANAGER->findImage(L"타일선택")->render(getMemDC(), _sampleTiles[_selectSampleIndex].rcTile.left, _sampleTiles[_selectSampleIndex].rcTile.top);
+	}
+	else if (_ctrSelect == CTRL_OBJDRAW)
+	{
+		IMAGEMANAGER->findImage(L"타일선택")->render(getMemDC(), _objTiles[_ctrObjectSelect].rcTile.left, _objTiles[_ctrObjectSelect].rcTile.top);
 	}
 
 
@@ -538,6 +559,102 @@ void sceneMaptool::setMap(void)
 				}
 			}
 		}
+	}
+}
+
+//작업마다 세이브하기
+void sceneMaptool::ctrlSave(void)
+{
+	CTRLSAVE save;
+	save.alphaValue = _alphaValue;
+	save.countMapX = _countMapX;
+	save.countMapY = _countMapY;
+	save.ctrObjectSelect = _ctrObjectSelect;
+	save.ctrSelect = _ctrSelect;
+	_stprintf(save.fileName, _fileName);
+	save.isMapLoad = _isMapLoad;
+	save.mapView = _mapView;
+	_stprintf(save.saveSize, _saveSize);
+	save.selectSampleIndex = _selectSampleIndex;
+	save.selectSizeX = _selectSizeX;
+	save.selectSizeY = _selectSizeY;
+	save.viewTERRAIN = _viewTERRAIN;
+
+	for (int i = 0; i < TILEX * TILEY; i++)
+	{
+		save.tile[i] = _tiles[i];
+	}
+
+	if (_lBackUp.size() == 0)	_lSave.push_back(save);
+	else
+	{
+		while (1)
+		{
+			if (_lBackUp.size() == 0) break;
+			else _lBackUp.pop_back();
+		}
+	}
+
+	if (_lSave.size() > 100)
+	{
+		_lSave.pop_front();
+	}
+}
+
+void sceneMaptool::ctrlZ(void)
+{
+	if (_lSave.size() == 1 || _lSave.size() == 0) return;
+
+	_liSave = _lSave.end();
+	_liSave--;
+	_lBackUp.push_front(*_liSave);
+	_liSave--;
+	_lSave.pop_back();
+
+
+	_alphaValue = _liSave->alphaValue;
+	_countMapX = _liSave->countMapX;
+	_countMapY = _liSave->countMapY;
+	 _ctrObjectSelect = _liSave->ctrObjectSelect;
+	_ctrSelect = _liSave->ctrSelect;
+	_stprintf(_fileName, _liSave->fileName);
+	_isMapLoad = _liSave->isMapLoad;
+	_stprintf(_saveSize, _liSave->saveSize);
+	_selectSampleIndex = _liSave->selectSampleIndex;
+	_selectSizeX = _liSave->selectSizeX;
+	_selectSizeY = _liSave->selectSizeY;
+	_viewTERRAIN = _liSave->viewTERRAIN;
+	for (int i = 0; i < TILEX * TILEY; i++)
+	{
+		_tiles[i] = _liSave->tile[i];
+	}
+}
+
+void sceneMaptool::ctrlY(void)
+{
+	if (_lBackUp.size() == 0)	return;
+
+	_liBackUp = _lBackUp.begin();
+	_lSave.push_back(*_liBackUp);
+	_lBackUp.pop_front();
+	_liSave = _lSave.end();
+	_liSave--;
+
+	_alphaValue = _liSave->alphaValue;
+	_countMapX = _liSave->countMapX;
+	_countMapY = _liSave->countMapY;
+	_ctrObjectSelect = _liSave->ctrObjectSelect;
+	_ctrSelect = _liSave->ctrSelect;
+	_stprintf(_fileName, _liSave->fileName);
+	_isMapLoad = _liSave->isMapLoad;
+	_stprintf(_saveSize, _liSave->saveSize);
+	_selectSampleIndex = _liSave->selectSampleIndex;
+	_selectSizeX = _liSave->selectSizeX;
+	_selectSizeY = _liSave->selectSizeY;
+	_viewTERRAIN = _liSave->viewTERRAIN;
+	for (int i = 0; i < TILEX * TILEY; i++)
+	{
+		_tiles[i] = _liSave->tile[i];
 	}
 }
 					
