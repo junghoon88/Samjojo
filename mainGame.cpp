@@ -5,6 +5,8 @@
 #include "sceneSelect.h"
 #include "sceneStory.h"
 #include "sceneBattle.h"
+#include "sceneReadybase.h"
+#include "scenePos.h"
 #include "sceneBuy.h"
 #include "sceneSell.h"
 #include "sceneMaptool.h"
@@ -12,8 +14,12 @@
 
 
 mainGame::mainGame()
+	: _player(NULL), _friend(NULL), _enemy(NULL), _map(NULL)
 {
+	_stop = false;
+	_winsize = { WINSIZEX, WINSIZEY };
 
+	_FPS = 60.0f;
 }
 
 
@@ -21,6 +27,7 @@ mainGame::~mainGame()
 {
 
 }
+
 
 //√ ±‚»≠
 HRESULT mainGame::init(void)
@@ -33,11 +40,26 @@ HRESULT mainGame::init(void)
 	_friend->init();
 	_enemy = new Enemy;
 	_enemy->init();
+	_map = new gameMap;
+	_map->init();
 
+	_player->setLinkAdressFriend(_friend);
+	_player->setLinkAdressEnemy(_enemy);
+	_player->setLinkAdressMap(_map);
+
+	_friend->setLinkAdressPlayer(_player);
+	_friend->setLinkAdressEnemy(_enemy);
+	_friend->setLinkAdressMap(_map);
+
+	_enemy->setLinkAdressPlayer(_player);
+	_enemy->setLinkAdressFriend(_friend);
+	_enemy->setLinkAdressMap(_map);
+
+	_map->setLinkAdressPlayer(_player);
+	_map->setLinkAdressFriend(_friend);
+	_map->setLinkAdressEnemy(_enemy);
 
 	initScene();
-
-
 
 	return S_OK;
 }
@@ -54,6 +76,7 @@ void mainGame::initScene(void)
 	_sceneSelect->setLinkAdressPlayer(_player);
 	_sceneSelect->setLinkAdressEnemy(_enemy);
 	_sceneSelect->setLinkAdressFriend(_friend);
+	_sceneSelect->setLinkAdressMap(_map);
 	SCENEMANAGER->addScene(L"º±≈√æ¿", _sceneSelect);
 
 
@@ -61,16 +84,20 @@ void mainGame::initScene(void)
 	SCENEMANAGER->addScene(L"¥Î»≠æ¿", new sceneStory);				//Ω∫≈‰∏Æ
 
 
+
+	
+	sceneReadybase* _sceneReadybase = new sceneReadybase;          //¡ÿ∫Ò±‚∫ªæ¿
+	_sceneReadybase->setLinkAdressPlayer(_player);
+	SCENEMANAGER->addScene(L"¡ÿ∫Ò±‚∫ªæ¿", _sceneReadybase);
+
+
+	scenePos* _scenePos = new scenePos;                            //√‚¡¯æ¿
+	SCENEMANAGER->addScene(L"√‚¡¯æ¿", _scenePos);
+
 	sceneBuy* _sceneBuy = new sceneBuy;							    //±∏∏≈ªÛ¡°
-	_sceneBuy->setLinkAdressPlayer(_player);
-	_sceneBuy->setLinkAdressEnemy(_enemy);
-	_sceneBuy->setLinkAdressFriend(_friend);
 	SCENEMANAGER->addScene(L"±∏∏≈ªÛ¡°æ¿", _sceneBuy);
 
 	sceneSell* _sceneSell = new sceneSell;							//∆«∏≈ªÛ¡°
-	_sceneSell->setLinkAdressPlayer(_player);
-	_sceneSell->setLinkAdressEnemy(_enemy);
-	_sceneSell->setLinkAdressFriend(_friend);
 	SCENEMANAGER->addScene(L"∆«∏≈ªÛ¡°æ¿", _sceneSell);
 
 
@@ -78,6 +105,7 @@ void mainGame::initScene(void)
 	_sceneBattle->setLinkAdressPlayer(_player);
 	_sceneBattle->setLinkAdressEnemy(_enemy);
 	_sceneBattle->setLinkAdressFriend(_friend);
+	_sceneBattle->setLinkAdressMap(_map);
 	SCENEMANAGER->addScene(L"¿¸≈ıæ¿", _sceneBattle);
 
 	SCENEMANAGER->changeScene(L"√ ±‚»≠æ¿");
@@ -94,9 +122,13 @@ void mainGame::release(void)
 }
 
 //ø¨ªÍ∞¸∑√(≈∏¿Ã∏”)
-void mainGame::update(void)	
+void mainGame::update(void)
 {
 	gameNode::update();
+
+	checkWindowSize();
+	controlFPS();
+
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))
 	{
@@ -139,3 +171,51 @@ void mainGame::getChar(WPARAM wParam)
 	}
 }
 
+void mainGame::setWindowResize(POINT size)
+{
+	if (_winsize.x == size.x && _winsize.y == size.y)
+		return;
+
+	_stop = true; 
+	_winsize = size;
+}
+
+void mainGame::checkWindowSize(void)
+{
+	if (SCENEMANAGER->isCurScene(L"√ ±‚»≠æ¿"))
+	{
+		setWindowResize({ WINSIZEX2, WINSIZEY2 });
+	}
+	else if (SCENEMANAGER->isCurScene(L"º±≈√æ¿"))
+	{
+		setWindowResize({ WINSIZEX2, WINSIZEY2 });
+	}
+	else if (SCENEMANAGER->isCurScene(L"∏ ≈¯æ¿"))
+	{
+		setWindowResize({ WINSIZEX, WINSIZEY });
+	}
+	else if (SCENEMANAGER->isCurScene(L"¿Ø¥÷ø°µ≈Õ"))
+	{
+		setWindowResize({ WINSIZEX, WINSIZEY });
+	}
+	else if (SCENEMANAGER->isCurScene(L"¥Î»≠æ¿"))
+	{
+		setWindowResize({ WINSIZEX2, WINSIZEY2 });
+	}
+	else if (SCENEMANAGER->isCurScene(L"¿¸≈ıæ¿"))
+	{
+		setWindowResize({ WINSIZEX, WINSIZEY });
+	}
+}
+
+void mainGame::controlFPS(void)
+{
+	if (SCENEMANAGER->isCurScene(L"√ ±‚»≠æ¿"))
+	{
+		_FPS = 300.0f;
+	}
+	else
+	{
+		_FPS = 60.0f;
+	}
+}

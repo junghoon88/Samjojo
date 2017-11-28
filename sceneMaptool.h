@@ -48,8 +48,6 @@ private:
 
 	button* _ctrlButton[CTRL_END];
 	button* _exit;
-	TCHAR _strExit[100];
-	TCHAR _strButton[CTRL_END][100];
 	TCHAR _fileName[100];
 	TCHAR _saveSize[100];
 
@@ -110,8 +108,6 @@ public:
 
 	void save(void);
 	void load(void);
-
-	TERRAIN terrainSelect(int index);
 
 	inline int getCtrlSelect(void) { return _ctrSelect; }
 	inline void setCtrlSelect(int select) { _ctrSelect = select; }

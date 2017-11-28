@@ -349,10 +349,8 @@ void sceneMaptool::render(void)
 	for (int i = 0; i < CTRL_END; i++)
 	{
 		_ctrlButton[i]->render();
-		TextOut(getMemDC(), _ctrlButton[i]->getRect().left, _ctrlButton[i]->getRect().top, _strButton[i], _tcslen(_strButton[i]));
 	}
 	_exit->render();
-	TextOut(getMemDC(), _exit->getRect().left, _exit->getRect().top, _strExit, _tcslen(_strExit));
 
 	//스페이스바 누르면 TERRAIN 번호 보여주기
 	if (_viewTERRAIN)
@@ -435,17 +433,12 @@ void sceneMaptool::setup(void)
 	_ctrlButton[CTRL_LOAD] = new button;
 	_ctrlButton[CTRL_ERASER] = new button;
 	
-	_ctrlButton[CTRL_SAVE]->init(L"맵툴버튼",	WINSIZEX - (3 * TILESIZE) / 2, WINSIZEY - 100, { 0, 0 }, { 0, 1 }, ctrlSelectSave, this);
-	_ctrlButton[CTRL_LOAD]->init(L"맵툴버튼",	WINSIZEX - (3 * TILESIZE) / 2, WINSIZEY - 60, { 0, 0 }, { 0, 1 }, ctrlSelectLoad, this);
-	_ctrlButton[CTRL_ERASER]->init(L"맵툴버튼",	WINSIZEX - (3 * TILESIZE) / 2, TILESIZE * 14 - 10, { 0, 0 }, { 0, 1 }, ctrlSelectEraser, this);
-	
-	_stprintf(_strButton[CTRL_SAVE], L"SAVE");
-	_stprintf(_strButton[CTRL_LOAD], L"LOAD");
-	_stprintf(_strButton[CTRL_ERASER], L"ERASER");
+	_ctrlButton[CTRL_SAVE]->init(  L"맵툴버튼", L"SAVE"  ,	WINSIZEX - (3 * TILESIZE) / 2, WINSIZEY - 100, { 0, 0 }, { 0, 1 }, ctrlSelectSave, this);
+	_ctrlButton[CTRL_LOAD]->init(  L"맵툴버튼", L"LOAD"  ,	WINSIZEX - (3 * TILESIZE) / 2, WINSIZEY - 60, { 0, 0 }, { 0, 1 }, ctrlSelectLoad, this);
+	_ctrlButton[CTRL_ERASER]->init(L"맵툴버튼", L"ERASER",	WINSIZEX - (3 * TILESIZE) / 2, TILESIZE * 14 - 10, { 0, 0 }, { 0, 1 }, ctrlSelectEraser, this);
 
 	_exit = new button;
-	_exit->init(L"맵툴버튼", WINSIZEX - (3 * TILESIZE) / 2, WINSIZEY - 20, { 0, 0 }, { 0, 1 }, exit, this);
-	_stprintf(_strExit, L"EXIT");
+	_exit->init(L"맵툴버튼", L"EXIT", WINSIZEX - (3 * TILESIZE) / 2, WINSIZEY - 20, { 0, 0 }, { 0, 1 }, exit, this);
 
 	_ctrSelect = CTRL_TERRAINDRAW;
 
@@ -501,7 +494,7 @@ void sceneMaptool::setup(void)
 	{
 		_tiles[i].sampleTerrainIdx = 0;
 		_tiles[i].sampleObjectSelectIdx = OBJECTSELECT_NONE;
-		_tiles[i].terrain = terrainSelect(_tiles[i].sampleTerrainIdx);
+		_tiles[i].terrain = TERRAIN_RIVER;
 		_tiles[i].isClick = false;
 		_stprintf(_tiles[i].obj, L"");
 	}
@@ -705,10 +698,4 @@ void sceneMaptool::load(void)
 	_mapView = false;
 
 	CloseHandle(file);
-}
-
-TERRAIN sceneMaptool::terrainSelect(int index)
-{
-
-	return TERRAIN_RIVER;
 }

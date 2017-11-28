@@ -3,7 +3,11 @@
 
 
 button::button()
+	: _image(NULL)
 {
+	_stprintf(_strText, L"");
+
+	_fontNum = FONTVERSION_SAMJOJO;
 }
 
 
@@ -61,9 +65,56 @@ HRESULT button::init(const TCHAR* imageName, int x, int y,
 
 }
 
+HRESULT button::init(const TCHAR * imageName, const TCHAR * text, int x, int y, POINT btnDownFramePoint, POINT btnUpFramePoint, CALLBACK_FUNCTION cbFunction)
+{
+	_obj = NULL;
+	_callbackFunction = static_cast<CALLBACK_FUNCTION>(cbFunction);
+	_callbackFunctionParameter = NULL;
+
+	_direction = BUTTONDIRECTION_NULL;
+
+	_x = x;
+	_y = y;
+
+	_btnUpFramePoint = btnUpFramePoint;
+	_btnDownFramePoint = btnDownFramePoint;
+
+	_imageName = imageName;
+	_image = IMAGEMANAGER->findImage(imageName);
+
+	_rc = RectMakeCenter(x, y, _image->getFrameWidth(), _image->getFrameHeight());
+
+	setText(text);
+
+	return S_OK;
+}
+
+HRESULT button::init(const TCHAR * imageName, const TCHAR* text, int x, int y, POINT btnDownFramePoint, POINT btnUpFramePoint, void * cbFunction, void * obj)
+{
+	_obj = obj;
+	_callbackFunction = NULL;
+	_callbackFunctionParameter = static_cast<CALLBACK_FUNCTION_PARAMETER>(cbFunction);
+
+	_direction = BUTTONDIRECTION_NULL;
+
+	_x = x;
+	_y = y;
+
+	_btnUpFramePoint = btnUpFramePoint;
+	_btnDownFramePoint = btnDownFramePoint;
+
+	_imageName = imageName;
+	_image = IMAGEMANAGER->findImage(imageName);
+
+	_rc = RectMakeCenter(x, y, _image->getFrameWidth(), _image->getFrameHeight());
+
+	setText(text);
+
+	return S_OK;
+}
+
 void button::release(void)
 {
-
 }
 
 void button::update(void)
@@ -105,4 +156,19 @@ void button::render(void)
 				_btnDownFramePoint.x, _btnDownFramePoint.y);
 		break;
 	}
+
+	SetBkMode(getMemDC(), TRANSPARENT);
+	HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
+	DrawText(getMemDC(), _strText, _tcslen(_strText), &_rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	SelectObject(getMemDC(), oldFont);
 }
+
+
+void button::setText(const TCHAR* text)
+{
+	if (text == NULL) return;
+
+	_tcscpy(_strText, text);
+}
+
+

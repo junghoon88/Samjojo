@@ -15,11 +15,9 @@ scanDialog::~scanDialog()
 
 HRESULT scanDialog::init(const char* filename)
 {
-	SAFE_DELETE(_fp);
-
 	if (fopen_s(&_fp, filename, "r") == EINVAL)
 	{
-		SAFE_DELETE(_fp);
+		_fp = NULL;
 	}
 
 	story = RectMake(100, 100, 464, 120);
@@ -27,32 +25,40 @@ HRESULT scanDialog::init(const char* filename)
 	_face = IMAGEMANAGER->findImage(L"face 00000");
 	next = 0;
 	
+	_face->setX(story.left);
+	_face->setY(story.top);
 	return S_OK;
 }
 
 void scanDialog::release(void)
 {
-	SAFE_DELETE(_fp);
+	_vScripts.clear();
+	fclose(_fp);
+	_fp = NULL;
 }
  
 void scanDialog::update(void)
 {
 	
 
-	if (_tcscmp(_face->getFileName(), L"좌측대화창.bmp"))
+	_face->setX(_face->getX());
+	_face->setY(_face->getY());
+
+	if (_tcscmp(_story->getFileName(), L"image/좌측대화창.bmp")==0)
 	{
 		_face->setX(story.left);
 		_face->setY(story.top);
 	
 	}
-	//else if (_tcscmp(_face->getFileName(), L"우측대화창.bmp"))
-	//{
-	//	_face->setX(story.right - 120);
-	//	_face->setY(story.top);
-	//}
+	else if (_tcscmp(_story->getFileName(), L"image/우측대화창.bmp")==0)
+	{
+		_face->setX(story.right - 120);
+		_face->setY(story.top);
+	}
+	
 
-	_face->setX(_face->getX());
-	_face->setY(_face->getY());
+	
+
 }
 
 void scanDialog::render(void)
@@ -67,15 +73,33 @@ void scanDialog::render(void)
 		_face->render(getMemDC(), _face->getX(), _face->getY());
 	}
 
-	TextOut(getMemDC(), story.left+150, story.top+30, ss.c_str(), len);
-
-	for (int i = 0; i < _vScripts.size(); i++)
+	if (_tcscmp(_story->getFileName(), L"image/좌측대화창.bmp") == 0)
 	{
-		ss = convert_wc(_vScripts[i]);
-		len = _tcslen(ss.c_str());
+		TextOut(getMemDC(), story.left + 150, story.top + 30, ss.c_str(), len);
+		for (int i = 0; i < _vScripts.size(); i++)
+		{
+			ss = convert_wc(_vScripts[i]);
+			len = _tcslen(ss.c_str());
 
-		TextOut(getMemDC(), story.left + 150, story.top + 35+15 * (i + 1), ss.c_str(), len);
+			TextOut(getMemDC(), story.left + 150, story.top + 35 + 15 * (i + 1), ss.c_str(), len);
+		}
+
 	}
+	else if (_tcscmp(_story->getFileName(), L"image/우측대화창.bmp") == 0)
+	{
+		TextOut(getMemDC(), story.left+10, story.top + 30, ss.c_str(), len);
+		for (int i = 0; i < _vScripts.size(); i++)
+		{
+			ss = convert_wc(_vScripts[i]);
+			len = _tcslen(ss.c_str());
+
+			TextOut(getMemDC(), story.left +10 , story.top + 35 + 15 * (i + 1), ss.c_str(), len);
+		}
+	}
+	
+
+	
+	
 	
 }
 
@@ -104,7 +128,7 @@ void scanDialog::loadDialog(void)
 					_strName[i] = '\0';
 					break;
 				}
-
+				 
 				_strName[i] = str[i + 1];
 			}
 		
@@ -129,10 +153,47 @@ void scanDialog::loadDialog(void)
 		else if (str[0] == '/')
 		{
 			next++;
+			
 		}
-		else if (str[0] == '=' && str[1] == '=')
+		else if (str[0] == '=')
 		{
-			return;
+			if (str[1] == '=')
+			{
+				return;
+			}
+			else if (str[1] == '>')
+			{
+				int len = strlen(str);
+				char temp[100] = "";
+				char nextFileName[100] = "scripts/";
+				for (int i = 0; i < len; i++)
+				{
+					if (str[i + 2] == '\n' || str[i + 2] == '\0')
+					{
+						temp[i] = '\0';
+						break;
+					}
+					temp[i] = str[i + 2];
+				}
+				strcat(nextFileName, temp);
+
+				nextFile(nextFileName);
+
+				return;
+			}
+		}
+		else if (str[0] == '*')
+		{
+			char *temp;
+			temp = strtok(str, "*"); //문자열분리
+			temp = strtok(temp, ",");
+			int posx = atoi(temp);
+			temp = strtok(NULL, ",");
+			int posy = atoi(temp);
+			temp = strtok(NULL, ",");
+			int isLeft = atoi(temp);
+			story = RectMake(posx, posy, 464, 120);
+			printf("");
 		}
 		
 		/////페이스 결정전
@@ -159,20 +220,39 @@ void scanDialog::loadDialog(void)
 		else if (strcmp(_strName, "왕윤") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00161");
-
+			_story = IMAGEMANAGER->findImage(L"좌대화창");
 		}
 		else if (strcmp(_strName, "초선") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00025");
+			_story = IMAGEMANAGER->findImage(L"우대화창");
 		}
 		else if (strcmp(_strName, "병사") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00181");
+			_story = IMAGEMANAGER->findImage(L"우대화창");
 		}
 		else if (strcmp(_strName, "원소") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00109");
+			_story = IMAGEMANAGER->findImage(L"우대화창");
 		}
 	}
+}
+
+void scanDialog::nextDialog(void)
+{
 
 }
+
+void scanDialog::nextFile(const char * filename)
+{
+	fclose(_fp);
+	_fp = NULL;
+	if (fopen_s(&_fp, filename, "r") == EINVAL)
+	{
+		_fp = NULL;
+	}
+}
+
+

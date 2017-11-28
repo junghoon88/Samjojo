@@ -10,7 +10,7 @@ enum ITEMA_NUMBER //방어구 아이템 고유번호
 	ITEMA_NUMBER_NONE = -1,
 };
 
-enum ITEMS_NUMBER //방어구 아이템 고유번호
+enum ITEMS_NUMBER //소비 아이템 고유번호
 {
 	ITEMS_NUMBER_NONE = -1
 };

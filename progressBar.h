@@ -12,6 +12,9 @@ private:
 	image* _progressBarBottom;
 
 public:
+	progressBar();
+	~progressBar();
+
 	HRESULT init(TCHAR* name, int x, int y, int width, int height);
 	HRESULT init(TCHAR* topImage, TCHAR* bottomImage, float x, float y, int width, int height);
 	void release(void);
@@ -21,12 +24,11 @@ public:
 
 	void setGauge(float currentGauge, float maxGauge);
 
+public:
 	inline void setX(int x) { _pt.x = x; }
 	inline void setY(int y) { _pt.y = y; }
 
 	inline float getWidth(void) { return _width; }
-	
-	progressBar();
-	~progressBar();
+	inline RECT getRect(void) { return _rcProgress; }
 };
 

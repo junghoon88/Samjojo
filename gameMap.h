@@ -2,6 +2,11 @@
 #include "gameNode.h"
 #include "tileNode.h"
 
+class Player;
+class Friend;
+class Enemy;
+class infoCursor;
+
 class gameMap : public gameNode
 {
 private:
@@ -12,8 +17,15 @@ private:
 
 	TCHAR _objImage[OBJECTSELECT_MAX][100];
 
-	int _pos[2];
+	image*		_imgMap;		//실제 보여줄 맵
+	int			_tilesizeX;		//타일크기(맵에 타일이 총 몇개인지)
+	int			_tilesizeY;		//타일크기(맵에 타일이 총 몇개인지)
 
+
+	Player*		_player;	//플레이어
+	Friend*		_friend;	//아군
+	Enemy*		_enemy;		//적군
+	infoCursor* _cursor;
 
 public:
 	gameMap();
@@ -25,15 +37,21 @@ public:
 	void render(void);
 
 	//맵툴에서 그린 맵 로드함수
-	void load();
+	void loadData(int num);
 
 	//타일 정보 접근자
 	tagTile* getTile(void) { return _tiles; }
 	DWORD* getAttribute(void) { return _attribute; }
 
-	//1p, 2p 포지션 
-	int getPosFirst() { return _pos[0]; }
-	int getPosSecond() { return _pos[1]; }
 
+public:
+	inline void setLinkAdressPlayer(Player* player) { _player = player; }
+	inline void setLinkAdressFriend(Friend* friends) { _friend = friends; }
+	inline void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
+	inline void setLinkAdressCursor(infoCursor* info) { _cursor = info; }
+
+
+	inline int getTileSizeX(void) { return _tilesizeX; }
+	inline int getTileSizeY(void) { return _tilesizeY; }
 };
 

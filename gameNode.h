@@ -4,7 +4,6 @@
 //빈 비트맵 파일 백버퍼 생성
 static image* _backBuffer = IMAGEMANAGER->addImage(L"backBuffer", WINSIZEX, WINSIZEY);
 
-
 class gameNode
 {
 private:
