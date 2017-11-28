@@ -98,6 +98,12 @@ void sceneUnitEditor::loadUnitFiles(void)
 
 void sceneUnitEditor::release(void)
 {
+	for (int i = 0; i < UNITEDITOR_BUTTON_MAX; i++)
+	{
+		_ctrlButton[i]->release();
+		SAFE_DELETE(_ctrlButton[i]);
+	}
+
 	for (int i = 0; i < UNITEDITOR_NUMEDITBOX_MAX; i++)
 	{
 		_numEditBox[i]->release();
