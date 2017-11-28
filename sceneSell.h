@@ -1,13 +1,13 @@
 #pragma once
-#include "gameNode.h"
+#include "sceneReadybase.h"
 #include "Player.h"
 #include "Enemy.h"
 #include "Friend.h"
 
-class sceneSell : public gameNode
+class sceneSell : public sceneReadybase
 {
 private:
-	Player*		_player;
+
 
 
 public:

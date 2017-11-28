@@ -67,8 +67,9 @@ void scenePos::render(void){
 
 	_posImg->render(getMemDC(), 0, 0);
 
-	IMAGEMANAGER->findImage(L"조조출진")->render(getMemDC(), 5, 679);
-	IMAGEMANAGER->findImage(L"하후돈출진")->render(getMemDC(), 5+84, 679);
+	//고정픽
+	IMAGEMANAGER->findImage(L"조조출진")->render(getMemDC(), 5, 679);     
+	IMAGEMANAGER->findImage(L"하후돈출진")->render(getMemDC(), 81, 679);
 
 
 

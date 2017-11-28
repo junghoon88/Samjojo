@@ -1,10 +1,10 @@
 #pragma once
-#include "gameNode.h"
+#include "sceneReadybase.h"
 #include "Player.h"
 #include "Enemy.h"
 #include "Friend.h"
 
-class sceneBuy : public gameNode
+class sceneBuy : public sceneReadybase
 {
 private:
 	Player*		_player;
