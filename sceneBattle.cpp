@@ -37,20 +37,45 @@ void sceneBattle::release(void)
 
 void sceneBattle::update(void)
 {
-	
+	//debug
+	{
+		Unit* unit = _enemy->getUnits()[0];
+		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD8))
+		{
+			unit->move(_map, DIRECTION_UP);
+		}
+		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
+		{
+			unit->move(_map, DIRECTION_DN);
+		}
+		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
+		{
+			unit->move(_map, DIRECTION_LF);
+		}
+		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD6))
+		{
+			unit->move(_map, DIRECTION_RG);
+		}
+	}
+
+	_player->update();
+	_friend->update();
+	_enemy->update();
 
 	_map->update(); 
-	if(Phase == playerPhase)_cursor->update();
+
+	//if(Phase == playerPhase)_cursor->update();
 }
 
 void sceneBattle::render(void)
 {
 	_map->render();
-	_cursor->render();
 
 	_player->render();
 	_friend->render();
 	_enemy->render();
+
+	//_cursor->render();
 }
 
 void sceneBattle::initImage(void)

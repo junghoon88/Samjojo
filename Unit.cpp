@@ -133,3 +133,58 @@ void Unit::copyUnitData(Unit* unit)
 	//battle 관련 변수
 	memcpy(&_battleState, &unit->getBattleState(), sizeof(tagBattleState));
 }
+
+void Unit::move(gameMap* map, DIRECTION dir)
+{
+	_battleState.dir = dir;
+	POINT maxTile = { (LONG)map->getTileSizeX(), (LONG)map->getTileSizeY() };
+
+	//move
+	switch (dir)
+	{
+	case DIRECTION_DN:
+		_battleState.tilePt.y += 1;
+		break;
+	case DIRECTION_UP:
+		_battleState.tilePt.y -= 1;
+		break;
+	case DIRECTION_LF:
+		_battleState.tilePt.x -= 1;
+		break;
+	case DIRECTION_RG:
+		_battleState.tilePt.x += 1;
+		break;
+	}
+
+	//collision check
+	switch (dir)
+	{
+	case DIRECTION_DN:
+		if (_battleState.tilePt.y >= maxTile.y)
+		{
+			_battleState.tilePt.y -= 1;
+		}
+		break;
+	case DIRECTION_UP:
+		if (_battleState.tilePt.y < 0)
+		{
+			_battleState.tilePt.y += 1;
+		}
+		break;
+	case DIRECTION_LF:
+		if (_battleState.tilePt.x < 0)
+		{
+			_battleState.tilePt.x += 1;
+		}
+		break;
+	case DIRECTION_RG:
+		if (_battleState.tilePt.x >= maxTile.x)
+		{
+			_battleState.tilePt.x -= 1;
+		}
+		break;
+	}
+
+	_battleState.rc = RectMake(_battleState.tilePt.x * TILESIZE, _battleState.tilePt.y * TILESIZE, TILESIZE, TILESIZE);
+	_battleState.pt = { (LONG)((_battleState.rc.left + _battleState.rc.right) * 0.5f), (LONG)((_battleState.rc.top + _battleState.rc.bottom) * 0.5f) };
+}

@@ -15,6 +15,8 @@ HRESULT infoCursor::init(void)
 {
 	isShow = false;
 	isUnit = false;
+	indexTile = 0;
+
 
 	rc = { WINSIZEX - SIDEWINSIZE,0,WINSIZEX,WINSIZEY };//인터페이스 간이 렉트
 	tileImgRect = RectMakeCenter(rc.left + SIDEWINSIZE / 2, 80, FROFILEIMAGE, FROFILEIMAGE);
@@ -23,6 +25,8 @@ HRESULT infoCursor::init(void)
 	{
 		element[i] = RectMakeCenter(rc.left + TILESIZE/2 + ((TILESIZE / 2 + (TILESIZE / 2 * 0.25)) * i), tileImgRect.bottom + TILESIZE / 2, TILESIZE / 2, TILESIZE / 2);
 	}
+
+
 
 	unit = L"유닛이름정보";
 	tilename = L"타일이름정보";
@@ -47,7 +51,7 @@ void infoCursor::release(void)
 }
 void infoCursor::update(void) 
 {
-	mouse_Scanning();//지형 타일 갱신 및 클릭 신호 받을 곳.
+	mouse_Scanning();//지형 타일 갱신
 
 	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON)) dataClean();  //윈도우 닫기
 	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
@@ -73,13 +77,21 @@ void infoCursor::mouse_Scanning(void)
 {
 	if (!isShow)
 	{
-		for (int i = 0; i < TILEX * TILEY; i++)
+//		for (int i = 0; i < TILEX * TILEY; i++)
+//		{
+//			if (PtInRect(&findtile->getTile()[i].rc, _ptMouse))
+//			{
+//				drawLine = { findtile->getTile()[i].rc.left,findtile->getTile()[i].rc.top,findtile->getTile()[i].rc.right,findtile->getTile()[i].rc.bottom };
+//			
+//			}
+//		}
+
+	//for문을 현재 위치 기반으로 타일을 찾자 그냥 너무 부하가 큼
+		indexTile = (int)(_ptMouse.x / TILESIZE) + (int)(_ptMouse.y / TILESIZE) * TILEX;
+
+		if (PtInRect(&findtile->getTile()[indexTile].rc, _ptMouse))
 		{
-			if (PtInRect(&findtile->getTile()[i].rc, _ptMouse))
-			{
-				drawLine = { findtile->getTile()[i].rc.left,findtile->getTile()[i].rc.top,findtile->getTile()[i].rc.right,findtile->getTile()[i].rc.bottom };
-			
-			}
+			drawLine = { findtile->getTile()[indexTile].rc.left,findtile->getTile()[indexTile].rc.top,findtile->getTile()[indexTile].rc.right,findtile->getTile()[indexTile].rc.bottom };
 		}
 	}
 
@@ -93,7 +105,7 @@ void infoCursor::mouse_Click(void)
 		{
 			isUnit = true;
 			unit = _player->getUnits()[i]->getStatus().name;
-		//	unitImg = _player->getUnits()[i]->getImgBattleIdle();//여기
+			unitImg = _player->getUnits()[i]->getBattleState().imgBattleIdle;//여기
 		}
 	}
 
@@ -113,10 +125,11 @@ void infoCursor::mouse_Click(void)
 		{
 			isUnit = true;
 			unit = _enemy->getUnits()[i]->getStatus().name;
-
+			unitImg = _enemy->getUnits()[i]->getBattleState().imgBattleIdle;//여기
 		}
 
 	}
+
 
 	for (int i = 0; i < TILEX * TILEY; i++)
 	{
@@ -406,9 +419,10 @@ void infoCursor::mouse_Click(void)
 			}
 			tileNum = findtile->getTile()[i].terrain;//해당번호를 키값으로 찾으면 된다. 이미지를!
 			//지형정보 스위치문!
+			isShow = true;
 		}
 	}
-	isShow = true;
+
 }
 
 void infoCursor::mouse_moveCamera(void)
@@ -444,6 +458,7 @@ void infoCursor::infoDraw(void)
 	if (isUnit) //유닛을 눌렀을때 표시할 것들
 	{
 		Rectangle(getMemDC(), unitImgRect.left, unitImgRect.top, unitImgRect.right, unitImgRect.bottom); // 디버그용 렉트출력
+		unitImg->render(getMemDC(), unitImgRect.left, unitImgRect.top);
 		TextOut(getMemDC(), unitImgRect.left, unitImgRect.bottom + 24, unit, _tcslen(unit));
 	}
 	Rectangle(getMemDC(), tileImgRect.left, tileImgRect.top, tileImgRect.right, tileImgRect.bottom); // 디버그용 렉트출력
