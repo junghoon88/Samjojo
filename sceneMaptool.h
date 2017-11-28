@@ -3,6 +3,7 @@
 #include "tileNode.h"
 #include "button.h"
 #include "editbox.h"
+#include <list>
 
 enum CTRL
 {
@@ -16,32 +17,31 @@ enum CTRL
 	CTRL_END = 3
 };
 
-struct ctrlSave
+struct CTRLSAVE
 {
 	tagTile tile[TILEX * TILEY];
-	TCHAR _fileName[100];
+	TCHAR fileName[100];
 	TCHAR saveSize[100];
 
 	int ctrSelect;
 	int ctrObjectSelect;
-	int _selectSampleIndex;
+	int selectSampleIndex;
 
-	int _countMapX;
-	int _countMapY;
+	int countMapX;
+	int countMapY;
 
-	int _selectSizeX, _selectSizeY;
+	int selectSizeX, selectSizeY;
 
-	float _alphaValue;
+	float alphaValue;
 
-	bool _mapView;
-	bool _viewTERRAIN;
-	bool _isMapLoad;
+	bool mapView;
+	bool viewTERRAIN;
+	bool isMapLoad;
 };
 
 class sceneMaptool : public gameNode
 {
 private:
-	int _selectSampleIndex;
 	tagSampleTile _sampleTiles[SAMPLETILEX * SAMPLETILEY];
 	tagSampleObject _objTiles[CTRL_END];
 	tagTile _tiles[TILEX * TILEY];
@@ -54,6 +54,8 @@ private:
 	editbox* _editBox;
 	editbox* _alphaValueBox;
 	editbox* _tileObj;
+
+	int _selectSampleIndex;
 
 	int _ctrSelect;
 	int _ctrObjectSelect;
@@ -72,6 +74,12 @@ private:
 	bool _viewTERRAIN;
 	bool _isMapLoad;
 
+	list<CTRLSAVE> _lSave;
+	list<CTRLSAVE>::iterator _liSave;
+
+	list<CTRLSAVE> _lBackUp;
+	list<CTRLSAVE>::iterator _liBackUp;
+
 private:
 	static void ctrlSelectSave(void* obj);
 	static void ctrlSelectLoad(void* obj);
@@ -82,6 +90,10 @@ private:
 
 	void setup(void);
 	void setMap(void);
+
+	void ctrlSave(void);
+	void ctrlZ(void);
+	void ctrlY(void);
 
 
 public:

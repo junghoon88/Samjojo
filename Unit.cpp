@@ -133,3 +133,54 @@ void Unit::copyUnitData(Unit* unit)
 	//battle 관련 변수
 	memcpy(&_battleState, &unit->getBattleState(), sizeof(tagBattleState));
 }
+
+void Unit::move(gameMap* map, DIRECTION dir)
+{
+	_battleState.dir = dir;
+
+	//move
+	switch (dir)
+	{
+	case DIRECTION_DN:
+		_battleState.tilePt.y += 1;
+		break;
+	case DIRECTION_UP:
+		_battleState.tilePt.y -= 1;
+		break;
+	case DIRECTION_LF:
+		_battleState.tilePt.x -= 1;
+		break;
+	case DIRECTION_RG:
+		_battleState.tilePt.x += 1;
+		break;
+	}
+
+	//collision check
+	switch (dir)
+	{
+	case DIRECTION_DN:
+		if (_battleState.tilePt.y >= map->getTileSizeY())
+		{
+			_battleState.tilePt.y -= 1;
+		}
+		break;
+	case DIRECTION_UP:
+		if (_battleState.tilePt.y < 0)
+		{
+			_battleState.tilePt.y += 1;
+		}
+		break;
+	case DIRECTION_LF:
+		if (_battleState.tilePt.x < 0)
+		{
+			_battleState.tilePt.x += 1;
+		}
+		break;
+	case DIRECTION_RG:
+		if (_battleState.tilePt.x >= map->getTileSizeX())
+		{
+			_battleState.tilePt.x -= 1;
+		}
+		break;
+	}
+}
