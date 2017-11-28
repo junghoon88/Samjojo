@@ -20,12 +20,7 @@ enum BUTTONDIRECTION
 	BUTTONDIRECTION_DOWN
 };
 
-enum FONTVERSION
-{
-	FONTVERSION_SAMJOJO,
 
-	FONTVERSION_MAX
-};
 
 class button : public gameNode
 {
@@ -38,7 +33,6 @@ private:
 	float _x, _y;
 
 	TCHAR _strText[1024];
-	HFONT _font[FONTVERSION_MAX];
 	FONTVERSION _fontNum;
 	
 
@@ -48,9 +42,6 @@ private:
 	void* _obj;
 	CALLBACK_FUNCTION _callbackFunction;
 	CALLBACK_FUNCTION_PARAMETER _callbackFunctionParameter;
-
-private:
-	void setFontAll(void);
 
 public:
 	HRESULT init(const TCHAR* imageName, int x, int y,

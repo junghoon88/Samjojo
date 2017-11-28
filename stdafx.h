@@ -85,3 +85,6 @@ using namespace IOTA_UTIL;
 extern HINSTANCE _hInstance;
 extern HWND _hWnd;
 extern POINT _ptMouse;
+
+extern HFONT _gFont[FONTVERSION_MAX];
+extern HBRUSH _gBrush[BRUSHVERSION_MAX];

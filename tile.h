@@ -23,8 +23,6 @@ private:
 
 	tile* _parentNode;
 
-	COLORREF _color;
-	HBRUSH _brush;
 	HPEN _pen;
 
 	wstring _attribute;
@@ -43,13 +41,6 @@ public:
 
 	int getIdX(void) { return _idX; }
 	int getIdY(void) { return _idY; }
-
-	void setColor(COLORREF color)
-	{
-		DeleteObject(_brush);
-		_color = color;
-		_brush = CreateSolidBrush(_color);
-	}
 
 	RECT getRect() { return _rc; }
 

@@ -1,17 +1,18 @@
 #include "stdafx.h"
 #include "loading.h"
 
-loadItem::loadItem(){}
+loadItem::loadItem()
+{
+	ZeroMemory(&_imageResource, sizeof(tagImageResource));
+	ZeroMemory(&_soundResource, sizeof(tagSoundResource));
+}
 loadItem::~loadItem(){}
 
-HRESULT loadItem::initForImage(wstring keyName, int width, int height, bool blend)
+HRESULT loadItem::initForImage(const TCHAR* keyName, int width, int height, bool blend)
 {
 	_kind = LOAD_KIND_IMAGE_0;
 
-	memset(&_imageResource, 0, sizeof(tagImageResource));
-
-	//_imageResource.keyName = keyName;
-	_stprintf(_imageResource.keyName, L"%s", keyName.c_str());
+	_tcscpy(_imageResource.keyName, keyName);
 	_imageResource.width = width;
 	_imageResource.height = height;
 	_imageResource.blend = blend;
@@ -19,16 +20,12 @@ HRESULT loadItem::initForImage(wstring keyName, int width, int height, bool blen
 	return S_OK;
 }
 
-HRESULT loadItem::initForImage(wstring keyName, const TCHAR* fileName, int width, int height, BOOL trans, COLORREF transColor, bool blend)
+HRESULT loadItem::initForImage(const TCHAR* keyName, const TCHAR* fileName, int width, int height, BOOL trans, COLORREF transColor, bool blend)
 {
 	_kind = LOAD_KIND_IMAGE_1;
 
-	memset(&_imageResource, 0, sizeof(tagImageResource));
-
-	//_imageResource.keyName = keyName;
-	 _stprintf(_imageResource.keyName, L"%s", keyName.c_str());
-	//_imageResource.fileName = fileName;
-	_stprintf(_imageResource.fileName, L"%s", fileName);
+	_tcscpy(_imageResource.keyName, keyName);
+	_tcscpy(_imageResource.fileName, fileName);
 	_imageResource.width = width;
 	_imageResource.height = height;
 	_imageResource.trans = trans;
@@ -38,16 +35,12 @@ HRESULT loadItem::initForImage(wstring keyName, const TCHAR* fileName, int width
 	return S_OK;
 }
 
-HRESULT loadItem::initForImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height, BOOL trans, COLORREF transColor, bool blend)
+HRESULT loadItem::initForImage(const TCHAR* keyName, const TCHAR* fileName, float x, float y, int width, int height, BOOL trans, COLORREF transColor, bool blend)
 {
 	_kind = LOAD_KIND_IMAGE_2;
 
-	memset(&_imageResource, 0, sizeof(tagImageResource));
-
-	//_imageResource.keyName = keyName;
-	 _stprintf(_imageResource.keyName, L"%s", keyName.c_str());
-	//_imageResource.fileName = fileName;
-	_stprintf(_imageResource.fileName, L"%s", fileName);
+	_tcscpy(_imageResource.keyName, keyName);
+	_tcscpy(_imageResource.fileName, fileName);
 	_imageResource.x = x;
 	_imageResource.y = y;
 	_imageResource.width = width;
@@ -59,16 +52,12 @@ HRESULT loadItem::initForImage(wstring keyName, const TCHAR* fileName, float x, 
 	return S_OK;
 }
 
-HRESULT loadItem::initForFrameImage(wstring keyName, const TCHAR* fileName, int width, int height, int frameX, int frameY, BOOL trans, COLORREF transColor, bool blend)
+HRESULT loadItem::initForFrameImage(const TCHAR* keyName, const TCHAR* fileName, int width, int height, int frameX, int frameY, BOOL trans, COLORREF transColor, bool blend)
 {
 	_kind = LOAD_KIND_FRAMEIMAGE_0;
 
-	memset(&_imageResource, 0, sizeof(tagImageResource));
-
-	//_imageResource.keyName = keyName;
-	 _stprintf(_imageResource.keyName, L"%s", keyName.c_str());
-	//_imageResource.fileName = fileName;
-	_stprintf(_imageResource.fileName, L"%s", fileName);
+	_tcscpy(_imageResource.keyName, keyName);
+	_tcscpy(_imageResource.fileName, fileName);
 	_imageResource.width = width;
 	_imageResource.height = height;
 	_imageResource.frameX = frameX;
@@ -80,17 +69,13 @@ HRESULT loadItem::initForFrameImage(wstring keyName, const TCHAR* fileName, int 
 	return S_OK;
 }
 
-HRESULT loadItem::initForFrameImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height,
+HRESULT loadItem::initForFrameImage(const TCHAR* keyName, const TCHAR* fileName, float x, float y, int width, int height,
 	int frameX, int frameY, BOOL trans, COLORREF transColor, bool blend)
 {
 	_kind = LOAD_KIND_FRAMEIMAGE_1;
 
-	memset(&_imageResource, 0, sizeof(tagImageResource));
-
-	//_imageResource.keyName = keyName;
-	 _stprintf(_imageResource.keyName, L"%s", keyName.c_str());
-	//_imageResource.fileName = fileName;
-	_stprintf(_imageResource.fileName, L"%s", fileName);
+	_tcscpy(_imageResource.keyName, keyName);
+	_tcscpy(_imageResource.fileName, fileName);
 	_imageResource.width = width;
 	_imageResource.height = height;
 	_imageResource.x = x;
@@ -100,6 +85,18 @@ HRESULT loadItem::initForFrameImage(wstring keyName, const TCHAR* fileName, floa
 	_imageResource.trans = trans;
 	_imageResource.transColor = transColor;
 	_imageResource.blend = blend;
+
+	return S_OK;
+}
+
+HRESULT loadItem::initForSound(const TCHAR* keyName, const TCHAR* fileName, bool bgm, bool loop)
+{
+	_kind = LOAD_KIND_SOUND;
+
+	_tcscpy(_soundResource.keyName, keyName);
+	_tcscpy(_soundResource.fileName, fileName);
+	_soundResource.bgm = bgm;
+	_soundResource.loop = loop;
 
 	return S_OK;
 }
@@ -142,59 +139,88 @@ void loading::render()
 {
 	if(_background)	_background->render(getMemDC(), 0, 0);
 	_loadingBar->render();
+
+	SetBkMode(getMemDC(), TRANSPARENT);
+
+	if (_currentGauge > 0 && _currentGauge < _vLoadItem.size())
+	{
+		if (_vLoadItem[_currentGauge]->getLoadingKind() <= LOAD_KIND_FRAMEIMAGE_1)
+		{
+			int x = _loadingBar->getRect().left;
+			int y = _loadingBar->getRect().top - 10;
+			TCHAR* name = _vLoadItem[_currentGauge-1]->getImageResource().fileName;
+			TextOut(getMemDC(), x, y, name, _tcslen(name));
+		}
+		else if (_vLoadItem[_currentGauge-1]->getLoadingKind() == LOAD_KIND_SOUND)
+		{
+			int x = _loadingBar->getRect().left;
+			int y = _loadingBar->getRect().top - 10;
+			TCHAR* name = _vLoadItem[_currentGauge-1]->getSoundResource().fileName;
+			TextOut(getMemDC(), x, y, name, _tcslen(name));
+		}
+	}
+
 }
 
 
-void loading::loadImage(wstring keyName, int width, int height, bool blend)
+void loading::loadImage(const TCHAR* keyName, int width, int height, bool blend)
 {
 	loadItem* item = new loadItem;
 	item->initForImage(keyName, width, height, blend);
 
-	_vLoadImage.push_back(item);
+	_vLoadItem.push_back(item);
 }
 
-void loading::loadImage(wstring keyName, const TCHAR* fileName, int width, int height, BOOL trans, COLORREF transColor, bool blend)
+void loading::loadImage(const TCHAR* keyName, const TCHAR* fileName, int width, int height, BOOL trans, COLORREF transColor, bool blend)
 {
 	loadItem* item = new loadItem;
 	item->initForImage(keyName, fileName, width, height, trans, transColor, blend);
 
-	_vLoadImage.push_back(item);
+	_vLoadItem.push_back(item);
 }
 
-void loading::loadImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height, BOOL trans, COLORREF transColor, bool blend)
+void loading::loadImage(const TCHAR* keyName, const TCHAR* fileName, float x, float y, int width, int height, BOOL trans, COLORREF transColor, bool blend)
 {
 	loadItem* item = new loadItem;
 	item->initForImage(keyName, fileName, x, y, width, height, trans, transColor, blend);
 
-	_vLoadImage.push_back(item);
+	_vLoadItem.push_back(item);
 }
 
-void loading::loadFrameImage(wstring keyName, const TCHAR* fileName, int width, int height, int frameX, int frameY, BOOL trans, COLORREF transColor, bool blend)
+void loading::loadFrameImage(const TCHAR* keyName, const TCHAR* fileName, int width, int height, int frameX, int frameY, BOOL trans, COLORREF transColor, bool blend)
 {
 	loadItem* item = new loadItem;
 	item->initForFrameImage(keyName, fileName, width, height, frameX, frameY, trans, transColor, blend);
 
-	_vLoadImage.push_back(item);
+	_vLoadItem.push_back(item);
 }
 
-void loading::loadFrameImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height, int frameX, int frameY, BOOL trans, COLORREF transColor, bool blend)
+void loading::loadFrameImage(const TCHAR* keyName, const TCHAR* fileName, float x, float y, int width, int height, int frameX, int frameY, BOOL trans, COLORREF transColor, bool blend)
 {
 	loadItem* item = new loadItem;
 	item->initForFrameImage(keyName, fileName, x, y, width, height, frameX, frameY, trans, transColor, blend);
 
-	_vLoadImage.push_back(item);
+	_vLoadItem.push_back(item);
+}
+
+void loading::loadSound(const TCHAR* keyName, const TCHAR* fileName, bool bgm, bool loop)
+{
+	loadItem* item = new loadItem;
+	item->initForSound(keyName, fileName, bgm, loop);
+
+	_vLoadItem.push_back(item);
 }
 
 
 BOOL loading::loadingImageDone()
 {
 	//로딩이 끝났으면 다됐다고 전해라~
-	if (_currentGauge >= _vLoadImage.size())
+	if (_currentGauge >= _vLoadItem.size())
 	{
 		return TRUE;
 	}
 
-	loadItem* item = _vLoadImage[_currentGauge];
+	loadItem* item = _vLoadItem[_currentGauge];
 
 	switch (item->getLoadingKind())
 	{
@@ -230,12 +256,13 @@ BOOL loading::loadingImageDone()
 		break;
 		case LOAD_KIND_SOUND:
 		{
-			//쉬우니 완성해볼 것.
+			tagSoundResource sound = item->getSoundResource();
+			SOUNDMANAGER->addSound(sound.keyName, sound.fileName, sound.bgm, sound.loop);
 		}
 		break;
 	}
 
-	_loadingBar->setGauge(_currentGauge, _vLoadImage.size());
+	_loadingBar->setGauge(_currentGauge, _vLoadItem.size());
 	_currentGauge++;
 
 	return FALSE;

@@ -22,6 +22,18 @@ enum BTNSELECT1
 	BTNSELECT1_MAX
 };
 
+enum BTNTEST
+{
+	BTNTEST_STORY,
+	BTNTEST_READYBASE,
+	BTNTEST_POS,
+	BTNTEST_BUY,
+	BTNTEST_SELL,
+	BTNTEST_BATTLE,
+
+	BTNTEST_MAX
+};
+
 #define SCENARIO_MAX 58
 
 class sceneSelect : public gameNode
@@ -34,6 +46,8 @@ private:
 	button*		_button1[BTNSELECT1_MAX];
 		
 	button*		_button2[SCENARIO_MAX + 1];
+
+	button*		_buttonTest[BTNTEST_MAX];
 
 		
 			
@@ -77,5 +91,14 @@ public:
 	//level2
 	static void cbFuncSelect(void* obj);
 	static void cbFuncPrev(void* obj);
+
+	//debug
+	static void cbFuncDebug1(void* obj);
+	static void cbFuncDebug2(void* obj);
+	static void cbFuncDebug3(void* obj);
+	static void cbFuncDebug4(void* obj);
+	static void cbFuncDebug5(void* obj);
+	static void cbFuncDebug6(void* obj);
+
 };
 

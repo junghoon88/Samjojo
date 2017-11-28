@@ -14,6 +14,13 @@ sceneSelect::sceneSelect()
 	{
 		_button2[i] = NULL;
 	}
+	
+	//debug
+	for (int i = 0; i < BTNTEST_MAX; i++)
+	{
+		_buttonTest[i] = NULL;
+	}
+
 	_player = NULL;
 	_friend = NULL;
 	_enemy = NULL;
@@ -56,6 +63,12 @@ void sceneSelect::release(void)
 		SAFE_DELETE(_button2[i]);
 	}
 
+	//debug
+	for (int i = 0; i < BTNTEST_MAX; i++)
+	{
+		_buttonTest[i]->release();
+		SAFE_DELETE(_buttonTest[i]);
+	}
 }
 
 void sceneSelect::update(void)
@@ -66,6 +79,12 @@ void sceneSelect::update(void)
 		for (int i = 0; i < BTNSELECT1_MAX; i++)
 		{
 			if (_button1[i]) _button1[i]->update();
+		}
+
+		//debug
+		for (int i = 0; i < BTNTEST_MAX; i++)
+		{
+			if (_buttonTest[i]) _buttonTest[i]->update();
 		}
 		break;
 	case SELECTLEVEL2:
@@ -92,6 +111,13 @@ void sceneSelect::render(void)
 		{
 			if (_button1[i] == NULL) continue;
 			_button1[i]->render();
+		}
+
+		//debug
+		for (int i = 0; i < BTNTEST_MAX; i++)
+		{
+			if (_buttonTest[i] == NULL) continue;
+			_buttonTest[i]->render();
 		}
 		break;
 	case SELECTLEVEL2:
@@ -140,6 +166,40 @@ void sceneSelect::setuptButtons(void)
 	}
 	_button2[SCENARIO_MAX] = new button;
 	_button2[SCENARIO_MAX]->init(L"SELECT-선택버튼", L"이전으로", WINSIZEX2 / 2 - 400, 500, { 0,0 }, { 0,1 }, cbFuncPrev, this);
+
+	//debugt
+	for (int i = 0; i < BTNTEST_MAX; i++)
+	{
+		switch (i)
+		{
+			case BTNTEST_STORY:
+				_buttonTest[i] = new button;
+				_buttonTest[i]->init(L"SELECT-선택버튼", L"스토리씬", 300, 100, { 0,0 }, { 0,1 }, cbFuncDebug1, this);
+				break;
+			case BTNTEST_READYBASE:
+				_buttonTest[i] = new button;
+				_buttonTest[i]->init(L"SELECT-선택버튼", L"준비기본씬", 300, 150, { 0,0 }, { 0,1 }, cbFuncDebug2, this);
+				break;
+			case BTNTEST_POS:
+				_buttonTest[i] = new button;
+				_buttonTest[i]->init(L"SELECT-선택버튼", L"출진", 300, 200, { 0,0 }, { 0,1 }, cbFuncDebug3, this);
+				break;
+			case BTNTEST_BUY:
+				_buttonTest[i] = new button;
+				_buttonTest[i]->init(L"SELECT-선택버튼", L"구매상점", 300, 250, { 0,0 }, { 0,1 }, cbFuncDebug4, this);
+				break;
+			case BTNTEST_SELL:
+				_buttonTest[i] = new button;
+				_buttonTest[i]->init(L"SELECT-선택버튼", L"판매상점", 300, 300, { 0,0 }, { 0,1 }, cbFuncDebug5, this);
+				break;
+			case BTNTEST_BATTLE:
+				_buttonTest[i] = new button;
+				_buttonTest[i]->init(L"SELECT-선택버튼", L"전투", 300, 350, { 0,0 }, { 0,1 }, cbFuncDebug6, this);
+				break;
+
+		}
+		
+	}
 }
 
 void sceneSelect::selectScenario(void)
@@ -158,9 +218,9 @@ void sceneSelect::selectScenario(void)
 
 
 			
-			SCENEMANAGER->changeScene(L"대화씬");
+			//SCENEMANAGER->changeScene(L"대화씬");
 			//SCENEMANAGER->changeScene(L"상점씬");
-			//SCENEMANAGER->changeScene(L"전투씬");
+			SCENEMANAGER->changeScene(L"전투씬");
 			//SCENEMANAGER->changeScene(L"준비기본씬");
 
 			break;
@@ -200,5 +260,39 @@ void sceneSelect::cbFuncPrev(void * obj)
 	sceneSelect* ss = (sceneSelect*)obj;
 	ss->setPrevLevel();
 }
+
+//debug
+void sceneSelect::cbFuncDebug1(void* obj)
+{
+	sceneSelect* ss = (sceneSelect*)obj;
+	SCENEMANAGER->changeScene(L"대화씬");
+}
+void sceneSelect::cbFuncDebug2(void* obj)
+{
+	sceneSelect* ss = (sceneSelect*)obj;
+	SCENEMANAGER->changeScene(L"준비기본씬");
+}
+void sceneSelect::cbFuncDebug3(void* obj)
+{
+	sceneSelect* ss = (sceneSelect*)obj;
+	SCENEMANAGER->changeScene(L"출진씬");
+}
+void sceneSelect::cbFuncDebug4(void* obj)
+{
+	sceneSelect* ss = (sceneSelect*)obj;
+	SCENEMANAGER->changeScene(L"구매상점씬");
+}
+void sceneSelect::cbFuncDebug5(void* obj)
+{
+	sceneSelect* ss = (sceneSelect*)obj;
+	SCENEMANAGER->changeScene(L"판매상점씬");
+}
+void sceneSelect::cbFuncDebug6(void* obj)
+{
+	sceneSelect* ss = (sceneSelect*)obj;
+	SCENEMANAGER->changeScene(L"전투씬");
+}
+
+
 //~callback functions
 //-----------------------------------------------------------------------------------------

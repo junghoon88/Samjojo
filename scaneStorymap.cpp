@@ -3,6 +3,7 @@
 
 
 scaneStorymap::scaneStorymap()
+	: sDl(NULL)
 {
 }
 
@@ -13,8 +14,6 @@ scaneStorymap::~scaneStorymap()
 }
 HRESULT scaneStorymap::init(void)
 {
-	
-
 	storymap = IMAGEMANAGER->findImage(L"smap 0000");
 
 	for (int i = 0; i < STILEY; i++)
@@ -75,6 +74,9 @@ HRESULT scaneStorymap::init(void)
 }
 void scaneStorymap::release(void)
 {
+	ZeroMemory(&iso, sizeof(tagIso) * STILEX * STILEY);
+	storymap = NULL;
+	ZeroMemory(&img, sizeof(tagChar) * CHARMAX);
 
 }
 void scaneStorymap::update(void) 

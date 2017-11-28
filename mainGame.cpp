@@ -18,6 +18,8 @@ mainGame::mainGame()
 {
 	_stop = false;
 	_winsize = { WINSIZEX, WINSIZEY };
+
+	_FPS = 60.0f;
 }
 
 
@@ -120,34 +122,13 @@ void mainGame::release(void)
 }
 
 //ø¨ªÍ∞¸∑√(≈∏¿Ã∏”)
-void mainGame::update(void)	
+void mainGame::update(void)
 {
 	gameNode::update();
 
-	if (SCENEMANAGER->isCurScene(L"√ ±‚»≠æ¿"))
-	{
-		setWindowResize({ WINSIZEX2, WINSIZEY2 });
-	}
-	else if (SCENEMANAGER->isCurScene(L"º±≈√æ¿"))
-	{
-		setWindowResize({ WINSIZEX2, WINSIZEY2 });
-	}
-	else if (SCENEMANAGER->isCurScene(L"∏ ≈¯æ¿"))
-	{
-		setWindowResize({ WINSIZEX, WINSIZEY });
-	}
-	else if (SCENEMANAGER->isCurScene(L"¿Ø¥÷ø°µ≈Õ"))
-	{
-		setWindowResize({ WINSIZEX, WINSIZEY });
-	}
-	else if (SCENEMANAGER->isCurScene(L"¥Î»≠æ¿"))
-	{
-		setWindowResize({ WINSIZEX2, WINSIZEY2 });
-	}
-	else if (SCENEMANAGER->isCurScene(L"¿¸≈ıæ¿"))
-	{
-		setWindowResize({ WINSIZEX, WINSIZEY });
-	}
+	checkWindowSize();
+	controlFPS();
+
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))
 	{
@@ -199,3 +180,42 @@ void mainGame::setWindowResize(POINT size)
 	_winsize = size;
 }
 
+void mainGame::checkWindowSize(void)
+{
+	if (SCENEMANAGER->isCurScene(L"√ ±‚»≠æ¿"))
+	{
+		setWindowResize({ WINSIZEX2, WINSIZEY2 });
+	}
+	else if (SCENEMANAGER->isCurScene(L"º±≈√æ¿"))
+	{
+		setWindowResize({ WINSIZEX2, WINSIZEY2 });
+	}
+	else if (SCENEMANAGER->isCurScene(L"∏ ≈¯æ¿"))
+	{
+		setWindowResize({ WINSIZEX, WINSIZEY });
+	}
+	else if (SCENEMANAGER->isCurScene(L"¿Ø¥÷ø°µ≈Õ"))
+	{
+		setWindowResize({ WINSIZEX, WINSIZEY });
+	}
+	else if (SCENEMANAGER->isCurScene(L"¥Î»≠æ¿"))
+	{
+		setWindowResize({ WINSIZEX2, WINSIZEY2 });
+	}
+	else if (SCENEMANAGER->isCurScene(L"¿¸≈ıæ¿"))
+	{
+		setWindowResize({ WINSIZEX, WINSIZEY });
+	}
+}
+
+void mainGame::controlFPS(void)
+{
+	if (SCENEMANAGER->isCurScene(L"√ ±‚»≠æ¿"))
+	{
+		_FPS = 300.0f;
+	}
+	else
+	{
+		_FPS = 60.0f;
+	}
+}
