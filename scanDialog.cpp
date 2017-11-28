@@ -184,14 +184,14 @@ void scanDialog::loadDialog(void)
 		else if (str[0] == '*')
 		{
 			char *temp;
-			temp = strtok(str, "*");
+			temp = strtok(str, "*"); //문자열분리
 			temp = strtok(temp, ",");
 			int posx = atoi(temp);
 			temp = strtok(NULL, ",");
 			int posy = atoi(temp);
 			temp = strtok(NULL, ",");
 			int isLeft = atoi(temp);
-
+			story = RectMake(posx, posy, 464, 120);
 			printf("");
 		}
 		

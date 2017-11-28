@@ -32,6 +32,8 @@ public:
 
 
 public:
+	
+	
 	inline int getNext(void) { return next; }
 
 	

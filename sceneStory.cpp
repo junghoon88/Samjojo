@@ -44,6 +44,7 @@ void sceneStory::update(void)
 	
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
+	
 		_dialog->loadDialog();
 		
 	}
