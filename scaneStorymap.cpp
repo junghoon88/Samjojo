@@ -16,6 +16,7 @@ HRESULT scaneStorymap::init(void)
 {
 	storymap = IMAGEMANAGER->findImage(L"smap 0000");
 
+
 	for (int i = 0; i < STILEY; i++)
 	{
 		for (int j = 0; j < STILEX; j++)
@@ -74,11 +75,15 @@ HRESULT scaneStorymap::init(void)
 }
 void scaneStorymap::release(void)
 {
-	ZeroMemory(&iso, sizeof(tagIso) * STILEX * STILEY);
-	storymap = NULL;
-	ZeroMemory(&img, sizeof(tagChar) * CHARMAX);
-
+	for (int i = 0; i < STILEY; i++)
+	{
+		for (int j = 0; j < STILEY; j++)
+		{
+			DeleteObject(iso[i][j].region);
+		}
+	}
 }
+
 void scaneStorymap::update(void) 
 {
 
