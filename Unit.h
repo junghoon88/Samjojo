@@ -1,6 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "Item.h"
+#include "aStar.h"
 
 #define UNIT_ATTACK_RANGE_MAX 7
 
