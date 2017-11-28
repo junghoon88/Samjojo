@@ -6,7 +6,7 @@
 #define STILESIZEX 8
 #define STILESIZEY 4
 
-#define CHARMAX 6
+#define CHARMAX 11
 //Å¸ÀÏ°¹¼ö
 #define STILEX 200
 #define STILEY 200

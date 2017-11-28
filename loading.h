@@ -27,27 +27,40 @@ struct tagImageResource
 	bool blend;
 };
 
+struct tagSoundResource
+{
+	TCHAR keyName[256];
+	TCHAR fileName[256];
+	bool bgm;
+	bool loop;
+};
+
 class loadItem
 {
 private:
 	LOAD_KIND _kind;
 	tagImageResource _imageResource;
+	tagSoundResource _soundResource;
 
 public:
+	loadItem();
+	~loadItem();
 
-	HRESULT initForImage(wstring keyName, int width, int height, bool blend = FALSE);
-	HRESULT initForImage(wstring keyName, const TCHAR* fileName, int width, int height, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
-	HRESULT initForImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
+	HRESULT initForImage(const TCHAR* keyName, int width, int height, bool blend = FALSE);
+	HRESULT initForImage(const TCHAR* keyName, const TCHAR* fileName, int width, int height, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
+	HRESULT initForImage(const TCHAR* keyName, const TCHAR* fileName, float x, float y, int width, int height, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
 
-	HRESULT initForFrameImage(wstring keyName, const TCHAR* fileName, int width, int height, int frameX, int frameY, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
-	HRESULT initForFrameImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height, int frameX, int frameY, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
+	HRESULT initForFrameImage(const TCHAR* keyName, const TCHAR* fileName, int width, int height, int frameX, int frameY, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
+	HRESULT initForFrameImage(const TCHAR* keyName, const TCHAR* fileName, float x, float y, int width, int height, int frameX, int frameY, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
+
+	HRESULT initForSound(const TCHAR* keyName, const TCHAR* fileName, bool bgm, bool loop);
 
 	LOAD_KIND getLoadingKind() { return _kind; }
 
-	tagImageResource getImageResource(void) { return _imageResource; }
+public:
+	inline tagImageResource getImageResource(void) { return _imageResource; }
+	inline tagSoundResource getSoundResource(void) { return _soundResource; }
 
-	loadItem();
-	~loadItem();
 };
 
 class loading : public gameNode
@@ -57,7 +70,7 @@ private:
 	typedef vector<loadItem*>::iterator arrLoadItemIter;
 
 private:
-	arrLoadItem _vLoadImage;
+	arrLoadItem _vLoadItem;
 
 
 	image* _background;
@@ -71,15 +84,16 @@ public:
 	void update();
 	void render();
 
-	void loadImage(wstring keyName, int width, int height, bool blend = FALSE);
-	void loadImage(wstring keyName, const TCHAR* fileName, int width, int height, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
-	void loadImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
-	void loadFrameImage(wstring keyName, const TCHAR* fileName, int width, int height, int frameX, int frameY, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
-	void loadFrameImage(wstring keyName, const TCHAR* fileName, float x, float y, int width, int height, int frameX, int frameY, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
+	void loadImage(const TCHAR* keyName, int width, int height, bool blend = FALSE);
+	void loadImage(const TCHAR* keyName, const TCHAR* fileName, int width, int height, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
+	void loadImage(const TCHAR* keyName, const TCHAR* fileName, float x, float y, int width, int height, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
+	void loadFrameImage(const TCHAR* keyName, const TCHAR* fileName, int width, int height, int frameX, int frameY, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
+	void loadFrameImage(const TCHAR* keyName, const TCHAR* fileName, float x, float y, int width, int height, int frameX, int frameY, BOOL trans = FALSE, COLORREF transColor = FALSE, bool blend = FALSE);
+	void loadSound(const TCHAR* keyName, const TCHAR* fileName, bool bgm, bool loop);
 
 	BOOL loadingImageDone();
 
-	vector<loadItem*> getLoadItem() { return _vLoadImage; }
+	vector<loadItem*> getLoadItem() { return _vLoadItem; }
 
 
 	loading();

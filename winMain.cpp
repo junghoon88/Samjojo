@@ -1,15 +1,20 @@
 #include "stdafx.h"
 #include "mainGame.h"
+#include "globalTools.h"
 
 //전역변수를 선언한다면 요기요기요 
 HINSTANCE _hInstance;		//어플 고유번호
 HWND _hWnd;					//조작질
 POINT _ptMouse;
+HFONT _gFont[FONTVERSION_MAX];
+HBRUSH _gBrush[BRUSHVERSION_MAX];
+
 
 LPTSTR _lpszClass = WINNAME;
 
 
 mainGame _mg;
+globalTools _gTools;
 
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -61,10 +66,24 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 		return 0;
 	}
 
+	//Font, Brush 생성
+	_gTools.setFontAll();
+	_gTools.setBrushAll();
+
 	//GetMessage : 메시지 정보가 들어오면 그때 반응
 	//PeekMessage : 메시지 정보가 들어오든 말든 무조건 반응(상시 루프돌고있음)
 	while (true)
 	{
+		if (_mg.getStop())
+		{
+			setWindowsSize(WINSTARTX, WINSTARTY, _mg.getWinSize().x, _mg.getWinSize().y);
+
+			//윈도우 창을 모니터에 띄워줌
+			ShowWindow(_hWnd, cmdShow);
+			
+			_mg.setStop(false);
+		}
+
 		if (PeekMessage(&message, NULL, 0, 0, PM_REMOVE))
 		{
 			if (message.message == WM_QUIT) break;
@@ -73,7 +92,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 		}
 		else
 		{
-			TIMEMANAGER->update(60.0f);
+			TIMEMANAGER->update(_mg.getFPS());
 			_mg.update();
 			_mg.render();
 		}
@@ -86,6 +105,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	//}
 
 	_mg.release();
+
+	//Font, Brush 제거
+	_gTools.deleteFontAll();
+	_gTools.deleteBrushAll();
 
 	return message.wParam;
 }

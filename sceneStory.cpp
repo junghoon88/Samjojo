@@ -26,13 +26,18 @@ HRESULT sceneStory::init(void)
 	
 	_sSmap = new scaneStorymap;
 	_sSmap->init();
-
 	_sSmap->setAdreessLinkDialog(_dialog);
+
 	return S_OK;
 }
 
 void sceneStory::release(void)
 {
+	_dialog->release();
+	SAFE_DELETE(_dialog);
+
+	_sSmap->release();
+	SAFE_DELETE(_sSmap);
 }
 
 void sceneStory::update(void)
@@ -44,6 +49,7 @@ void sceneStory::update(void)
 	
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
+	
 		_dialog->loadDialog();
 		
 	}
