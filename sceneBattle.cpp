@@ -46,11 +46,12 @@ void sceneBattle::update(void)
 void sceneBattle::render(void)
 {
 	_map->render();
-	_cursor->render();
 
 	_player->render();
 	_friend->render();
 	_enemy->render();
+
+	_cursor->render();
 }
 
 void sceneBattle::initImage(void)

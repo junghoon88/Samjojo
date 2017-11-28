@@ -45,6 +45,8 @@ HRESULT sceneSelect::init(void)
 	_friend->loadUnits();
 	_enemy->loadUnits();
 
+	_map->loadData(3);
+	_enemy->locateUnits();
 
 	return S_OK;
 }
@@ -216,8 +218,6 @@ void sceneSelect::selectScenario(void)
 			_map->loadData(i);
 			_enemy->locateUnits();
 
-
-			
 			//SCENEMANAGER->changeScene(L"¥Î»≠æ¿");
 			//SCENEMANAGER->changeScene(L"ªÛ¡°æ¿");
 
