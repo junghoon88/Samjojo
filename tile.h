@@ -15,15 +15,11 @@ private:
 	// G == 시작점으로부터 현재 노드(타일) 까지의 경로비용
 	// H == 현재 노드(타일)부터 도착점까지의 경로비용
 
-	float _totalCost;		//F
-	float _costFromStart;	//G
-	float _costToGoal;		//H
+	int _totalCost;		//F
 
 	bool _isOpen;
+	bool _isFind;
 
-	tile* _parentNode;
-
-	HPEN _pen;
 
 	wstring _attribute;
 
@@ -53,17 +49,10 @@ public:
 	void setTotalCost(float totalCost) { _totalCost = totalCost; }
 	float getTotalCost() { return _totalCost; }
 
-	void setCostFromStart(float costFromStart) { _costFromStart = costFromStart; }
-	float getCostFromStart() { return _costFromStart; }
-
-	void setCostToGoal(float costToGoal) { _costToGoal = costToGoal; }
-	float getCostToGoal() { return _costToGoal; }
-
-	void setParentNode(tile* t) { _parentNode = t; }
-	tile* getParentNode() { return _parentNode; }
-
 	void setIsOpen(bool isOpen) { _isOpen = isOpen; }
 	bool getIsOpen() { return _isOpen; }
 
+	inline void setIsFind(bool isFind) { _isFind = isFind; }
+	inline bool getIsFind(void) { return _isFind; }
 };
 
