@@ -234,7 +234,7 @@ public:
 	inline void setItemA(ItemArmor* itema) { _itemA = itema; }
 	inline ItemSpecial*	getItemS(void) { return _itemS; }
 	inline void setItemS(ItemSpecial* items) { _itemS = items; }
-	inline int getImgBattleIdle(void) { return _battleState.numImgBattleAtk; }
+	inline int getImgBattleIdle(void) { return _battleState.numImgBattleIdle; }
 	inline int getImgBattleAtk(void) { return _battleState.numImgBattleAtk; }
 	inline int getImgBattleSpc(void) { return _battleState.numImgBattleSpc; }
 	inline void setLinkAdressAStar(aStar* astar) { _astar = astar; }
