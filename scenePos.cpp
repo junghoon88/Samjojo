@@ -26,11 +26,6 @@ HRESULT scenePos::init(void) {
 	_okClicking = false;
 	_cancelClicking = false;
 
-	for (int i = 0; i < _vUnitsInFile.size(); i++) {
-		_vUnitsInFile[i]->getStatus().posRC = RectMake(4+(57*i), 52, 48, 48);
-	}
-
-
 	return S_OK;
 }
 void scenePos::release(void) {

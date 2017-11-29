@@ -13,7 +13,6 @@ struct tagStatus //기본정보 (수정하지말것)
 
 	TEAM team;
 
-	RECT posRC;       //출진 선택전용 렉트
 	//이미지
 	image*			imgFace;
 	int				numImagFace;
