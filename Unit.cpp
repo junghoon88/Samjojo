@@ -41,8 +41,9 @@ void Unit::release(void)
 
 void Unit::update(void)
 {
-	move();
+	_battleState.isMoving = move();
 
+	
 	switch (_battleState.unitState)
 	{
 	case UNITSTATE_IDLE:	  //기본상태
@@ -142,7 +143,7 @@ void Unit::copyUnitData(Unit* unit)
 	memcpy(&_battleState, &unit->getBattleState(), sizeof(tagBattleState));
 }
 
-void Unit::move(void)
+bool Unit::move(void)
 {
 	int moveSpeed = TILESIZE / 16;
 
@@ -177,7 +178,7 @@ void Unit::move(void)
 		}
 		else
 		{
-			return;
+			return FALSE;
 		}
 	}
 
@@ -201,6 +202,8 @@ void Unit::move(void)
 	_battleState.tilePt = { (LONG)(_battleState.pt.x / TILESIZE), (LONG)(_battleState.pt.y / TILESIZE) };
 
 	_battleState.unitState = UNITSTATE_IDLE;
+
+	return TRUE;
 }
 
 void Unit::move(DIRECTION dir)
@@ -258,7 +261,7 @@ void Unit::move(DIRECTION dir)
 }
 
 
-void Unit::findEnemy(TEAM myTeam)
+void Unit::findEnemy(TEAM myTeam, POINT closeEnemyPos)
 {
 	//1. 공격 범위 넣고
 	_astar->resetAtkRange();
@@ -285,7 +288,8 @@ void Unit::findEnemy(TEAM myTeam)
 	else
 	{
 		//4. 공격이 불가능한 상태이면 가장 가까운 적을 향해 간다.
-
+		_battleState.findEnemy = false;
+		_battleState.tilePtNext = _astar->findCloseTile(_battleState.tilePt, closeEnemyPos);
 	}
 }
 
@@ -296,10 +300,11 @@ void Unit::findMoveArea(void)
 	_astar->clearTiles();
 
 	POINT curTilePt = _battleState.tilePt;
-	_astar->setTiles(curTilePt, 3);
+	_astar->setTiles(curTilePt, _status.movePoint);
 	if (_astar->getTile(curTilePt))
 	{
 		_astar->findOpenList(_astar->getTile(curTilePt));
+
 		for (int i = 0; i < _astar->getOpenList().size(); i++)
 		{
 			_moveArea.push_back(_astar->getOpenList()[i]);

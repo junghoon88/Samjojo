@@ -101,18 +101,24 @@ vector<tile*> aStar::addOpenList(tile* currentTile)
 			if (i == 2 && j == 0) continue;
 			if (i == 2 && j == 2) continue;
 
-			if (startX + j < 0) continue;
-			if (startX + j >= _tileMax.x) continue;
-			if (startY + i < 0) continue;
-			if (startY + i >= _tileMax.y) continue;
+			int targetX = startX + j;
+			int targetY = startY + i;
+
+			if (targetX < 0) continue;
+			if (targetX >= _tileMax.x) continue;
+			if (targetY < 0) continue;
+			if (targetY >= _tileMax.y) continue;
 
 
-			tile* node = findTile(startX + j, startY + i);
+			tile* node = findTile(targetX, targetY);
 			if (node == NULL) continue;
 
 			if (node->getIsOpen()) continue; //이미 열었으면
 			if (node->getAttribute() == L"start") continue;
 			if (node->getAttribute() == L"unmove") continue;
+
+			//유닛이 있으면 건너뛰기
+			if (_map->getTeamInfo()[targetX + targetY * TILESIZE] != TEAM_NONE) continue;
 
 
 			bool addObj = true;
@@ -261,6 +267,8 @@ void aStar::addAtkList(TEAM myTeam, tile* currentTile)
 ///POINT * pos : 현재 위치를 받아서, 적을 공격할 수 있는 위치 중에 가장 가까운 위치로 변경해준다.
 bool aStar::findAtkPos(TEAM myTeam, POINT* myPos, POINT* enemyPos)
 {
+	addAtkList(myTeam, findTile(myPos->x, myPos->y));
+
 	for (viTile iter = _vOpenList.begin(); iter != _vOpenList.end(); ++iter)
 	{
 		addAtkList(myTeam, (*iter));
@@ -287,6 +295,27 @@ bool aStar::findAtkPos(TEAM myTeam, POINT* myPos, POINT* enemyPos)
 	}
 
 	return false;
+}
+
+POINT aStar::findCloseTile(POINT st, POINT ed)
+{
+	POINT tarPt = st;
+
+	float distMin = 1000.0f;
+
+	for (viTile iter = _vOpenList.begin(); iter != _vOpenList.end(); ++iter)
+	{
+		POINT tempPt = { (*iter)->getIdX(), (*iter)->getIdY() };
+
+		float dist = getDistance(tempPt.x, tempPt.y, ed.x, ed.y);
+		if (distMin > dist)
+		{
+			tarPt = tempPt;
+			distMin = dist;
+		}
+	}
+
+	return tarPt;
 }
 
 void aStar::release(void)
