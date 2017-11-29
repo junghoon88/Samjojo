@@ -8,6 +8,8 @@ button::button()
 	_stprintf(_strText, L"");
 
 	_fontNum = FONTVERSION_SAMJOJO;
+
+	_color = RGB(0, 0, 0);
 }
 
 
@@ -89,31 +91,6 @@ HRESULT button::init(const TCHAR * imageName, const TCHAR * text, int x, int y, 
 	return S_OK;
 }
 
-HRESULT button::init(const TCHAR * imageName, const TCHAR * text, int x, int y, POINT btnDownFramePoint, POINT btnUpFramePoint, COLORREF color, CALLBACK_FUNCTION cbFunction)
-{
-	_obj = NULL;
-	_callbackFunction = static_cast<CALLBACK_FUNCTION>(cbFunction);
-	_callbackFunctionParameter = NULL;
-
-	_direction = BUTTONDIRECTION_NULL;
-
-	_x = x;
-	_y = y;
-
-	_btnUpFramePoint = btnUpFramePoint;
-	_btnDownFramePoint = btnDownFramePoint;
-
-	_imageName = imageName;
-	_image = IMAGEMANAGER->findImage(imageName);
-
-	_rc = RectMakeCenter(x, y, _image->getFrameWidth(), _image->getFrameHeight());
-
-	_color = color;
-	setText(text);
-
-	return S_OK;
-}
-
 HRESULT button::init(const TCHAR * imageName, const TCHAR* text, int x, int y, POINT btnDownFramePoint, POINT btnUpFramePoint, void * cbFunction, void * obj)
 {
 	_obj = obj;
@@ -182,11 +159,13 @@ void button::render(void)
 		break;
 	}
 
+	COLORREF oldcolor = GetTextColor(getMemDC());
 	SetTextColor(getMemDC(), _color);
 	SetBkMode(getMemDC(), TRANSPARENT);
 	HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
 	DrawText(getMemDC(), _strText, _tcslen(_strText), &_rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 	SelectObject(getMemDC(), oldFont);
+	SetTextColor(getMemDC(), oldcolor);
 }
 
 

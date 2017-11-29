@@ -211,60 +211,89 @@ void sceneUnitEditor::initButton(void)
 	
 	//label
 
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FILELIST]->init(L"LABEL-큰이름표", L"유닛목록", 50 + UPDATEPOSX, 100 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(0, 0, 0), NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FILELIST]->init(L"LABEL-큰이름표", L"유닛목록", 50 + UPDATEPOSX, 100 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FILELIST]->setColor(RGB(0, 0, 0));
 
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_NAME]->init(L"LABEL-작은이름표", L"이름", 475 + 25 + UPDATEPOSX, 100 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_NAME]->init(L"LABEL-작은이름표", L"이름", 475 + 25 + UPDATEPOSX, 100 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_NAME]->setColor(RGB(255, 255, 255));
 
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FAMILY]->init(L"LABEL-작은이름표", L"소속", 475 + 25 + UPDATEPOSX, 150 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_AOS]->init(L"LABEL-작은이름표", L"병과", 475 + 25 + UPDATEPOSX, 185 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FAMILY]->init(L"LABEL-작은이름표", L"소속", 475 + 25 + UPDATEPOSX, 150 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FAMILY]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_AOS]->init(L"LABEL-작은이름표", L"병과", 475 + 25 + UPDATEPOSX, 185 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_AOS]->setColor(RGB(255, 255, 255));
 																											   
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_INIT]->init(L"LABEL-큰이름표", L"기본능력치", 475 + 50 + UPDATEPOSX, 235 + 15 + UPDATEPOSY, { 0,0 }, { 0,0 }, RGB(0, 0, 0), NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_INIT]->init(L"LABEL-큰이름표", L"기본능력치", 475 + 50 + UPDATEPOSX, 235 + 15 + UPDATEPOSY, { 0,0 }, { 0,0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_INIT]->setColor(RGB(0, 0, 0));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_HP]->init(L"LABEL-작은이름표", L"체력", 475 + 25 + UPDATEPOSX, 285 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_HP]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_MP]->init(L"LABEL-작은이름표", L"마력", 475 + 25 + UPDATEPOSX, 320 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_MP]->setColor(RGB(255, 255, 255));
 
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_HP]->init(L"LABEL-작은이름표", L"체력", 475 + 25 + UPDATEPOSX, 285 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_MP]->init(L"LABEL-작은이름표", L"마력", 475 + 25 + UPDATEPOSX, 320 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_ATK]->init(L"LABEL-작은이름표", L"공격력", 475 + 25 + UPDATEPOSX, 370 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_ATK]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_DEP]->init(L"LABEL-작은이름표", L"방어력", 475 + 25 + UPDATEPOSX, 405 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_DEP]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_RES]->init(L"LABEL-작은이름표", L"정신력", 475 + 25 + UPDATEPOSX, 440 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_RES]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_AGL]->init(L"LABEL-작은이름표", L"순발력", 475 + 25 + UPDATEPOSX, 475 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_AGL]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FIG]->init(L"LABEL-작은이름표", L"사기"  , 475 + 25 + UPDATEPOSX, 510 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FIG]->setColor(RGB(255, 255, 255));
 
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_ATK]->init(L"LABEL-작은이름표", L"공격력", 475 + 25 + UPDATEPOSX, 370 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_DEP]->init(L"LABEL-작은이름표", L"방어력", 475 + 25 + UPDATEPOSX, 405 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_RES]->init(L"LABEL-작은이름표", L"정신력", 475 + 25 + UPDATEPOSX, 440 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_AGL]->init(L"LABEL-작은이름표", L"순발력", 475 + 25 + UPDATEPOSX, 475 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FIG]->init(L"LABEL-작은이름표", L"사기"  , 475 + 25 + UPDATEPOSX, 510 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_PWR]->init(L"LABEL-작은이름표", L"무력", 475 + 25 + UPDATEPOSX, 560 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_PWR]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LDS]->init(L"LABEL-작은이름표", L"통솔", 475 + 25 + UPDATEPOSX, 595 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LDS]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_INT]->init(L"LABEL-작은이름표", L"지력", 475 + 25 + UPDATEPOSX, 630 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_INT]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_DEX]->init(L"LABEL-작은이름표", L"민첩", 475 + 25 + UPDATEPOSX, 665 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_DEX]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LUK]->init(L"LABEL-작은이름표", L"행운", 475 + 25 + UPDATEPOSX, 700 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LUK]->setColor(RGB(255, 255, 255));
 
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_PWR]->init(L"LABEL-작은이름표", L"무력", 475 + 25 + UPDATEPOSX, 560 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LDS]->init(L"LABEL-작은이름표", L"통솔", 475 + 25 + UPDATEPOSX, 595 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_INT]->init(L"LABEL-작은이름표", L"지력", 475 + 25 + UPDATEPOSX, 630 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_DEX]->init(L"LABEL-작은이름표", L"민첩", 475 + 25 + UPDATEPOSX, 665 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LUK]->init(L"LABEL-작은이름표", L"행운", 475 + 25 + UPDATEPOSX, 700 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
 
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_ENTERSCENARIO]->init(L"LABEL-작은이름표", L"출전", 700 + 25 + UPDATEPOSX, 100 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_ENTERSCENARIO]->setColor(RGB(255, 255, 255));
 
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_ENTERSCENARIO]->init(L"LABEL-작은이름표", L"출전", 700 + 25 + UPDATEPOSX, 100 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LV]->init(L"LABEL-작은이름표"  , L"레벨", 700 + 25 + UPDATEPOSX, 150 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_MOVE]->init(L"LABEL-작은이름표", L"이동력", 700 + 25 + UPDATEPOSX, 185 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LV]->init(L"LABEL-작은이름표"  , L"레벨", 700 + 25 + UPDATEPOSX, 150 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LV]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_MOVE]->init(L"LABEL-작은이름표", L"이동력", 700 + 25 + UPDATEPOSX, 185 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_MOVE]->setColor(RGB(255, 255, 255));
 									 
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPER]->init(L"LABEL-큰이름표", L"증가능력치", 700 + 50 + UPDATEPOSX, 235 + 15 + UPDATEPOSY, { 0,0 }, { 0,0 }, RGB(0, 0, 0), NULL);
-
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERHP]->init(L"LABEL-작은이름표", L"체력", 700 + 25 + UPDATEPOSX, 285 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERMP]->init(L"LABEL-작은이름표", L"마력", 700 + 25 + UPDATEPOSX, 320 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPER]->init(L"LABEL-큰이름표", L"증가능력치", 700 + 50 + UPDATEPOSX, 235 + 15 + UPDATEPOSY, { 0,0 }, { 0,0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPER]->setColor(RGB(0, 0, 0));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERHP]->init(L"LABEL-작은이름표", L"체력", 700 + 25 + UPDATEPOSX, 285 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERHP]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERMP]->init(L"LABEL-작은이름표", L"마력", 700 + 25 + UPDATEPOSX, 320 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERMP]->setColor(RGB(255, 255, 255));
 																 
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERATK]->init(L"LABEL-작은이름표", L"공격력", 700 + 25 + UPDATEPOSX, 370 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERDEP]->init(L"LABEL-작은이름표", L"방어력", 700 + 25 + UPDATEPOSX, 405 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERRES]->init(L"LABEL-작은이름표", L"정신력", 700 + 25 + UPDATEPOSX, 440 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERAGL]->init(L"LABEL-작은이름표", L"순발력", 700 + 25 + UPDATEPOSX, 475 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERFIG]->init(L"LABEL-작은이름표", L"사기", 700 + 25 + UPDATEPOSX, 510 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERATK]->init(L"LABEL-작은이름표", L"공격력", 700 + 25 + UPDATEPOSX, 370 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERATK]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERDEP]->init(L"LABEL-작은이름표", L"방어력", 700 + 25 + UPDATEPOSX, 405 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERDEP]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERRES]->init(L"LABEL-작은이름표", L"정신력", 700 + 25 + UPDATEPOSX, 440 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERRES]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERAGL]->init(L"LABEL-작은이름표", L"순발력", 700 + 25 + UPDATEPOSX, 475 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERAGL]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERFIG]->init(L"LABEL-작은이름표", L"사기", 700 + 25 + UPDATEPOSX, 510 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERFIG]->setColor(RGB(255, 255, 255));
 																 
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERPWR]->init(L"LABEL-작은이름표", L"무력", 700 + 25 + UPDATEPOSX, 560 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERLDS]->init(L"LABEL-작은이름표", L"통솔", 700 + 25 + UPDATEPOSX, 595 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERINT]->init(L"LABEL-작은이름표", L"지력", 700 + 25 + UPDATEPOSX, 630 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERDEX]->init(L"LABEL-작은이름표", L"민첩", 700 + 25 + UPDATEPOSX, 665 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERLUK]->init(L"LABEL-작은이름표", L"행운", 700 + 25 + UPDATEPOSX, 700 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, RGB(255, 255, 255), NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERPWR]->init(L"LABEL-작은이름표", L"무력", 700 + 25 + UPDATEPOSX, 560 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERPWR]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERLDS]->init(L"LABEL-작은이름표", L"통솔", 700 + 25 + UPDATEPOSX, 595 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERLDS]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERINT]->init(L"LABEL-작은이름표", L"지력", 700 + 25 + UPDATEPOSX, 630 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERINT]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERDEX]->init(L"LABEL-작은이름표", L"민첩", 700 + 25 + UPDATEPOSX, 665 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERDEX]->setColor(RGB(255, 255, 255));
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERLUK]->init(L"LABEL-작은이름표", L"행운", 700 + 25 + UPDATEPOSX, 700 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	_ctrlButton[UNITEDITOR_BUTTON_LABEL_LVPERLUK]->setColor(RGB(255, 255, 255));
 
 
 	_ctrlButton[UNITEDITOR_BUTTON_LABEL_RANGE]->init(L"LABEL-큰이름표", L"공격범위", 900 + 50 + UPDATEPOSX, 100 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
-
 	_ctrlButton[UNITEDITOR_BUTTON_LABEL_WEAPON]->init(L"LABEL-큰이름표" , L"무기", 900 + 50 + UPDATEPOSX, 345 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
 	_ctrlButton[UNITEDITOR_BUTTON_LABEL_ARMOR]->init(L"LABEL-큰이름표", L"방어구", 900 + 50 + UPDATEPOSX, 460 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
 	_ctrlButton[UNITEDITOR_BUTTON_LABEL_SUBITEM]->init(L"LABEL-큰이름표", L"보조", 900 + 50 + UPDATEPOSX, 575 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
-
 
 	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FILENAME]->init(L"LABEL-큰이름표", L"저장이름", 294 + 50 + UPDATEPOSX, 900 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
 

@@ -41,8 +41,23 @@ void Unit::release(void)
 
 void Unit::update(void)
 {
-	move();
+	if (_battleState.squence == UNITSEQUENCE_MOVE)
+	{
+		_battleState.isMoving = move();
+		if (_battleState.isMoving == FALSE)
+		{
+			if (_battleState.findEnemy)
+			{
+				_battleState.squence = UNITSEQUENCE_ATTACK;
+			}
+			else
+			{
+				_battleState.squence = UNITSEQUENCE_TURNOFF;
+			}
+		}
+	}
 
+	
 	switch (_battleState.unitState)
 	{
 	case UNITSTATE_IDLE:	  //기본상태
@@ -77,7 +92,7 @@ void Unit::render(void)
 	{
 		case UNITSTATE_IDLE:	  //기본상태
 		case UNITSTATE_TIRED:
-			_battleState.imgBattleIdle->frameRender(getMemDC(), _battleState.rc.left, _battleState.rc.top, _battleState.frameIdle, 0);
+			_battleState.imgBattleIdle->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY(), _battleState.frameIdle, 0);
 		break;
 		case UNITSTATE_ATK:	  //공격상태
 			_battleState.imgBattleAtk->frameRender(getMemDC(), _battleState.rc.left, _battleState.rc.top, _battleState.frameAtk, 0);
@@ -142,7 +157,7 @@ void Unit::copyUnitData(Unit* unit)
 	memcpy(&_battleState, &unit->getBattleState(), sizeof(tagBattleState));
 }
 
-void Unit::move(void)
+bool Unit::move(void)
 {
 	int moveSpeed = TILESIZE / 16;
 
@@ -177,7 +192,7 @@ void Unit::move(void)
 		}
 		else
 		{
-			return;
+			return FALSE;
 		}
 	}
 
@@ -201,6 +216,8 @@ void Unit::move(void)
 	_battleState.tilePt = { (LONG)(_battleState.pt.x / TILESIZE), (LONG)(_battleState.pt.y / TILESIZE) };
 
 	_battleState.unitState = UNITSTATE_IDLE;
+
+	return TRUE;
 }
 
 void Unit::move(DIRECTION dir)
@@ -258,7 +275,7 @@ void Unit::move(DIRECTION dir)
 }
 
 
-void Unit::findEnemy(TEAM myTeam)
+void Unit::findEnemy(TEAM myTeam, POINT closeEnemyPos)
 {
 	//1. 공격 범위 넣고
 	_astar->resetAtkRange();
@@ -285,8 +302,11 @@ void Unit::findEnemy(TEAM myTeam)
 	else
 	{
 		//4. 공격이 불가능한 상태이면 가장 가까운 적을 향해 간다.
-
+		_battleState.findEnemy = false;
+		_battleState.tilePtNext = _astar->findCloseTile(_battleState.tilePt, closeEnemyPos);
 	}
+
+	_battleState.squence = UNITSEQUENCE_MOVE;
 }
 
 //이동가능한 범위를 계산한다.
@@ -296,10 +316,11 @@ void Unit::findMoveArea(void)
 	_astar->clearTiles();
 
 	POINT curTilePt = _battleState.tilePt;
-	_astar->setTiles(curTilePt, 3);
+	_astar->setTiles(curTilePt, _status.movePoint);
 	if (_astar->getTile(curTilePt))
 	{
 		_astar->findOpenList(_astar->getTile(curTilePt));
+
 		for (int i = 0; i < _astar->getOpenList().size(); i++)
 		{
 			_moveArea.push_back(_astar->getOpenList()[i]);

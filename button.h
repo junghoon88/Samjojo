@@ -56,9 +56,6 @@ public:
 		POINT btnDownFramePoint, POINT btnUpFramePoint,
 		CALLBACK_FUNCTION cbFunction);
 	HRESULT init(const TCHAR* imageName, const TCHAR* text, int x, int y,
-		POINT btnDownFramePoint, POINT btnUpFramePoint, COLORREF color,
-		CALLBACK_FUNCTION cbFunction);
-	HRESULT init(const TCHAR* imageName, const TCHAR* text, int x, int y,
 		POINT btnDownFramePoint, POINT btnUpFramePoint,
 		void* cbFunction, void* obj);
 
@@ -76,5 +73,7 @@ public:
 public:
 	inline RECT getRect(void) { return _rc; }
 	inline void setFontNum(FONTVERSION fontNum) { _fontNum = fontNum; }
+	inline void setColor(COLORREF color) { _color = color; }
+
 };
 

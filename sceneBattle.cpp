@@ -21,7 +21,7 @@ HRESULT sceneBattle::init(void)
 
 	_cursor = new infoCursor;
 	_cursor->init();
-
+	_turn = 1;
 
 	_astar = new aStar;
 	_astar->init(_map);
@@ -69,17 +69,22 @@ void sceneBattle::update(void)
 		{
 			_map->scanUnitsPos();
 			unit->findMoveArea();
-			//unit->findEnemy();
+		}
+		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD9))
+		{
+			unit->setUnitSequnce(UNITSEQUENCE_TURNON);
+			_map->scanUnitsPos();
+			unit->findEnemy(TEAM_ENEMY, findCloseEnemyPos(unit));
 		}
 	}
 
 	_player->update();
 	_friend->update();
 	_enemy->update();
-
+	_map->scanUnitsPos();
 	_map->update(); 
-
 	if(_phase == playerPhase)_cursor->update();
+
 }
 
 void sceneBattle::render(void)
@@ -91,8 +96,59 @@ void sceneBattle::render(void)
 	_enemy->render();
 
 	_cursor->render();
-
 	_astar->render();
+}
+
+POINT sceneBattle::findCloseEnemyPos(Unit* unit)
+{
+	float distMin = 1000.0f;
+	POINT myPt = unit->getBattleState().tilePt;
+	POINT tarPt = myPt;
+
+	switch (unit->getStatus().team)
+	{
+	case TEAM_PLAYER:
+		break;
+	case TEAM_FRIEND:
+		for (int i = 0; i < _enemy->getUnits().size(); i++)
+		{
+			POINT ePt = _enemy->getUnits()[i]->getBattleState().tilePt;
+
+			float dist = getDistance(myPt.x, myPt.y, ePt.x, ePt.y);
+			if (distMin > dist)
+			{
+				tarPt = ePt;
+				distMin = dist;
+			}
+		}
+		break;
+	case TEAM_ENEMY:
+		for (int i = 0; i < _player->getUnits().size(); i++)
+		{
+			POINT ePt = _player->getUnits()[i]->getBattleState().tilePt;
+
+			float dist = getDistance(myPt.x, myPt.y, ePt.x, ePt.y);
+			if (distMin > dist)
+			{
+				tarPt = ePt;
+				distMin = dist;
+			}
+		}
+		for (int i = 0; i < _friend->getUnits().size(); i++)
+		{
+			POINT ePt = _friend->getUnits()[i]->getBattleState().tilePt;
+
+			float dist = getDistance(myPt.x, myPt.y, ePt.x, ePt.y);
+			if (distMin > dist)
+			{
+				tarPt = ePt;
+				distMin = dist;
+			}
+		}
+		break;
+	}
+
+	return tarPt;
 }
 
 void sceneBattle::initImage(void)
@@ -104,6 +160,7 @@ void sceneBattle::initSound(void)
 {
 
 }
+
 
 
 void sceneBattle::phaseControl(void)
@@ -139,4 +196,46 @@ void sceneBattle::linkClass(void)
 	{
 		_enemy->getUnits()[i]->setLinkAdressAStar(_astar);
 	}
+}
+
+Unit* sceneBattle::findUnit(TEAM team, POINT pt)
+{
+	switch (team)
+	{
+	case TEAM_PLAYER:
+		for (int i = 0; i < _player->getUnits().size(); i++)
+		{
+			POINT unitPt = _player->getUnits()[i]->getBattleState().tilePt;
+
+			if (pt.x == unitPt.x && pt.y == unitPt.y)
+			{
+				return _player->getUnits()[i];
+			}
+		}
+		break;
+	case TEAM_FRIEND:
+		for (int i = 0; i < _friend->getUnits().size(); i++)
+		{
+			POINT unitPt = _friend->getUnits()[i]->getBattleState().tilePt;
+
+			if (pt.x == unitPt.x && pt.y == unitPt.y)
+			{
+				return _friend->getUnits()[i];
+			}
+		}
+		break;
+	case TEAM_ENEMY:
+		for (int i = 0; i < _enemy->getUnits().size(); i++)
+		{
+			POINT unitPt = _enemy->getUnits()[i]->getBattleState().tilePt;
+
+			if (pt.x == unitPt.x && pt.y == unitPt.y)
+			{
+				return _enemy->getUnits()[i];
+			}
+		}
+		break;
+	}
+
+	return NULL;
 }
