@@ -43,8 +43,8 @@ void sceneStory::release(void)
 void sceneStory::update(void)
 {
 	
-	_dialog->update();
-	_sSmap->update();
+	
+	
 	if (!(_dialog->getDirection() ==4))
 	{
 		if (_dialog->getNext() == 0)
@@ -63,7 +63,8 @@ void sceneStory::update(void)
 				_dialog->loadDialog();
 		}
 	}
-	
+	_sSmap->update();
+	_dialog->update();
 }
 
 
