@@ -72,6 +72,7 @@ void sceneBattle::update(void)
 		}
 		if (KEYMANAGER->isOnceKeyDown('8') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD9))
 		{
+			unit->setUnitSequnce(UNITSEQUENCE_TURNON);
 			_map->scanUnitsPos();
 			unit->findEnemy(TEAM_ENEMY, findCloseEnemyPos(unit));
 		}
