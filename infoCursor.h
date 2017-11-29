@@ -37,9 +37,9 @@ private:
 
 
 	//유닛 정보 표시용
-	TCHAR* unit;
+	TCHAR* unitName;
 	TCHAR* utype;//클래스
-	TCHAR* faction;//진영(아군적군)
+	TCHAR* factionName;//진영(아군적군)
 	TCHAR* showExp;//플레이어는 아군적군대신 경험치 표시됨
 	TCHAR* showAtk;//A.K.A 공격력
 	
