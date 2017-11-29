@@ -13,9 +13,15 @@ private:
 	RECT story;
 	image* _story;
 	image* _face;
-	
+	image* Nebi;
+	image* Nebi2;
+	image* mouse;
+	FONTVERSION _fontNum, _fontNum2;
 
+	float time; //안내창 등장 시간
+	float Mtime; //마우스 프레임 시간
 	int next;
+	bool isleft;
 	char tmpName[100];
 public:
 	scanDialog();
@@ -27,7 +33,7 @@ public:
 	void render(void);
 
 	void loadDialog(void);
-	void nextDialog(void);
+	
 	void nextFile(const char* filename);
 
 
@@ -35,7 +41,7 @@ public:
 	
 	
 	inline int getNext(void) { return next; }
-
+	inline float getTime(void) { return time; }
 	
 
 };

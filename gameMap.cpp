@@ -122,13 +122,13 @@ void gameMap::scanUnitsPos(void)
 	for (int i = 0; i < _friend->getUnits().size(); i++)
 	{
 		POINT tilept = _friend->getUnits()[i]->getBattleState().tilePt;
-		_teamInfo[tilept.x + tilept.y * TILESIZE] = TEAM_PLAYER;
+		_teamInfo[tilept.x + tilept.y * TILESIZE] = TEAM_FRIEND;
 	}
 
 	for (int i = 0; i < _enemy->getUnits().size(); i++)
 	{
 		POINT tilept = _enemy->getUnits()[i]->getBattleState().tilePt;
-		_teamInfo[tilept.x + tilept.y * TILESIZE] = TEAM_PLAYER;
+		_teamInfo[tilept.x + tilept.y * TILESIZE] = TEAM_ENEMY;
 	}
 
 }
