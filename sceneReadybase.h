@@ -8,10 +8,11 @@ class sceneReadybase : public gameNode
 	image* _baseImg;
 	POINT _pt;
 	RECT _rcPosUI, _rcEquipUI, _rcBuyUI, _rcSellUI;
-	Player* _player;
 
 	bool _posClicking;
 public:
+
+	Player* _player;
 
 	HRESULT init(void);
 	void release(void);

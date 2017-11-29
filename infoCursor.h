@@ -1,13 +1,15 @@
 #pragma once
 #include "tileNode.h"
 #include "gameNode.h"
-#include "gameMap.h"
+
 
 #define INTERFACESIZEY 150
+#define FROFILEIMAGE 120
 
 class Player;
 class Enemy;
 class Friend;
+class gameMap;
 
 class infoCursor : public gameNode
 {
@@ -22,8 +24,15 @@ private:
 	HPEN linePen,oPen;
 
 	RECT tileImgRect;
+	image* tileImg;
 	RECT unitImgRect;
+	image* unitImg;
 	RECT element[4];
+	
+
+	//타일 검출용//
+	int indexTile;
+	//타일 검출용//
 
 
 	//유닛 정보 표시용
@@ -43,6 +52,7 @@ private:
 	//지형 정보 표시용
 	TCHAR* tilename;
 	TCHAR* prop;
+	int tileNum;
 	bool fire;
 	bool wind;
 	bool earth;
@@ -73,6 +83,7 @@ public:
 	inline void setLinkPlyer(Player* player) { _player = player; }
 	inline void setLinkEnemy(Enemy* enm) { _enemy = enm; }
 	inline void setLinkFriend(Friend* fri) { _friend = fri; }
+	inline void setLinkAdressMap(gameMap* tile) { findtile = tile; }
 
 };
 

@@ -7,7 +7,7 @@
 class sceneSell : public gameNode
 {
 private:
-	Player*		_player;
+	Player* _player;
 
 
 public:
@@ -19,5 +19,6 @@ public:
 	void update(void);
 	void render(void);
 
+	void setLinkAdressPlayer(Player* player) { _player = player; }
 };
 

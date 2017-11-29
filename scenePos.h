@@ -14,8 +14,8 @@ private:
 	RECT _rcCancel;
 	RECT _rcOK;
 
-	//HWND _btnOk;
-	//HWND _btnCancel;
+	vUnits _vUnits;
+	vUnits _vUnitsInFile;
 
 	
 	Player* _player;

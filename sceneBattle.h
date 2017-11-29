@@ -5,6 +5,7 @@
 #include "Friend.h"
 #include "gameMap.h"
 #include "infoCursor.h"
+#include "aStar.h"
 
 enum tagPhase
 {
@@ -25,7 +26,10 @@ private:
 
 
 	infoCursor* _cursor;	//커서 정보
-	tagPhase Phase;
+
+	tagPhase	_phase;
+
+	aStar*		_astar;		//a* 을 전투씬에 공용으로 선언하고, 각 유닛에서 할당받아서 쓰고 싶을때 쓴다.
 
 private:
 	void initImage(void);
@@ -48,6 +52,6 @@ public:
 	inline void setLinkAdressMap(gameMap* map) { _map = map; }
 
 	void phaseControl(void);
-
+	void linkClass(void);
 };
 

@@ -1,8 +1,9 @@
 #pragma once
 #include "gameNode.h"
 #include "Item.h"
+#include "aStar.h"
+#include "gameMap.h"
 
-#define UNIT_ATTACK_RANGE_MAX 7
 
 struct tagStatus
 {
@@ -142,6 +143,10 @@ struct tagBattleState
 	POINT			pt;
 	RECT			rc;
 	POINT			tilePt;	//타일 번호
+	POINT			tilePtNext;
+	POINT			tilePtEnemy;
+	BOOL			findEnemy;
+
 
 	DIRECTION		dir;
 
@@ -161,7 +166,8 @@ struct tagBattleState
 	FRAME_IDLE		frameIdle;
 	FRAME_SPC		frameSpc;
 
-	BOOL			isHiding;	//은신상태 여부
+	bool			isHiding;	//은신상태 여부
+	bool			isMoving;
 };
 
 //유닛에디터에서 저장할 정보들 모음
@@ -197,17 +203,27 @@ protected:
 	//battle 관련 변수
 	tagBattleState	_battleState;
 
+	gameMap*		_map; 
+	aStar*			_astar;
+	vector<tile*>	_moveArea;
+
 public:
 	Unit();
 	~Unit();
 
-	HRESULT init(void);
+	HRESULT init(gameMap* map);
 	void release(void);
 	void update(void);
 	void render(void);
 
 	void loadUnitData(tagUnitSaveInfo &info);
 	void copyUnitData(Unit* unit);
+
+	void move(void);
+	void move(DIRECTION dir);
+	void findEnemy(TEAM myTeam);
+	void findMoveArea(void);
+	void showMoveArea(void);
 
 public:
 	inline tagStatus getStatus(void) { return _status; }
@@ -218,10 +234,12 @@ public:
 	inline void setItemA(ItemArmor* itema) { _itemA = itema; }
 	inline ItemSpecial*	getItemS(void) { return _itemS; }
 	inline void setItemS(ItemSpecial* items) { _itemS = items; }
-
-	inline int getImgBattleIdle(void) { return _battleState.numImgBattleAtk; }
+	inline int getImgBattleIdle(void) { return _battleState.numImgBattleIdle; }
 	inline int getImgBattleAtk(void) { return _battleState.numImgBattleAtk; }
 	inline int getImgBattleSpc(void) { return _battleState.numImgBattleSpc; }
+	inline void setLinkAdressAStar(aStar* astar) { _astar = astar; }
+
+
 
 	inline void setImgBattleIdle(int num)
 	{

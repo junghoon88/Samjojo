@@ -7,6 +7,7 @@
 #include "sceneBattle.h"
 #include "sceneReadybase.h"
 #include "scenePos.h"
+#include "sceneEquip.h"
 #include "sceneBuy.h"
 #include "sceneSell.h"
 #include "sceneMaptool.h"
@@ -92,12 +93,19 @@ void mainGame::initScene(void)
 
 
 	scenePos* _scenePos = new scenePos;                            //출진씬
+	_scenePos->setLinkAdressPlayer(_player);
 	SCENEMANAGER->addScene(L"출진씬", _scenePos);
 
+	sceneEquip* _sceneEquip = new sceneEquip;                      //장비씬
+	_sceneEquip->setLinkAdressPlayer(_player);
+	SCENEMANAGER->addScene(L"장비씬", _sceneEquip);
+
 	sceneBuy* _sceneBuy = new sceneBuy;							    //구매상점
+	_sceneBuy->setLinkAdressPlayer(_player);
 	SCENEMANAGER->addScene(L"구매상점씬", _sceneBuy);
 
 	sceneSell* _sceneSell = new sceneSell;							//판매상점
+	_sceneSell->setLinkAdressPlayer(_player);
 	SCENEMANAGER->addScene(L"판매상점씬", _sceneSell);
 
 
@@ -205,6 +213,14 @@ void mainGame::checkWindowSize(void)
 	else if (SCENEMANAGER->isCurScene(L"전투씬"))
 	{
 		setWindowResize({ WINSIZEX, WINSIZEY });
+	}
+	else if (SCENEMANAGER->isCurScene(L"준비기본씬"))
+	{
+		setWindowResize({ WINSIZEX,WINSIZEY });
+	}
+	else if (SCENEMANAGER->isCurScene(L"출진씬"))
+	{
+		setWindowResize({ WINSIZEX3,WINSIZEY3 });
 	}
 }
 
