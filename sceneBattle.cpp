@@ -49,23 +49,23 @@ void sceneBattle::update(void)
 	//debug
 	{
 		Unit* unit = _enemy->getUnits()[0];
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD8))
+		if (KEYMANAGER->isOnceKeyDown('3'))
 		{
 			unit->move(DIRECTION_UP);
 		}
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
+		if (KEYMANAGER->isOnceKeyDown('5'))
 		{
 			unit->move(DIRECTION_DN);
 		}
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
+		if (KEYMANAGER->isOnceKeyDown('4'))
 		{
 			unit->move(DIRECTION_LF);
 		}
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD6))
+		if (KEYMANAGER->isOnceKeyDown('6'))
 		{
 			unit->move(DIRECTION_RG);
 		}
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD7))
+		if (KEYMANAGER->isOnceKeyDown('7'))
 		{
 			_map->scanUnitsPos();
 			unit->findMoveArea();

@@ -296,7 +296,7 @@ void Unit::findMoveArea(void)
 	_astar->clearTiles();
 
 	POINT curTilePt = _battleState.tilePt;
-	_astar->setTiles(curTilePt, 3);
+	_astar->setTiles(curTilePt, _status.movePoint);
 	if (_astar->getTile(curTilePt))
 	{
 		_astar->findOpenList(_astar->getTile(curTilePt));
@@ -309,6 +309,10 @@ void Unit::findMoveArea(void)
 
 void Unit::showMoveArea(void)
 {
+	if (_moveArea.size() == 0)
+		return;
+
+
 	for (int i = 0; i < _moveArea.size(); i++)
 	{
 		if (_moveArea[i] == NULL) continue;
@@ -317,8 +321,43 @@ void Unit::showMoveArea(void)
 		int y = _moveArea[i]->getIdY();
 
 		int cost = (int)_moveArea[i]->getTotalCost();
+		//RECT rc;
+		//rc = RectMake(x * TILESIZE , y * TILESIZE, 48, 48);
+		//Rectangle(getMemDC(), rc.left, rc.top, rc.right, rc.bottom);
+		switch (_status.team)
+		{
+			case TEAM_PLAYER:
+				IMAGEMANAGER->findImage(L"playerMoveAreaTile")->alphaRender(getMemDC(), x * TILESIZE, y * TILESIZE, 120);
+			break;
+			case TEAM_FRIEND:
+				IMAGEMANAGER->findImage(L"nonPlayerMoveAreaTile")->alphaRender(getMemDC(), x * TILESIZE, y * TILESIZE, 120);
+			break;
+			case TEAM_ENEMY:
+				IMAGEMANAGER->findImage(L"nonPlayerMoveAreaTile")->alphaRender(getMemDC(), x * TILESIZE, y * TILESIZE, 120);
+			break;
+		}
+
 		TCHAR str[10];
 		_stprintf(str, L"%d", cost);
 		TextOut(getMemDC(), x * TILESIZE + 20, y * TILESIZE + 20, str, _tcslen(str));
+
+	}
+	
+	for (int i = 0; i < UNIT_ATTACK_RANGE_MAX; i++) // y
+	{
+		for (int j = 0; j < UNIT_ATTACK_RANGE_MAX; j++) // x
+		{
+			if (_status.atkRange[j][i] == true)
+			{
+				int x = _battleState.tilePt.x + j - int(UNIT_ATTACK_RANGE_MAX / 2);
+				int y = _battleState.tilePt.y + i - int(UNIT_ATTACK_RANGE_MAX / 2);
+
+				if (x < 0) continue;
+				if (y < 0) continue;
+				if (x >= _map->getTileSizeX()) continue;
+				if (y >= _map->getTileSizeY()) continue;
+				IMAGEMANAGER->findImage(L"curAtkArea")->alphaRender(getMemDC(), x * TILESIZE, y * TILESIZE, 120);
+			}
+		}
 	}
 }
