@@ -118,7 +118,7 @@ vector<tile*> aStar::addOpenList(tile* currentTile)
 			if (node->getAttribute() == L"unmove") continue;
 
 			//유닛이 있으면 건너뛰기
-			if (_map->getTeamInfo()[targetX + targetY * TILESIZE] != TEAM_NONE) continue;
+			if (_map->getTeamInfo()[targetX + targetY * TILEX] != TEAM_NONE) continue;
 
 
 			bool addObj = true;
@@ -234,13 +234,13 @@ void aStar::addAtkList(TEAM myTeam, tile* currentTile)
 			//적팀이 맞는지 체크
 			if (myTeam == TEAM_FRIEND)
 			{
-				TEAM eteam = _map->getTeamInfo()[node->getIdX() + node->getIdY() * TILESIZE];
+				TEAM eteam = _map->getTeamInfo()[node->getIdX() + node->getIdY() * TILEX];
 				if (eteam != TEAM_ENEMY)
 					continue;
 			}
 			else if (myTeam == TEAM_ENEMY)
 			{
-				TEAM eteam = _map->getTeamInfo()[node->getIdX() + node->getIdY() * TILESIZE];
+				TEAM eteam = _map->getTeamInfo()[node->getIdX() + node->getIdY() * TILEX];
 				if (eteam != TEAM_PLAYER && eteam != TEAM_FRIEND)
 					continue;
 			}
@@ -255,7 +255,7 @@ void aStar::addAtkList(TEAM myTeam, tile* currentTile)
 				}
 			}
 
-			int index = node->getIdX() + node->getIdY() * TILESIZE;
+			int index = node->getIdX() + node->getIdY() * TILEX;
 			//_mAttackList.insert(pair<POINT, tile*>(pt, node));
 			_mAttackList.insert(make_pair(index, currentTile));
 			return;

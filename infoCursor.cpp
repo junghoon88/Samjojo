@@ -84,7 +84,7 @@ void infoCursor::mouse_Scanning(void)
 
 void infoCursor::mouse_Click(void)
 {
-	findtile->scanUnitsPos();
+	//findtile->scanUnitsPos();
 //	int findIndex = (int)(indexTile + MAINCAMERA->getCameraX()) / TILESIZE + (int)(MAINCAMERA->getCameraY() / TILESIZE) * TILEX;
 	int findIndex = indexTile + (MAINCAMERA->getCameraX() / TILESIZE) + (MAINCAMERA->getCameraY() / TILESIZE) * TILEX;
 
