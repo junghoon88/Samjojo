@@ -19,7 +19,7 @@ void globalTools::setFontAll(void)
 		{
 		case FONTVERSION_SAMJOJO:
 			_gFont[i] = CreateFont(
-				17,						//문자폭
+				15,						//문자폭
 				0,						//문자 넓이
 				0,						//문자 기울기(실제로 문자가 각도로 기움)
 				0,						//문자 방향
@@ -32,7 +32,7 @@ void globalTools::setFontAll(void)
 				CLIP_DEFAULT_PRECIS,	//클리핑 정확도
 				DEFAULT_QUALITY,		//출력의 퀄리티
 				FF_DONTCARE,			//자간
-				TEXT("궁서체"));			//폰트
+				TEXT("a진지궁서"));			//폰트
 			break;
 		}
 	}

@@ -13,7 +13,7 @@
 
 #define FACE_MAX			300
 #define NORMAL_IMAGE_MAX	1
-#define COMBAT_IMAGE_MAX	1
+#define COMBAT_IMAGE_MAX	26
 #define WEAPON_IMAGE_MAX	1
 #define ARMOR_IMAGE_MAX		1
 #define SUBITEM_IMAGE_MAX	1

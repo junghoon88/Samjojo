@@ -30,6 +30,7 @@ private:
 	const TCHAR* _imageName;			//버튼 이미지 이름
 	image* _image;					//버튼 이미지
 	RECT _rc;
+	COLORREF _color;
 	float _x, _y;
 
 	TCHAR _strText[1024];
@@ -53,6 +54,9 @@ public:
 
 	HRESULT init(const TCHAR* imageName, const TCHAR* text, int x, int y,
 		POINT btnDownFramePoint, POINT btnUpFramePoint,
+		CALLBACK_FUNCTION cbFunction);
+	HRESULT init(const TCHAR* imageName, const TCHAR* text, int x, int y,
+		POINT btnDownFramePoint, POINT btnUpFramePoint, COLORREF color,
 		CALLBACK_FUNCTION cbFunction);
 	HRESULT init(const TCHAR* imageName, const TCHAR* text, int x, int y,
 		POINT btnDownFramePoint, POINT btnUpFramePoint,
