@@ -47,11 +47,20 @@ void sceneStory::update(void)
 
 	_dialog->update();
 	
-	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	if (_dialog->getNext() == 0)
 	{
-	
+		if (_dialog->getTime() > 4.0f &&KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		_dialog->loadDialog();
-		
+	}
+	else if (_dialog->getNext() == 2 || _dialog->getNext() == 3)
+	{
+		if(KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		_dialog->loadDialog();
+	}
+	else
+	{
+		 if (_dialog->getTime() > 2.0f &&KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		_dialog->loadDialog();
 	}
 	
 	_sSmap->update();

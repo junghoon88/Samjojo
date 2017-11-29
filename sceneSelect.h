@@ -70,6 +70,7 @@ public:
 	~sceneSelect();
 
 	void selectScenario(void);
+	void selectScenario(BTNTEST test);
 
 public:
 	inline void setLinkAdressPlayer(Player* player) { _player = player; }

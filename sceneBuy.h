@@ -18,7 +18,7 @@ public:
 	void release(void);
 	void update(void);
 	void render(void);
-
+	void setLinkAdressPlayer(Player* player) { _player = player; }
 
 };
 

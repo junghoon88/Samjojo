@@ -23,6 +23,12 @@ HRESULT sceneReadybase::init(void) {
 	_rcSellUI = RectMake(884, 840, 74, 115);
 
 	_posClicking = false;
+
+	
+
+
+
+
 	return S_OK;
 }
 void sceneReadybase::release(void) {
@@ -56,7 +62,7 @@ void sceneReadybase::render(void) {
 	TCHAR tmp[30];
 	_stprintf(tmp, L"x: %d, y: %d", _pt.x, _pt.y);
 	TextOut(getMemDC(), 100, 100, tmp, _tcslen(tmp));
-
+	
 	if (_posClicking) {
 		IMAGEMANAGER->findImage(L"출진눌림")->render(getMemDC(), _rcPosUI.left, _rcPosUI.top-2);
 	}

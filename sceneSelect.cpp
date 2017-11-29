@@ -204,30 +204,72 @@ void sceneSelect::setuptButtons(void)
 
 void sceneSelect::selectScenario(void)
 {
-	for (int i = 0; i < SCENARIO_MAX; i++)
+	//for (int i = 0; i < SCENARIO_MAX; i++)
 	{
 		//if (PtInRect(&_button2[i]->getRect(), _ptMouse))
 		{
 			//debug
-			i = 3;
+			int i = 3;
 
 			DATABASE->setSlectScenario(i);
 
 			_map->loadData(i);
+			_map->scanUnitsPos();
+			//test
+			_player->registUnitAll();
+			_player->locateUnits();
+
+			_friend->locateUnits();
 			_enemy->locateUnits();
 
-
-			
 			//SCENEMANAGER->changeScene(L"´ëÈ­¾À");
-			//SCENEMANAGER->changeScene(L"»óÁ¡¾À");
+			//SCENEMANAGER->changeScene(L"ÁØºñ±âº»¾À");
+			SCENEMANAGER->changeScene(L"ÀüÅõ¾À");
 
-			//SCENEMANAGER->changeScene(L"ÀüÅõ¾À");
-			SCENEMANAGER->changeScene(L"ÁØºñ±âº»¾À");
-
-			break;
+			//break;
 		}
 	}
 }
+
+void sceneSelect::selectScenario(BTNTEST test)
+{
+	//debug
+	int i = 3;
+
+	DATABASE->setSlectScenario(i);
+
+	_map->loadData(i);
+	_map->scanUnitsPos();
+	//test
+	_player->registUnitAll();
+	_player->locateUnits();
+
+	_friend->locateUnits();
+	_enemy->locateUnits();
+
+	switch (test)
+	{
+	case BTNTEST_STORY:
+		SCENEMANAGER->changeScene(L"´ëÈ­¾À");
+		break;
+	case BTNTEST_READYBASE:
+		SCENEMANAGER->changeScene(L"ÁØºñ±âº»¾À");
+		break;
+	case BTNTEST_POS:
+		SCENEMANAGER->changeScene(L"ÃâÁø¾À");
+		break;
+	case BTNTEST_BUY:
+		SCENEMANAGER->changeScene(L"±¸¸Å»óÁ¡¾À");
+		break;
+	case BTNTEST_SELL:
+		SCENEMANAGER->changeScene(L"ÆÇ¸Å»óÁ¡¾À");
+		break;
+	case BTNTEST_BATTLE:
+		SCENEMANAGER->changeScene(L"ÀüÅõ¾À");
+		break;
+	}
+}
+
 
 //-----------------------------------------------------------------------------------------
 //callback functions
@@ -266,32 +308,32 @@ void sceneSelect::cbFuncPrev(void * obj)
 void sceneSelect::cbFuncDebug1(void* obj)
 {
 	sceneSelect* ss = (sceneSelect*)obj;
-	SCENEMANAGER->changeScene(L"´ëÈ­¾À");
+	ss->selectScenario(BTNTEST_STORY);
 }
 void sceneSelect::cbFuncDebug2(void* obj)
 {
 	sceneSelect* ss = (sceneSelect*)obj;
-	SCENEMANAGER->changeScene(L"ÁØºñ±âº»¾À");
+	ss->selectScenario(BTNTEST_READYBASE);
 }
 void sceneSelect::cbFuncDebug3(void* obj)
 {
 	sceneSelect* ss = (sceneSelect*)obj;
-	SCENEMANAGER->changeScene(L"ÃâÁø¾À");
+	ss->selectScenario(BTNTEST_POS);
 }
 void sceneSelect::cbFuncDebug4(void* obj)
 {
 	sceneSelect* ss = (sceneSelect*)obj;
-	SCENEMANAGER->changeScene(L"±¸¸Å»óÁ¡¾À");
+	ss->selectScenario(BTNTEST_BUY);
 }
 void sceneSelect::cbFuncDebug5(void* obj)
 {
 	sceneSelect* ss = (sceneSelect*)obj;
-	SCENEMANAGER->changeScene(L"ÆÇ¸Å»óÁ¡¾À");
+	ss->selectScenario(BTNTEST_SELL);
 }
 void sceneSelect::cbFuncDebug6(void* obj)
 {
 	sceneSelect* ss = (sceneSelect*)obj;
-	SCENEMANAGER->changeScene(L"ÀüÅõ¾À");
+	ss->selectScenario(BTNTEST_BATTLE);
 }
 
 

@@ -4,7 +4,10 @@
 #include "Enemy.h"
 #include "Friend.h"
 #include "button.h"
-
+struct tagPos {
+	TCHAR name[32];
+	RECT posRC;
+};
 class scenePos : public gameNode
 {
 private:
@@ -14,9 +17,10 @@ private:
 	RECT _rcCancel;
 	RECT _rcOK;
 
-	//HWND _btnOk;
-	//HWND _btnCancel;
+	vUnits _vUnits;
+	vUnits _vUnitsInFile;
 
+	tagPos _posUnits[7];
 	
 	Player* _player;
 

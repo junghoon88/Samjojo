@@ -1,10 +1,11 @@
 #pragma once
 #include "gameNode.h"
 #include "Item.h"
+#include "aStar.h"
+#include "gameMap.h"
 
-#define UNIT_ATTACK_RANGE_MAX 7
 
-struct tagStatus
+struct tagStatus //기본정보 (수정하지말것)
 {
 	TCHAR name[32];
 	TCHAR family[32];	//부대
@@ -134,6 +135,16 @@ enum UNITCONDITION
 	UNITCONDITION_MAX
 };
 
+enum UNITSEQUENCE
+{
+	UNITSEQUENCE_TURNON,
+	UNITSEQUENCE_MOVE,
+	UNITSEQUENCE_ATTACK,
+	UNITSEQUENCE_TURNOFF,
+
+
+};
+
 struct tagBattleState
 {
 	BOOL			valid; //행동 가능하면 true, 행동 했으면 false
@@ -142,6 +153,10 @@ struct tagBattleState
 	POINT			pt;
 	RECT			rc;
 	POINT			tilePt;	//타일 번호
+	POINT			tilePtNext;
+	POINT			tilePtEnemy;
+	BOOL			findEnemy;
+
 
 	DIRECTION		dir;
 
@@ -161,10 +176,14 @@ struct tagBattleState
 	FRAME_IDLE		frameIdle;
 	FRAME_SPC		frameSpc;
 
-	BOOL			isHiding;	//은신상태 여부
+	UNITSEQUENCE	squence;
+	bool			isHiding;	//은신상태 여부
+	bool			isMoving;	//움직이는중
+	bool			isAtking;	//공격중
+	bool			isHiting;	//피격중
 };
 
-//유닛에디터에서 저장할 정보들 모음
+//유닛에디터에서 저장할 정보들 모음 (수정하지말것)
 struct tagUnitSaveInfo
 {
 	//기본 정보
@@ -197,17 +216,27 @@ protected:
 	//battle 관련 변수
 	tagBattleState	_battleState;
 
+	gameMap*		_map; 
+	aStar*			_astar;
+	vector<tile*>	_moveArea;
+
 public:
 	Unit();
 	~Unit();
 
-	HRESULT init(void);
+	HRESULT init(gameMap* map);
 	void release(void);
 	void update(void);
 	void render(void);
 
 	void loadUnitData(tagUnitSaveInfo &info);
 	void copyUnitData(Unit* unit);
+
+	bool move(void);
+	void move(DIRECTION dir);
+	void findEnemy(TEAM myTeam, POINT closeEnemyPos);
+	void findMoveArea(void);
+	void showMoveArea(void);
 
 public:
 	inline tagStatus getStatus(void) { return _status; }
@@ -218,9 +247,12 @@ public:
 	inline void setItemA(ItemArmor* itema) { _itemA = itema; }
 	inline ItemSpecial*	getItemS(void) { return _itemS; }
 	inline void setItemS(ItemSpecial* items) { _itemS = items; }
-	inline int getImgBattleIdle(void) { return _battleState.numImgBattleAtk; }
+	inline int getImgBattleIdle(void) { return _battleState.numImgBattleIdle; }
 	inline int getImgBattleAtk(void) { return _battleState.numImgBattleAtk; }
 	inline int getImgBattleSpc(void) { return _battleState.numImgBattleSpc; }
+	inline void setLinkAdressAStar(aStar* astar) { _astar = astar; }
+
+
 
 	inline void setImgBattleIdle(int num)
 	{
@@ -268,6 +300,9 @@ public:
 	inline tagBattleState getBattleState(void) { return _battleState; }
 	inline RECT getRect(void) { return _battleState.rc; }
 	inline void setBattleState(tagBattleState state) { _battleState = state; }
+
+	inline UNITSEQUENCE getUnitSequnce(void) { return _battleState.squence; }
+	inline void setUnitSequnce(UNITSEQUENCE squence) { _battleState.squence = squence; }
 };
 
 typedef vector<Unit*>	vUnits;

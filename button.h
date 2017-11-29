@@ -30,6 +30,7 @@ private:
 	const TCHAR* _imageName;			//버튼 이미지 이름
 	image* _image;					//버튼 이미지
 	RECT _rc;
+	COLORREF _color;
 	float _x, _y;
 
 	TCHAR _strText[1024];
@@ -72,5 +73,7 @@ public:
 public:
 	inline RECT getRect(void) { return _rc; }
 	inline void setFontNum(FONTVERSION fontNum) { _fontNum = fontNum; }
+	inline void setColor(COLORREF color) { _color = color; }
+
 };
 

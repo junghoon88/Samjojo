@@ -54,7 +54,7 @@ void Friend::loadUnits(void)
 		ReadFile(file, &unitInfo, sizeof(tagUnitSaveInfo), &read, NULL);
 
 		Unit* _unit = new Unit;
-		_unit->init();
+		_unit->init(_map);
 		_unit->loadUnitData(unitInfo);
 
 		_vUnitsInFile.push_back(_unit);
@@ -98,11 +98,12 @@ void Friend::locateUnits(void)
 					{
 						//찾았으면 출전목록에 넣는다.
 						Unit* unit = new Unit;
-						unit->init();
+						unit->init(_map);
 						unit->copyUnitData(_vUnitsInFile[v]);
 
 						tagBattleState bState = unit->getBattleState();
 						bState.tilePt = { j, i };
+						bState.tilePtNext = bState.tilePt;
 						bState.rc = RectMake(j * TILESIZE, i * TILESIZE, TILESIZE, TILESIZE);
 						bState.pt = { (LONG)((bState.rc.left + bState.rc.right) * 0.5f), (LONG)((bState.rc.top + bState.rc.bottom) * 0.5f) };
 						unit->setBattleState(bState);

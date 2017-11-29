@@ -49,12 +49,13 @@ void gameMap::render(void)
 	SetBkMode(getMemDC(), TRANSPARENT);
 
 	//ÁöÇü
+#if 0
 	for (int i = 0; i < TILEX * TILEY; i++)
 	{
 		image* img = IMAGEMANAGER->findImage(_strSampleImgKey[_tiles[i].sampleTerrainIdx]);
 		if (img)
 		{
-			img->render(getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top);
+			img->render(getMemDC(), _tiles[i].rc.left - MAINCAMERA->getCameraX(), _tiles[i].rc.top - MAINCAMERA->getCameraY());
 		}
 
 		if (_tiles[i].sampleObjectSelectIdx != OBJECTSELECT_NONE)
@@ -71,8 +72,10 @@ void gameMap::render(void)
 			_imgMap->alphaRender(getMemDC(), 0, 0, 180);
 		}
 	}
+#else
+	_imgMap->render(getMemDC(),0 - MAINCAMERA->getCameraX(),0 - MAINCAMERA->getCameraY());
 
-
+#endif
 
 }
 
@@ -101,5 +104,28 @@ void gameMap::loadData(int num)
 
 	ZeroMemory(&_attribute, sizeof(DWORD) * TILEX * TILEY);
 
+	memset(&_teamInfo, TEAM_NONE, sizeof(TEAM)*TILEX*TILEY);
+
 	CloseHandle(file);
+}
+
+void gameMap::scanUnitsPos(void)
+{
+	memset(&_teamInfo, TEAM_NONE, sizeof(TEAM)*TILEX*TILEY);
+
+	for (int i = 0; i < _player->getUnits().size(); i++)
+	{
+		POINT tilept = _player->getUnits()[i]->getBattleState().tilePt;
+		_teamInfo[tilept.x + tilept.y * TILEX] = TEAM_PLAYER;
+	}
+	for (int i = 0; i < _friend->getUnits().size(); i++)
+	{
+		POINT tilept = _friend->getUnits()[i]->getBattleState().tilePt;
+		_teamInfo[tilept.x + tilept.y * TILEX] = TEAM_FRIEND;
+	}
+	for (int i = 0; i < _enemy->getUnits().size(); i++)
+	{
+		POINT tilept = _enemy->getUnits()[i]->getBattleState().tilePt;
+		_teamInfo[tilept.x + tilept.y * TILEX] = TEAM_ENEMY;
+	}
 }
