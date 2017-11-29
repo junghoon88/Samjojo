@@ -21,12 +21,22 @@ HRESULT scanDialog::init(const char* filename)
 	}
 
 	story = RectMake(100, 100, 464, 120);
+
+	Nebi = IMAGEMANAGER->findImage(L"nebi 00");
+	Nebi2 = IMAGEMANAGER->findImage(L"nebi 03");
 	_story = IMAGEMANAGER->findImage(L"좌대화창");
 	_face = IMAGEMANAGER->findImage(L"face 00000");
+	mouse = IMAGEMANAGER->findImage(L"마우스2");
+	mouse->setFrameX(0);
 	next = 0;
 	
+	_fontNum = FONTVERSION_SAMJOJO;
+	_fontNum2 = FONTVERSION_STORY;
 	_face->setX(story.left);
 	_face->setY(story.top);
+	time = 0;
+	Mtime = 0;
+	ShowCursor(false);
 	return S_OK;
 }
 
@@ -35,29 +45,42 @@ void scanDialog::release(void)
 	_vScripts.clear();
 	fclose(_fp);
 	_fp = NULL;
+	ShowCursor(true);
 }
  
 void scanDialog::update(void)
 {
-	
-
+		
+	time += TIMEMANAGER->getElapsedTime();
+	Mtime += TIMEMANAGER->getElapsedTime();
 	_face->setX(_face->getX());
 	_face->setY(_face->getY());
 
-	if (_tcscmp(_story->getFileName(), L"image/좌측대화창.bmp")==0)
+	
+	if (isleft)
 	{
+		_story = IMAGEMANAGER->findImage(L"좌대화창");
 		_face->setX(story.left);
 		_face->setY(story.top);
-	
 	}
-	else if (_tcscmp(_story->getFileName(), L"image/우측대화창.bmp")==0)
-	{
+	
+	else
+	{	
+		_story = IMAGEMANAGER->findImage(L"우대화창");
 		_face->setX(story.right - 120);
 		_face->setY(story.top);
 	}
 	
-
-	
+	if (Mtime > 0.3f)
+	{
+		
+		if (mouse->getFrameX() >= mouse->getMaxFrameX())
+		{
+			mouse->setFrameX(0);
+		}
+		else mouse->setFrameX(mouse->getFrameX() + 1);
+		Mtime = 0;
+	}
 
 }
 
@@ -73,34 +96,96 @@ void scanDialog::render(void)
 		_face->render(getMemDC(), _face->getX(), _face->getY());
 	}
 
-	if (_tcscmp(_story->getFileName(), L"image/좌측대화창.bmp") == 0)
+	if (isleft)
 	{
+		SetBkMode(getMemDC(), TRANSPARENT);
+		HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
 		TextOut(getMemDC(), story.left + 150, story.top + 30, ss.c_str(), len);
+		SelectObject(getMemDC(), oldFont);
 		for (int i = 0; i < _vScripts.size(); i++)
 		{
 			ss = convert_wc(_vScripts[i]);
 			len = _tcslen(ss.c_str());
-
+			SetBkMode(getMemDC(), TRANSPARENT);
+			HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum2]);
 			TextOut(getMemDC(), story.left + 150, story.top + 35 + 15 * (i + 1), ss.c_str(), len);
+			SelectObject(getMemDC(), oldFont);
 		}
-
 	}
-	else if (_tcscmp(_story->getFileName(), L"image/우측대화창.bmp") == 0)
+	else  
 	{
+		SetBkMode(getMemDC(), TRANSPARENT);
+		HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
 		TextOut(getMemDC(), story.left+10, story.top + 30, ss.c_str(), len);
+		SelectObject(getMemDC(), oldFont);
 		for (int i = 0; i < _vScripts.size(); i++)
 		{
 			ss = convert_wc(_vScripts[i]);
 			len = _tcslen(ss.c_str());
-
+			SetBkMode(getMemDC(), TRANSPARENT);
+			HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum2]);
 			TextOut(getMemDC(), story.left +10 , story.top + 35 + 15 * (i + 1), ss.c_str(), len);
+			SelectObject(getMemDC(), oldFont);
 		}
 	}
-	
-
-	
-	
-	
+	switch (next)
+	{
+		case 0: 
+		{
+			if (time < 2.0f) {
+				
+				mouse->render(getMemDC(), _ptMouse.x, _ptMouse.y);
+				Nebi->render(getMemDC(), WINSIZEX2 / 2 - Nebi->getWidth() / 2, 150);
+			}
+			else if (time > 2.0f && time < 4.0f)
+			{
+				Nebi = IMAGEMANAGER->findImage(L"nebi 01");
+				Nebi->render(getMemDC(), WINSIZEX2 / 2 - Nebi->getWidth() / 2, 150);
+				mouse->render(getMemDC(), _ptMouse.x, _ptMouse.y);
+			}
+			else 
+			{
+				mouse = IMAGEMANAGER->findImage(L"마우스");
+				mouse->frameRender(getMemDC(), _ptMouse.x - mouse->getFrameWidth() / 2, _ptMouse.y - mouse->getFrameHeight() / 2);
+			}
+		}
+			break;
+		case 1:
+			{
+				Nebi = IMAGEMANAGER->findImage(L"nebi 02");
+				if (time < 2.0f)
+				{
+					mouse = IMAGEMANAGER->findImage(L"마우스2");
+					mouse->render(getMemDC(), _ptMouse.x, _ptMouse.y);
+					Nebi->render(getMemDC(), WINSIZEX2 / 2 - Nebi->getWidth() / 2, 150);
+				}
+				else if (time > 2.0f)
+				{
+					mouse = IMAGEMANAGER->findImage(L"마우스");
+					mouse->frameRender(getMemDC(), _ptMouse.x - mouse->getFrameWidth() / 2, _ptMouse.y - mouse->getFrameHeight() / 2);
+				}
+			}
+		break;
+		case 2 : case 3 :{
+			mouse->frameRender(getMemDC(), _ptMouse.x - mouse->getFrameWidth() / 2, _ptMouse.y - mouse->getFrameHeight() / 2);
+				}
+				break;
+		case 4:
+			{			
+			if (time < 2.0f)
+				{
+					mouse = IMAGEMANAGER->findImage(L"마우스2");
+					mouse->render(getMemDC(), _ptMouse.x, _ptMouse.y); 
+					Nebi2->render(getMemDC(), WINSIZEX2 / 2 - Nebi2->getWidth() / 2, 150);
+				}
+				else
+				{
+					mouse = IMAGEMANAGER->findImage(L"마우스");
+					mouse->frameRender(getMemDC(), _ptMouse.x - mouse->getFrameWidth() / 2, _ptMouse.y - mouse->getFrameHeight() / 2);
+				}
+			}
+				break;
+	}
 }
 
 void scanDialog::loadDialog(void)
@@ -152,8 +237,9 @@ void scanDialog::loadDialog(void)
 		}
 		else if (str[0] == '/')
 		{
-			next++;
 			
+			next++;
+			time = 0;
 		}
 		else if (str[0] == '=')
 		{
@@ -192,6 +278,7 @@ void scanDialog::loadDialog(void)
 			int posy = atoi(temp);
 			temp = strtok(NULL, ",");
 			int isLeft = atoi(temp);
+			isleft = isLeft;
 			story = RectMake(posx, posy, 464, 120);
 			printf("");
 		}
@@ -200,50 +287,42 @@ void scanDialog::loadDialog(void)
 		if (strcmp(_strName, "동탁") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00135");
-			_story = IMAGEMANAGER->findImage(L"좌대화창");
 		}
 		else if (strcmp(_strName, "이유") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00140");
-			_story = IMAGEMANAGER->findImage(L"좌대화창");
 		}
 		else if (strcmp(_strName, "문관1") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00176");
-			_story = IMAGEMANAGER->findImage(L"우대화창");
 		}
 		else if (strcmp(_strName, "문관2") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00177");
-			_story = IMAGEMANAGER->findImage(L"우대화창");
 		}
 		else if (strcmp(_strName, "왕윤") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00161");
-			_story = IMAGEMANAGER->findImage(L"좌대화창");
 		}
 		else if (strcmp(_strName, "초선") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00025");
-			_story = IMAGEMANAGER->findImage(L"우대화창");
 		}
 		else if (strcmp(_strName, "병사") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00181");
-			_story = IMAGEMANAGER->findImage(L"우대화창");
 		}
 		else if (strcmp(_strName, "원소") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00109");
-			_story = IMAGEMANAGER->findImage(L"우대화창");
+		}
+		else if (strcmp(_strName, "조조") == 0)
+		{
+			_face = IMAGEMANAGER->findImage(L"face 00001");
 		}
 	}
 }
 
-void scanDialog::nextDialog(void)
-{
-
-}
 
 void scanDialog::nextFile(const char * filename)
 {

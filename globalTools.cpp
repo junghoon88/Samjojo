@@ -34,6 +34,23 @@ void globalTools::setFontAll(void)
 				FF_DONTCARE,			//자간
 				TEXT("궁서체"));			//폰트
 			break;
+		case FONTVERSION_STORY:
+			_gFont[i] = CreateFont(
+				14,						
+				6,						
+				0,						
+				0,						
+				300,					
+				false,					
+				false,					
+				false,					
+				HANGUL_CHARSET,			
+				OUT_DEFAULT_PRECIS,		
+				CLIP_DEFAULT_PRECIS,	
+				DEFAULT_QUALITY,		
+				FF_DONTCARE,			
+				TEXT("바탕체"));			
+			break;
 		}
 	}
 }
