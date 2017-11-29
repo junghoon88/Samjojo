@@ -159,11 +159,13 @@ void button::render(void)
 		break;
 	}
 
+	COLORREF oldcolor = GetTextColor(getMemDC());
 	SetTextColor(getMemDC(), _color);
 	SetBkMode(getMemDC(), TRANSPARENT);
 	HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
 	DrawText(getMemDC(), _strText, _tcslen(_strText), &_rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 	SelectObject(getMemDC(), oldFont);
+	SetTextColor(getMemDC(), oldcolor);
 }
 
 
