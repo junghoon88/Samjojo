@@ -234,6 +234,7 @@ public:
 
 	bool move(void);
 	void move(DIRECTION dir);
+	void attack(void);
 	void findEnemy(TEAM myTeam, POINT closeEnemyPos);
 	void findMoveArea(void);
 	void showMoveArea(void);
@@ -252,7 +253,8 @@ public:
 	inline int getImgBattleSpc(void) { return _battleState.numImgBattleSpc; }
 	inline void setLinkAdressAStar(aStar* astar) { _astar = astar; }
 
-
+	inline void setCurHP(int damage) { _status.HP -= damage; }
+	inline int getCurHP(void) { return _status.HP; }
 
 	inline void setImgBattleIdle(int num)
 	{

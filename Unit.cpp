@@ -57,6 +57,10 @@ void Unit::update(void)
 		}
 	}
 
+	if (_battleState.squence == UNITSEQUENCE_ATTACK)
+	{
+		attack();
+	}
 	
 	switch (_battleState.unitState)
 	{
@@ -79,6 +83,9 @@ void Unit::update(void)
 		_battleState.frameIdle = FRAME_IDLE_TIRED;
 		break;
 	}
+
+	if (_battleState.imgBattleIdle->getMaxFrameY() < _battleState.imgBattleIdle->getFrameY()) _battleState.imgBattleIdle->setFrameY(0);
+	_battleState.imgBattleIdle->setFrameY(_battleState.imgBattleIdle->getFrameY() + 1);
 }
 
 void Unit::render(void)
@@ -215,6 +222,7 @@ bool Unit::move(void)
 	_battleState.rc = RectMake(_battleState.pt.x - TILESIZE / 2, _battleState.pt.y - TILESIZE / 2, TILESIZE, TILESIZE);
 	_battleState.tilePt = { (LONG)(_battleState.pt.x / TILESIZE), (LONG)(_battleState.pt.y / TILESIZE) };
 
+
 	_battleState.unitState = UNITSTATE_IDLE;
 
 	return TRUE;
@@ -274,6 +282,12 @@ void Unit::move(DIRECTION dir)
 
 }
 
+void Unit::attack(void)
+{
+
+
+	_battleState.squence = UNITSEQUENCE_TURNOFF;
+}
 
 void Unit::findEnemy(TEAM myTeam, POINT closeEnemyPos)
 {
