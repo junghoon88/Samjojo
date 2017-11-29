@@ -26,8 +26,18 @@ HRESULT scenePos::init(void) {
 	_okClicking = false;
 	_cancelClicking = false;
 
-	for (int i = 0; i < _vUnitsInFile.size(); i++) {
-		_vUnitsInFile[i]->getStatus().posRC = RectMake(4+(57*i), 52, 48, 48);
+	//이름배정
+	_tcscpy(_posUnits[0].name, L"조조");
+	_tcscpy(_posUnits[1].name, L"조인");
+	_tcscpy(_posUnits[2].name, L"하후돈");
+	_tcscpy(_posUnits[3].name, L"하후연");
+	_tcscpy(_posUnits[4].name, L"이전");
+	_tcscpy(_posUnits[5].name, L"악진");
+	_tcscpy(_posUnits[6].name, L"조홍");
+
+	//RECT define
+	for (int i = 0; i < 7; i++) {
+		_posUnits[i].posRC = RectMake(4 + (57 * i), 52, 48, 48);
 	}
 
 
@@ -41,7 +51,7 @@ void scenePos::update(void){
 	_pt.y = _ptMouse.y;
 
 
-	
+
 
 
 
@@ -67,24 +77,47 @@ void scenePos::update(void){
 		if (PtInRect(&_rcCancel, _pt)) {       //닫기창클릭
 			SCENEMANAGER->changeScene(L"준비기본씬");
 		}
+		for (int i = 0; i < 7; i++) {
+			if (PtInRect(&_posUnits[i].posRC, _pt)) { //위 장수리스트중 하나클릭
+				for (int j = 0; j < _vUnitsInFile.size(); j++) {
+					if (!_tcscmp(_posUnits[i].name, _vUnitsInFile[j]->getStatus().name)) {
+						_player->registUnit(_vUnitsInFile[j]);    //vUnits 벡터에넣음 (출진리스트)
+					}
+				}
+			}
+		}
 	}
 }
 void scenePos::render(void){
 
 	_posImg->render(getMemDC(), 0, 0);
 
-	//조조,하후돈 고정픽
-	for (int i = 0; i < _vUnitsInFile.size(); i++) {
-		if (!_tcscmp(_vUnitsInFile[i]->getStatus().name, L"조조")) {
-			_vUnitsInFile[i]->getBattleState().imgBattleIdle->frameRender(getMemDC(), 6, 367, 0, 0);
+	//위
+	for (int i = 0; i < 7; i++) {
+		for (int j = 0; j < _vUnitsInFile.size(); j++) {
+			if (!_tcscmp(_posUnits[i].name,_vUnitsInFile[j]->getStatus().name )) {
+				_vUnitsInFile[j]->getBattleState().imgBattleIdle->frameRender(getMemDC(), _posUnits[i].posRC.left, _posUnits[i].posRC.top, 0, 0);
+			}
 		}
-		if (!_tcscmp(_vUnitsInFile[i]->getStatus().name, L"하후돈")) {
-			_vUnitsInFile[i]->getBattleState().imgBattleIdle->frameRender(getMemDC(), 6+48, 367, 0, 0);
-		}
+		
+	}
+
+
+
+	//아래 조조,하후돈 고정픽
+	for (int i = 0; i < _vUnits.size(); i++) {
+		//if (!_tcscmp(_vUnitsInFile[i]->getStatus().name, L"조조")) {
+		//	_vUnitsInFile[i]->getBattleState().imgBattleIdle->frameRender(getMemDC(), 6, 367, 0, 0);
+		//}
+		//if (!_tcscmp(_vUnitsInFile[i]->getStatus().name, L"하후돈")) {
+		//	_vUnitsInFile[i]->getBattleState().imgBattleIdle->frameRender(getMemDC(), 6+48, 367, 0, 0);
+		//}
+
+		_vUnits[i]->getBattleState().imgBattleIdle->frameRender(getMemDC(), 6 + (48 * i)+i, 367, 0, 0);
 	}
 	
-
-
+	
+	
 
 
 
@@ -120,7 +153,7 @@ void scenePos::render(void){
 	//TextOut(getMemDC(), 300, 300, _vUnitsInFile[0]->getStatus().name, _tcslen(_vUnitsInFile[0]->getStatus().name));
 	//Rectangle(getMemDC(), _rcCancel.left, _rcCancel.top, _rcCancel.right, _rcCancel.bottom);
 
-	//for (int i = 0; i < _vUnitsInFile.size(); i++) {
-	//	Rectangle(getMemDC(), _vUnitsInFile[i]->getStatus().posRC.left, _vUnitsInFile[i]->getStatus().posRC.top, _vUnitsInFile[i]->getStatus().posRC.right, _vUnitsInFile[i]->getStatus().posRC.bottom);
+	//for(int i = 0; i < 7; i++) {
+	//	Rectangle(getMemDC(), _posUnits[i].posRC.left, _posUnits[i].posRC.top, _posUnits[i].posRC.right, _posUnits[i].posRC.bottom);
 	//}
 }
