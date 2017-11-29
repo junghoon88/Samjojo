@@ -34,26 +34,26 @@ void camera::update(void)
 {
 
 
-	if (_targetX < _minX)	_targetX = _minX;
-	if (_targetX > _maxX)	_targetX = _maxX;
-
-	if (_targetY < _minY)	_targetY = _minY;
-	if (_targetY > _maxY)	_targetY = _maxY;
-
-	if (_targetX != _cameraX)
-	{
-		int speed = (abs(_targetX - _cameraX)*0.2 + 1) > CAMERA_SPEED ? CAMERA_SPEED : (abs(_targetX - _cameraX)*0.2 + 1);
-
-		if (_targetX > _cameraX)	_cameraX += speed;
-		if (_targetX < _cameraX)	_cameraX -= speed;
-	}
-	if (_targetY != _cameraY)
-	{
-		int speed = (abs(_targetY - _cameraY)*0.2 + 1) > CAMERA_SPEED ? CAMERA_SPEED : (abs(_targetY - _cameraY)*0.2 + 1);
-
-		if (_targetY > _cameraY)	_cameraY += speed;
-		if (_targetY < _cameraY)	_cameraY -= speed;
-	}
+	//if (_targetX < _minX)	_targetX = _minX;
+	//if (_targetX > _maxX)	_targetX = _maxX;
+	//
+	//if (_targetY < _minY)	_targetY = _minY;
+	//if (_targetY > _maxY)	_targetY = _maxY;
+	//
+	//if (_targetX != _cameraX)
+	//{
+	//	int speed = (abs(_targetX - _cameraX)*0.2 + 1) > CAMERA_SPEED ? CAMERA_SPEED : (abs(_targetX - _cameraX)*0.2 + 1);
+	//
+	//	if (_targetX > _cameraX)	_cameraX += speed;
+	//	if (_targetX < _cameraX)	_cameraX -= speed;
+	//}
+	//if (_targetY != _cameraY)
+	//{
+	//	int speed = (abs(_targetY - _cameraY)*0.2 + 1) > CAMERA_SPEED ? CAMERA_SPEED : (abs(_targetY - _cameraY)*0.2 + 1);
+	//
+	//	if (_targetY > _cameraY)	_cameraY += speed;
+	//	if (_targetY < _cameraY)	_cameraY -= speed;
+	//}
 
 
 	//if (_cameraX < WINSIZEX / 2)				_cameraX = WINSIZEX / 2;

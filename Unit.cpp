@@ -41,7 +41,21 @@ void Unit::release(void)
 
 void Unit::update(void)
 {
-	_battleState.isMoving = move();
+	if (_battleState.squence == UNITSEQUENCE_MOVE)
+	{
+		_battleState.isMoving = move();
+		if (_battleState.isMoving == FALSE)
+		{
+			if (_battleState.findEnemy)
+			{
+				_battleState.squence = UNITSEQUENCE_ATTACK;
+			}
+			else
+			{
+				_battleState.squence = UNITSEQUENCE_TURNOFF;
+			}
+		}
+	}
 
 	
 	switch (_battleState.unitState)
@@ -78,7 +92,7 @@ void Unit::render(void)
 	{
 		case UNITSTATE_IDLE:	  //기본상태
 		case UNITSTATE_TIRED:
-			_battleState.imgBattleIdle->frameRender(getMemDC(), _battleState.rc.left, _battleState.rc.top, _battleState.frameIdle, 0);
+			_battleState.imgBattleIdle->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY(), _battleState.frameIdle, 0);
 		break;
 		case UNITSTATE_ATK:	  //공격상태
 			_battleState.imgBattleAtk->frameRender(getMemDC(), _battleState.rc.left, _battleState.rc.top, _battleState.frameAtk, 0);
@@ -291,6 +305,8 @@ void Unit::findEnemy(TEAM myTeam, POINT closeEnemyPos)
 		_battleState.findEnemy = false;
 		_battleState.tilePtNext = _astar->findCloseTile(_battleState.tilePt, closeEnemyPos);
 	}
+
+	_battleState.squence = UNITSEQUENCE_MOVE;
 }
 
 //이동가능한 범위를 계산한다.

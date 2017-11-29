@@ -13,7 +13,6 @@ struct tagStatus //기본정보 (수정하지말것)
 
 	TEAM team;
 
-	RECT posRC;       //출진 선택전용 렉트
 	//이미지
 	image*			imgFace;
 	int				numImagFace;
@@ -136,6 +135,16 @@ enum UNITCONDITION
 	UNITCONDITION_MAX
 };
 
+enum UNITSEQUENCE
+{
+	UNITSEQUENCE_TURNON,
+	UNITSEQUENCE_MOVE,
+	UNITSEQUENCE_ATTACK,
+	UNITSEQUENCE_TURNOFF,
+
+
+};
+
 struct tagBattleState
 {
 	BOOL			valid; //행동 가능하면 true, 행동 했으면 false
@@ -167,6 +176,7 @@ struct tagBattleState
 	FRAME_IDLE		frameIdle;
 	FRAME_SPC		frameSpc;
 
+	UNITSEQUENCE	squence;
 	bool			isHiding;	//은신상태 여부
 	bool			isMoving;	//움직이는중
 	bool			isAtking;	//공격중
@@ -290,6 +300,9 @@ public:
 	inline tagBattleState getBattleState(void) { return _battleState; }
 	inline RECT getRect(void) { return _battleState.rc; }
 	inline void setBattleState(tagBattleState state) { _battleState = state; }
+
+	inline UNITSEQUENCE getUnitSequnce(void) { return _battleState.squence; }
+	inline void setUnitSequnce(UNITSEQUENCE squence) { _battleState.squence = squence; }
 };
 
 typedef vector<Unit*>	vUnits;

@@ -26,6 +26,7 @@ HRESULT scenePos::init(void) {
 	_okClicking = false;
 	_cancelClicking = false;
 
+
 	//이름배정
 	_tcscpy(_posUnits[0].name, L"조조");
 	_tcscpy(_posUnits[1].name, L"조인");

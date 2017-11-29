@@ -214,6 +214,7 @@ void sceneSelect::selectScenario(void)
 			DATABASE->setSlectScenario(i);
 
 			_map->loadData(i);
+			_map->scanUnitsPos();
 			//test
 			_player->registUnitAll();
 			_player->locateUnits();
@@ -238,6 +239,7 @@ void sceneSelect::selectScenario(BTNTEST test)
 	DATABASE->setSlectScenario(i);
 
 	_map->loadData(i);
+	_map->scanUnitsPos();
 	//test
 	_player->registUnitAll();
 	_player->locateUnits();
