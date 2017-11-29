@@ -104,6 +104,69 @@ void gameMap::loadData(int num)
 
 	ZeroMemory(&_attribute, sizeof(DWORD) * TILEX * TILEY);
 
+	for (int i = 0; i < TILEX * TILEY; i++)
+	{
+		switch (_tiles[i].terrain)
+		{
+		case TERRAIN_NONE:
+			break;
+		case TERRAIN_RIVER:
+		case TERRAIN_WATER:
+		case TERRAIN_DITCH:
+		case TERRAIN_ROCK:
+		case TERRAIN_SHIP:
+		case TERRAIN_BROW:
+		case TERRAIN_FIRE:
+		case TERRAIN_CASTLEGATE:
+		case TERRAIN_RAMPART:
+		case TERRAIN_POND:
+		case TERAAIN_FENCE:
+		case TERRAIN_ALTER:
+		case TERRAIN_UNDERGROUND:
+			_attribute[i] = ATTR_UNMOVE;
+			break;
+		case TERRAIN_BRIDGE:
+			_attribute[i] = ATTR_BRIDGE;
+			break;
+		case TERRAIN_VILLAGE:
+		case TERRAIN_BARRACK:
+		case TERRAIN_CASTLE:
+		case TERRAIN_STRONGHOLD:
+		case TERRAIN_GATEWAY:
+			_attribute[i] = ATTR_CASTLE;
+			break;
+		case TERRAIN_PREMISES:
+		case TERRAIN_FOREST:
+			_attribute[i] = ATTR_FOREST;
+			break;
+		case TERRAIN_WAREHOUSE:
+			_attribute[i] = ATTR_WAREHOUSE;
+			break;
+		case TERRAIN_MOUNTAIN:
+		case TERRAIN_BADLANDS:
+			_attribute[i] = ATTR_MOUNTAIN;
+			break;
+		case TERRAIN_SNOW:
+			_attribute[i] = ATTR_SNOW;
+			break;
+		case TERRAIN_INCASTLE:
+			_attribute[i] = ATTR_INCASTLE;
+			break;
+		case TERRAIN_SWAMP:
+		case TERRAIN_FORD:
+			_attribute[i] = ATTR_WATER;
+			break;
+		case TERRAIN_GRASSLAND:
+		case TERRAIN_FLAT:
+			_attribute[i] = ATTR_FLAT;
+			break;
+		case TERRAIN_MAX:
+			break;
+		default:
+			break;
+		}
+	}
+
 	memset(&_teamInfo, TEAM_NONE, sizeof(TEAM)*TILEX*TILEY);
 
 	CloseHandle(file);

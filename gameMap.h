@@ -22,7 +22,6 @@ private:
 	int			_tilesizeX;		//타일크기(맵에 타일이 총 몇개인지)
 	int			_tilesizeY;		//타일크기(맵에 타일이 총 몇개인지)
 
-
 	Player*		_player;	//플레이어
 	Friend*		_friend;	//아군
 	Enemy*		_enemy;		//적군
