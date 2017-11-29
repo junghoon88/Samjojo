@@ -114,6 +114,7 @@ void Player::registUnitAll(void)
 			break;
 	}
 	
+<<<<<<< HEAD
 }
 void Player::registUnitBasic(void) {
 	//0. Á¶Á¶
@@ -134,6 +135,8 @@ void Player::registUnitBasic(void) {
 			break;
 		}
 	}
+=======
+>>>>>>> 47c3cbd3e3e3154b5c934c092b1de7193d76c6fb
 }
 
 

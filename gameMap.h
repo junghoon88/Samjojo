@@ -2,6 +2,7 @@
 #include "gameNode.h"
 #include "tileNode.h"
 
+class Unit;
 class Player;
 class Friend;
 class Enemy;
@@ -41,6 +42,9 @@ public:
 	void loadData(int num);
 	//유닛들의 위치를 불러온다.
 	void scanUnitsPos(void);
+
+	Unit* findEnemyUnit(TEAM myTeam, POINT tilePt);
+
 public:
 	inline void setLinkAdressPlayer(Player* player) { _player = player; }
 	inline void setLinkAdressFriend(Friend* friends) { _friend = friends; }
@@ -55,5 +59,6 @@ public:
 
 	inline int getTileSizeX(void) { return _tilesizeX; }
 	inline int getTileSizeY(void) { return _tilesizeY; }
+
 };
 

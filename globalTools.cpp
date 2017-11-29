@@ -71,7 +71,7 @@ void globalTools::setFontAll(void)
 		case FONTVERSION_STORY:
 			_gFont[i] = CreateFont(
 				14,						
-				6,						
+				8,						
 				0,						
 				0,						
 				300,					

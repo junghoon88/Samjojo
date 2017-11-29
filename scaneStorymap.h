@@ -13,13 +13,18 @@
 
 #define STILESIZEXHALF STILESIZEX/2
 #define STILESIZEYHALF STILESIZEY/2
-
+enum Direction
+{
+	STORY_DIRECTION_UP,
+	STORY_DIRECTION_DOWN,
+	STORY_DIRECTION_LEFT,
+	STORY_DIRECTION_RIGHT,
+	STORY_MOVE
+};
 struct tagIso
 {
 	int x;
 	int y;
-	POINT poly[4];
-	HRGN region;
 };
 struct tagChar
 {
@@ -38,8 +43,9 @@ private:
 	tagIso iso[STILEX][STILEY];
 	image* storymap;
 	tagChar img[CHARMAX];
-	
-
+	Direction dir;
+	float time;
+	int x, y;
 	
 public:
 	scaneStorymap();
@@ -50,6 +56,7 @@ public:
 	void update(void);
 	void render(void);
 
+	void jojomove(void);
 	void setAdreessLinkDialog(scanDialog* sD) { sDl = sD; }
 };
 

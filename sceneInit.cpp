@@ -454,26 +454,27 @@ void sceneInit::initImageStory(void)
 
 	
 	//대화창
-	_loading->loadImage(L"좌대화창", L"image/좌측대화창.bmp", 464, 120,true,RGB(255,0,255));
-	_loading->loadImage(L"우대화창", L"image/우측대화창.bmp", 464, 120,true,RGB(255,0,255));
+	_loading->loadImage(L"좌대화창", L"image/story/좌측대화창.bmp", 464, 120,true,RGB(255,0,255));
+	_loading->loadImage(L"우대화창", L"image/story/우측대화창.bmp", 464, 120,true,RGB(255,0,255));
 	_loading->loadFrameImage(L"마우스", L"image/story/storyMouse.bmp", 54, 28,2,1, true, RGB(255, 0, 255));
 	_loading->loadImage(L"마우스2", L"image/story/storyMouse2.bmp", 26, 26, true, RGB(255, 0, 255));
 	//대화전 안내창
-	for (int i = 0; i <= 3; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		_stprintf(strKey, L"nebi %02d", i);
 		_stprintf(strName, L"image/story/nebi %02d.bmp", i);
 		_loading->loadImage(strKey, strName, 148, 52, true, RGB(255, 0, 255));
 	}
 		_loading->loadImage(L"nebi 03", L"image/story/nebi 03.bmp", 196, 52, true, RGB(255, 0, 255));
-
+		_loading->loadImage(L"nebi 04", L"image/story/nebi 04.bmp", 196, 52, true, RGB(255, 0, 255));
+		_loading->loadFrameImage(L"story jojo", L"image/story/story_jojo 00.bmp", 48, 128, 1, 2, true, RGB(255, 0, 255));
 	for (int i = 0; i <= 3; i++)
 	{
 		_stprintf(strKey, L"smap %04d", i);
-		_stprintf(strName, L"image/map %04d.bmp", i);
+		_stprintf(strName, L"image/story/map %04d.bmp", i);
 		_loading->loadImage(strKey, strName, 640, 400);
 	}
-	for (int i = 0; i <= 10; i++)
+	for (int i = 0; i <= 11; i++)
 	{
 		_stprintf(strKey, L"story_%02d", i);
 		_stprintf(strName, L"image/story/story_%02d.bmp", i);
@@ -488,21 +489,21 @@ void sceneInit::initImageStory(void)
 
 void sceneInit::initImageReady(void) {
 
-	IMAGEMANAGER->addImage(L"레디UI", L"image/ready/readyUI.bmp", 960, 960, false, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"출진UI", L"image/ready/posUI.bmp", 617, 522, false, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"출진눌림", L"image/ready/출진눌림버튼.bmp", 75, 117, false, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"결정비활성버튼", L"image/ready/결정비활성버튼.bmp", 86, 21, false, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"결정활성버튼", L"image/ready/결정활성버튼.bmp",  86, 21, false, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"결정눌림버튼", L"image/ready/결정눌림버튼.bmp",  86, 21, false, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"취소버튼", L"image/ready/취소버튼.bmp", 86, 21, false, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"취소눌림버튼", L"image/ready/취소눌림버튼.bmp", 86, 21, false, RGB(255, 0, 255));
+	_loading->loadImage(L"레디UI", L"image/ready/readyUI.bmp", 960, 960, false, RGB(255, 0, 255));
+	_loading->loadImage(L"출진UI", L"image/ready/posUI.bmp", 617, 522, false, RGB(255, 0, 255));
+	_loading->loadImage(L"출진눌림", L"image/ready/출진눌림버튼.bmp", 75, 117, false, RGB(255, 0, 255));
+	_loading->loadImage(L"결정비활성버튼", L"image/ready/결정비활성버튼.bmp", 86, 21, false, RGB(255, 0, 255));
+	_loading->loadImage(L"결정활성버튼", L"image/ready/결정활성버튼.bmp",  86, 21, false, RGB(255, 0, 255));
+	_loading->loadImage(L"결정눌림버튼", L"image/ready/결정눌림버튼.bmp",  86, 21, false, RGB(255, 0, 255));
+	_loading->loadImage(L"취소버튼", L"image/ready/취소버튼.bmp", 86, 21, false, RGB(255, 0, 255));
+	_loading->loadImage(L"취소눌림버튼", L"image/ready/취소눌림버튼.bmp", 86, 21, false, RGB(255, 0, 255));
 
 	//출진유닛
-	IMAGEMANAGER->addImage(L"조조출진", L"image/ready/조조.bmp", 84, 84, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"하후돈출진", L"image/ready/하후돈.bmp", 84, 84, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"하후연출진", L"image/ready/하후연.bmp", 84, 84, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"이악조출진", L"image/ready/이악조.bmp", 84, 84, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"조인출진", L"image/ready/조인.bmp", 84, 84, true, RGB(255, 0, 255));
+	_loading->loadImage(L"조조출진", L"image/ready/조조.bmp", 84, 84, true, RGB(255, 0, 255));
+	_loading->loadImage(L"하후돈출진", L"image/ready/하후돈.bmp", 84, 84, true, RGB(255, 0, 255));
+	_loading->loadImage(L"하후연출진", L"image/ready/하후연.bmp", 84, 84, true, RGB(255, 0, 255));
+	_loading->loadImage(L"이악조출진", L"image/ready/이악조.bmp", 84, 84, true, RGB(255, 0, 255));
+	_loading->loadImage(L"조인출진", L"image/ready/조인.bmp", 84, 84, true, RGB(255, 0, 255));
 
 
 

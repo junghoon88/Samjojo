@@ -433,12 +433,12 @@ void sceneMaptool::setup(void)
 	_ctrlButton[CTRL_LOAD] = new button;
 	_ctrlButton[CTRL_ERASER] = new button;
 	
-	_ctrlButton[CTRL_SAVE]->init(  L"맵툴버튼", L"SAVE"  ,	WINSIZEX - (3 * TILESIZE) / 2, WINSIZEY - 100, { 0, 0 }, { 0, 1 }, ctrlSelectSave, this);
-	_ctrlButton[CTRL_LOAD]->init(  L"맵툴버튼", L"LOAD"  ,	WINSIZEX - (3 * TILESIZE) / 2, WINSIZEY - 60, { 0, 0 }, { 0, 1 }, ctrlSelectLoad, this);
-	_ctrlButton[CTRL_ERASER]->init(L"맵툴버튼", L"ERASER",	WINSIZEX - (3 * TILESIZE) / 2, TILESIZE * 14 - 10, { 0, 0 }, { 0, 1 }, ctrlSelectEraser, this);
+	_ctrlButton[CTRL_SAVE]->init(  L"맵툴버튼", L"저장"  ,	WINSIZEX - (3 * TILESIZE) / 2, WINSIZEY - 100, { 0, 0 }, { 0, 1 }, ctrlSelectSave, this);
+	_ctrlButton[CTRL_LOAD]->init(  L"맵툴버튼", L"불러오기"  ,	WINSIZEX - (3 * TILESIZE) / 2, WINSIZEY - 60, { 0, 0 }, { 0, 1 }, ctrlSelectLoad, this);
+	_ctrlButton[CTRL_ERASER]->init(L"맵툴버튼", L"지우기",	WINSIZEX - (3 * TILESIZE) / 2, TILESIZE * 14 - 10, { 0, 0 }, { 0, 1 }, ctrlSelectEraser, this);
 
 	_exit = new button;
-	_exit->init(L"맵툴버튼", L"EXIT", WINSIZEX - (3 * TILESIZE) / 2, WINSIZEY - 20, { 0, 0 }, { 0, 1 }, exit, this);
+	_exit->init(L"맵툴버튼", L"나가기", WINSIZEX - (3 * TILESIZE) / 2, WINSIZEY - 20, { 0, 0 }, { 0, 1 }, exit, this);
 
 	_ctrSelect = CTRL_TERRAINDRAW;
 
