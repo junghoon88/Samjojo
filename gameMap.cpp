@@ -104,5 +104,31 @@ void gameMap::loadData(int num)
 
 	ZeroMemory(&_attribute, sizeof(DWORD) * TILEX * TILEY);
 
+	memset(&_teamInfo, TEAM_NONE, sizeof(TEAM)*TILEX*TILEY);
+
 	CloseHandle(file);
+}
+
+void gameMap::scanUnitsPos(void)
+{
+	memset(&_teamInfo, TEAM_NONE, sizeof(TEAM)*TILEX*TILEY);
+
+	for (int i = 0; i < _player->getUnits().size(); i++)
+	{
+		POINT tilept = _player->getUnits()[i]->getBattleState().tilePt;
+		_teamInfo[tilept.x + tilept.y * TILESIZE] = TEAM_PLAYER;
+	}
+
+	for (int i = 0; i < _friend->getUnits().size(); i++)
+	{
+		POINT tilept = _friend->getUnits()[i]->getBattleState().tilePt;
+		_teamInfo[tilept.x + tilept.y * TILESIZE] = TEAM_FRIEND;
+	}
+
+	for (int i = 0; i < _enemy->getUnits().size(); i++)
+	{
+		POINT tilept = _enemy->getUnits()[i]->getBattleState().tilePt;
+		_teamInfo[tilept.x + tilept.y * TILESIZE] = TEAM_ENEMY;
+	}
+
 }

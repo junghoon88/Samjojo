@@ -71,8 +71,13 @@ void sceneInit::initImageSlect(void)
 		_stprintf(strName, L"image/logo/Logo %05d.bmp", i);
 		_loading->loadImage(strKey, strName, 640, 400);
 	}
+	_loading->loadImage(L"logo 37", L"image/logo/Logo 00037.bmp", 1104, 960);
+	_loading->loadImage(L"logo 38", L"image/logo/Logo 00038.bmp", 1104, 960);
 
 	_loading->loadFrameImage(L"SELECT-선택버튼", L"image/button2.bmp", 100, 60, 1, 2);
+	_loading->loadFrameImage(L"SELECT-작은선택버튼", L"image/button3.bmp", 50, 60, 1, 2);
+	_loading->loadFrameImage(L"LABEL-큰이름표", L"image/label.bmp", 100, 30, 1, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage(L"LABEL-작은이름표", L"image/label2.bmp", 72, 30, 1, 1, true, RGB(255, 0, 255));
 }
 
 void sceneInit::initImageMapTool(void)
@@ -249,7 +254,7 @@ void sceneInit::initImageUnits(void)
 		unitNum++;
 	}
 
-	//보병
+	//보병 3, 4, 5
 	for(int i = 0; i < TEAM_MAX; i++)
 	{
 		TCHAR strTemp[100] = L"";
@@ -273,7 +278,7 @@ void sceneInit::initImageUnits(void)
 		unitNum++;
 	}
 
-	//기병
+	//기병 6, 7, 8
 	for (int i = 0; i < TEAM_MAX; i++)
 	{
 		TCHAR strTemp[100] = L"";
@@ -297,7 +302,7 @@ void sceneInit::initImageUnits(void)
 		unitNum++;
 	}
 
-	//궁병
+	//궁병 9, 10, 11
 	for (int i = 0; i < TEAM_MAX; i++)
 	{
 		TCHAR strTemp[100] = L"";
@@ -321,7 +326,7 @@ void sceneInit::initImageUnits(void)
 		unitNum++;
 	}
 
-	//궁기병
+	//궁기병 12, 13, 14
 	for (int i = 0; i < TEAM_MAX; i++)
 	{
 		TCHAR strTemp[100] = L"";
@@ -345,7 +350,7 @@ void sceneInit::initImageUnits(void)
 		unitNum++;
 	}
 
-	//도사
+	//도사 15, 16, 17
 	for (int i = 0; i < TEAM_MAX; i++)
 	{
 		TCHAR strTemp[100] = L"";
@@ -369,7 +374,7 @@ void sceneInit::initImageUnits(void)
 		unitNum++;
 	}
 
-	//법사
+	//법사 18, 19, 20
 	for (int i = 0; i < TEAM_MAX; i++)
 	{
 		TCHAR strTemp[100] = L"";
@@ -393,7 +398,7 @@ void sceneInit::initImageUnits(void)
 		unitNum++;
 	}
 
-	//무도가
+	//무도가 21, 22, 23
 	for (int i = 0; i < TEAM_MAX; i++)
 	{
 		TCHAR strTemp[100] = L"";
@@ -417,7 +422,7 @@ void sceneInit::initImageUnits(void)
 		unitNum++;
 	}
 
-	//석기
+	//석기 24, 25, 26
 	for (int i = 0; i < TEAM_MAX; i++)
 	{
 		TCHAR strTemp[100] = L"";
@@ -451,7 +456,16 @@ void sceneInit::initImageStory(void)
 	//대화창
 	_loading->loadImage(L"좌대화창", L"image/좌측대화창.bmp", 464, 120,true,RGB(255,0,255));
 	_loading->loadImage(L"우대화창", L"image/우측대화창.bmp", 464, 120,true,RGB(255,0,255));
-	
+	_loading->loadFrameImage(L"마우스", L"image/story/storyMouse.bmp", 54, 28,2,1, true, RGB(255, 0, 255));
+	_loading->loadImage(L"마우스2", L"image/story/storyMouse2.bmp", 26, 26, true, RGB(255, 0, 255));
+	//대화전 안내창
+	for (int i = 0; i <= 3; i++)
+	{
+		_stprintf(strKey, L"nebi %02d", i);
+		_stprintf(strName, L"image/story/nebi %02d.bmp", i);
+		_loading->loadImage(strKey, strName, 148, 52, true, RGB(255, 0, 255));
+	}
+		_loading->loadImage(L"nebi 03", L"image/story/nebi 03.bmp", 196, 52, true, RGB(255, 0, 255));
 
 	for (int i = 0; i <= 3; i++)
 	{
@@ -465,6 +479,7 @@ void sceneInit::initImageStory(void)
 		_stprintf(strName, L"image/story/story_%02d.bmp", i);
 		_loading->loadImage(strKey, strName, 48, 64,true,RGB(255,0,255));
 	}
+	
 	memset(strKey, NULL, _tcslen(strKey));
 	memset(strName, NULL, _tcslen(strName)); 
 

@@ -76,9 +76,6 @@
     <Filter Include="MainGame\sceneBattle\Items">
       <UniqueIdentifier>{9b5dfb22-898e-4678-923e-f8e470a7031a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainGame\sceneBattle\aStar">
-      <UniqueIdentifier>{e9da99b9-273c-45a4-819e-2a1875cad09d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MainGame\sceneUnitEditor">
       <UniqueIdentifier>{f4bf651e-3ac3-43eb-a805-858c47d013b4}</UniqueIdentifier>
     </Filter>
@@ -102,6 +99,9 @@
     </Filter>
     <Filter Include="MainGame\SIDEINTERFACE - hyunjun">
       <UniqueIdentifier>{35199bcb-83e6-4f1b-be61-4b97f3b2aa3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\sceneBattle\aStar">
+      <UniqueIdentifier>{e9da99b9-273c-45a4-819e-2a1875cad09d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
