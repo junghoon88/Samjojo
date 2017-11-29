@@ -1,17 +1,11 @@
 #pragma once
-#include "sceneReadybase.h"
+#include "gameNode.h"
 #include "Player.h"
 #include "Enemy.h"
 #include "Friend.h"
 #include "button.h"
-struct tagPOS {
-	image* _readyImg;  //장수 기본이미지
 
-
-
-
-};
-class scenePos : public sceneReadybase
+class scenePos : public gameNode
 {
 private:
 	image* _posImg;
@@ -20,7 +14,8 @@ private:
 	RECT _rcCancel;
 	RECT _rcOK;
 
-	
+	vUnits _vUnits;
+	vUnits _vUnitsInFile;
 
 	
 	Player* _player;
