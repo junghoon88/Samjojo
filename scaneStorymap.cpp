@@ -15,7 +15,7 @@ scaneStorymap::~scaneStorymap()
 HRESULT scaneStorymap::init(void)
 {
 	storymap = IMAGEMANAGER->findImage(L"smap 0000");
-
+	time = 0;
 
 	for (int i = 0; i < STILEY; i++)
 	{
@@ -52,8 +52,8 @@ HRESULT scaneStorymap::init(void)
 	img[7].y = 108;
 	img[8].x = 60; //병사
 	img[8].y = 88;
-	img[9].x = 85; //조조
-	img[9].y = 55;
+	x = img[9].x = 85; //조조
+	y = img[9].y = 55;
 	img[10].x = 72; //원소
 	img[10].y = 78;
 	
@@ -67,8 +67,9 @@ HRESULT scaneStorymap::init(void)
 		img[i].etc->setY(iso[img[i].x][img[i].y].y);
 	}
 	
-	
-	
+	img[9].etc->setFrameX(iso[x][y].y);
+	img[9].etc->setFrameY(iso[x][y].y);
+	img[9].etc->setFrameY(0);
 	
 
 	return S_OK;
@@ -86,30 +87,51 @@ void scaneStorymap::release(void)
 
 void scaneStorymap::update(void) 
 {
-
-	//if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
-	//{
-	//	y++;
-	//}
-	//if (KEYMANAGER->isStayKeyDown(VK_LEFT))
-	//{
-	//	y--;
-	//}
-	//if (KEYMANAGER->isStayKeyDown(VK_UP))
-	//{
-	//	x++;
-	//}
-	//if (KEYMANAGER->isStayKeyDown(VK_DOWN))
-	//{
-	//	x--;
-	//}
+	switch(sDl->getDirection())
+	{
+	//case 0: dir = STORY_DIRECTION_UP;
+	//	break;
+	//case 1: dir = STORY_DIRECTION_DOWN;
+	//	break;
+	case 2: dir = STORY_DIRECTION_LEFT;
+		break;
+	case 3: dir = STORY_DIRECTION_RIGHT;
+		break;
+	case 4: dir = STORY_MOVE;
+		break;
+	}
+	switch (dir)
+	{
+		//case  STORY_DIRECTION_UP :
+		//	break;
+		//case  STORY_DIRECTION_DOWN:
+		//	break;
+	case  STORY_DIRECTION_LEFT:img[9].etc = IMAGEMANAGER->findImage(L"story_09");
+		break;
+	case  STORY_DIRECTION_RIGHT:img[9].etc = IMAGEMANAGER->findImage(L"story_11");
+		break;
+	case STORY_MOVE:
+			{
+				img[9].etc = IMAGEMANAGER->findImage(L"story jojo");
+				time += TIMEMANAGER->getElapsedTime();
+				if (time > 0.2f)
+				{
+					if (img[9].etc->getFrameY() >= img[9].etc->getMaxFrameY())
+					{
+						img[9].etc->setFrameY(0);
+					}
+					else img[9].etc->setFrameY(img[9].etc->getFrameY() + 1);
+					time = 0;
+				}
+			}
+	break;
+	}
 	
-	//for (int i = 0; i < CHARMAX; i++)
-	//{
-	//	img[i].etc->setX(iso[img[i].x][img[i].y].x);
-	//	img[i].etc->setY(iso[img[i].x][img[i].y].y);
-	//}
-
+	jojomove();
+	
+	img[9].etc->setX(iso[x][y].x);
+	img[9].etc->setY(iso[x][y].y);
+	
 }
 void scaneStorymap::render(void)
 {
@@ -146,12 +168,17 @@ void scaneStorymap::render(void)
 			img[i].etc->render(getMemDC(), img[i].etc->getX(), img[i].etc->getY());
 		}
 	}
-	else if (sDl->getNext() == 1 || sDl->getNext() == 3)
+	else if (sDl->getNext() == 1 || sDl->getNext() == 3 )
 	{
 		for (int i = 6; i <= 7; i++)
 		{
 			img[i].etc->render(getMemDC(), img[i].etc->getX(), img[i].etc->getY());
 		}
+	}
+	else if (sDl->getNext() == 4 && sDl->getDirection() == 4)
+	{
+		img[9].etc->frameRender(getMemDC(), img[9].etc->getX(), img[9].etc->getY());
+		img[10].etc->render(getMemDC(), img[10].etc->getX(), img[10].etc->getY());
 	}
 	else if (sDl->getNext() == 2)
 	{
@@ -182,6 +209,17 @@ void scaneStorymap::render(void)
 
 				TextOut(getMemDC(), 800, 0, tmpPOINT, _tcslen(tmpPOINT));
 			}
+		}
+	}
+}
+void scaneStorymap::jojomove(void)
+{
+	if (sDl->getDirection()==4&& x<=180)
+	{
+		x++;
+		if (x >= 180)
+		{
+			sDl->setDirection(0);
 		}
 	}
 }

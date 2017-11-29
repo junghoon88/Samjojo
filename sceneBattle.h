@@ -21,13 +21,14 @@ private:
 	Player*		_player;	//플레이어
 	Friend*		_friend;	//아군
 	Enemy*		_enemy;		//적군
-
 	gameMap*	_map;		//게임 맵
-
-
 	infoCursor* _cursor;	//커서 정보
 
+
+
 	tagPhase	_phase;
+	int _turn; //턴 진행상황
+
 
 	aStar*		_astar;		//a* 을 전투씬에 공용으로 선언하고, 각 유닛에서 할당받아서 쓰고 싶을때 쓴다.
 
@@ -55,6 +56,7 @@ public:
 	inline void setLinkAdressFriend(Friend* friends) { _friend = friends; }
 	inline void setLinkAdressMap(gameMap* map) { _map = map; }
 
+	Unit* findUnit(TEAM team, POINT pt);
 	void phaseControl(void);
 	void linkClass(void);
 };

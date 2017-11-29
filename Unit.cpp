@@ -57,9 +57,14 @@ void Unit::update(void)
 		}
 	}
 
+	//상대적인적(player, friend vs enemy)
 	if (_battleState.squence == UNITSEQUENCE_ATTACK)
 	{
-		attack();
+		Unit* enemy = _map->findEnemyUnit(_status.team, _battleState.tilePtEnemy);
+		if (enemy != NULL)
+		{
+			printf("");
+		}
 	}
 	
 	switch (_battleState.unitState)
@@ -99,7 +104,7 @@ void Unit::render(void)
 	{
 		case UNITSTATE_IDLE:	  //기본상태
 		case UNITSTATE_TIRED:
-			_battleState.imgBattleIdle->frameRender(getMemDC(), _battleState.rc.left, _battleState.rc.top, _battleState.frameIdle, 0);
+			_battleState.imgBattleIdle->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY(), _battleState.frameIdle, 0);
 		break;
 		case UNITSTATE_ATK:	  //공격상태
 			_battleState.imgBattleAtk->frameRender(getMemDC(), _battleState.rc.left, _battleState.rc.top, _battleState.frameAtk, 0);
@@ -374,8 +379,12 @@ void Unit::showMoveArea(void)
 
 		TCHAR str[10];
 		_stprintf(str, L"%d", cost);
+
 		TextOut(getMemDC(), x * TILESIZE + 20, y * TILESIZE + 20, str, _tcslen(str));
 
+		TCHAR str2[10];
+		_stprintf(str2, L"%d", cost);
+		TextOut(getMemDC(), x * TILESIZE + 20 - MAINCAMERA->getCameraX(), y * TILESIZE + 20 - MAINCAMERA->getCameraY(), str2, _tcslen(str2));
 	}
 	
 	for (int i = 0; i < UNIT_ATTACK_RANGE_MAX; i++) // y
@@ -395,4 +404,9 @@ void Unit::showMoveArea(void)
 			}
 		}
 	}
+}
+
+void Unit::clearMoveArea(void)
+{
+	_moveArea.clear();
 }
