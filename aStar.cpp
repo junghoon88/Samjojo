@@ -290,7 +290,7 @@ bool aStar::findAtkPos(TEAM myTeam, POINT* myPos, POINT* enemyPos)
 		}
 
 		*myPos = { (*iterMin).second->getIdX(), (*iterMin).second->getIdY() };
-		*enemyPos = { (*iterMin).first % TILESIZE, (*iterMin).first / TILESIZE };
+		*enemyPos = { (*iterMin).first % TILEX, (*iterMin).first / TILEX };
 		return true;
 	}
 

@@ -57,6 +57,15 @@ void Unit::update(void)
 		}
 	}
 
+	//상대적인적(player, friend vs enemy)
+	if (_battleState.squence == UNITSEQUENCE_ATTACK)
+	{
+		Unit* enemy = _map->findEnemyUnit(_status.team, _battleState.tilePtEnemy);
+		if (enemy != NULL)
+		{
+			printf("");
+		}
+	}
 	
 	switch (_battleState.unitState)
 	{
