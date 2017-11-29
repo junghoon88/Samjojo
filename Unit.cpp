@@ -57,6 +57,15 @@ void Unit::update(void)
 		}
 	}
 
+	//상대적인적(player, friend vs enemy)
+	if (_battleState.squence == UNITSEQUENCE_ATTACK)
+	{
+		Unit* enemy = _map->findEnemyUnit(_status.team, _battleState.tilePtEnemy);
+		if (enemy != NULL)
+		{
+			printf("");
+		}
+	}
 	
 	switch (_battleState.unitState)
 	{
@@ -340,6 +349,11 @@ void Unit::showMoveArea(void)
 		int cost = (int)_moveArea[i]->getTotalCost();
 		TCHAR str[10];
 		_stprintf(str, L"%d", cost);
-		TextOut(getMemDC(), x * TILESIZE + 20, y * TILESIZE + 20, str, _tcslen(str));
+		TextOut(getMemDC(), x * TILESIZE + 20 - MAINCAMERA->getCameraX(), y * TILESIZE + 20 - MAINCAMERA->getCameraY(), str, _tcslen(str));
 	}
+}
+
+void Unit::clearMoveArea(void)
+{
+	_moveArea.clear();
 }

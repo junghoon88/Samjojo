@@ -4,6 +4,7 @@
 #include "Friend.h"
 #include "Enemy.h"
 #include "infoCursor.h"
+#include "Unit.h"
 
 
 gameMap::gameMap()
@@ -191,4 +192,45 @@ void gameMap::scanUnitsPos(void)
 		POINT tilept = _enemy->getUnits()[i]->getBattleState().tilePt;
 		_teamInfo[tilept.x + tilept.y * TILEX] = TEAM_ENEMY;
 	}
+}
+
+Unit* gameMap::findEnemyUnit(TEAM myTeam, POINT tilePt)
+{
+	switch (myTeam)
+	{
+	case TEAM_PLAYER:
+		break;
+	case TEAM_FRIEND:
+		for (int i = 0; i < _enemy->getUnits().size(); i++)
+		{
+			POINT emTilePt = _enemy->getUnits()[i]->getBattleState().tilePt;
+
+			if (tilePt.x == emTilePt.x && tilePt.y == emTilePt.y)
+			{
+				return _enemy->getUnits()[i];
+			}
+		}
+		break;
+	case TEAM_ENEMY:
+		for (int i = 0; i < _player->getUnits().size(); i++)
+		{
+			POINT emTilePt = _player->getUnits()[i]->getBattleState().tilePt;
+
+			if (tilePt.x == emTilePt.x && tilePt.y == emTilePt.y)
+			{
+				return _player->getUnits()[i];
+			}
+		}
+		for (int i = 0; i < _friend->getUnits().size(); i++)
+		{
+			POINT emTilePt = _friend->getUnits()[i]->getBattleState().tilePt;
+
+			if (tilePt.x == emTilePt.x && tilePt.y == emTilePt.y)
+			{
+				return _friend->getUnits()[i];
+			}
+		}
+		break;
+	}
+	return NULL;
 }
