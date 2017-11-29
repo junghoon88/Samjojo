@@ -26,7 +26,8 @@ HRESULT infoCursor::init(void)
 		element[i] = RectMakeCenter(rc.left + TILESIZE/2 + ((TILESIZE / 2 + (TILESIZE / 2 * 0.25)) * i), tileImgRect.bottom + TILESIZE / 2, TILESIZE / 2, TILESIZE / 2);
 	}
 
-
+	clickUnit = NONE;
+	vNum = 0;
 	factionName = L"진영정보";
 	unitName = L"유닛이름정보";
 	tilename = L"타일이름정보";
@@ -45,10 +46,14 @@ HRESULT infoCursor::init(void)
 	return S_OK;
 	
 }
+
+
 void infoCursor::release(void)
 {
 
 }
+
+
 void infoCursor::update(void) 
 {
 	mouse_Scanning();//지형 타일 갱신
@@ -56,10 +61,14 @@ void infoCursor::update(void)
 	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON)) dataClean();  //윈도우 닫기
 	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
 	{
-		if (isShow) dataClean();
-		else mouse_Click();//지형 클릭 시 
+		if (!isShow && isUnit && clickUnit == PLAYER) mouse_ClickToAction();
+	    else if (isShow) dataClean();
+		else mouse_ClickToTile();//지형 클릭 시 
 	}
 }
+
+
+
 void infoCursor::render(void) 
 {
 	tileLineDraw(); //커서 타일 테두리 그림
@@ -82,7 +91,7 @@ void infoCursor::mouse_Scanning(void)
 
 }
 
-void infoCursor::mouse_Click(void)
+void infoCursor::mouse_ClickToTile(void)
 {
 	findtile->scanUnitsPos();
 //	int findIndex = (int)(indexTile + MAINCAMERA->getCameraX()) / TILESIZE + (int)(MAINCAMERA->getCameraY() / TILESIZE) * TILEX;
@@ -94,30 +103,44 @@ void infoCursor::mouse_Click(void)
 		{
 			if (PtInRect(&_player->getUnits()[i]->getRect(), scanPoint))
 			{
+				vNum = i;
 				isUnit = true;
+				clickUnit = PLAYER;
 				factionName = L"플레이어";
 				unitName = _player->getUnits()[i]->getStatus().name;
-				unitImg = _player->getUnits()[i]->getBattleState().imgBattleIdle;//여기
+				unitImg = _player->getUnits()[i]->getBattleState().imgBattleIdle;
 			}
 		}
 	}
-	else if (findtile->getTeamInfo()[findIndex * TILESIZE] == TEAM_FRIEND)
+	else if (findtile->getTeamInfo()[findIndex] == TEAM_FRIEND)
 	{
-		//factionName = L"아군";
-		//isUnit = true;
-		//unitName = _friend->getUnits()[findIndex]->getStatus().name;
+		for (int i = 0; i < _friend->getUnits().size(); i++)
+		{
+			if (PtInRect(&_friend->getUnits()[i]->getRect(), scanPoint))
+			{
+				vNum = i;
+				isUnit = true;
+				clickUnit = FRIEND;
+				factionName = L"아군";
+				unitName = _friend->getUnits()[i]->getStatus().name;
+				unitImg = _friend->getUnits()[i]->getBattleState().imgBattleIdle;
+				_friend->getUnits()[i]->findMoveArea();
+			}
+		}
 	}
-	else if (findtile->getTeamInfo()[findIndex * TILESIZE / TILEX] == TEAM_ENEMY)
+	else if (findtile->getTeamInfo()[findIndex] == TEAM_ENEMY)
 	{
-
 		for (int i = 0; i < _enemy->getUnits().size(); i++)
 		{
 			if (PtInRect(&_enemy->getUnits()[i]->getRect(), scanPoint))
 			{
+				vNum = i;
 				isUnit = true;
+				clickUnit = ENEMY;
 				factionName = L"적군";
 				unitName = _enemy->getUnits()[i]->getStatus().name;
-				unitImg = _enemy->getUnits()[i]->getBattleState().imgBattleIdle;//여기
+				unitImg = _enemy->getUnits()[i]->getBattleState().imgBattleIdle;
+				_enemy->getUnits()[i]->findMoveArea();
 			}
 		}
 	}
@@ -406,6 +429,11 @@ void infoCursor::mouse_Click(void)
 	isShow = true;
 }
 
+void infoCursor::mouse_ClickToAction(void)//플레이어 유닛을 누른상태일때 클릭하면 취해줄 액션들
+{
+	
+}
+
 void infoCursor::moveCamera(void)
 {
 	if (_ptMouse.x > WINSIZEX - TILESIZE/2 - 144 && _ptMouse.x <= WINSIZEX - 144 && MAINCAMERA->getCameraX() < findtile->getTileSizeX() * TILESIZE - TILESIZE * 20)// 마우스가 오른쪽 
@@ -435,6 +463,19 @@ void infoCursor::dataClean(void)//마우스 우클릭 시 현재 인터페이스의 정보를 초기
 	wind = false;
 	earth = false;
 	water = false;
+
+	switch (clickUnit)
+	{
+	case PLAYER:
+		_player->getUnits()[vNum]->clearMoveArea();
+		break;
+	case FRIEND:
+		_friend->getUnits()[vNum]->clearMoveArea();
+		break;
+	case ENEMY:
+		_enemy->getUnits()[vNum]->clearMoveArea();
+		break;
+	}
 }
 void infoCursor::tileLineDraw(void)
 {

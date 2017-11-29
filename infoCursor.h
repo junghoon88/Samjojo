@@ -11,6 +11,11 @@ class Enemy;
 class Friend;
 class gameMap;
 
+enum clickFW
+{
+	NONE,PLAYER,FRIEND,ENEMY
+};
+
 class infoCursor : public gameNode
 {
 private:
@@ -18,11 +23,11 @@ private:
 	Friend*		_friend;
 	Enemy*		_enemy;
 	gameMap* findtile;
+	clickFW clickUnit;
 
 	RECT rc;//정보 제공용 박스
 	RECT drawLine;//타일 테두리 표시용
 	HPEN linePen,oPen;
-
 	RECT tileImgRect;
 	image* tileImg;
 	RECT unitImgRect;
@@ -43,6 +48,7 @@ private:
 	TCHAR* showExp;//플레이어는 아군적군대신 경험치 표시됨
 	TCHAR* showAtk;//A.K.A 공격력
 	
+	int vNum;// v넘버
 	int bonus;//밟은 땅에 따른 전투력 증감표시
 	int exp;
 	int lv;
@@ -79,7 +85,8 @@ public:
 	void infoDraw(void);
 	void moveCamera(void);
 	void mouse_Scanning(void);
-	void mouse_Click(void);
+	void mouse_ClickToTile(void);
+	void mouse_ClickToAction(void);
 
 public:
 	inline void setLinkPlyer(Player* player) { _player = player; }
