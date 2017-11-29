@@ -24,13 +24,6 @@ HRESULT scaneStorymap::init(void)
 			iso[i][j].x = 400 + STILESIZEXHALF*(j - i);
 			iso[i][j].y = -200+ STILESIZEYHALF*(j + i);
 	
-			iso[i][j].poly[0] = { iso[i][j].x, iso[i][j].y - STILESIZEYHALF };
-			iso[i][j].poly[1] = { iso[i][j].x + STILESIZEXHALF, iso[i][j].y };
-			iso[i][j].poly[2] = { iso[i][j].x, iso[i][j].y + STILESIZEYHALF };
-			iso[i][j].poly[3] = { iso[i][j].x - STILESIZEXHALF, iso[i][j].y };
-	
-			iso[i][j].region = CreatePolygonRgn(iso[i][j].poly, 4, ALTERNATE);
-
 		}
 	}
 	
@@ -76,13 +69,13 @@ HRESULT scaneStorymap::init(void)
 }
 void scaneStorymap::release(void)
 {
-	for (int i = 0; i < STILEY; i++)
-	{
-		for (int j = 0; j < STILEY; j++)
-		{
-			DeleteObject(iso[i][j].region);
-		}
-	}
+	//for (int i = 0; i < STILEY; i++)
+	//{
+	//	for (int j = 0; j < STILEY; j++)
+	//	{
+	//		DeleteObject(iso[i][j].region);
+	//	}
+	//}
 }
 
 void scaneStorymap::update(void) 
@@ -150,19 +143,7 @@ void scaneStorymap::render(void)
 
 	storymap->render(getMemDC(), 0, 0);
 
-	for (int i = 0; i < STILEY; i++)
-	{
-		for (int j = 0; j < STILEX; j++)
-		{
-			if (KEYMANAGER->isStayKeyDown(VK_SPACE))
-			{
-				Polygon(getMemDC(), iso[i][j].poly, 4);
-
-			}
-		}
-	}
-
-	if (sDl->getNext() == 0)
+		if (sDl->getNext() == 0)
 	{		for (int i = 0; i < 6; i++)
 		{
 			img[i].etc->render(getMemDC(), img[i].etc->getX(), img[i].etc->getY());
@@ -194,23 +175,7 @@ void scaneStorymap::render(void)
 			img[i].etc->render(getMemDC(), img[i].etc->getX(), img[i].etc->getY());
 		}
 	}
-	
-	for (int i = 0; i < STILEY; i++)
-	{
-		for (int j = 0; j < STILEX; j++)
-		{
-			
-			if (PtInRegion(iso[i][j].region, _ptMouse.x, _ptMouse.y))
-			{
-				
-				TCHAR tmpPOINT[1002];
-				
-				_stprintf(tmpPOINT, L" x축 %d 번째타일,y 축 %d 번째타일", i, j);
 
-				TextOut(getMemDC(), 800, 0, tmpPOINT, _tcslen(tmpPOINT));
-			}
-		}
-	}
 }
 void scaneStorymap::jojomove(void)
 {

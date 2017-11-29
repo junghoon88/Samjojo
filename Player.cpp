@@ -100,7 +100,7 @@ void Player::registUnitAll(void)
 		}
 	}
 
-	/*
+	
 	//동희야 여기 수정해야됨.
 	//테스트로 그냥 때려박음
 	for (viUnits iter = _vUnitsInFile.begin(); iter != _vUnitsInFile.end(); ++iter)
@@ -113,7 +113,7 @@ void Player::registUnitAll(void)
 		if (_vUnits.size() >= ENTRANT_MAX)
 			break;
 	}
-	*/
+	
 }
 
 

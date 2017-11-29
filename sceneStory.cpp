@@ -43,8 +43,6 @@ void sceneStory::release(void)
 void sceneStory::update(void)
 {
 	
-	
-
 	_dialog->update();
 	_sSmap->update();
 	if (!(_dialog->getDirection() ==4))
@@ -75,4 +73,5 @@ void sceneStory::render(void)
 	_sSmap->render();
 	SetBkMode(getMemDC(), TRANSPARENT);
 	_dialog->render();
+	if (_dialog->getNext() == 6) SCENEMANAGER->changeScene(L"준비기본씬");
 }
