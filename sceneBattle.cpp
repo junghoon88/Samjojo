@@ -69,7 +69,12 @@ void sceneBattle::update(void)
 		{
 			_map->scanUnitsPos();
 			unit->findMoveArea();
-			//unit->findEnemy();
+		}
+		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD9))
+		{
+			unit->setUnitSequnce(UNITSEQUENCE_TURNON);
+			_map->scanUnitsPos();
+			unit->findEnemy(TEAM_ENEMY, findCloseEnemyPos(unit));
 		}
 	}
 
@@ -92,6 +97,58 @@ void sceneBattle::render(void)
 
 	_cursor->render();
 	_astar->render();
+}
+
+POINT sceneBattle::findCloseEnemyPos(Unit* unit)
+{
+	float distMin = 1000.0f;
+	POINT myPt = unit->getBattleState().tilePt;
+	POINT tarPt = myPt;
+
+	switch (unit->getStatus().team)
+	{
+	case TEAM_PLAYER:
+		break;
+	case TEAM_FRIEND:
+		for (int i = 0; i < _enemy->getUnits().size(); i++)
+		{
+			POINT ePt = _enemy->getUnits()[i]->getBattleState().tilePt;
+
+			float dist = getDistance(myPt.x, myPt.y, ePt.x, ePt.y);
+			if (distMin > dist)
+			{
+				tarPt = ePt;
+				distMin = dist;
+			}
+		}
+		break;
+	case TEAM_ENEMY:
+		for (int i = 0; i < _player->getUnits().size(); i++)
+		{
+			POINT ePt = _player->getUnits()[i]->getBattleState().tilePt;
+
+			float dist = getDistance(myPt.x, myPt.y, ePt.x, ePt.y);
+			if (distMin > dist)
+			{
+				tarPt = ePt;
+				distMin = dist;
+			}
+		}
+		for (int i = 0; i < _friend->getUnits().size(); i++)
+		{
+			POINT ePt = _friend->getUnits()[i]->getBattleState().tilePt;
+
+			float dist = getDistance(myPt.x, myPt.y, ePt.x, ePt.y);
+			if (distMin > dist)
+			{
+				tarPt = ePt;
+				distMin = dist;
+			}
+		}
+		break;
+	}
+
+	return tarPt;
 }
 
 void sceneBattle::initImage(void)

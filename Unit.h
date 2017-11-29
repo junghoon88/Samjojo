@@ -5,7 +5,7 @@
 #include "gameMap.h"
 
 
-struct tagStatus
+struct tagStatus //기본정보 (수정하지말것)
 {
 	TCHAR name[32];
 	TCHAR family[32];	//부대
@@ -135,6 +135,16 @@ enum UNITCONDITION
 	UNITCONDITION_MAX
 };
 
+enum UNITSEQUENCE
+{
+	UNITSEQUENCE_TURNON,
+	UNITSEQUENCE_MOVE,
+	UNITSEQUENCE_ATTACK,
+	UNITSEQUENCE_TURNOFF,
+
+
+};
+
 struct tagBattleState
 {
 	BOOL			valid; //행동 가능하면 true, 행동 했으면 false
@@ -166,11 +176,14 @@ struct tagBattleState
 	FRAME_IDLE		frameIdle;
 	FRAME_SPC		frameSpc;
 
+	UNITSEQUENCE	squence;
 	bool			isHiding;	//은신상태 여부
-	bool			isMoving;
+	bool			isMoving;	//움직이는중
+	bool			isAtking;	//공격중
+	bool			isHiting;	//피격중
 };
 
-//유닛에디터에서 저장할 정보들 모음
+//유닛에디터에서 저장할 정보들 모음 (수정하지말것)
 struct tagUnitSaveInfo
 {
 	//기본 정보
@@ -219,9 +232,9 @@ public:
 	void loadUnitData(tagUnitSaveInfo &info);
 	void copyUnitData(Unit* unit);
 
-	void move(void);
+	bool move(void);
 	void move(DIRECTION dir);
-	void findEnemy(TEAM myTeam);
+	void findEnemy(TEAM myTeam, POINT closeEnemyPos);
 	void findMoveArea(void);
 	void showMoveArea(void);
 
@@ -287,6 +300,9 @@ public:
 	inline tagBattleState getBattleState(void) { return _battleState; }
 	inline RECT getRect(void) { return _battleState.rc; }
 	inline void setBattleState(tagBattleState state) { _battleState = state; }
+
+	inline UNITSEQUENCE getUnitSequnce(void) { return _battleState.squence; }
+	inline void setUnitSequnce(UNITSEQUENCE squence) { _battleState.squence = squence; }
 };
 
 typedef vector<Unit*>	vUnits;

@@ -37,14 +37,18 @@ private:
 	void initSound(void);
 
 public:
+	sceneBattle();
+	~sceneBattle();
+
 	HRESULT init(void);
 	void release(void);
 	void update(void);
 	void render(void);
 
+private:
+	POINT findCloseEnemyPos(Unit* unit);
+public:
 
-	sceneBattle();
-	~sceneBattle();
 
 public:
 	inline void setLinkAdressPlayer(Player* player) { _player = player; }

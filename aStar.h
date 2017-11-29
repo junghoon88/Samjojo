@@ -61,6 +61,8 @@ public:
 	void addAtkList(TEAM myTeam, tile* currentTile);
 	bool findAtkPos(TEAM myTeam, POINT* myPos, POINT* enemyPos);
 
+	POINT findCloseTile(POINT st, POINT ed);
+
 	void clearTiles(void);
 	tile* getTile(POINT tilePt);
 
