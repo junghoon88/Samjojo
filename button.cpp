@@ -8,6 +8,8 @@ button::button()
 	_stprintf(_strText, L"");
 
 	_fontNum = FONTVERSION_SAMJOJO;
+
+	_color = RGB(0, 0, 0);
 }
 
 
@@ -157,6 +159,7 @@ void button::render(void)
 		break;
 	}
 
+	SetTextColor(getMemDC(), _color);
 	SetBkMode(getMemDC(), TRANSPARENT);
 	HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
 	DrawText(getMemDC(), _strText, _tcslen(_strText), &_rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
@@ -170,5 +173,3 @@ void button::setText(const TCHAR* text)
 
 	_tcscpy(_strText, text);
 }
-
-

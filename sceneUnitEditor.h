@@ -6,10 +6,10 @@
 
 
 #define UPDATEPOSX 16
-#define UPDATEPOSY 0
+#define UPDATEPOSY 16
 
 #define FILENAME_STARTX		UPDATEPOSX
-#define FILENAME_STARTY		260
+#define FILENAME_STARTY		300
 #define FILENAME_WIDTH		128
 #define FILENAME_HEIGHT		30
 
@@ -112,11 +112,11 @@ enum UNITEDITOR_BUTTON
 	UNITEDITOR_BUTTON_FACE_PREV,		//얼굴 이전 이미지
 	UNITEDITOR_BUTTON_FACE_NEXT,		//얼굴 다음 이미지
 
-	UNITEDITOR_BUTTON_NORMAL_PREV,		//대화 이전 이미지
-	UNITEDITOR_BUTTON_NORMAL_NEXT,		//대화 다음 이미지
+	//UNITEDITOR_BUTTON_NORMAL_PREV,		//대화 이전 이미지
+	//UNITEDITOR_BUTTON_NORMAL_NEXT,		//대화 다음 이미지
 	
-	//UNITEDITOR_BUTTON_COMBAT_PREV,		//전투 이전 이미지
-	//UNITEDITOR_BUTTON_COMBAT_NEXT,		//전투 다음 이미지
+	UNITEDITOR_BUTTON_COMBAT_PREV,		//전투 이전 이미지
+	UNITEDITOR_BUTTON_COMBAT_NEXT,		//전투 다음 이미지
 	
 	UNITEDITOR_BUTTON_WEAPON_PREV,		//무기 이전 이미지
 	UNITEDITOR_BUTTON_WEAPON_NEXT,		//무기 다음 이미지
@@ -209,6 +209,8 @@ private:
 	image* _imgBattleIdle;
 	image* _imgBattleSpc;
 
+	image* _bgImage;
+
 	bool _exit;
 
 
@@ -216,8 +218,8 @@ private:
 	//기존 파일들 스캔
 	vector<tagUnitFileInfo> _vUnits;
 	void loadUnitFiles(void);
-	HBRUSH hBrushWhite;
-	HBRUSH hBrushBlue;
+	HBRUSH hBrushNon;
+	HBRUSH hBrushSelect;
 
 	HBRUSH hBrushRange;
 	HBRUSH hBrushPlayer;
