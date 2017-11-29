@@ -50,12 +50,12 @@ HRESULT scaneStorymap::init(void)
 	img[6].y = 108; 
 	img[7].x = 95; //초선
 	img[7].y = 108;
-	img[8].x = 85; //조조
-	img[8].y = 55;
-	img[9].x = 72; //원소
-	img[9].y = 78;
-	img[10].x = 135; //병사
-	img[10].y = 75;
+	img[8].x = 60; //병사
+	img[8].y = 88;
+	img[9].x = 85; //조조
+	img[9].y = 55;
+	img[10].x = 72; //원소
+	img[10].y = 78;
 	
 	
 	for (int i = 0; i < CHARMAX; i++)
@@ -117,11 +117,11 @@ void scaneStorymap::render(void)
 	{
 	case 0: storymap = IMAGEMANAGER->findImage(L"smap 0000");
 		break;
-	case 1: storymap = IMAGEMANAGER->findImage(L"smap 0001");
+	case 1: case 2 : case 3 : storymap = IMAGEMANAGER->findImage(L"smap 0001");
 		break;
-	case 2: storymap = IMAGEMANAGER->findImage(L"smap 0002");
+	case 4 : storymap = IMAGEMANAGER->findImage(L"smap 0002");
 		break;
-	case 3: storymap = IMAGEMANAGER->findImage(L"smap 0003");
+	case 5: storymap = IMAGEMANAGER->findImage(L"smap 0003");
 		break;
 
 	}
@@ -146,27 +146,28 @@ void scaneStorymap::render(void)
 			img[i].etc->render(getMemDC(), img[i].etc->getX(), img[i].etc->getY());
 		}
 	}
-	else if (sDl->getNext() == 1)
+	else if (sDl->getNext() == 1 || sDl->getNext() == 3)
 	{
-		for (int i = 6; i < 8; i++)
+		for (int i = 6; i <= 7; i++)
 		{
 			img[i].etc->render(getMemDC(), img[i].etc->getX(), img[i].etc->getY());
 		}
 	}
 	else if (sDl->getNext() == 2)
 	{
-		for (int i = 8; i < 10; i++)
+		for (int i = 6; i <= 8; i++)
 		{
 			img[i].etc->render(getMemDC(), img[i].etc->getX(), img[i].etc->getY());
 		}
 	}
-	else if (sDl->getNext() == 3)
+	else if (sDl->getNext() == 4)
 	{
-		for (int i = 0; i < CHARMAX; i++)
+		for (int i = 9; i < 11; i++)
 		{
 			img[i].etc->render(getMemDC(), img[i].etc->getX(), img[i].etc->getY());
 		}
 	}
+	
 	for (int i = 0; i < STILEY; i++)
 	{
 		for (int j = 0; j < STILEX; j++)
