@@ -36,11 +36,14 @@ HRESULT scenePos::init(void) {
 	_tcscpy(_posUnits[5].name, L"악진");
 	_tcscpy(_posUnits[6].name, L"조홍");
 
-	//RECT define
+	//RECT & bool define
 	for (int i = 0; i < 7; i++) {
 		_posUnits[i].posRC = RectMake(4 + (57 * i), 52, 48, 48);
+		_posUnits[i].isPos = false;
 	}
-
+	//조조 하후돈고정픽
+	_posUnits[0].isPos = true;
+	_posUnits[2].isPos = true;
 
 	return S_OK;
 }
@@ -71,22 +74,42 @@ void scenePos::update(void){
 		else {
 			_cancelClicking = false;
 		}
+
 	}
 
-
+	
 	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) {
 		if (PtInRect(&_rcCancel, _pt)) {       //닫기창클릭
 			SCENEMANAGER->changeScene(L"준비기본씬");
 		}
 		for (int i = 0; i < 7; i++) {
-			if (PtInRect(&_posUnits[i].posRC, _pt)) { //위 장수리스트중 하나클릭
+			if (PtInRect(&_posUnits[i].posRC, _pt) && !_posUnits[i].isPos) { //위 장수리스트중 하나클릭  (추가)
+				_posUnits[i].isPos = true;
 				for (int j = 0; j < _vUnitsInFile.size(); j++) {
 					if (!_tcscmp(_posUnits[i].name, _vUnitsInFile[j]->getStatus().name)) {
 						_player->registUnit(_vUnitsInFile[j]);    //vUnits 벡터에넣음 (출진리스트)
+						_vUnits = _player->getUnits();
 					}
 				}
 			}
+
+			if (PtInRect(&posRC2[i], _pt) && i != 0 && i != 1) {   //아래 장수리스트중 하나클릭 (제거)
+				for (int j = 0; j < 7; j++) {
+					if (!_tcscmp(_vUnits[i]->getStatus().name, _posUnits[j].name)) {
+						_posUnits[j].isPos = false;
+						break;
+					}
+				}
+				_player->cancleUnit(i); //제거
+				_vUnits = _player->getUnits();  //갱신
+			}
 		}
+	
+	}
+
+
+	for (int i = 0; i < _vUnits.size(); i++) {
+		posRC2[i] = RectMake(6 + (50 * i), 367, 48, 48);
 	}
 }
 void scenePos::render(void){
@@ -103,18 +126,13 @@ void scenePos::render(void){
 		
 	}
 
-
+	//for (int i = 0; i < 7; i++) {
+	//	Rectangle(getMemDC(), _posUnits[i].posRC.left, _posUnits[i].posRC.top, _posUnits[i].posRC.right, _posUnits[i].posRC.bottom);
+	//}
 
 	//아래 조조,하후돈 고정픽
 	for (int i = 0; i < _vUnits.size(); i++) {
-		//if (!_tcscmp(_vUnitsInFile[i]->getStatus().name, L"조조")) {
-		//	_vUnitsInFile[i]->getBattleState().imgBattleIdle->frameRender(getMemDC(), 6, 367, 0, 0);
-		//}
-		//if (!_tcscmp(_vUnitsInFile[i]->getStatus().name, L"하후돈")) {
-		//	_vUnitsInFile[i]->getBattleState().imgBattleIdle->frameRender(getMemDC(), 6+48, 367, 0, 0);
-		//}
-
-		_vUnits[i]->getBattleState().imgBattleIdle->frameRender(getMemDC(), 6 + (48 * i)+i, 367, 0, 0);
+		_vUnits[i]->getBattleState().imgBattleIdle->frameRender(getMemDC(), 6 + (50 * i), 367, 0, 0);
 	}
 	
 	
@@ -153,8 +171,7 @@ void scenePos::render(void){
 
 	//TextOut(getMemDC(), 300, 300, _vUnitsInFile[0]->getStatus().name, _tcslen(_vUnitsInFile[0]->getStatus().name));
 	//Rectangle(getMemDC(), _rcCancel.left, _rcCancel.top, _rcCancel.right, _rcCancel.bottom);
-
-	//for(int i = 0; i < 7; i++) {
-	//	Rectangle(getMemDC(), _posUnits[i].posRC.left, _posUnits[i].posRC.top, _posUnits[i].posRC.right, _posUnits[i].posRC.bottom);
-	//}
+	//for(int i=0; i<_vUnits.size(); i++)
+	//	Rectangle(getMemDC(), posRC2[i].left, posRC2[i].top, posRC2[i].right, posRC2[i].bottom);
+	
 }
