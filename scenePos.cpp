@@ -26,6 +26,9 @@ HRESULT scenePos::init(void) {
 	_okClicking = false;
 	_cancelClicking = false;
 
+	for (int i = 0; i < _vUnitsInFile.size(); i++) {
+		_vUnitsInFile[i]->getStatus().posRC = RectMake(4+(57*i), 52, 48, 48);
+	}
 
 
 	return S_OK;
@@ -116,4 +119,8 @@ void scenePos::render(void){
 
 	//TextOut(getMemDC(), 300, 300, _vUnitsInFile[0]->getStatus().name, _tcslen(_vUnitsInFile[0]->getStatus().name));
 	//Rectangle(getMemDC(), _rcCancel.left, _rcCancel.top, _rcCancel.right, _rcCancel.bottom);
+
+	//for (int i = 0; i < _vUnitsInFile.size(); i++) {
+	//	Rectangle(getMemDC(), _vUnitsInFile[i]->getStatus().posRC.left, _vUnitsInFile[i]->getStatus().posRC.top, _vUnitsInFile[i]->getStatus().posRC.right, _vUnitsInFile[i]->getStatus().posRC.bottom);
+	//}
 }
