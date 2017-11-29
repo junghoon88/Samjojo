@@ -214,6 +214,10 @@ void sceneSelect::selectScenario(void)
 			DATABASE->setSlectScenario(i);
 
 			_map->loadData(i);
+			//test
+			_player->registUnitAll();
+			_player->locateUnits();
+
 			_friend->locateUnits();
 			_enemy->locateUnits();
 
@@ -234,6 +238,10 @@ void sceneSelect::selectScenario(BTNTEST test)
 	DATABASE->setSlectScenario(i);
 
 	_map->loadData(i);
+	//test
+	_player->registUnitAll();
+	_player->locateUnits();
+
 	_friend->locateUnits();
 	_enemy->locateUnits();
 

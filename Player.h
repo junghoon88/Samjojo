@@ -2,6 +2,8 @@
 #include "gameNode.h"
 #include "Unit.h"
 
+#define ENTRANT_MAX	7
+
 class Friend;
 class Enemy;
 class gameMap;
@@ -29,7 +31,14 @@ public:
 	void render(void);
 
 	void loadUnits(void);
+	void registUnitAll(void);
+	void registUnit(Unit* unit);	//파일유닛중에서 출전할 유닛 등록
+	void cancleUnit(int num);		//출전유닛중에서 취소할 유닛
+	void locateUnits(void);
 	void deleteUnits(void);
+
+private:
+	Unit* findUnit(TCHAR* name);
 
 public:
 	inline vUnits getUnits(void) { return _vUnits; }

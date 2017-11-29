@@ -18,6 +18,8 @@
 #define ARMOR_IMAGE_MAX		1
 #define SUBITEM_IMAGE_MAX	1
 
+#define UNIT_ATTACK_RANGE_MAX	7
+
 typedef enum DIRECTION
 {
 	DIRECTION_DN,
