@@ -22,6 +22,7 @@ private:
 	float Mtime; //마우스 프레임 시간
 	int next;
 	bool isleft;
+	int Direction;
 	char tmpName[100];
 public:
 	scanDialog();
@@ -42,7 +43,7 @@ public:
 	
 	inline int getNext(void) { return next; }
 	inline float getTime(void) { return time; }
-	
-
+	inline int getDirection(void){ return Direction; }
+	inline void setDirection(int dr) { Direction = dr; }
 };
 
