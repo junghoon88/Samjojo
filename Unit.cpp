@@ -137,6 +137,7 @@ void Unit::copyUnitData(Unit* unit)
 void Unit::move(gameMap* map, DIRECTION dir)
 {
 	_battleState.dir = dir;
+	POINT maxTile = { (LONG)map->getTileSizeX(), (LONG)map->getTileSizeY() };
 
 	//move
 	switch (dir)
@@ -159,7 +160,7 @@ void Unit::move(gameMap* map, DIRECTION dir)
 	switch (dir)
 	{
 	case DIRECTION_DN:
-		if (_battleState.tilePt.y >= map->getTileSizeY())
+		if (_battleState.tilePt.y >= maxTile.y)
 		{
 			_battleState.tilePt.y -= 1;
 		}
@@ -177,10 +178,13 @@ void Unit::move(gameMap* map, DIRECTION dir)
 		}
 		break;
 	case DIRECTION_RG:
-		if (_battleState.tilePt.x >= map->getTileSizeX())
+		if (_battleState.tilePt.x >= maxTile.x)
 		{
 			_battleState.tilePt.x -= 1;
 		}
 		break;
 	}
+
+	_battleState.rc = RectMake(_battleState.tilePt.x * TILESIZE, _battleState.tilePt.y * TILESIZE, TILESIZE, TILESIZE);
+	_battleState.pt = { (LONG)((_battleState.rc.left + _battleState.rc.right) * 0.5f), (LONG)((_battleState.rc.top + _battleState.rc.bottom) * 0.5f) };
 }

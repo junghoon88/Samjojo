@@ -119,6 +119,19 @@ void Enemy::locateUnits(void)
 			}
 		}
 	}
+
+	//debug
+	{
+		vector<POINT> vTilePt;
+		vTilePt.clear();
+
+		for (int i = 0; i < _vUnits.size(); i++)
+		{
+			POINT pt = _vUnits[i]->getBattleState().tilePt;
+			vTilePt.push_back(pt);
+		}
+		printf("");
+	}
 }
 
 void Enemy::deleteUnits(void)

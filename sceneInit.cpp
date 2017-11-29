@@ -72,7 +72,7 @@ void sceneInit::initImageSlect(void)
 		_loading->loadImage(strKey, strName, 640, 400);
 	}
 
-	_loading->loadFrameImage(L"SELECT-선택버튼", L"image/button.bmp", 100, 60, 1, 2);
+	_loading->loadFrameImage(L"SELECT-선택버튼", L"image/button2.bmp", 100, 60, 1, 2);
 }
 
 void sceneInit::initImageMapTool(void)

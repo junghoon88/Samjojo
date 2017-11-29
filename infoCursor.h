@@ -3,7 +3,7 @@
 #include "gameNode.h"
 #include "progressBar.h"
 
-#define INTERFACESIZEY 150
+#define INTERFACESIZEY 144
 #define FROFILEIMAGE 120
 
 class Player;
@@ -32,6 +32,7 @@ private:
 
 	//타일 검출용//
 	int indexTile;
+	POINT scanPoint;
 	//타일 검출용//
 
 
@@ -76,7 +77,7 @@ public:
 	void dataClean(void);//마우스 우클릭시 클리어 용
 	void tileLineDraw(void);
 	void infoDraw(void);
-	void mouse_moveCamera(void);
+	void moveCamera(void);
 	void mouse_Scanning(void);
 	void mouse_Click(void);
 

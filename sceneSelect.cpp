@@ -45,8 +45,6 @@ HRESULT sceneSelect::init(void)
 	_friend->loadUnits();
 	_enemy->loadUnits();
 
-	_map->loadData(3);
-	_enemy->locateUnits();
 
 	return S_OK;
 }

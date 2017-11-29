@@ -16,7 +16,7 @@ HRESULT infoCursor::init(void)
 	isShow = false;
 	isUnit = false;
 	indexTile = 0;
-
+	scanPoint = { 0,0 };
 
 	rc = { WINSIZEX - SIDEWINSIZE,0,WINSIZEX,WINSIZEY };//인터페이스 간이 렉트
 	tileImgRect = RectMakeCenter(rc.left + SIDEWINSIZE / 2, 80, FROFILEIMAGE, FROFILEIMAGE);
@@ -52,7 +52,7 @@ void infoCursor::release(void)
 void infoCursor::update(void) 
 {
 	mouse_Scanning();//지형 타일 갱신
-	mouse_moveCamera();
+	if(!isShow)moveCamera();
 	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON)) dataClean();  //윈도우 닫기
 	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
 	{
@@ -74,17 +74,9 @@ void infoCursor::mouse_Scanning(void)
 {
 	if (!isShow)
 	{
-//		for (int i = 0; i < TILEX * TILEY; i++)
-//		{
-//			if (PtInRect(&findtile->getTile()[i].rc, _ptMouse))
-//			{
-//				drawLine = { findtile->getTile()[i].rc.left,findtile->getTile()[i].rc.top,findtile->getTile()[i].rc.right,findtile->getTile()[i].rc.bottom };
-//			
-//			}
-//		}
-
-	//for문을 현재 위치 기반으로 타일을 찾자 그냥 너무 부하가 큼
-		indexTile = (((int)_ptMouse.x + MAINCAMERA->getCameraX())) / TILESIZE + (((int)_ptMouse.y + MAINCAMERA->getCameraY())) / TILESIZE * TILEX;
+		scanPoint.x = _ptMouse.x + MAINCAMERA->getCameraX();
+		scanPoint.y = _ptMouse.y + MAINCAMERA->getCameraY();
+		indexTile = ((int)_ptMouse.x ) / TILESIZE + ((int)_ptMouse.y) / TILESIZE  * TILEX;
 
 		if (PtInRect(&findtile->getTile()[indexTile].rc, _ptMouse))
 		{
@@ -98,7 +90,7 @@ void infoCursor::mouse_Click(void)
 {
 	for (int i = 0; i < _player->getUnits().size(); i++)
 	{
-		if (PtInRect(&_player->getUnits()[i]->getRect(), _ptMouse))
+		if (PtInRect(&_player->getUnits()[i]->getRect(), scanPoint))
 		{
 			isUnit = true;
 			unit = _player->getUnits()[i]->getStatus().name;
@@ -108,7 +100,7 @@ void infoCursor::mouse_Click(void)
 
 	for (int i = 0; i < _friend->getUnits().size(); i++)
 	{
-		if (PtInRect(&_friend->getUnits()[i]->getRect(), _ptMouse))
+		if (PtInRect(&_friend->getUnits()[i]->getRect(), scanPoint))
 		{
 			isUnit = true;
 			unit = _friend->getUnits()[i]->getStatus().name;
@@ -118,7 +110,7 @@ void infoCursor::mouse_Click(void)
 
 	for (int i = 0; i < _enemy->getUnits().size(); i++)
 	{
-		if (PtInRect(&_enemy->getUnits()[i]->getRect(), _ptMouse))
+		if (PtInRect(&_enemy->getUnits()[i]->getRect(), scanPoint))
 		{
 			isUnit = true;
 			unit = _enemy->getUnits()[i]->getStatus().name;
@@ -126,16 +118,6 @@ void infoCursor::mouse_Click(void)
 		}
 
 	}
-
-
-	//for (int i = 0; i < TILEX * TILEY; i++)
-	//{
-	//	tagTile* tile = findtile->getTile();
-	//	if (PtInRect(&findtile->getTile()[i].rc, _ptMouse))
-	//	{
-	//
-	//	}
-	//}
 	if (PtInRect(&findtile->getTile()[indexTile].rc, _ptMouse))
 	{
 			//지형정보 넣을 곳
@@ -427,12 +409,25 @@ void infoCursor::mouse_Click(void)
 
 }
 
-void infoCursor::mouse_moveCamera(void)
+void infoCursor::moveCamera(void)
 {
-	if (_ptMouse.x > WINSIZEX - TILESIZE - 144 && _ptMouse.x <= WINSIZEX - 144 && MAINCAMERA->getCameraX() < TILEX * TILESIZE - TILESIZE * 20) MAINCAMERA->setCameraX(MAINCAMERA->getCameraX() + TILESIZE); // 마우스가 오른쪽  //화면 최대 조건 걸어야함.
-	if (_ptMouse.x < TILESIZE && _ptMouse.x >= 0 && MAINCAMERA->getCameraX() > 0) MAINCAMERA->setCameraX(MAINCAMERA->getCameraX() - TILESIZE); //마우스가 왼쪽
-	if (_ptMouse.y > WINSIZEY - TILESIZE && _ptMouse.y <= WINSIZEY && MAINCAMERA->getCameraY() <= TILEY * TILESIZE - TILESIZE * 20)MAINCAMERA->setCameraY(MAINCAMERA->getCameraY() + TILESIZE); //마우스가 화면 아래쪽
-	if (_ptMouse.y < TILESIZE && _ptMouse.y >= 0 && MAINCAMERA->getCameraY() > 0) MAINCAMERA->setCameraY(MAINCAMERA->getCameraY() - TILESIZE); //마우스가 화면 윗쪽
+	if (_ptMouse.x > WINSIZEX - TILESIZE/2 - 144 && _ptMouse.x <= WINSIZEX - 144 && MAINCAMERA->getCameraX() < findtile->getTileSizeX() * TILESIZE - TILESIZE * 20)// 마우스가 오른쪽 
+		MAINCAMERA->setCameraX(MAINCAMERA->getCameraX() + TILESIZE ); 
+	if (_ptMouse.x < TILESIZE/2 && _ptMouse.x >= 0 && MAINCAMERA->getCameraX() > 0)//마우스가 왼쪽
+		MAINCAMERA->setCameraX(MAINCAMERA->getCameraX() - TILESIZE); 
+	if (_ptMouse.y > WINSIZEY - TILESIZE/2 && _ptMouse.y < WINSIZEY && MAINCAMERA->getCameraY() < findtile->getTileSizeY() * TILESIZE - TILESIZE * 20)//마우스가 화면 아래쪽
+		MAINCAMERA->setCameraY(MAINCAMERA->getCameraY() + TILESIZE); 
+	if (_ptMouse.y < TILESIZE/2 && _ptMouse.y >= 0 && MAINCAMERA->getCameraY() > 0)//마우스가 화면 윗쪽
+		MAINCAMERA->setCameraY(MAINCAMERA->getCameraY() - TILESIZE); 
+
+	if(KEYMANAGER->isOnceKeyDown(VK_LEFT) && MAINCAMERA->getCameraX() > 0)//왼쪽
+		MAINCAMERA->setCameraX(MAINCAMERA->getCameraX() - TILESIZE);
+	if (KEYMANAGER->isOnceKeyDown(VK_UP) && MAINCAMERA->getCameraY() > 0)//위쪽
+		MAINCAMERA->setCameraY(MAINCAMERA->getCameraY() - TILESIZE);
+	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT) && MAINCAMERA->getCameraX() < findtile->getTileSizeX() * TILESIZE - TILESIZE * 20)//오른쪽
+		MAINCAMERA->setCameraX(MAINCAMERA->getCameraX() + TILESIZE);
+	if (KEYMANAGER->isOnceKeyDown(VK_DOWN) && MAINCAMERA->getCameraY() < findtile->getTileSizeY() * TILESIZE - TILESIZE * 20)//아래
+		MAINCAMERA->setCameraY(MAINCAMERA->getCameraY() + TILESIZE);
 }
 
 void infoCursor::dataClean(void)//마우스 우클릭 시 현재 인터페이스의 정보를 초기화 해주는 역할을 할 것.
