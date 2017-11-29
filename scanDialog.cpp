@@ -29,7 +29,7 @@ HRESULT scanDialog::init(const char* filename)
 	mouse = IMAGEMANAGER->findImage(L"마우스2");
 	mouse->setFrameX(0);
 	next = 0;
-	
+	Direction = 0;
 	_fontNum = FONTVERSION_SAMJOJO;
 	_fontNum2 = FONTVERSION_STORY;
 	_face->setX(story.left);
@@ -100,14 +100,17 @@ void scanDialog::render(void)
 	{
 		SetBkMode(getMemDC(), TRANSPARENT);
 		HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
+		SetTextColor(getMemDC(), RGB(0, 0, 255));
 		TextOut(getMemDC(), story.left + 150, story.top + 30, ss.c_str(), len);
 		SelectObject(getMemDC(), oldFont);
 		for (int i = 0; i < _vScripts.size(); i++)
 		{
+			SetTextColor(getMemDC(), RGB(0, 0, 0));
 			ss = convert_wc(_vScripts[i]);
 			len = _tcslen(ss.c_str());
 			SetBkMode(getMemDC(), TRANSPARENT);
 			HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum2]);
+			
 			TextOut(getMemDC(), story.left + 150, story.top + 35 + 15 * (i + 1), ss.c_str(), len);
 			SelectObject(getMemDC(), oldFont);
 		}
@@ -116,6 +119,7 @@ void scanDialog::render(void)
 	{
 		SetBkMode(getMemDC(), TRANSPARENT);
 		HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
+		SetTextColor(getMemDC(), RGB(0, 0, 255));
 		TextOut(getMemDC(), story.left+10, story.top + 30, ss.c_str(), len);
 		SelectObject(getMemDC(), oldFont);
 		for (int i = 0; i < _vScripts.size(); i++)
@@ -124,12 +128,13 @@ void scanDialog::render(void)
 			len = _tcslen(ss.c_str());
 			SetBkMode(getMemDC(), TRANSPARENT);
 			HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum2]);
+			SetTextColor(getMemDC(), RGB(0, 0, 0));
 			TextOut(getMemDC(), story.left +10 , story.top + 35 + 15 * (i + 1), ss.c_str(), len);
 			SelectObject(getMemDC(), oldFont);
 		}
 	}
 	switch (next)
-	{
+	{	
 		case 0: 
 		{
 			if (time < 2.0f) {
@@ -174,6 +179,7 @@ void scanDialog::render(void)
 			{			
 			if (time < 2.0f)
 				{
+					Nebi2 = IMAGEMANAGER->findImage(L"nebi 03");
 					mouse = IMAGEMANAGER->findImage(L"마우스2");
 					mouse->render(getMemDC(), _ptMouse.x, _ptMouse.y); 
 					Nebi2->render(getMemDC(), WINSIZEX2 / 2 - Nebi2->getWidth() / 2, 150);
@@ -184,7 +190,23 @@ void scanDialog::render(void)
 					mouse->frameRender(getMemDC(), _ptMouse.x - mouse->getFrameWidth() / 2, _ptMouse.y - mouse->getFrameHeight() / 2);
 				}
 			}
-				break;
+			break;
+		case 5:
+		{
+			if (time < 2.0f)
+			{
+				Nebi2 = IMAGEMANAGER->findImage(L"nebi 04");
+				mouse = IMAGEMANAGER->findImage(L"마우스2");
+				mouse->render(getMemDC(), _ptMouse.x, _ptMouse.y);
+				Nebi2->render(getMemDC(), WINSIZEX2 / 2 - Nebi2->getWidth() / 2, 150);
+			}
+			else
+			{
+				mouse = IMAGEMANAGER->findImage(L"마우스");
+				mouse->frameRender(getMemDC(), _ptMouse.x - mouse->getFrameWidth() / 2, _ptMouse.y - mouse->getFrameHeight() / 2);
+			}
+		}
+		break;
 	}
 }
 
@@ -278,7 +300,10 @@ void scanDialog::loadDialog(void)
 			int posy = atoi(temp);
 			temp = strtok(NULL, ",");
 			int isLeft = atoi(temp);
+			temp = strtok(NULL, ",");
+			int isDirection = atoi(temp);
 			isleft = isLeft;
+			Direction = isDirection;
 			story = RectMake(posx, posy, 464, 120);
 			printf("");
 		}
