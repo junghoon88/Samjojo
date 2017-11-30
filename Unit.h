@@ -207,11 +207,7 @@ class Unit : public gameNode
 private:
 	typedef BOOL(*Temp)[UNIT_ATTACK_RANGE_MAX];
 
-	int _idleFrmCnt;
-	int _idleFrmIdx;
-
-	int _atkFrmCnt;
-	int _atkFrmIdx;
+	int _ImgFrameTime;
 
 protected:
 	tagStatus		_status;
@@ -250,9 +246,8 @@ public:
 	void showMoveArea(void);
 	void clearMoveArea(void);
 
-	void atkFrmPlay(void);
-
 	void updateSequence(void);
+	void updateImage(void);
 public:
 	inline tagStatus getStatus(void) { return _status; }
 	inline void setStatus(tagStatus status) { _status = status; }
