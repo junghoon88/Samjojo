@@ -26,8 +26,6 @@ HRESULT Unit::init(gameMap* map)
 	_itemA = NULL;
 	_itemS = NULL;
 
-
-
 	ZeroMemory(&_battleState, sizeof(tagBattleState));
 
 	_map = map;
@@ -45,6 +43,9 @@ void Unit::release(void)
 
 void Unit::update(void)
 {
+	updateStatus();	// 초기능력치 + 레벨당능력치 + 아이템능력치
+	expMaxCheck();	// 경험치 확인
+
 //Unit Sequenece: 턴 동안 진행되는 행동들
 	updateSequence();
 
@@ -52,8 +53,7 @@ void Unit::update(void)
 //~Unit Sequence
 
 	updateImage();
-
-	
+		
 }
 
 void Unit::render(void)
@@ -80,8 +80,30 @@ void Unit::render(void)
 	}
 
 	showMoveArea();
+}
 
-	TCHAR str[200];
+void Unit::updateStatus(void)
+{
+	_status.HP = _status.HPMax = _status.InitHPMax + (_status.level * _status.LvPerHPMax) + _status.ItemPlusHPMax;
+	_status.MP = _status.MPMax = _status.InitMPMax + (_status.level * _status.LvPerMPMax) + _status.ItemPlusMPMax;
+	_status.Atk = _status.InitAtk + (_status.level * _status.LvPerAtk) + _status.ItemPlusAtk;
+	_status.Dep = _status.InitDep + (_status.level * _status.LvPerDep) + _status.ItemPlusDep;
+	_status.Res = _status.InitRes + (_status.level * _status.LvPerRes) + _status.ItemPlusRes;
+	_status.Agl = _status.InitAgl + (_status.level * _status.LvPerAgl) + _status.ItemPlusAgl;
+	_status.Fig = _status.InitFig + (_status.level * _status.LvPerFig) + _status.ItemPlusFig;
+	_status.Pwr = _status.InitPwr + (_status.level * _status.LvPerPwr) + _status.ItemPlusPwr;
+	_status.Lds = _status.InitLds + (_status.level * _status.LvPerLds) + _status.ItemPlusLds;
+	_status.Int = _status.InitInt + (_status.level * _status.LvPerInt) + _status.ItemPlusInt;
+	_status.Dex = _status.InitDex + (_status.level * _status.LvPerDex) + _status.ItemPlusDex;
+	_status.Luk = _status.InitLuk + (_status.level * _status.LvPerLuk) + _status.ItemPlusLuk;
+}
+void Unit::expMaxCheck(void)
+{
+	if (_status.expMax <= _status.exp)
+	{
+		_status.exp = 0;
+		_status.level += 1;
+	}
 }
 
 void Unit::loadUnitData(tagUnitSaveInfo &info)
@@ -471,27 +493,21 @@ void Unit::updateImage(void)
 	{
 	case UNITSTATE_IDLE:	  //기본상태
 		_battleState.frameIdle = (FRAME_IDLE)_battleState.dir;
-		_battleState.imgBattleIdle->setFrameX(_battleState.frameIdle);
 		break;
 	case UNITSTATE_ATK:	  //공격상태
 		_battleState.frameAtk = (FRAME_ATK)_battleState.dir;
-		_battleState.imgBattleAtk->setFrameX(_battleState.frameAtk);
 		break;
 	case UNITSTATE_DEF:	  //방어상태
 		_battleState.frameSpc = (FRAME_SPC)_battleState.dir;
-		_battleState.imgBattleSpc->setFrameX(_battleState.frameSpc);
 		break;
 	case UNITSTATE_HIT:    //피격상태
 		_battleState.frameSpc = FRAME_SPC_HIT;
-		_battleState.imgBattleSpc->setFrameX(_battleState.frameSpc);
 		break;
 	case UNITSTATE_VIC:    //승리
 		_battleState.frameSpc = FRAME_SPC_VIC;
-		_battleState.imgBattleSpc->setFrameX(_battleState.frameSpc);
 		break;
 	case UNITSTATE_TIRED:
 		_battleState.frameIdle = FRAME_IDLE_TIRED;
-		_battleState.imgBattleIdle->setFrameX(_battleState.frameIdle);
 		break;
 	}
 
@@ -521,4 +537,3 @@ void Unit::updateImage(void)
 		
 
 }
-
