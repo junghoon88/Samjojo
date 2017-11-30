@@ -44,49 +44,9 @@ void Unit::release(void)
 
 void Unit::update(void)
 {
-
 //Unit Sequenece: 턴 동안 진행되는 행동들
+	updateSequence();
 
-	if (_battleState.squence == UNITSEQUENCE_MOVE)	// findEnemy 함수에서 변경해줌
-	{
-		_battleState.isMoving = move();
-		if (_battleState.isMoving == FALSE)
-		{
-			if (_battleState.findEnemy)
-			{
-				_battleState.squence = UNITSEQUENCE_ATTACK;
-			}
-			else
-			{
-				_battleState.squence = UNITSEQUENCE_TURNOFF;
-			}
-		}
-	}
-
-	//상대적인적(player, friend vs enemy)
-	Unit* opponent = _map->findEnemyUnit(_status.team, _battleState.tilePtEnemy);
-
-	if (_battleState.squence == UNITSEQUENCE_ATTACK)
-	{
-		if (opponent != NULL)
-		{
-			attack(opponent);
-		}
-	}
-
-	if (_battleState.squence == UNITSEQUENCE_COUNTER)
-	{
-		if (opponent != NULL)
-		{
-			counterAttack(opponent);
-		}
-	}
-	
-	if (_battleState.squence == UNITSEQUENCE_TURNOFF)
-	{
-		if (_battleState.findEnemy) opponent->setUnitState(UNITSTATE_IDLE);
-		_battleState.unitState = UNITSTATE_IDLE;
-	}
 
 //~Unit Sequence
 
@@ -507,4 +467,54 @@ void Unit::atkFrmPlay(void)
 
 		_atkFrmCnt = 0;
 	}
+}
+
+void Unit::updateSequence(void)
+{
+	if (_battleState.squence == UNITSEQUENCE_MOVE)	// findEnemy 함수에서 변경해줌
+	{
+		_battleState.isMoving = move();
+		if (_battleState.isMoving == FALSE)
+		{
+			if (_battleState.findEnemy)
+			{
+				_battleState.squence = UNITSEQUENCE_ATTACK;
+			}
+			else
+			{
+				_battleState.squence = UNITSEQUENCE_TURNOFF;
+			}
+
+			_moveArea.clear();
+		}
+
+		return;
+	}
+
+	//상대적인적(player, friend vs enemy)
+	Unit* opponent = _map->findEnemyUnit(_status.team, _battleState.tilePtEnemy);
+
+	if (_battleState.squence == UNITSEQUENCE_ATTACK)
+	{
+		if (opponent != NULL)
+		{
+			attack(opponent);
+		}
+		_battleState.squence = UNITSEQUENCE_TURNOFF;
+		return;
+	}
+
+	//if (_battleState.squence == UNITSEQUENCE_COUNTER)
+	//{
+	//	if (opponent != NULL)
+	//	{
+	//		counterAttack(opponent);
+	//	}
+	//}
+
+	//if (_battleState.squence == UNITSEQUENCE_TURNOFF)
+	//{
+	//	if (_battleState.findEnemy) opponent->setUnitState(UNITSTATE_IDLE);
+	//	_battleState.unitState = UNITSTATE_IDLE;
+	//}
 }

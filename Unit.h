@@ -251,6 +251,8 @@ public:
 	void clearMoveArea(void);
 
 	void atkFrmPlay(void);
+
+	void updateSequence(void);
 public:
 	inline tagStatus getStatus(void) { return _status; }
 	inline void setStatus(tagStatus status) { _status = status; }
