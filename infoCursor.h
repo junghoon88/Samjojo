@@ -3,7 +3,6 @@
 #include "gameNode.h"
 #include "progressBar.h"
 
-#define INTERFACESIZEY 144
 #define FROFILEIMAGE 120
 
 class Player;
@@ -37,7 +36,6 @@ private:
 
 	//타일 검출용//
 	int indexTile;
-	POINT scanPoint;
 	//타일 검출용//
 
 
@@ -67,6 +65,14 @@ private:
 	bool earth;
 	bool water;
 	//지형 정보 표시용
+	//플레이어 유닛 클릭시 표시할 정보,공격,스킬,도구,대기,취소
+	RECT infoBox;
+	
+
+
+
+	//플레이어 유닛 클릭시 표시할 정보,공격,스킬,도구,대기,취소
+
 
 	bool isUnit;//Unit은 true. 지형은 false
 	bool isShow;//클릭하면 true로
@@ -85,6 +91,7 @@ public:
 	void infoDraw(void);
 	void moveCamera(void);
 	void mouse_Scanning(void);
+	void mouse_MovetileScanning(void);//플레이어 유닛 클릭 시 이동가능 타일 검색용
 	void mouse_ClickToTile(void);
 	void mouse_ClickToAction(void);
 

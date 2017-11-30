@@ -251,6 +251,24 @@ public:
 	inline int getImgBattleAtk(void) { return _battleState.numImgBattleAtk; }
 	inline int getImgBattleSpc(void) { return _battleState.numImgBattleSpc; }
 	inline void setLinkAdressAStar(aStar* astar) { _astar = astar; }
+	inline bool isMovableArea(int index)
+	{
+		for (int i = 0; i < _moveArea.size(); i++)
+		{
+			if (_moveArea[i] == NULL) continue;
+
+			int x = _moveArea[i]->getIdX();
+			int y = _moveArea[i]->getIdY();
+
+			if (x + y * TILEX == index)
+			{
+				//여기다가 해당 인덱스로 가라고 신호를 넣어주면 되겠죠??
+				return true;
+				break;
+			}
+		}
+		return false;
+	};//인덱스 받아서 인덱스로 해당타일 있으면 트루값 반환 해주자 없으면 빠꾸
 
 
 
@@ -300,7 +318,7 @@ public:
 	inline tagBattleState getBattleState(void) { return _battleState; }
 	inline RECT getRect(void) { return _battleState.rc; }
 	inline void setBattleState(tagBattleState state) { _battleState = state; }
-
+	inline void setVaild(bool val) { _battleState.valid = val; }
 	inline UNITSEQUENCE getUnitSequnce(void) { return _battleState.squence; }
 	inline void setUnitSequnce(UNITSEQUENCE squence) { _battleState.squence = squence; }
 };

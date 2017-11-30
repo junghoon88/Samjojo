@@ -357,3 +357,4 @@ void Unit::clearMoveArea(void)
 {
 	_moveArea.clear();
 }
+

@@ -16,7 +16,6 @@ HRESULT infoCursor::init(void)
 	isShow = false;
 	isUnit = false;
 	indexTile = 0;
-	scanPoint = { 0,0 };
 
 	rc = { WINSIZEX - SIDEWINSIZE,0,WINSIZEX,WINSIZEY };//인터페이스 간이 렉트
 	tileImgRect = RectMakeCenter(rc.left + SIDEWINSIZE / 2, 80, FROFILEIMAGE, FROFILEIMAGE);
@@ -25,7 +24,6 @@ HRESULT infoCursor::init(void)
 	{
 		element[i] = RectMakeCenter(rc.left + TILESIZE/2 + ((TILESIZE / 2 + (TILESIZE / 2 * 0.25)) * i), tileImgRect.bottom + TILESIZE / 2, TILESIZE / 2, TILESIZE / 2);
 	}
-
 	clickUnit = NONE;
 	vNum = 0;
 	factionName = L"진영정보";
@@ -61,9 +59,9 @@ void infoCursor::update(void)
 	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON)) dataClean();  //윈도우 닫기
 	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
 	{
-		if (!isShow && isUnit && clickUnit == PLAYER) mouse_ClickToAction();
+		if(isShow && clickUnit == PLAYER) mouse_ClickToAction();
 	    else if (isShow) dataClean();
-		else mouse_ClickToTile();//지형 클릭 시 
+		else if(!isShow) mouse_ClickToTile();//지형 클릭 시 
 	}
 }
 
@@ -83,12 +81,9 @@ void infoCursor::mouse_Scanning(void)
 {
 	if (!isShow)
 	{
-		scanPoint.x = (int)_ptMouse.x + MAINCAMERA->getCameraX();
-		scanPoint.y = (int)_ptMouse.y + MAINCAMERA->getCameraY();
 		indexTile = (int)(_ptMouse.x / TILESIZE) + (int)(_ptMouse.y / TILESIZE)  * TILEX ;
 		drawLine = { findtile->getTile()[indexTile].rc.left,findtile->getTile()[indexTile].rc.top,findtile->getTile()[indexTile].rc.right,findtile->getTile()[indexTile].rc.bottom };
 	}
-
 }
 
 void infoCursor::mouse_ClickToTile(void)
@@ -101,7 +96,7 @@ void infoCursor::mouse_ClickToTile(void)
 	{
 		for (int i = 0; i < _player->getUnits().size(); i++)
 		{
-			if (PtInRect(&_player->getUnits()[i]->getRect(), scanPoint))
+			if (findIndex == (int)(_player->getUnits()[i]->getBattleState().tilePt.x + _player->getUnits()[i]->getBattleState().tilePt.y * TILEX))
 			{
 				vNum = i;
 				isUnit = true;
@@ -109,6 +104,8 @@ void infoCursor::mouse_ClickToTile(void)
 				factionName = L"플레이어";
 				unitName = _player->getUnits()[i]->getStatus().name;
 				unitImg = _player->getUnits()[i]->getBattleState().imgBattleIdle;
+				_player->getUnits()[i]->findMoveArea();
+				break;
 			}
 		}
 	}
@@ -116,7 +113,7 @@ void infoCursor::mouse_ClickToTile(void)
 	{
 		for (int i = 0; i < _friend->getUnits().size(); i++)
 		{
-			if (PtInRect(&_friend->getUnits()[i]->getRect(), scanPoint))
+			if (findIndex == (int)(_friend->getUnits()[i]->getBattleState().tilePt.x + _friend->getUnits()[i]->getBattleState().tilePt.y * TILEX))
 			{
 				vNum = i;
 				isUnit = true;
@@ -125,6 +122,7 @@ void infoCursor::mouse_ClickToTile(void)
 				unitName = _friend->getUnits()[i]->getStatus().name;
 				unitImg = _friend->getUnits()[i]->getBattleState().imgBattleIdle;
 				_friend->getUnits()[i]->findMoveArea();
+				break;
 			}
 		}
 	}
@@ -132,7 +130,7 @@ void infoCursor::mouse_ClickToTile(void)
 	{
 		for (int i = 0; i < _enemy->getUnits().size(); i++)
 		{
-			if (PtInRect(&_enemy->getUnits()[i]->getRect(), scanPoint))
+			if (findIndex == (int)(_enemy->getUnits()[i]->getBattleState().tilePt.x + _enemy->getUnits()[i]->getBattleState().tilePt.y * TILEX))
 			{
 				vNum = i;
 				isUnit = true;
@@ -141,6 +139,7 @@ void infoCursor::mouse_ClickToTile(void)
 				unitName = _enemy->getUnits()[i]->getStatus().name;
 				unitImg = _enemy->getUnits()[i]->getBattleState().imgBattleIdle;
 				_enemy->getUnits()[i]->findMoveArea();
+				break;
 			}
 		}
 	}
@@ -431,7 +430,26 @@ void infoCursor::mouse_ClickToTile(void)
 
 void infoCursor::mouse_ClickToAction(void)//플레이어 유닛을 누른상태일때 클릭하면 취해줄 액션들
 {
+	int setindex = (int)(_ptMouse.x / TILESIZE) + (int)(_ptMouse.y / TILESIZE)  * TILEX;
+	int findIndex = setindex + (MAINCAMERA->getCameraX() / TILESIZE) + (MAINCAMERA->getCameraY() / TILESIZE) * TILEX;
+	//_player->getUnits()[vNum]->getBattleState().rc.right;//이렇게 하면 해당 유닛 오른쪽으로 윈도우를 만들 수 있을듯
+		
+	if (findIndex == (int)(_player->getUnits()[vNum]->getBattleState().tilePt.x + _player->getUnits()[vNum]->getBattleState().tilePt.y * TILEX)) //해당유닛 한번 더 클릭하면
+	{
+		unitName = L"눌렀냐"; // 이제 요기다가 메뉴 호출하면 끝남. ㅎㅎㅎㅎㅎㅎ
+	}
+	else if (_player->getUnits()[vNum]->isMovableArea(findIndex))//유닛이 아니고 땅 누르면 
+	{
+		unitName = L"땅"; //일단 이넘까진 된다.
+	}
+	else dataClean();
 	
+
+}
+
+void infoCursor::mouse_MovetileScanning(void)
+{
+
 }
 
 void infoCursor::moveCamera(void)
@@ -444,6 +462,7 @@ void infoCursor::moveCamera(void)
 		MAINCAMERA->setCameraY(MAINCAMERA->getCameraY() + TILESIZE); 
 	if (_ptMouse.y < TILESIZE/2 && _ptMouse.y >= 0 && MAINCAMERA->getCameraY() > 0)//마우스가 화면 윗쪽
 		MAINCAMERA->setCameraY(MAINCAMERA->getCameraY() - TILESIZE); 
+
 
 	if(KEYMANAGER->isOnceKeyDown(VK_LEFT) && MAINCAMERA->getCameraX() > 0)//왼쪽
 		MAINCAMERA->setCameraX(MAINCAMERA->getCameraX() - TILESIZE);
@@ -476,6 +495,7 @@ void infoCursor::dataClean(void)//마우스 우클릭 시 현재 인터페이스의 정보를 초기
 		_enemy->getUnits()[vNum]->clearMoveArea();
 		break;
 	}
+	clickUnit = NONE;
 }
 void infoCursor::tileLineDraw(void)
 {

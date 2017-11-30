@@ -28,7 +28,7 @@ HRESULT sceneBattle::init(void)
 
 	linkClass();
 
-	_phase = playerPhase;
+	_phase = PLAYERPHASE;
 
 
 	return S_OK;
@@ -83,7 +83,9 @@ void sceneBattle::update(void)
 	_enemy->update();
 	_map->scanUnitsPos();
 	_map->update(); 
-	if(_phase == playerPhase)_cursor->update();
+	if(_phase == PLAYERPHASE)_cursor->update();
+	else if (_phase == FRIENDPHASE);
+	else if (_phase == ENEMYPHASE);
 
 }
 
@@ -162,12 +164,77 @@ void sceneBattle::initSound(void)
 }
 
 
-
-void sceneBattle::phaseControl(void)
+void sceneBattle::phaseCheck(void)
 {
+	int _Active = 0;
+	if (_phase == PLAYERPHASE)
+	{
+		for (int i = 0; i < _player->getUnits().size(); i++)
+		{
+			if (!_player->getUnits()[i]->getBattleState().valid) continue;
+			_Active++;
+		}
+		if (_Active == 0)
+		{
+			for (int i = 0; i < _friend->getUnits().size(); i++)
+			{
+				_friend->getUnits()[i]->setVaild(true);
+			}
+			_phase = FRIENDPHASE;
 
+		}
+	}
+	else if (_phase == FRIENDPHASE)
+	{
+		for (int i = 0; i < _friend->getUnits().size(); i++)
+		{
+			if (!_friend->getUnits()[i]->getBattleState().valid) continue;
+		}
+		if (_Active == 0)
+		{
+			for (int i = 0; i < _enemy->getUnits().size(); i++)
+			{
+				_enemy->getUnits()[i]->setVaild(true);
+			}
+			_phase = ENEMYPHASE;
+		}
+	}
+	else if (_phase == ENEMYPHASE)
+	{
+		for (int i = 0; i < _enemy->getUnits().size(); i++)
+		{
+			if (!_enemy->getUnits()[i]->getBattleState().valid) continue;
+		}
+		if (_Active == 0)
+		{
+			for (int i = 0; i < _player->getUnits().size(); i++)
+			{
+				_player->getUnits()[i]->setVaild(true);
+			}
+			_phase = PLAYERPHASE;
+		}
+	}
+}
+void sceneBattle::phaseControl(void) //호출해서 벡터 검출하고 행동할 수 있는 놈 없으면 페이즈 전환
+{
+	
 }
 
+void sceneBattle::friendAction(void)//아군 턴 액션
+{ 
+	for (int i = 0; i < _friend->getUnits().size(); i++) //행동 끝난 뒤에 끝나는 신호가 필요함..
+	{
+		if (!_friend->getUnits()[i]->getBattleState().valid) continue;
+	}
+
+}
+void sceneBattle::enemyAction(void) //적군 턴 액션
+{
+	for (int i = 0; i < _enemy->getUnits().size(); i++)
+	{
+		if (!_enemy->getUnits()[i]->getBattleState().valid) continue;
+	}
+}
 
 void sceneBattle::linkClass(void)
 {
