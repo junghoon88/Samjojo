@@ -113,6 +113,10 @@ void Player::registUnitAll(void)
 		if (_vUnits.size() >= ENTRANT_MAX)
 			break;
 	}
+
+	
+
+
 }
 void Player::registUnitBasic(void) {
 	//0. Á¶Á¶
@@ -133,6 +137,7 @@ void Player::registUnitBasic(void) {
 			break;
 		}
 	}
+
 }
 
 
