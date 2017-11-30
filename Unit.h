@@ -207,7 +207,8 @@ class Unit : public gameNode
 private:
 	typedef BOOL(*Temp)[UNIT_ATTACK_RANGE_MAX];
 
-	int _ImgFrameTime;
+	int _imgFrameTime;
+	int _imgFrameY;
 
 protected:
 	tagStatus		_status;

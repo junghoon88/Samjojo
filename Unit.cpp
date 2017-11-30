@@ -33,8 +33,8 @@ HRESULT Unit::init(gameMap* map)
 	_map = map;
 
 
-	_ImgFrameTime = 0;
-
+	_imgFrameTime = 0;
+	_imgFrameY = 0;
 	return S_OK;
 }
 
@@ -67,15 +67,15 @@ void Unit::render(void)
 	{
 		case UNITSTATE_IDLE:	  //기본상태
 		case UNITSTATE_TIRED:
-			_battleState.imgBattleIdle->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY());
+			_battleState.imgBattleIdle->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY(), _battleState.frameIdle, _imgFrameY);
 		break;
 		case UNITSTATE_ATK:	  //공격상태
-			_battleState.imgBattleAtk->frameRender(getMemDC(), _battleState.rc.left, _battleState.rc.top);
+			_battleState.imgBattleAtk->frameRender(getMemDC(), _battleState.rc.left, _battleState.rc.top, _battleState.frameAtk, _imgFrameY);
 		break;
 		case UNITSTATE_DEF:	  //방어상태
 		case UNITSTATE_HIT:    //피격상태
 		case UNITSTATE_VIC:    //승리
-			_battleState.imgBattleSpc->frameRender(getMemDC(), _battleState.rc.left, _battleState.rc.top);
+			_battleState.imgBattleSpc->frameRender(getMemDC(), _battleState.rc.left, _battleState.rc.top, _battleState.frameSpc, _imgFrameY);
 		break;
 	}
 
@@ -471,27 +471,21 @@ void Unit::updateImage(void)
 	{
 	case UNITSTATE_IDLE:	  //기본상태
 		_battleState.frameIdle = (FRAME_IDLE)_battleState.dir;
-		_battleState.imgBattleIdle->setFrameX(_battleState.frameIdle);
 		break;
 	case UNITSTATE_ATK:	  //공격상태
 		_battleState.frameAtk = (FRAME_ATK)_battleState.dir;
-		_battleState.imgBattleAtk->setFrameX(_battleState.frameAtk);
 		break;
 	case UNITSTATE_DEF:	  //방어상태
 		_battleState.frameSpc = (FRAME_SPC)_battleState.dir;
-		_battleState.imgBattleSpc->setFrameX(_battleState.frameSpc);
 		break;
 	case UNITSTATE_HIT:    //피격상태
 		_battleState.frameSpc = FRAME_SPC_HIT;
-		_battleState.imgBattleSpc->setFrameX(_battleState.frameSpc);
 		break;
 	case UNITSTATE_VIC:    //승리
 		_battleState.frameSpc = FRAME_SPC_VIC;
-		_battleState.imgBattleSpc->setFrameX(_battleState.frameSpc);
 		break;
 	case UNITSTATE_TIRED:
 		_battleState.frameIdle = FRAME_IDLE_TIRED;
-		_battleState.imgBattleIdle->setFrameX(_battleState.frameIdle);
 		break;
 	}
 
@@ -501,21 +495,32 @@ void Unit::updateImage(void)
 	{
 		float frameFPS = 10.0f;
 
-		_ImgFrameTime += TIMEMANAGER->getElapsedTime();
-		if (_ImgFrameTime >= (1 / frameFPS))
+		_imgFrameTime += TIMEMANAGER->getElapsedTime();
+		if (_imgFrameTime >= (1 / frameFPS))
 		{
-			_ImgFrameTime -= (1 / frameFPS);
-			_battleState.imgBattleIdle->nextFrameY();
-			_battleState.imgBattleAtk->nextFrameY();
-			//_battleState.imgBattleSpc->nextFrameY();
+			switch (_battleState.unitState)
+			{
+			case UNITSTATE_IDLE:	  //기본상태
+			case UNITSTATE_TIRED:
+				_imgFrameY = _imgFrameY == _battleState.imgBattleIdle->getMaxFrameY() ? 0 : _imgFrameY + 1;
+				break;
+			case UNITSTATE_ATK:	  //공격상태
+				_imgFrameY = _imgFrameY == _battleState.imgBattleAtk->getMaxFrameY() ? 0 : _imgFrameY + 1;
+				break;
+			case UNITSTATE_DEF:	  //방어상태
+			case UNITSTATE_HIT:    //피격상태
+			case UNITSTATE_VIC:    //승리
+				_imgFrameY = _imgFrameY == _battleState.imgBattleSpc->getMaxFrameY() ? 0 : _imgFrameY + 1;
+				break;
+			}
+
+			_imgFrameTime -= (1 / frameFPS);
 		}
 	}
 	else
 	{
-		_ImgFrameTime = 0;
-		_battleState.imgBattleIdle->setFrameY(0);
-		_battleState.imgBattleAtk->setFrameY(0);
-		//_battleState.imgBattleSpc->setFrameY(0);
+		_imgFrameTime = 0;
+		_imgFrameY = 0;
 	}
 		
 		
