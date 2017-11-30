@@ -4,6 +4,7 @@
 #include "aStar.h"
 #include "gameMap.h"
 
+#define MAXDEF 100
 
 struct tagStatus //기본정보 (수정하지말것)
 {
@@ -119,11 +120,11 @@ enum FRAME_SPC
 enum UNITSTATE
 {
 	UNITSTATE_IDLE,	  //기본상태
+	UNITSTATE_TIRED,  
 	UNITSTATE_ATK,	  //공격상태
 	UNITSTATE_DEF,	  //방어상태
 	UNITSTATE_HIT,    //피격상태
 	UNITSTATE_VIC,    //승리
-	UNITSTATE_TIRED,  
 
 	UNITSTATE_MAX
 };
@@ -140,6 +141,7 @@ enum UNITSEQUENCE
 	UNITSEQUENCE_TURNON,
 	UNITSEQUENCE_MOVE,
 	UNITSEQUENCE_ATTACK,
+	UNITSEQUENCE_COUNTER,
 	UNITSEQUENCE_TURNOFF,
 
 
@@ -205,6 +207,12 @@ class Unit : public gameNode
 private:
 	typedef BOOL(*Temp)[UNIT_ATTACK_RANGE_MAX];
 
+	int _idleFrmCnt;
+	int _idleFrmIdx;
+
+	int _atkFrmCnt;
+	int _atkFrmIdx;
+
 protected:
 	tagStatus		_status;
 
@@ -234,10 +242,17 @@ public:
 
 	bool move(void);
 	void move(DIRECTION dir);
+	void attack(Unit* opponent);
+	void counterAttack(Unit* opponent);
+
 	void findEnemy(TEAM myTeam, POINT closeEnemyPos);
 	void findMoveArea(void);
 	void showMoveArea(void);
 	void clearMoveArea(void);
+
+	void atkFrmPlay(void);
+
+	void updateSequence(void);
 public:
 	inline tagStatus getStatus(void) { return _status; }
 	inline void setStatus(tagStatus status) { _status = status; }
@@ -251,8 +266,30 @@ public:
 	inline int getImgBattleAtk(void) { return _battleState.numImgBattleAtk; }
 	inline int getImgBattleSpc(void) { return _battleState.numImgBattleSpc; }
 	inline void setLinkAdressAStar(aStar* astar) { _astar = astar; }
+	inline bool isMovableArea(int index)
+	{
+		for (int i = 0; i < _moveArea.size(); i++)
+		{
+			if (_moveArea[i] == NULL) continue;
 
+			int x = _moveArea[i]->getIdX();
+			int y = _moveArea[i]->getIdY();
 
+			if (x + y * TILEX == index)
+			{
+				//여기다가 해당 인덱스로 가라고 신호를 넣어주면 되겠죠??
+				return true;
+				break;
+			}
+		}
+		return false;
+	};//인덱스 받아서 인덱스로 해당타일 있으면 트루값 반환 해주자 없으면 빠꾸
+
+	inline void setUnitState(UNITSTATE state) { _battleState.unitState = state; }
+	inline UNITSTATE getUnitState(void) { return _battleState.unitState; }
+
+	inline void setCurHP(int damage) { _status.HP -= damage; }
+	inline int getCurHP(void) { return _status.HP; }
 
 	inline void setImgBattleIdle(int num)
 	{
@@ -300,7 +337,7 @@ public:
 	inline tagBattleState getBattleState(void) { return _battleState; }
 	inline RECT getRect(void) { return _battleState.rc; }
 	inline void setBattleState(tagBattleState state) { _battleState = state; }
-
+	inline void setVaild(bool val) { _battleState.valid = val; }
 	inline UNITSEQUENCE getUnitSequnce(void) { return _battleState.squence; }
 	inline void setUnitSequnce(UNITSEQUENCE squence) { _battleState.squence = squence; }
 };

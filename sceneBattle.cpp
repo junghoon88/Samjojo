@@ -28,7 +28,7 @@ HRESULT sceneBattle::init(void)
 
 	linkClass();
 
-	_phase = playerPhase;
+	_phase = PLAYERPHASE;
 
 
 	return S_OK;
@@ -49,28 +49,28 @@ void sceneBattle::update(void)
 	//debug
 	{
 		Unit* unit = _enemy->getUnits()[0];
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD8))
+		if (KEYMANAGER->isOnceKeyDown('3') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD8))
 		{
 			unit->move(DIRECTION_UP);
 		}
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
+		if (KEYMANAGER->isOnceKeyDown('5') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
 		{
 			unit->move(DIRECTION_DN);
 		}
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
+		if (KEYMANAGER->isOnceKeyDown('4') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
 		{
 			unit->move(DIRECTION_LF);
 		}
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD6))
+		if (KEYMANAGER->isOnceKeyDown('6') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD6))
 		{
 			unit->move(DIRECTION_RG);
 		}
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD7))
+		if (KEYMANAGER->isOnceKeyDown('7') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD7))
 		{
 			_map->scanUnitsPos();
 			unit->findMoveArea();
 		}
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD9))
+		if (KEYMANAGER->isOnceKeyDown('8') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD9))
 		{
 			unit->setUnitSequnce(UNITSEQUENCE_TURNON);
 			_map->scanUnitsPos();
@@ -79,11 +79,13 @@ void sceneBattle::update(void)
 	}
 
 	_player->update();
-	_friend->update();
+	_friend->update(); 
 	_enemy->update();
 	_map->scanUnitsPos();
 	_map->update(); 
-	if(_phase == playerPhase)_cursor->update();
+	if(_phase == PLAYERPHASE)_cursor->update();
+	else if (_phase == FRIENDPHASE); //friendAction();
+	else if (_phase == ENEMYPHASE); //enemyAction();
 
 }
 
@@ -92,7 +94,7 @@ void sceneBattle::render(void)
 	_map->render();
 
 	_player->render();
-	_friend->render();
+	_friend->render(); 
 	_enemy->render();
 
 	_cursor->render();
@@ -162,12 +164,78 @@ void sceneBattle::initSound(void)
 }
 
 
-
-void sceneBattle::phaseControl(void)
+// ▼행동 종료시나..아무튼 호출해서 체크. 계속 체크돌릴 필요는 없을듯▼
+void sceneBattle::phaseCheck(void)
 {
-
+	int _Active = 0;
+	if (_phase == PLAYERPHASE)
+	{
+		for (int i = 0; i < _player->getUnits().size(); i++)
+		{
+			if (!_player->getUnits()[i]->getBattleState().valid) continue;
+			_Active++;
+		}
+		if (_Active == 0)//전부 행동 불가면 다음턴 애들 행동가능으로 만들고 페이즈 넘김.
+		{
+			for (int i = 0; i < _friend->getUnits().size(); i++)
+			{
+				_friend->getUnits()[i]->setVaild(true);
+			}
+			_phase = FRIENDPHASE;
+		}
+	}
+	else if (_phase == FRIENDPHASE)
+	{
+		for (int i = 0; i < _friend->getUnits().size(); i++)
+		{
+			if (!_friend->getUnits()[i]->getBattleState().valid) continue;
+		}
+		if (_Active == 0)
+		{
+			for (int i = 0; i < _enemy->getUnits().size(); i++)
+			{
+				_enemy->getUnits()[i]->setVaild(true);
+			}
+			_phase = ENEMYPHASE;
+		}
+	}
+	else if (_phase == ENEMYPHASE)
+	{
+		for (int i = 0; i < _enemy->getUnits().size(); i++)
+		{
+			if (!_enemy->getUnits()[i]->getBattleState().valid) continue;
+		}
+		if (_Active == 0)
+		{
+			for (int i = 0; i < _player->getUnits().size(); i++)
+			{
+				_player->getUnits()[i]->setVaild(true);
+			}
+			_phase = PLAYERPHASE;
+		}
+	}
 }
 
+void sceneBattle::phaseControl(void) //호출해서 벡터 검출하고 행동할 수 있는 놈 없으면 페이즈 전환
+{
+	
+}
+
+void sceneBattle::friendAction(void)//아군 턴 액션
+{ 
+	for (int i = 0; i < _friend->getUnits().size(); i++) //행동 끝난 뒤에 끝나는 신호가 필요함..
+	{
+		if (!_friend->getUnits()[i]->getBattleState().valid) continue; //행동 불가능인 애들은 거르고
+	}
+
+}
+void sceneBattle::enemyAction(void) //적군 턴 액션
+{
+	for (int i = 0; i < _enemy->getUnits().size(); i++)
+	{
+		if (!_enemy->getUnits()[i]->getBattleState().valid) continue;
+	}
+}
 
 void sceneBattle::linkClass(void)
 {

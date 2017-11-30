@@ -53,9 +53,6 @@ void scanDialog::update(void)
 		
 	time += TIMEMANAGER->getElapsedTime();
 	Mtime += TIMEMANAGER->getElapsedTime();
-	_face->setX(_face->getX());
-	_face->setY(_face->getY());
-
 	
 	if (isleft)
 	{
@@ -94,6 +91,8 @@ void scanDialog::render(void)
 	{
 		_story->alphaRender(getMemDC(), story.left, story.top,155);
 		_face->render(getMemDC(), _face->getX(), _face->getY());
+		_story->render(getMemDC(), story.left, story.top);
+		_face->render(getMemDC());
 	}
 
 	if (isleft)
@@ -345,9 +344,13 @@ void scanDialog::loadDialog(void)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00001");
 		}
-		else if (strcmp(_strName, "¾ç½Ü") == 0)
+		else if (strcmp(_strName, "¾çÈ£¼º") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00287");
+		}
+		else if (strcmp(_strName, "ÇÏÈÄµ·") == 0)
+		{
+			_face = IMAGEMANAGER->findImage(L"face 00009");
 		}
 	}
 }

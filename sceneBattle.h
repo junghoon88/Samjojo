@@ -9,9 +9,9 @@
 
 enum tagPhase
 {
-	playerPhase,
-	alliPhase,
-	enemyPhase // 이 순으로 전투 진행
+	PLAYERPHASE,
+	FRIENDPHASE,
+	ENEMYPHASE // 이 순으로 전투 진행
 };
 
 
@@ -58,6 +58,9 @@ public:
 
 	Unit* findUnit(TEAM team, POINT pt);
 	void phaseControl(void);
+	void friendAction(void);
+	void enemyAction(void);
+	void phaseCheck(void);
 	void linkClass(void);
 };
 

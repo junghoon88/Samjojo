@@ -107,6 +107,9 @@ void sceneInit::initImageMapTool(void)
 	_loading->loadFrameImage(L"맵툴버튼", L"image/button.bmp", 100, 60, 1, 2);
 	_loading->loadFrameImage(L"맵툴버튼2", L"image/button.bmp", 50, 60, 1, 2);
 
+	//하얀 배경 지우기
+	IMAGEMANAGER->addImage(L"maptoolBackground", L"image/maptoolBackground.bmp", 340, 520);
+
 
 	//원본맵 이미지 추가하기
 	_loading->loadImage(L"M000", L"image/Map/M000.bmp", 960, 960, false, RGB(255, 0, 255), true);
@@ -186,6 +189,11 @@ void sceneInit::initImageUnitEditor(void)
 
 void sceneInit::initImageUnits(void)
 {
+	_loading->loadImage(L"curAtkArea", L"image/battleScene/atk_range.bmp", TILESIZE, TILESIZE, true, RGB(255, 0, 255), true);
+	_loading->loadImage(L"playerMoveAreaTile", L"image/battleScene/player_range_tile.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
+	_loading->loadImage(L"nonPlayerMoveAreaTile", L"image/battleScene/non-player_range_tile.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
+
+
 	TCHAR strKey[100], strName[100];
 	int unitNum = 0;
 	//조조
@@ -489,21 +497,21 @@ void sceneInit::initImageStory(void)
 
 void sceneInit::initImageReady(void) {
 
-	IMAGEMANAGER->addImage(L"레디UI", L"image/ready/readyUI.bmp", 960, 960, false, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"출진UI", L"image/ready/posUI.bmp", 617, 522, false, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"출진눌림", L"image/ready/출진눌림버튼.bmp", 75, 117, false, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"결정비활성버튼", L"image/ready/결정비활성버튼.bmp", 86, 21, false, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"결정활성버튼", L"image/ready/결정활성버튼.bmp",  86, 21, false, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"결정눌림버튼", L"image/ready/결정눌림버튼.bmp",  86, 21, false, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"취소버튼", L"image/ready/취소버튼.bmp", 86, 21, false, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"취소눌림버튼", L"image/ready/취소눌림버튼.bmp", 86, 21, false, RGB(255, 0, 255));
+	_loading->loadImage(L"레디UI", L"image/ready/readyUI.bmp", 960, 960, false, RGB(255, 0, 255));
+	_loading->loadImage(L"출진UI", L"image/ready/posUI.bmp", 617, 522, false, RGB(255, 0, 255));
+	_loading->loadImage(L"출진눌림", L"image/ready/출진눌림버튼.bmp", 75, 117, false, RGB(255, 0, 255));
+	_loading->loadImage(L"결정비활성버튼", L"image/ready/결정비활성버튼.bmp", 86, 21, false, RGB(255, 0, 255));
+	_loading->loadImage(L"결정활성버튼", L"image/ready/결정활성버튼.bmp",  86, 21, false, RGB(255, 0, 255));
+	_loading->loadImage(L"결정눌림버튼", L"image/ready/결정눌림버튼.bmp",  86, 21, false, RGB(255, 0, 255));
+	_loading->loadImage(L"취소버튼", L"image/ready/취소버튼.bmp", 86, 21, false, RGB(255, 0, 255));
+	_loading->loadImage(L"취소눌림버튼", L"image/ready/취소눌림버튼.bmp", 86, 21, false, RGB(255, 0, 255));
 
 	//출진유닛
-	IMAGEMANAGER->addImage(L"조조출진", L"image/ready/조조.bmp", 84, 84, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"하후돈출진", L"image/ready/하후돈.bmp", 84, 84, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"하후연출진", L"image/ready/하후연.bmp", 84, 84, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"이악조출진", L"image/ready/이악조.bmp", 84, 84, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage(L"조인출진", L"image/ready/조인.bmp", 84, 84, true, RGB(255, 0, 255));
+	_loading->loadImage(L"조조출진", L"image/ready/조조.bmp", 84, 84, true, RGB(255, 0, 255));
+	_loading->loadImage(L"하후돈출진", L"image/ready/하후돈.bmp", 84, 84, true, RGB(255, 0, 255));
+	_loading->loadImage(L"하후연출진", L"image/ready/하후연.bmp", 84, 84, true, RGB(255, 0, 255));
+	_loading->loadImage(L"이악조출진", L"image/ready/이악조.bmp", 84, 84, true, RGB(255, 0, 255));
+	_loading->loadImage(L"조인출진", L"image/ready/조인.bmp", 84, 84, true, RGB(255, 0, 255));
 
 
 
