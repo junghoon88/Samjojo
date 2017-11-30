@@ -231,7 +231,7 @@ public:
 
 	HRESULT init(gameMap* map);
 	void release(void);
-	void update(void);
+	void update(TEAM team);
 	void render(void);
 
 	void loadUnitData(tagUnitSaveInfo &info);
@@ -247,7 +247,7 @@ public:
 	void showMoveArea(void);
 	void clearMoveArea(void);
 
-	void updateSequence(void);
+	void updateSequence(bool bAuto);
 	void updateImage(void);
 public:
 	inline tagStatus getStatus(void) { return _status; }

@@ -28,7 +28,7 @@ void Enemy::update(void)
 {
 	for (int i = 0; i < _vUnits.size(); i++)
 	{
-		_vUnits[i]->update();
+		_vUnits[i]->update(TEAM_ENEMY);
 	}
 }
 
