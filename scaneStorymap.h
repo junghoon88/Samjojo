@@ -25,8 +25,6 @@ struct tagIso
 {
 	int x;
 	int y;
-	POINT poly[4];
-	HRGN region;
 };
 struct tagChar
 {

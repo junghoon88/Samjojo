@@ -79,13 +79,13 @@ void sceneBattle::update(void)
 	}
 
 	_player->update();
-	_friend->update();
+	_friend->update(); 
 	_enemy->update();
 	_map->scanUnitsPos();
 	_map->update(); 
 	if(_phase == PLAYERPHASE)_cursor->update();
-	else if (_phase == FRIENDPHASE);
-	else if (_phase == ENEMYPHASE);
+	else if (_phase == FRIENDPHASE); //friendAction();
+	else if (_phase == ENEMYPHASE); //enemyAction();
 
 }
 
@@ -94,7 +94,7 @@ void sceneBattle::render(void)
 	_map->render();
 
 	_player->render();
-	_friend->render();
+	_friend->render(); 
 	_enemy->render();
 
 	_cursor->render();
@@ -164,6 +164,7 @@ void sceneBattle::initSound(void)
 }
 
 
+// ▼행동 종료시나..아무튼 호출해서 체크. 계속 체크돌릴 필요는 없을듯▼
 void sceneBattle::phaseCheck(void)
 {
 	int _Active = 0;
@@ -174,14 +175,13 @@ void sceneBattle::phaseCheck(void)
 			if (!_player->getUnits()[i]->getBattleState().valid) continue;
 			_Active++;
 		}
-		if (_Active == 0)
+		if (_Active == 0)//전부 행동 불가면 다음턴 애들 행동가능으로 만들고 페이즈 넘김.
 		{
 			for (int i = 0; i < _friend->getUnits().size(); i++)
 			{
 				_friend->getUnits()[i]->setVaild(true);
 			}
 			_phase = FRIENDPHASE;
-
 		}
 	}
 	else if (_phase == FRIENDPHASE)
@@ -215,6 +215,7 @@ void sceneBattle::phaseCheck(void)
 		}
 	}
 }
+
 void sceneBattle::phaseControl(void) //호출해서 벡터 검출하고 행동할 수 있는 놈 없으면 페이즈 전환
 {
 	
@@ -224,7 +225,7 @@ void sceneBattle::friendAction(void)//아군 턴 액션
 { 
 	for (int i = 0; i < _friend->getUnits().size(); i++) //행동 끝난 뒤에 끝나는 신호가 필요함..
 	{
-		if (!_friend->getUnits()[i]->getBattleState().valid) continue;
+		if (!_friend->getUnits()[i]->getBattleState().valid) continue; //행동 불가능인 애들은 거르고
 	}
 
 }
