@@ -92,7 +92,7 @@ void scanDialog::render(void)
 	
 	if(strlen(_strName)>=1)
 	{
-		_story->render(getMemDC(), story.left, story.top);
+		_story->alphaRender(getMemDC(), story.left, story.top,155);
 		_face->render(getMemDC(), _face->getX(), _face->getY());
 	}
 
@@ -344,6 +344,10 @@ void scanDialog::loadDialog(void)
 		else if (strcmp(_strName, "Á¶Á¶") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00001");
+		}
+		else if (strcmp(_strName, "¾ç½Ü") == 0)
+		{
+			_face = IMAGEMANAGER->findImage(L"face 00287");
 		}
 	}
 }

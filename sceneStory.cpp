@@ -42,9 +42,6 @@ void sceneStory::release(void)
 
 void sceneStory::update(void)
 {
-	
-	
-	
 	if (!(_dialog->getDirection() ==4))
 	{
 		if (_dialog->getNext() == 0)
@@ -75,4 +72,5 @@ void sceneStory::render(void)
 	SetBkMode(getMemDC(), TRANSPARENT);
 	_dialog->render();
 	if (_dialog->getNext() == 6) SCENEMANAGER->changeScene(L"준비기본씬");
+	if (_dialog->getNext() == 7) SCENEMANAGER->changeScene(L"전투씬");
 }
