@@ -32,6 +32,7 @@ public:
 
 	void loadUnits(void);
 	void registUnitAll(void);
+	void registUnitBasic(void);
 	void registUnit(Unit* unit);	//파일유닛중에서 출전할 유닛 등록
 	void cancleUnit(int num);		//출전유닛중에서 취소할 유닛
 	void locateUnits(void);

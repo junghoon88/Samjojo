@@ -16,18 +16,17 @@
 #define SAMPLETILEY 10
 
 //비트필드 타일 속성
-#define ATTR_UNMOVE		0x00000001	//여기로는 못가요
-#define ATTR_SWAMP		0x00000002	//수, 풍계 공격만 가능해요, 이동력 절반으로 깍여요
-#define ATTR_FLAT		0x00000004	//화, 풍계 공격만 가능해요
-#define ATTR_BADLANDS	0x00000008	//지, 풍계 공격만 가능해요, 이동력 절반으로 깍여요
-#define ATTR_VILLAGE	0x00000010	//화계공격만 가능해요, 이동력 절반으로 깍여요
-#define ATTR_CASTLE		0x00000020	//화계공격만 가능해요, 여기에서는 피20%회복이 가능해요, 첫 점령시 상급 회복템 드랍해요
-#define ATTR_BRIDGE		0x00000040	//화, 수, 풍계 공격만 가능해요
-#define	ATTR_BARRACK	0x00000080	//화계 공격만 가능해요, 여기서는 피20%회복이 가능해요, 첫 점령시 하급 회복템 드랍해요
-#define	ATTR_GATEWAY	0x00000100	//화계 공격만 가능해요, 여기서는 MP20%회복이 가능해요, 첫 점령시 MP 회복템 드랍해요
-#define	ATTR_WAREHOUSE	0x00000200	//화계 공격만 가능해요, 첫 점령시 하급 회복템 드랍해요
-#define ATTR_INCASTLE	0x00000400	//화계 공격만 가능해요
-#define ATTR_MOUNTAIN	0x00000800	//지, 풍계 공격만 가능해요, 이동력이 절반으로 깍여요
+#define ATTR_INCASTLE	0x00000001	//화계 공격만 가능해요
+#define ATTR_FLAT		0x00000002	//화, 풍계 공격만 가능해요
+#define ATTR_BRIDGE		0x00000004	//화, 수, 풍계 공격만 가능해요
+#define ATTR_SNOW		0x00000008	//수, 풍계 공격만 가능해요
+#define ATTR_UNMOVE		0x00000010	//여기로는 못가요
+#define ATTR_FOREST		0x00000020	//화계공격만 가능해요, 이동력이 절반으로 깍여요
+#define ATTR_MOUNTAIN	0x00000040	//지, 풍계 공격만 가능해요, 이동력이 절반으로 깍여요
+#define ATTR_WATER		0x00000080	//수, 풍계 공격만 가능해요, 이동력이 절반으로 깍여요
+#define ATTR_CASTLE		0x00000100	//화계공격만 가능해요, 여기에서는 피20%회복이 가능해요, 첫 점령시 회복템 드랍해요
+#define ATTR_WAREHOUSE	0x00000200	//화계공격만 가능해요, 첫 점령시 회복템 드랍해요
+
 
 //지형의 대한 정의
 enum TERRAIN

@@ -216,7 +216,8 @@ void sceneSelect::selectScenario(void)
 			_map->loadData(i);
 			_map->scanUnitsPos();
 			//test
-			_player->registUnitAll();
+			//_player->registUnitAll();
+			_player->registUnitBasic();   //조조 하후돈만 등록용
 			_player->locateUnits();
 
 			_friend->locateUnits();
@@ -241,7 +242,8 @@ void sceneSelect::selectScenario(BTNTEST test)
 	_map->loadData(i);
 	_map->scanUnitsPos();
 	//test
-	_player->registUnitAll();
+	//_player->registUnitAll();
+	_player->registUnitBasic();   //조조 하후돈만 등록용
 	_player->locateUnits();
 
 	_friend->locateUnits();

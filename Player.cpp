@@ -100,22 +100,40 @@ void Player::registUnitAll(void)
 		}
 	}
 
-	/*
+
 	//동희야 여기 수정해야됨.
 	//테스트로 그냥 때려박음
 	for (viUnits iter = _vUnitsInFile.begin(); iter != _vUnitsInFile.end(); ++iter)
 	{
 		if (0 == _tcscmp((*iter)->getStatus().name, L"조조"))	continue;
 		if (0 == _tcscmp((*iter)->getStatus().name, L"하후돈"))	continue;
-		
+
 		registUnit(*iter);
 
 		if (_vUnits.size() >= ENTRANT_MAX)
 			break;
 	}
-	*/
 }
-
+void Player::registUnitBasic(void) {
+	//0. 조조
+	for (viUnits iter = _vUnitsInFile.begin(); iter != _vUnitsInFile.end(); ++iter)
+	{
+		if (0 == _tcscmp((*iter)->getStatus().name, L"조조"))
+		{
+			registUnit((*iter));
+			break;
+		}
+	}
+	//1. 하후돈
+	for (viUnits iter = _vUnitsInFile.begin(); iter != _vUnitsInFile.end(); ++iter)
+	{
+		if (0 == _tcscmp((*iter)->getStatus().name, L"하후돈"))
+		{
+			registUnit((*iter));
+			break;
+		}
+	}
+}
 
 
 void Player::registUnit(Unit* unit)

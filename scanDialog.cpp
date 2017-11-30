@@ -53,9 +53,6 @@ void scanDialog::update(void)
 		
 	time += TIMEMANAGER->getElapsedTime();
 	Mtime += TIMEMANAGER->getElapsedTime();
-	_face->setX(_face->getX());
-	_face->setY(_face->getY());
-
 	
 	if (isleft)
 	{
@@ -93,7 +90,7 @@ void scanDialog::render(void)
 	if(strlen(_strName)>=1)
 	{
 		_story->render(getMemDC(), story.left, story.top);
-		_face->render(getMemDC(), _face->getX(), _face->getY());
+		_face->render(getMemDC());
 	}
 
 	if (isleft)

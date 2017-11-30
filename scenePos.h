@@ -7,7 +7,9 @@
 struct tagPos {
 	TCHAR name[32];
 	RECT posRC;
+	bool isPos;
 };
+
 class scenePos : public gameNode
 {
 private:
@@ -21,7 +23,8 @@ private:
 	vUnits _vUnitsInFile;
 
 	tagPos _posUnits[7];
-	
+	RECT posRC2[7];  //출진리스트에서 제거하기위한 클릭용 rect
+
 	Player* _player;
 
 	bool _availableOK;
