@@ -258,6 +258,9 @@ void sceneMaptool::render(void)
 {
 	SetBkMode(getMemDC(), TRANSPARENT);
 
+	//흰배경 없애기
+	IMAGEMANAGER->findImage(L"maptoolBackground")->render(getMemDC(), WINSIZEX - TILESIZE * 3, 500);
+
 	//샘플타일
 	RectangleMake(getMemDC(), WINSIZEX - 3 * TILESIZE - 1, 0, TILESIZE * 3 + 1, TILESIZE * 10 + 21);
 	TextOut(getMemDC(), WINSIZEX - (3 * TILESIZE) / 2 - 20, 1, L"지형", _tcslen(L"지형"));
