@@ -26,8 +26,6 @@ HRESULT Unit::init(gameMap* map)
 	_itemA = NULL;
 	_itemS = NULL;
 
-
-
 	ZeroMemory(&_battleState, sizeof(tagBattleState));
 
 	_map = map;
@@ -35,6 +33,11 @@ HRESULT Unit::init(gameMap* map)
 
 	_imgFrameTime = 0;
 	_imgFrameY = 0;
+
+	_oldSeq = UNITSEQUENCE_TURNON;
+
+	_delayTime = 0;
+
 	return S_OK;
 }
 
@@ -45,17 +48,30 @@ void Unit::release(void)
 
 void Unit::update(TEAM team)
 {
-	switch (team)
+	updateStatus();	// 초기능력치 + 레벨당능력치 + 아이템능력치
+	expMaxCheck();	// 경험치 확인
+	
+	if (_oldSeq != _battleState.squence)
 	{
-	case TEAM_PLAYER:
-		updateSequence(false);
-		break;
-	case TEAM_FRIEND:
-	case TEAM_ENEMY:
-		updateSequence(true);
-		break;
+		_delayTime++;
+		if (_delayTime >= 100)
+		{
+			_oldSeq = _battleState.squence;
+		}
 	}
-
+	else
+	{
+		switch (team)
+		{
+			case TEAM_PLAYER:
+				updateSequence(false);
+			break;
+			case TEAM_FRIEND:
+			case TEAM_ENEMY:
+				updateSequence(true);
+			break;
+		}
+	}
 	updateImage();
 }
 
@@ -82,9 +98,38 @@ void Unit::render(void)
 		break;
 	}
 
-	
+	showMoveArea();
+}
 
-	TCHAR str[200];
+void Unit::updateStatus(void)
+{
+	_status.HP = _status.HPMax = _status.InitHPMax + (_status.level * _status.LvPerHPMax) + _status.ItemPlusHPMax;
+	_status.MP = _status.MPMax = _status.InitMPMax + (_status.level * _status.LvPerMPMax) + _status.ItemPlusMPMax;
+	_status.Pwr = _status.InitPwr + _status.ItemPlusPwr;
+	_status.Lds = _status.InitLds + _status.ItemPlusLds;
+	_status.Int = _status.InitInt + _status.ItemPlusInt;
+	_status.Dex = _status.InitDex + _status.ItemPlusDex;
+	_status.Luk = _status.InitLuk + _status.ItemPlusLuk;
+
+	_status.Atk = _status.InitAtk + (_status.level * _status.LvPerAtk) + _status.ItemPlusAtk;
+	_status.Dep = _status.InitDep + (_status.level * _status.LvPerDep) + _status.ItemPlusDep;
+	_status.Res = _status.InitRes + (_status.level * _status.LvPerRes) + _status.ItemPlusRes;
+	_status.Agl = _status.InitAgl + (_status.level * _status.LvPerAgl) + _status.ItemPlusAgl;
+	_status.Fig = _status.InitFig + (_status.level * _status.LvPerFig) + _status.ItemPlusFig;
+
+	//_status.Atk = (_status.Pwr / 2) + (_status.level * _status.LvPerAtk) + _status.ItemPlusAtk;
+	//_status.Dep = (_status.Lds / 2) + (_status.level * _status.LvPerDep) + _status.ItemPlusDep;
+	//_status.Res = (_status.Int / 2) + (_status.level * _status.LvPerRes) + _status.ItemPlusRes;
+	//_status.Agl = (_status.Dex / 2) + (_status.level * _status.LvPerAgl) + _status.ItemPlusAgl;
+	//_status.Fig = (_status.Luk / 2) + (_status.level * _status.LvPerFig) + _status.ItemPlusFig;
+}
+void Unit::expMaxCheck(void)
+{
+	if (_status.expMax <= _status.exp)
+	{
+		_status.exp = 0;
+		if (_status.level < MAXLVL) _status.level += 1;
+	}
 }
 
 void Unit::loadUnitData(tagUnitSaveInfo &info)
@@ -265,12 +310,15 @@ void Unit::moveTo(POINT tliePt)
 void Unit::attack(Unit* opponent)
 {
 	_battleState.unitState = UNITSTATE_ATK;
-	opponent->setUnitState(UNITSTATE_DEF);
 
-	if (0)	// 공격회피 성공하면 밑에 무효
+	if (1)
 	{
-		opponent->setUnitState(UNITSTATE_HIT);
-		_battleState.squence = UNITSEQUENCE_COUNTER;
+		opponent->setUnitState(UNITSTATE_HIT);			// 피격
+	}
+	else	// 공격회피 성공하면 밑에 무효
+	{
+		opponent->setUnitState(UNITSTATE_DEF);			// 방어
+		_battleState.squence = UNITSEQUENCE_COUNTER;	// 다음 시퀀스
 		return;
 	}
 
@@ -280,18 +328,20 @@ void Unit::attack(Unit* opponent)
 
 	opponent->setCurHP(opponent->getCurHP() - damage);
 
-	opponent->setUnitState(UNITSTATE_HIT);
-	_battleState.squence = UNITSEQUENCE_COUNTER;
+	_battleState.squence = UNITSEQUENCE_COUNTER;		// 다음 시퀀스
 }
 
 void Unit::counterAttack(Unit* opponent)
 {
 	opponent->setUnitState(UNITSTATE_ATK);
-	_battleState.unitState = UNITSTATE_DEF;
-
+	if (1)
+	{
+		_battleState.unitState = UNITSTATE_HIT;			// 피격
+	}
 	if (0)	// 공격회피 성공하면 밑에 무효
 	{
-		_battleState.squence = UNITSEQUENCE_TURNOFF;
+		_battleState.unitState = UNITSTATE_DEF;			// 방어
+		_battleState.squence = UNITSEQUENCE_TURNOFF;	// 다음 시퀀스
 		return;
 	}
 
@@ -301,9 +351,7 @@ void Unit::counterAttack(Unit* opponent)
 
 	setCurHP(_status.HP - damage);
 
-	_battleState.unitState = UNITSTATE_HIT;
-
-	_battleState.squence = UNITSEQUENCE_TURNOFF;
+	_battleState.squence = UNITSEQUENCE_TURNOFF;		// 다음 시퀀스
 }
 
 
@@ -430,10 +478,12 @@ void Unit::updateSequence(bool bAuto)
 			{
 				if (_battleState.findEnemy)
 				{
+					_oldSeq = _battleState.squence;
 					_battleState.squence = UNITSEQUENCE_ATTACK;
 				}
 				else
 				{
+					_oldSeq = _battleState.squence;
 					_battleState.squence = UNITSEQUENCE_TURNOFF;
 				}
 				_moveArea.clear();
@@ -455,6 +505,7 @@ void Unit::updateSequence(bool bAuto)
 		{
 			attack(opponent);
 		}
+		_oldSeq = _battleState.squence;
 		_battleState.squence = UNITSEQUENCE_TURNOFF;
 		return;
 	}
@@ -537,4 +588,3 @@ void Unit::updateImage(void)
 		
 
 }
-

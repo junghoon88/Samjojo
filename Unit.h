@@ -5,6 +5,7 @@
 #include "gameMap.h"
 
 #define MAXDEF 100
+#define MAXLVL 50
 
 struct tagStatus //기본정보 (수정하지말것)
 {
@@ -32,20 +33,20 @@ struct tagStatus //기본정보 (수정하지말것)
 	int Dep;		//방어력
 	int Res;		//정신력
 	int Agl;		//순발력
-	int Fig;		//사기
-	int Pwr;		//무력
+	int Fig;		//사기		↑변화스탯
+	int Pwr;		//무력		↓고정스탯
 	int Lds;		//통솔
 	int Int;		//지력
 	int Dex;		//민첩
-	int Luk;		//운
+	int Luk;		//운	
 
 	//기본 수치
 	int InitHPMax;
 	int InitMPMax;
-	int InitAtk;		//공격력
-	int InitDep;		//방어력
-	int InitRes;		//정신력
-	int InitAgl;		//순발력
+	int InitAtk;		//공격력 = 무력/2
+	int InitDep;		//방어력 = 통솔/2
+	int InitRes;		//정신력 = 지력/2
+	int InitAgl;		//순발력 = 민첩/2
 	int InitFig;		//사기
 	int InitPwr;		//무력
 	int InitLds;		//통솔
@@ -210,6 +211,10 @@ private:
 	int _imgFrameTime;
 	int _imgFrameY;
 
+	UNITSEQUENCE _oldSeq;
+
+	int _delayTime;
+
 protected:
 	tagStatus		_status;
 
@@ -249,6 +254,11 @@ public:
 
 	void updateSequence(bool bAuto);
 	void updateImage(void);
+public:
+	inline void updateStatus(void);
+	inline void earnExp(int exp) { _status.exp += exp; };
+	inline void	expMaxCheck(void);
+
 public:
 	inline tagStatus getStatus(void) { return _status; }
 	inline void setStatus(tagStatus status) { _status = status; }
