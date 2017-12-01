@@ -45,6 +45,20 @@ HRESULT scenePos::init(void) {
 	_posUnits[0].isPos = true;
 	_posUnits[2].isPos = true;
 
+	for (int i = 0; i < _vUnitsInFile.size(); i++) {
+		if (!_tcscmp(_vUnitsInFile[i]->getStatus().name, L"Á¶Á¶")) {
+			_chosang = _vUnitsInFile[i]->getStatus().imgFace;
+			_tcscpy(_name, _vUnitsInFile[i]->getStatus().name);
+			_tcscpy(_aos, _vUnitsInFile[i]->getStatus().aos);
+			_level = _vUnitsInFile[i]->getStatus().level;
+			_pwr = _vUnitsInFile[i]->getStatus().InitPwr;
+
+		}
+	}
+	
+
+
+
 	return S_OK;
 }
 void scenePos::release(void) {
@@ -55,8 +69,16 @@ void scenePos::update(void){
 	_pt.y = _ptMouse.y;
 
 
+	for (int i = 0; i < 7; i++) {
+		if (PtInRect(&_posUnits[i].posRC, _pt)) {
+			for (int j = 0; j < _vUnitsInFile.size(); j++) {
+				if (!_tcscmp(_posUnits[i].name, _vUnitsInFile[j]->getStatus().name)) {
 
-
+				}
+			}
+		}
+	}
+	
 
 
 
@@ -135,7 +157,7 @@ void scenePos::render(void){
 		_vUnits[i]->getBattleState().imgBattleIdle->frameRender(getMemDC(), 6 + (50 * i), 367, 0, 0);
 	}
 	
-	
+	_chosang->render(getMemDC(), 416, 44);
 	
 
 
