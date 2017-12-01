@@ -27,6 +27,7 @@ HRESULT sceneBattle::init(void)
 	_astar->init(_map);
 
 	linkClass();
+	setUpPlayer();//
 
 	_phase = PLAYERPHASE;
 	
@@ -34,6 +35,8 @@ HRESULT sceneBattle::init(void)
 	_sDL->init("scripts/script 05.txt");
 	_sDL->setNext(9);
 	ShowCursor(true);
+
+
 
 	return S_OK;
 }
@@ -219,11 +222,7 @@ void sceneBattle::phaseCheck(void)
 		}
 		if (_Active == 0)
 		{
-			for (int i = 0; i < _player->getUnits().size(); i++)
-			{
-				_player->getUnits()[i]->setVaild(true);
-			}
-			_phase = PLAYERPHASE;
+			setUpPlayer();
 		}
 	}
 }
@@ -318,4 +317,15 @@ Unit* sceneBattle::findUnit(TEAM team, POINT pt)
 	}
 
 	return NULL;
+}
+
+
+void sceneBattle::setUpPlayer(void)
+{
+	_phase = PLAYERPHASE;
+	for (int i = 0; i < _player->getUnits().size(); i++)
+	{
+		_player->getUnits()[i]->setVaild(true);
+		_player->getUnits()[i]->setMoved(true);
+	}
 }
