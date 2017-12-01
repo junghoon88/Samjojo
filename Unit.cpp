@@ -503,7 +503,7 @@ void Unit::updateSequence(bool bAuto)
 			_oldSeq = _battleState.squence;
 
 			// 상대의 공격범위 내에 자신이 위치하고 있으면 반격 시퀀스로 간다
-			if (opponent->getStatus().atkRange[_battleState.tilePt.x][_battleState.tilePt.y] == FALSE )
+			if (opponent->getStatus().atkRange[_battleState.tilePt.x][_battleState.tilePt.y] == TRUE )
 			{
 				_battleState.squence = UNITSEQUENCE_COUNTER;
 			}
