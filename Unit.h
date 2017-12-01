@@ -250,6 +250,10 @@ public:
 	void updateSequence(bool bAuto);
 	void updateImage(void);
 public:
+	inline void updateStatus(void);
+	inline void earnExp(int exp) { _status.exp += exp; };
+	inline void	expMaxCheck(void);
+
 	inline tagStatus getStatus(void) { return _status; }
 	inline void setStatus(tagStatus status) { _status = status; }
 	inline ItemWeapon* getItemW(void) { return _itemW; }
