@@ -89,6 +89,8 @@ void scanDialog::render(void)
 	
 	if(strlen(_strName)>=1)
 	{
+		_story->alphaRender(getMemDC(), story.left, story.top,155);
+		_face->render(getMemDC(), _face->getX(), _face->getY());
 		_story->render(getMemDC(), story.left, story.top);
 		_face->render(getMemDC());
 	}
@@ -341,6 +343,14 @@ void scanDialog::loadDialog(void)
 		else if (strcmp(_strName, "조조") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00001");
+		}
+		else if (strcmp(_strName, "양호성") == 0)
+		{
+			_face = IMAGEMANAGER->findImage(L"face 00287");
+		}
+		else if (strcmp(_strName, "하후돈") == 0)
+		{
+			_face = IMAGEMANAGER->findImage(L"face 00009");
 		}
 	}
 }

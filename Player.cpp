@@ -27,7 +27,7 @@ void Player::update(void)
 {
 	for (int i = 0; i < _vUnits.size(); i++)
 	{
-		_vUnits[i]->update();
+		_vUnits[i]->update(TEAM_PLAYER);
 	}
 }
 
@@ -113,6 +113,10 @@ void Player::registUnitAll(void)
 		if (_vUnits.size() >= ENTRANT_MAX)
 			break;
 	}
+
+	
+
+
 }
 void Player::registUnitBasic(void) {
 	//0. Á¶Á¶
@@ -133,6 +137,7 @@ void Player::registUnitBasic(void) {
 			break;
 		}
 	}
+
 }
 
 

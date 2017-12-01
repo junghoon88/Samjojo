@@ -49,28 +49,28 @@ void sceneBattle::update(void)
 	//debug
 	{
 		Unit* unit = _enemy->getUnits()[0];
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD8))
+		if (KEYMANAGER->isOnceKeyDown('3') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD8))
 		{
 			unit->move(DIRECTION_UP);
 		}
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
+		if (KEYMANAGER->isOnceKeyDown('5') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
 		{
 			unit->move(DIRECTION_DN);
 		}
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
+		if (KEYMANAGER->isOnceKeyDown('4') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
 		{
 			unit->move(DIRECTION_LF);
 		}
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD6))
+		if (KEYMANAGER->isOnceKeyDown('6') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD6))
 		{
 			unit->move(DIRECTION_RG);
 		}
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD7))
+		if (KEYMANAGER->isOnceKeyDown('7') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD7))
 		{
 			_map->scanUnitsPos();
 			unit->findMoveArea();
 		}
-		if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD9))
+		if (KEYMANAGER->isOnceKeyDown('8') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD9))
 		{
 			unit->setUnitSequnce(UNITSEQUENCE_TURNON);
 			_map->scanUnitsPos();
@@ -96,9 +96,9 @@ void sceneBattle::render(void)
 	_player->render();
 	_friend->render(); 
 	_enemy->render();
-
-	_cursor->render();
 	_astar->render();
+	_cursor->render();
+	
 }
 
 POINT sceneBattle::findCloseEnemyPos(Unit* unit)
