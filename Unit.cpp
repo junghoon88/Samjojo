@@ -283,6 +283,11 @@ void Unit::move(DIRECTION dir)
 
 }
 
+void Unit::moveTo(POINT tliePt)
+{
+	_battleState.tilePtNext = tliePt;
+}
+
 
 void Unit::findEnemy(TEAM myTeam, POINT closeEnemyPos)
 {

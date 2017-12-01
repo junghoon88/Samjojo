@@ -234,6 +234,7 @@ public:
 
 	bool move(void);
 	void move(DIRECTION dir);
+	void moveTo(POINT tliePt);
 	void findEnemy(TEAM myTeam, POINT closeEnemyPos);
 	void findMoveArea(void);
 	void showMoveArea(void);
