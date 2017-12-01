@@ -207,7 +207,8 @@ class Unit : public gameNode
 private:
 	typedef BOOL(*Temp)[UNIT_ATTACK_RANGE_MAX];
 
-	int _ImgFrameTime;
+	int _imgFrameTime;
+	int _imgFrameY;
 
 protected:
 	tagStatus		_status;
@@ -230,7 +231,7 @@ public:
 
 	HRESULT init(gameMap* map);
 	void release(void);
-	void update(void);
+	void update(TEAM team);
 	void render(void);
 
 	void loadUnitData(tagUnitSaveInfo &info);
@@ -246,7 +247,7 @@ public:
 	void showMoveArea(void);
 	void clearMoveArea(void);
 
-	void updateSequence(void);
+	void updateSequence(bool bAuto);
 	void updateImage(void);
 public:
 	inline void updateStatus(void);
