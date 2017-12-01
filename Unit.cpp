@@ -97,8 +97,6 @@ void Unit::render(void)
 			_battleState.imgBattleSpc->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY(), _battleState.frameSpc, _imgFrameY);
 		break;
 	}
-
-	showMoveArea();
 }
 
 void Unit::updateStatus(void)

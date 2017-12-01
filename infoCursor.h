@@ -78,17 +78,27 @@ private:
 	bool water;
 	//지형 정보 표시용
 	//플레이어 유닛 클릭시 표시할 정보,공격,스킬,도구,대기,취소
-	RECT infoBox;
+	RECT cmdBox;
 	button* actionBtn[BTN_MAX];
 	btnName btName;
 	POINT backToPT;
 	bool isCommand;
+	DIRECTION backToDir;
+	static void cb_attack(void* obj);
+	static void cb_item(void* obj);
+	static void cb_wait(void* obj);
+	static void cb_cancel(void* obj);
+
+	void cmd_atk(void);
+	void cmd_item(void);
+	void cmd_wait(void);
+	void cmd_cancel(void);
 	//플레이어 유닛 클릭시 표시할 정보,공격,스킬,도구,대기,취소
 
 
 	bool isUnit;//Unit은 true. 지형은 false
 	bool isShow;//클릭하면 true로
-
+	bool popUpMenu;
 public:
 	infoCursor();
 	~infoCursor();
