@@ -533,8 +533,6 @@ void infoCursor::infoDraw(void)
 	TextOut(getMemDC(), tileImgRect.left, tileImgRect.bottom + 50, tilename, _tcslen(tilename));
 	TextOut(getMemDC(), tileImgRect.left, tileImgRect.bottom + 80, prop, _tcslen(prop));
 
-	
-	
 	//for (int i = 0; i < 4; i++) // 디버그용 렉트출력
 	//{
 	//	Rectangle(getMemDC(), element[i].left, element[i].top, element[i].right, element[i].bottom);
@@ -559,8 +557,6 @@ void infoCursor::mouse_ActionCancel(void)//이동명령 취소용
 	isCommand = false;
 	dataClean();
 }
-
-
 
 void infoCursor::buttonSetup(void)
 {

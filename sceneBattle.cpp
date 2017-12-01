@@ -92,14 +92,16 @@ void sceneBattle::update(void)
 		_sDL->loadDialog();
 	}
 	_player->update();
-	_friend->update(); 
-	_enemy->update();
+	//_friend->update();
+	//_enemy->update();
 	_map->scanUnitsPos();
 	_map->update(); 
 	_sDL->update();
+	friendAction();
+	enemyAction();
 	if(_phase == PLAYERPHASE)_cursor->update();
-	else if (_phase == FRIENDPHASE); //friendAction();
-	else if (_phase == ENEMYPHASE); //enemyAction();
+//	else if (_phase == FRIENDPHASE); //friendAction();
+//	else if (_phase == ENEMYPHASE); //enemyAction();
 
 }
 
@@ -237,7 +239,7 @@ void sceneBattle::friendAction(void)//아군 턴 액션
 	for (int i = 0; i < _friend->getUnits().size(); i++) //행동 끝난 뒤에 끝나는 신호가 필요함..
 	{
 		if (_friend->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue; //행동 불가능인 애들은 거르고
-		
+		_friend->getUnits()[i]->update(TEAM_FRIEND);
 	}
 }
 void sceneBattle::enemyAction(void) //적군 턴 액션
@@ -245,6 +247,7 @@ void sceneBattle::enemyAction(void) //적군 턴 액션
 	for (int i = 0; i < _enemy->getUnits().size(); i++)
 	{
 		if (_enemy->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue;
+		_enemy->getUnits()[i]->update(TEAM_ENEMY);
 	}
 }
 

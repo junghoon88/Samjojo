@@ -50,28 +50,30 @@ void Unit::update(TEAM team)
 {
 	updateStatus();	// 초기능력치 + 레벨당능력치 + 아이템능력치
 	expMaxCheck();	// 경험치 확인
-	
-	if (_oldSeq != _battleState.squence)
+
+	switch (team)
 	{
-		_delayTime++;
-		if (_delayTime >= 100)
-		{
-			_oldSeq = _battleState.squence;
-		}
-	}
-	else
-	{
-		switch (team)
-		{
-			case TEAM_PLAYER:
-				updateSequence(false);
-			break;
-			case TEAM_FRIEND:
-			case TEAM_ENEMY:
+		case TEAM_PLAYER:
+			updateSequence(false);
+		break;
+		case TEAM_FRIEND:
+		case TEAM_ENEMY:
+			_delayTime++;
+			if (_oldSeq == _battleState.squence)
+			{
 				updateSequence(true);
-			break;
-		}
+			}
+			else
+			{
+				if (_delayTime >= 100)
+				{
+					_oldSeq = _battleState.squence;
+					_delayTime = 0;
+				}
+			}
+		break;
 	}
+
 	updateImage();
 }
 
@@ -84,16 +86,16 @@ void Unit::render(void)
 	showMoveArea();
 	switch (_battleState.unitState)
 	{
-		case UNITSTATE_IDLE:	  //기본상태
+		case UNITSTATE_IDLE:	//기본상태
 		case UNITSTATE_TIRED:
 			_battleState.imgBattleIdle->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY(), _battleState.frameIdle, _imgFrameY);
 		break;
-		case UNITSTATE_ATK:	  //공격상태
+		case UNITSTATE_ATK:		//공격상태
 			_battleState.imgBattleAtk->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY(), _battleState.frameAtk, _imgFrameY);
 		break;
-		case UNITSTATE_DEF:	  //방어상태
-		case UNITSTATE_HIT:    //피격상태
-		case UNITSTATE_VIC:    //승리
+		case UNITSTATE_DEF:		//방어상태
+		case UNITSTATE_HIT:		//피격상태
+		case UNITSTATE_VIC:		//승리
 			_battleState.imgBattleSpc->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY(), _battleState.frameSpc, _imgFrameY);
 		break;
 	}
@@ -312,44 +314,40 @@ void Unit::attack(Unit* opponent)
 	if (1)
 	{
 		opponent->setUnitState(UNITSTATE_HIT);			// 피격
+
+		int damage;
+		damage = _status.Atk * opponent->getStatus().Dep / MAXDEF;
+		opponent->setCurHP(opponent->getCurHP() - damage);
+
+		return;
 	}
 	else	// 공격회피 성공하면 밑에 무효
 	{
-		opponent->setUnitState(UNITSTATE_DEF);			// 방어
-		_battleState.squence = UNITSEQUENCE_COUNTER;	// 다음 시퀀스
+		opponent->setUnitState(UNITSTATE_DEF);			// 방어		
 		return;
 	}
-
-	int damage;
-
-	damage = _status.Atk * opponent->getStatus().Dep / MAXDEF;
-
-	opponent->setCurHP(opponent->getCurHP() - damage);
-
-	_battleState.squence = UNITSEQUENCE_COUNTER;		// 다음 시퀀스
 }
 
 void Unit::counterAttack(Unit* opponent)
 {
 	opponent->setUnitState(UNITSTATE_ATK);
+
 	if (1)
 	{
 		_battleState.unitState = UNITSTATE_HIT;			// 피격
+
+		int damage;
+		damage = opponent->getStatus().Atk * _status.Dep / MAXDEF;
+		setCurHP(_status.HP - damage);
+
+		return;
 	}
-	if (0)	// 공격회피 성공하면 밑에 무효
+	else	// 공격회피 성공하면 밑에 무효
 	{
 		_battleState.unitState = UNITSTATE_DEF;			// 방어
-		_battleState.squence = UNITSEQUENCE_TURNOFF;	// 다음 시퀀스
 		return;
 	}
 
-	int damage;
-
-	damage = opponent->getStatus().Atk * _status.Dep / MAXDEF;
-
-	setCurHP(_status.HP - damage);
-
-	_battleState.squence = UNITSEQUENCE_TURNOFF;		// 다음 시퀀스
 }
 
 
@@ -502,25 +500,37 @@ void Unit::updateSequence(bool bAuto)
 		if (opponent != NULL)
 		{
 			attack(opponent);
+			_oldSeq = _battleState.squence;
+
+			// 상대의 공격범위 내에 자신이 위치하고 있으면 반격 시퀀스로 간다
+			if (opponent->getStatus().atkRange[_battleState.tilePt.x][_battleState.tilePt.y] == TRUE )
+			{
+				_battleState.squence = UNITSEQUENCE_COUNTER;
+			}
+			else _battleState.squence = UNITSEQUENCE_TURNOFF;
+		}
+		else _battleState.squence = UNITSEQUENCE_TURNOFF;
+
+		return;
+	}
+
+	if (_battleState.squence == UNITSEQUENCE_COUNTER)
+	{
+		if (opponent != NULL)
+		{
+			counterAttack(opponent);
 		}
 		_oldSeq = _battleState.squence;
 		_battleState.squence = UNITSEQUENCE_TURNOFF;
 		return;
 	}
 
-	//if (_battleState.squence == UNITSEQUENCE_COUNTER)
-	//{
-	//	if (opponent != NULL)
-	//	{
-	//		counterAttack(opponent);
-	//	}
-	//}
-
-	//if (_battleState.squence == UNITSEQUENCE_TURNOFF)
-	//{
-	//	if (_battleState.findEnemy) opponent->setUnitState(UNITSTATE_IDLE);
-	//	_battleState.unitState = UNITSTATE_IDLE;
-	//}
+	if (_battleState.squence == UNITSEQUENCE_TURNOFF)
+	{
+		if (_battleState.findEnemy) opponent->setUnitState(UNITSTATE_IDLE);
+		_battleState.unitState = UNITSTATE_IDLE;
+		return;
+	}
 }
 
 void Unit::updateImage(void)
