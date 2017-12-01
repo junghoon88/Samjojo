@@ -162,6 +162,8 @@ void Player::cancleUnit(int num)
 	_vUnits.erase(_vUnits.begin() + num);
 }
 
+
+
 void Player::locateUnits(void)
 {
 	//맵에 있는 오브젝트에 유닛을 넣자

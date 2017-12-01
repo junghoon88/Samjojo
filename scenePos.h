@@ -15,6 +15,20 @@ class scenePos : public gameNode
 private:
 	image* _posImg;
 	image* _chosang;
+
+	image* _hpbar;
+
+	image* _mpbar;
+
+	image* _expbar;
+
+
+	image* _atkbar;
+	image* _depbar;
+	image* _resbar;
+	image* _aglbar;
+	image* _figbar;
+
 	TCHAR _name[32];
 	TCHAR _aos[32];
 	int _level;
@@ -34,6 +48,7 @@ private:
 	int _fig;		//사기
 	int _move;      //이동력
 
+	FONTVERSION _fontNum;
 
 	POINT _pt;
 
