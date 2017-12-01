@@ -187,14 +187,14 @@ void sceneBattle::phaseCheck(void)
 	{
 		for (int i = 0; i < _player->getUnits().size(); i++)
 		{
-			if (!_player->getUnits()[i]->getBattleState().valid) continue;
+			if (_player->getUnits()[i]->getBattleState().squence != UNITSEQUENCE_TURNOFF) continue;
 			_Active++;
 		}
 		if (_Active == 0)//전부 행동 불가면 다음턴 애들 행동가능으로 만들고 페이즈 넘김.
 		{
 			for (int i = 0; i < _friend->getUnits().size(); i++)
 			{
-				_friend->getUnits()[i]->setVaild(true);
+				_friend->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
 			}
 			_phase = FRIENDPHASE;
 		}
@@ -203,13 +203,13 @@ void sceneBattle::phaseCheck(void)
 	{
 		for (int i = 0; i < _friend->getUnits().size(); i++)
 		{
-			if (!_friend->getUnits()[i]->getBattleState().valid) continue;
+			if (!_friend->getUnits()[i]->getBattleState().squence != UNITSEQUENCE_TURNOFF) continue;
 		}
 		if (_Active == 0)
 		{
 			for (int i = 0; i < _enemy->getUnits().size(); i++)
 			{
-				_enemy->getUnits()[i]->setVaild(true);
+				_enemy->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
 			}
 			_phase = ENEMYPHASE;
 		}
@@ -218,7 +218,7 @@ void sceneBattle::phaseCheck(void)
 	{
 		for (int i = 0; i < _enemy->getUnits().size(); i++)
 		{
-			if (!_enemy->getUnits()[i]->getBattleState().valid) continue;
+			if (!_enemy->getUnits()[i]->getBattleState().squence != UNITSEQUENCE_TURNOFF) continue;
 		}
 		if (_Active == 0)
 		{
@@ -236,15 +236,15 @@ void sceneBattle::friendAction(void)//아군 턴 액션
 { 
 	for (int i = 0; i < _friend->getUnits().size(); i++) //행동 끝난 뒤에 끝나는 신호가 필요함..
 	{
-		if (!_friend->getUnits()[i]->getBattleState().valid) continue; //행동 불가능인 애들은 거르고
+		if (_friend->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue; //행동 불가능인 애들은 거르고
+		
 	}
-
 }
 void sceneBattle::enemyAction(void) //적군 턴 액션
 {
 	for (int i = 0; i < _enemy->getUnits().size(); i++)
 	{
-		if (!_enemy->getUnits()[i]->getBattleState().valid) continue;
+		if (_enemy->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue;
 	}
 }
 
@@ -325,7 +325,7 @@ void sceneBattle::setUpPlayer(void)
 	_phase = PLAYERPHASE;
 	for (int i = 0; i < _player->getUnits().size(); i++)
 	{
-		_player->getUnits()[i]->setVaild(true);
+		_player->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
 		_player->getUnits()[i]->setMoved(true);
 	}
 }

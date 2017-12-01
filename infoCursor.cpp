@@ -31,7 +31,7 @@ void infoCursor::update(void)
 		if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON)) dataClean();  //윈도우 닫기
 		if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
 		{
-			if (isShow && clickUnit == PLAYER && _player->getUnits()[vNum]->getBattleState().valid) mouse_ClickToAction(); // 
+			if (isShow && clickUnit == PLAYER && _player->getUnits()[vNum]->getUnitSequnce() == UNITSEQUENCE_TURNON &&  _player->getUnits()[vNum]->getBattleState().moved) mouse_ClickToAction(); // 
 			else if (isShow) dataClean();
 			else if (!isShow) mouse_ClickToTile();//지형 클릭 시 
 		}
@@ -553,7 +553,7 @@ void infoCursor::infoDraw(void)
 void infoCursor::mouse_ActionCancel(void)//이동명령 취소용
 {
 	_player->getUnits()[vNum]->moveBack(backToPT);
-	_player->getUnits()[vNum]->setVaild(true);
+	_player->getUnits()[vNum]->setUnitSequnce(UNITSEQUENCE_TURNON);
 	_player->getUnits()[vNum]->setMoved(true);
 	_player->getUnits()[vNum]->setDir(backToDir);
 	isCommand = false;

@@ -486,7 +486,7 @@ void Unit::updateSequence(bool bAuto)
 				}
 				_moveArea.clear();
 			}
-			else if (!bAuto && _battleState.valid)
+			else if (!bAuto)
 			{
 				_battleState.squence = UNITSEQUENCE_TURNON;
 			}
