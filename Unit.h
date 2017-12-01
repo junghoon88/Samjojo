@@ -239,9 +239,9 @@ public:
 
 	bool move(void);
 	void move(DIRECTION dir);
+	void moveTo(POINT tliePt);
 	void attack(Unit* opponent);
 	void counterAttack(Unit* opponent);
-
 	void findEnemy(TEAM myTeam, POINT closeEnemyPos);
 	void findMoveArea(void);
 	void showMoveArea(void);

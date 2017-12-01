@@ -96,9 +96,9 @@ void sceneBattle::render(void)
 	_player->render();
 	_friend->render(); 
 	_enemy->render();
-
-	_cursor->render();
 	_astar->render();
+	_cursor->render();
+	
 }
 
 POINT sceneBattle::findCloseEnemyPos(Unit* unit)

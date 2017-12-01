@@ -67,7 +67,7 @@ void Unit::render(void)
 	if (!_battleState.imgBattleIdle) return;
 	if (!_battleState.imgBattleSpc) return;
 
-
+	showMoveArea();
 	switch (_battleState.unitState)
 	{
 		case UNITSTATE_IDLE:	  //기본상태
@@ -84,8 +84,12 @@ void Unit::render(void)
 		break;
 	}
 
+<<<<<<< HEAD
 	showMoveArea();
 }
+=======
+	
+>>>>>>> e0c71a4820e0060348e1b09ff9e292a1ae5ce16c
 
 void Unit::updateStatus(void)
 {
@@ -279,6 +283,13 @@ void Unit::move(DIRECTION dir)
 
 }
 
+
+void Unit::moveTo(POINT tliePt)
+{
+	_battleState.tilePtNext = tliePt;
+}
+
+
 void Unit::attack(Unit* opponent)
 {
 	_battleState.unitState = UNITSTATE_ATK;
@@ -322,6 +333,7 @@ void Unit::counterAttack(Unit* opponent)
 
 	_battleState.squence = UNITSEQUENCE_TURNOFF;
 }
+
 
 void Unit::findEnemy(TEAM myTeam, POINT closeEnemyPos)
 {

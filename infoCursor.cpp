@@ -15,7 +15,13 @@ HRESULT infoCursor::init(void)
 {
 	isShow = false;
 	isUnit = false;
+	isCommand = false;
 	indexTile = 0;
+
+	for (int i = 0; i < BTN_MAX; i++)
+	{
+		actionBtn[i] = NULL;
+	}
 
 	rc = { WINSIZEX - SIDEWINSIZE,0,WINSIZEX,WINSIZEY };//인터페이스 간이 렉트
 	tileImgRect = RectMakeCenter(rc.left + SIDEWINSIZE / 2, 80, FROFILEIMAGE, FROFILEIMAGE);
@@ -39,33 +45,46 @@ HRESULT infoCursor::init(void)
 	unitImg = IMAGEMANAGER->findImage(L"보병");
 	tileImg = IMAGEMANAGER->findImage(L"보병");
 	drawLine = {0,0,0,0 };
+	drawMoveLine = { 0,0,0,0 };
 	oPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
 	linePen = CreatePen(PS_SOLID, 3, RGB(255, 0, 0));
 	return S_OK;
 	
 }
 
-
 void infoCursor::release(void)
 {
-
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	actionBtn[i]->release();
+	//	SAFE_DELETE(actionBtn[i]);
+	//}
 }
-
 
 void infoCursor::update(void) 
 {
-	mouse_Scanning();//지형 타일 갱신
-	if(!isShow)moveCamera();
-	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON)) dataClean();  //윈도우 닫기
-	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
+	if (!isCommand)
 	{
-		if(isShow && clickUnit == PLAYER) mouse_ClickToAction();
-	    else if (isShow) dataClean();
-		else if(!isShow) mouse_ClickToTile();//지형 클릭 시 
+		mouse_Scanning();//지형 타일 갱신
+		if (!isShow)moveCamera();
+		if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON)) dataClean();  //윈도우 닫기
+		if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
+		{
+			if (isShow && clickUnit == PLAYER) mouse_ClickToAction(); // && _player->getUnits()[vNum]->getBattleState().valid
+			else if (isShow) dataClean();
+			else if (!isShow) mouse_ClickToTile();//지형 클릭 시 
+		}
 	}
+	else if (isCommand)//명령 내린 상태이면 해당 동작이 끝날때까지 조작불가
+	{
+		if (UNITSEQUENCE_MOVE != _player->getUnits()[vNum]->getUnitSequnce())
+		{
+			dataClean();
+		
+		}
+	}
+
 }
-
-
 
 void infoCursor::render(void) 
 {
@@ -79,17 +98,21 @@ void infoCursor::render(void)
 
 void infoCursor::mouse_Scanning(void)
 {
+	indexTile = (int)(_ptMouse.x / TILESIZE) + (int)(_ptMouse.y / TILESIZE)  * TILEX;
 	if (!isShow)
 	{
-		indexTile = (int)(_ptMouse.x / TILESIZE) + (int)(_ptMouse.y / TILESIZE)  * TILEX ;
 		drawLine = { findtile->getTile()[indexTile].rc.left,findtile->getTile()[indexTile].rc.top,findtile->getTile()[indexTile].rc.right,findtile->getTile()[indexTile].rc.bottom };
+	}
+	else if (isShow && clickUnit == PLAYER)
+	{
+		int findIndex = indexTile + (MAINCAMERA->getCameraX() / TILESIZE) + (MAINCAMERA->getCameraY() / TILESIZE) * TILEX;
+		if(_player->getUnits()[vNum]->isMovableArea(findIndex))drawMoveLine = { findtile->getTile()[indexTile].rc.left,findtile->getTile()[indexTile].rc.top,findtile->getTile()[indexTile].rc.right,findtile->getTile()[indexTile].rc.bottom };
 	}
 }
 
 void infoCursor::mouse_ClickToTile(void)
 {
-	//findtile->scanUnitsPos();
-//	int findIndex = (int)(indexTile + MAINCAMERA->getCameraX()) / TILESIZE + (int)(MAINCAMERA->getCameraY() / TILESIZE) * TILEX;
+
 	int findIndex = indexTile + (MAINCAMERA->getCameraX() / TILESIZE) + (MAINCAMERA->getCameraY() / TILESIZE) * TILEX;
 
 	if (findtile->getTeamInfo()[findIndex] == TEAM_PLAYER)
@@ -428,28 +451,27 @@ void infoCursor::mouse_ClickToTile(void)
 	isShow = true;
 }
 
-void infoCursor::mouse_ClickToAction(void)//플레이어 유닛을 누른상태일때 클릭하면 취해줄 액션들
+void infoCursor::mouse_ClickToAction(void)//행동가능한 플레이어 유닛을 누른상태일때 클릭하면 취해줄 액션들
 {
 	int setindex = (int)(_ptMouse.x / TILESIZE) + (int)(_ptMouse.y / TILESIZE)  * TILEX;
 	int findIndex = setindex + (MAINCAMERA->getCameraX() / TILESIZE) + (MAINCAMERA->getCameraY() / TILESIZE) * TILEX;
-	//_player->getUnits()[vNum]->getBattleState().rc.right;//이렇게 하면 해당 유닛 오른쪽으로 윈도우를 만들 수 있을듯
-		
+	//_player->getUnits()[vNum]->getBattleState().rc.right;//액션 메뉴 렉트는 이걸 기준으로..
+	POINT goToTile;
+	goToTile.x = (findtile->getTile()[findIndex].rc.left ) / TILESIZE ;
+	goToTile.y = (findtile->getTile()[findIndex].rc.top ) / TILESIZE;
+
 	if (findIndex == (int)(_player->getUnits()[vNum]->getBattleState().tilePt.x + _player->getUnits()[vNum]->getBattleState().tilePt.y * TILEX)) //해당유닛 한번 더 클릭하면
 	{
-		unitName = L"눌렀냐"; // 이제 요기다가 메뉴 호출하면 끝남. ㅎㅎㅎㅎㅎㅎ
+		//행동가능 버튼 출력.
 	}
+	//여기에 조건으로 적유닛을 누르면 공격가능할경우 공격, 불가능할경우 무반응??
 	else if (_player->getUnits()[vNum]->isMovableArea(findIndex))//유닛이 아니고 땅 누르면 
 	{
-		unitName = L"땅"; //일단 이넘까진 된다.
+		_player->getUnits()[vNum]->moveTo(goToTile);
+		_player->getUnits()[vNum]->setUnitSequnce(UNITSEQUENCE_MOVE);
+		isCommand = true;
 	}
 	else dataClean();
-	
-
-}
-
-void infoCursor::mouse_MovetileScanning(void)
-{
-
 }
 
 void infoCursor::moveCamera(void)
@@ -496,7 +518,10 @@ void infoCursor::dataClean(void)//마우스 우클릭 시 현재 인터페이스의 정보를 초기
 		break;
 	}
 	clickUnit = NONE;
+	isCommand = false;
+	drawMoveLine = { 0,0,0,0 };
 }
+
 void infoCursor::tileLineDraw(void)
 {
 	SelectObject(getMemDC(), (HPEN)linePen);
@@ -506,7 +531,19 @@ void infoCursor::tileLineDraw(void)
 	LineTo(getMemDC(), drawLine.left, drawLine.bottom);		 //현재 타일 테두리그림
 	LineTo(getMemDC(), drawLine.left, drawLine.top);		 //현재 타일 테두리그림
 	SelectObject(getMemDC(), (HPEN)oPen);
+
+	if (isShow && clickUnit == PLAYER)
+	{
+		SelectObject(getMemDC(), (HPEN)linePen);
+		MoveToEx(getMemDC(), drawMoveLine.left, drawMoveLine.top, NULL); //이동 타일
+		LineTo(getMemDC(), drawMoveLine.right, drawMoveLine.top);		 //이동 타일 테두리그림
+		LineTo(getMemDC(), drawMoveLine.right, drawMoveLine.bottom);	 //이동 타일 테두리그림
+		LineTo(getMemDC(), drawMoveLine.left, drawMoveLine.bottom);		 //이동 타일 테두리그림
+		LineTo(getMemDC(), drawMoveLine.left, drawMoveLine.top);		 //이동 타일 테두리그림
+		SelectObject(getMemDC(), (HPEN)oPen);
+	}
 }
+
 void infoCursor::infoDraw(void)
 {
 
@@ -537,3 +574,29 @@ void infoCursor::infoDraw(void)
 	if (earth) IMAGEMANAGER->findImage(L"땅속성")->render(getMemDC(), element[3].left, element[3].top);
 	else if (!earth) IMAGEMANAGER->findImage(L"땅속성비활성")->render(getMemDC(), element[3].left, element[3].top);
 }
+
+
+//void infoCursor::buttonSetup(void)
+//{
+//	for (int i = 0; i < BTN_MAX; i++)
+//	{
+//		switch (i)
+//		{
+//		case BTN_ATTACK:
+//			actionBtn[i] = new button;
+//			actionBtn[i]->init(L"SELECT-선택버튼", L"게임시작", 50, 150, { 0,0 }, { 0,1 }, cbFuncSelect, this);
+//			break;
+//		case BTN_SKILL:
+//			actionBtn[i] = new button;
+//			actionBtn[i]->init(L"SELECT-선택버튼", L"맵편집", 50, 200, { 0,0 }, { 0,1 }, cbFuncMaptool, this);
+//			break;
+//		case BTN_ITEM:
+//			actionBtn[i] = new button;
+//			actionBtn[i]->init(L"SELECT-선택버튼", L"유닛편집", 50, 250, { 0,0 }, { 0,1 }, cbFuncUnitEditor, this);
+//			break;
+//		case BTN_WAIT:
+//			actionBtn[i] = new button;
+//			actionBtn[i]->init(L"SELECT-선택버튼", L"게임종료", 50, 300, { 0,0 }, { 0,1 }, cbFuncGameExit, this);
+//			break;
+//		}
+//}
