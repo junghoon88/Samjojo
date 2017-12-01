@@ -84,12 +84,8 @@ void Unit::render(void)
 		break;
 	}
 
-<<<<<<< HEAD
 	showMoveArea();
 }
-=======
-	
->>>>>>> e0c71a4820e0060348e1b09ff9e292a1ae5ce16c
 
 void Unit::updateStatus(void)
 {
