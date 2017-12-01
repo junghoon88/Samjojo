@@ -29,7 +29,11 @@ HRESULT sceneBattle::init(void)
 	linkClass();
 
 	_phase = PLAYERPHASE;
-
+	
+	_sDL = new scanDialog;
+	_sDL->init("scripts/script 05.txt");
+	_sDL->setNext(9);
+	ShowCursor(true);
 
 	return S_OK;
 }
@@ -42,6 +46,9 @@ void sceneBattle::release(void)
 
 	_astar->release();
 	SAFE_DELETE(_astar);
+
+	_sDL->release();
+	SAFE_DELETE(_sDL);
 }
 
 void sceneBattle::update(void)
@@ -77,12 +84,16 @@ void sceneBattle::update(void)
 			unit->findEnemy(TEAM_ENEMY, findCloseEnemyPos(unit));
 		}
 	}
-
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	{
+		_sDL->loadDialog();
+	}
 	_player->update();
 	_friend->update(); 
 	_enemy->update();
 	_map->scanUnitsPos();
 	_map->update(); 
+	_sDL->update();
 	if(_phase == PLAYERPHASE)_cursor->update();
 	else if (_phase == FRIENDPHASE); //friendAction();
 	else if (_phase == ENEMYPHASE); //enemyAction();
@@ -98,6 +109,7 @@ void sceneBattle::render(void)
 	_enemy->render();
 	_astar->render();
 	_cursor->render();
+	_sDL->render();
 	
 }
 

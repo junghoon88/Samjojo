@@ -6,6 +6,7 @@
 #include "gameMap.h"
 #include "infoCursor.h"
 #include "aStar.h"
+#include "scanDialog.h"
 
 enum tagPhase
 {
@@ -24,14 +25,14 @@ private:
 	gameMap*	_map;		//게임 맵
 	infoCursor* _cursor;	//커서 정보
 
-
+	
 
 	tagPhase	_phase;
 	int _turn; //턴 진행상황
 
 
 	aStar*		_astar;		//a* 을 전투씬에 공용으로 선언하고, 각 유닛에서 할당받아서 쓰고 싶을때 쓴다.
-
+	scanDialog* _sDL;
 private:
 	void initImage(void);
 	void initSound(void);

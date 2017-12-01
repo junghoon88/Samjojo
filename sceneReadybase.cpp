@@ -25,12 +25,16 @@ HRESULT sceneReadybase::init(void) {
 	_posClicking = _equipClicking = _buyClicking = _sellClicking = false;
 	
 
-
-
-
+	_sD = new scanDialog;
+	_sD->init("scripts/script 04.txt");
+	_sD->setNext(7);
+	ShowCursor(true);
+	_start = false;
 	return S_OK;
 }
 void sceneReadybase::release(void) {
+	_sD->release();
+	SAFE_DELETE(_sD);
 
 }
 void sceneReadybase::update(void) {
@@ -88,7 +92,15 @@ void sceneReadybase::update(void) {
 			SCENEMANAGER->changeScene(L"ÆÇ¸Å¾À");
 		}
 	}
-
+	if (_start)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			_sD->loadDialog();
+			if (_sD->getNext() == 8) SCENEMANAGER->changeScene(L"ÀüÅõ¾À");
+		}
+	}
+	_sD->update();
 }
 void sceneReadybase::render(void) {
 
@@ -113,5 +125,5 @@ void sceneReadybase::render(void) {
 
 	//Rectangle(getMemDC(), _rcPosUI.left, _rcPosUI.top, _rcPosUI.right, _rcPosUI.bottom);
 	
-	
+	_sD->render();
 }
