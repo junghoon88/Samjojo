@@ -10,6 +10,9 @@ class sceneReadybase : public gameNode
 	RECT _rcPosUI, _rcEquipUI, _rcBuyUI, _rcSellUI;
 
 	bool _posClicking;
+	bool _equipClicking;
+	bool _buyClicking;
+	bool _sellClicking;
 public:
 
 	Player* _player;

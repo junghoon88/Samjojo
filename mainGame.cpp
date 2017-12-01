@@ -216,7 +216,7 @@ void mainGame::checkWindowSize(void)
 	}
 	else if (SCENEMANAGER->isCurScene(L"준비기본씬"))
 	{
-		setWindowResize({ WINSIZEX,WINSIZEY });
+		setWindowResize({ WINSIZEX2,WINSIZEY2 });
 	}
 	else if (SCENEMANAGER->isCurScene(L"출진씬"))
 	{

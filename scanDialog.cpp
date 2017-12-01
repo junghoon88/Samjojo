@@ -70,7 +70,6 @@ void scanDialog::update(void)
 	
 	if (Mtime > 0.3f)
 	{
-		
 		if (mouse->getFrameX() >= mouse->getMaxFrameX())
 		{
 			mouse->setFrameX(0);
@@ -91,7 +90,6 @@ void scanDialog::render(void)
 	{
 		_story->alphaRender(getMemDC(), story.left, story.top,155);
 		_face->render(getMemDC(), _face->getX(), _face->getY());
-		_story->render(getMemDC(), story.left, story.top);
 		_face->render(getMemDC());
 	}
 
@@ -109,7 +107,6 @@ void scanDialog::render(void)
 			len = _tcslen(ss.c_str());
 			SetBkMode(getMemDC(), TRANSPARENT);
 			HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum2]);
-			
 			TextOut(getMemDC(), story.left + 150, story.top + 35 + 15 * (i + 1), ss.c_str(), len);
 			SelectObject(getMemDC(), oldFont);
 		}
