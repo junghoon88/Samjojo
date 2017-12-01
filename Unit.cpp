@@ -559,8 +559,6 @@ void Unit::updateImage(void)
 		break;
 	}
 
-
-
 	if (oldUnitState == _battleState.unitState)
 	{
 		float frameFPS = 10.0f;
