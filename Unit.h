@@ -150,7 +150,7 @@ enum UNITSEQUENCE
 struct tagBattleState
 {
 	BOOL			valid; //행동 가능하면 true, 행동 했으면 false
-
+	BOOL			moved;//플레이어용. 움직였나 안움직였나 체크 -> 움직였지만 추가 명령 가능상태 구분용.
 
 	POINT			pt;
 	RECT			rc;
@@ -334,6 +334,13 @@ public:
 	inline RECT getRect(void) { return _battleState.rc; }
 	inline void setBattleState(tagBattleState state) { _battleState = state; }
 	inline void setVaild(bool val) { _battleState.valid = val; }
+	inline void setMoved(bool val) { _battleState.moved = val; }
+	inline void moveBack(POINT backPT) // 이동한거 취소용.
+	{
+		_battleState.pt = backPT;
+		_battleState.rc = RectMake(_battleState.pt.x - TILESIZE / 2, _battleState.pt.y - TILESIZE / 2, TILESIZE, TILESIZE);
+		_battleState.tilePt = { (LONG)(_battleState.pt.x / TILESIZE), (LONG)(_battleState.pt.y / TILESIZE) };
+	}
 	inline UNITSEQUENCE getUnitSequnce(void) { return _battleState.squence; }
 	inline void setUnitSequnce(UNITSEQUENCE squence) { _battleState.squence = squence; }
 };

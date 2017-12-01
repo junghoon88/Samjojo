@@ -62,5 +62,7 @@ public:
 	void enemyAction(void);
 	void phaseCheck(void);
 	void linkClass(void);
+	void setUpPlayer(void);
+
 };
 

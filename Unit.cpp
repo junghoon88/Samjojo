@@ -408,7 +408,7 @@ void Unit::showMoveArea(void)
 				if (y < 0) continue;
 				if (x >= _map->getTileSizeX()) continue;
 				if (y >= _map->getTileSizeY()) continue;
-				IMAGEMANAGER->findImage(L"curAtkArea")->alphaRender(getMemDC(), x * TILESIZE - MAINCAMERA->getCameraX(), y * TILESIZE - MAINCAMERA->getCameraX(), 120);
+				IMAGEMANAGER->findImage(L"curAtkArea")->alphaRender(getMemDC(), x * TILESIZE - MAINCAMERA->getCameraX(), y * TILESIZE - MAINCAMERA->getCameraY(), 120);
 			}
 		}
 	}
@@ -437,6 +437,10 @@ void Unit::updateSequence(bool bAuto)
 					_battleState.squence = UNITSEQUENCE_TURNOFF;
 				}
 				_moveArea.clear();
+			}
+			else if (!bAuto && _battleState.valid)
+			{
+				_battleState.squence = UNITSEQUENCE_TURNON;
 			}
 		}
 		return;
