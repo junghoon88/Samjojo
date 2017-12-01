@@ -19,14 +19,12 @@ HRESULT sceneStory::init(void)
 	
 	
 	_dialog = new scanDialog;
-	
-	
 	_dialog->init("scripts/script 00.txt");
 	
 	
 	_sSmap = new scaneStorymap;
 	_sSmap->init();
-	_sSmap->setAdreessLinkDialog(_dialog);
+	_sSmap->setAddressLinkDialog(_dialog);
 
 	return S_OK;
 }
@@ -42,9 +40,6 @@ void sceneStory::release(void)
 
 void sceneStory::update(void)
 {
-	
-	
-	
 	if (!(_dialog->getDirection() ==4))
 	{
 		if (_dialog->getNext() == 0)
@@ -75,4 +70,5 @@ void sceneStory::render(void)
 	SetBkMode(getMemDC(), TRANSPARENT);
 	_dialog->render();
 	if (_dialog->getNext() == 6) SCENEMANAGER->changeScene(L"준비기본씬");
+
 }

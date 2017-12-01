@@ -70,7 +70,6 @@ void scanDialog::update(void)
 	
 	if (Mtime > 0.3f)
 	{
-		
 		if (mouse->getFrameX() >= mouse->getMaxFrameX())
 		{
 			mouse->setFrameX(0);
@@ -89,7 +88,8 @@ void scanDialog::render(void)
 	
 	if(strlen(_strName)>=1)
 	{
-		_story->render(getMemDC(), story.left, story.top);
+		_story->alphaRender(getMemDC(), story.left, story.top,155);
+		_face->render(getMemDC(), _face->getX(), _face->getY());
 		_face->render(getMemDC());
 	}
 
@@ -107,7 +107,6 @@ void scanDialog::render(void)
 			len = _tcslen(ss.c_str());
 			SetBkMode(getMemDC(), TRANSPARENT);
 			HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum2]);
-			
 			TextOut(getMemDC(), story.left + 150, story.top + 35 + 15 * (i + 1), ss.c_str(), len);
 			SelectObject(getMemDC(), oldFont);
 		}
@@ -341,6 +340,14 @@ void scanDialog::loadDialog(void)
 		else if (strcmp(_strName, "조조") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00001");
+		}
+		else if (strcmp(_strName, "양호성") == 0)
+		{
+			_face = IMAGEMANAGER->findImage(L"face 00287");
+		}
+		else if (strcmp(_strName, "하후돈") == 0)
+		{
+			_face = IMAGEMANAGER->findImage(L"face 00009");
 		}
 	}
 }

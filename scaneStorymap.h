@@ -57,6 +57,6 @@ public:
 	void render(void);
 
 	void jojomove(void);
-	void setAdreessLinkDialog(scanDialog* sD) { sDl = sD; }
+	void setAddressLinkDialog(scanDialog* sD) { sDl = sD; }
 };
 

@@ -189,6 +189,11 @@ void sceneInit::initImageUnitEditor(void)
 
 void sceneInit::initImageUnits(void)
 {
+	_loading->loadImage(L"curAtkArea", L"image/battleScene/atk_range.bmp", TILESIZE, TILESIZE, true, RGB(255, 0, 255), true);
+	_loading->loadImage(L"playerMoveAreaTile", L"image/battleScene/player_range_tile.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
+	_loading->loadImage(L"nonPlayerMoveAreaTile", L"image/battleScene/non-player_range_tile.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
+
+
 	TCHAR strKey[100], strName[100];
 	int unitNum = 0;
 	//조조
@@ -457,8 +462,8 @@ void sceneInit::initImageStory(void)
 
 	
 	//대화창
-	_loading->loadImage(L"좌대화창", L"image/story/좌측대화창.bmp", 464, 120,true,RGB(255,0,255));
-	_loading->loadImage(L"우대화창", L"image/story/우측대화창.bmp", 464, 120,true,RGB(255,0,255));
+	_loading->loadImage(L"좌대화창", L"image/story/좌측대화창.bmp", 464, 120,true,RGB(255,0,255),true);
+	_loading->loadImage(L"우대화창", L"image/story/우측대화창.bmp", 464, 120,true,RGB(255,0,255),true);
 	_loading->loadFrameImage(L"마우스", L"image/story/storyMouse.bmp", 54, 28,2,1, true, RGB(255, 0, 255));
 	_loading->loadImage(L"마우스2", L"image/story/storyMouse2.bmp", 26, 26, true, RGB(255, 0, 255));
 	//대화전 안내창
@@ -492,9 +497,12 @@ void sceneInit::initImageStory(void)
 
 void sceneInit::initImageReady(void) {
 
-	_loading->loadImage(L"레디UI", L"image/ready/readyUI.bmp", 960, 960, false, RGB(255, 0, 255));
+	_loading->loadImage(L"레디UI", L"image/ready/readyUI.bmp", 640, 400, false, RGB(255, 0, 255));
 	_loading->loadImage(L"출진UI", L"image/ready/posUI.bmp", 617, 522, false, RGB(255, 0, 255));
-	_loading->loadImage(L"출진눌림", L"image/ready/출진눌림버튼.bmp", 75, 117, false, RGB(255, 0, 255));
+	_loading->loadImage(L"출진눌림", L"image/ready/출진눌림버튼.bmp", 50, 50, false, RGB(255, 0, 255));
+	_loading->loadImage(L"장비눌림", L"image/ready/장비눌림버튼.bmp", 50, 50, false, RGB(255, 0, 255));
+	_loading->loadImage(L"구입눌림", L"image/ready/구입눌림버튼.bmp", 50, 50, false, RGB(255, 0, 255));
+	_loading->loadImage(L"매각눌림", L"image/ready/매각눌림버튼.bmp", 50, 50, false, RGB(255, 0, 255));
 	_loading->loadImage(L"결정비활성버튼", L"image/ready/결정비활성버튼.bmp", 86, 21, false, RGB(255, 0, 255));
 	_loading->loadImage(L"결정활성버튼", L"image/ready/결정활성버튼.bmp",  86, 21, false, RGB(255, 0, 255));
 	_loading->loadImage(L"결정눌림버튼", L"image/ready/결정눌림버튼.bmp",  86, 21, false, RGB(255, 0, 255));

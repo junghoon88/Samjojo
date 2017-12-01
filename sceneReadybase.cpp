@@ -17,21 +17,24 @@ HRESULT sceneReadybase::init(void) {
 
 	_baseImg = IMAGEMANAGER->findImage(L"레디UI");
 
-	_rcPosUI = RectMake(660, 840, 74, 115);
-	_rcEquipUI = RectMake(735, 840, 74, 115);
-	_rcBuyUI = RectMake(810, 840, 74, 115);
-	_rcSellUI = RectMake(884, 840, 74, 115);
+	_rcPosUI = RectMake(440, 350, 50, 50);
+	_rcEquipUI = RectMake(490, 350, 50, 50);
+	_rcBuyUI = RectMake(540, 350, 50, 50);
+	_rcSellUI = RectMake(590, 350, 50, 50);
 
-	_posClicking = false;
-
+	_posClicking = _equipClicking = _buyClicking = _sellClicking = false;
 	
 
-
-
-
+	_sD = new scanDialog;
+	_sD->init("scripts/script 04.txt");
+	_sD->setNext(7);
+	ShowCursor(true);
+	_start = false;
 	return S_OK;
 }
 void sceneReadybase::release(void) {
+	_sD->release();
+	SAFE_DELETE(_sD);
 
 }
 void sceneReadybase::update(void) {
@@ -39,21 +42,65 @@ void sceneReadybase::update(void) {
 
 	_pt.x = _ptMouse.x;
 	_pt.y = _ptMouse.y;
-	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON)) {
+	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON)) 
+	{
 		if (PtInRect(&_rcPosUI, _pt)) {  //출진창 누름
 			_posClicking = true;
 		}
 		else{
 			_posClicking = false;
 		}
+		if (PtInRect(&_rcEquipUI, _pt)) {  //장비창 누름
+			_equipClicking = true;
+		}
+		else {
+			_equipClicking = false;
+		}
+		if (PtInRect(&_rcBuyUI, _pt)) {  //장비창 누름
+			_buyClicking = true;
+		}
+		else {
+			_buyClicking = false;
+		}
+		if (PtInRect(&_rcSellUI, _pt)) {  //매각창 누름
+			_sellClicking = true;
+		}
+		else {
+			_sellClicking = false;
+		}
 	}
-	if(KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) {
-		if (PtInRect(&_rcPosUI, _pt)) {   //출진창 누르고땜
+	if(KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) 
+	{
+		if (PtInRect(&_rcPosUI, _pt)) 
+		{   //출진창 누르고땜
 			_posClicking = false;
 			SCENEMANAGER->changeScene(L"출진씬");
 		}
+		else if (PtInRect(&_rcEquipUI, _pt))
+		{   //출진창 누르고땜
+			_equipClicking = false;
+			SCENEMANAGER->changeScene(L"장비씬");
+		}
+		else if (PtInRect(&_rcBuyUI, _pt))
+		{   //출진창 누르고땜
+			_buyClicking = false;
+			SCENEMANAGER->changeScene(L"구매씬");
+		}
+		else if (PtInRect(&_rcSellUI, _pt))
+		{   //출진창 누르고땜
+			_sellClicking = false;
+			SCENEMANAGER->changeScene(L"판매씬");
+		}
 	}
-
+	if (_start)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			_sD->loadDialog();
+			if (_sD->getNext() == 8) SCENEMANAGER->changeScene(L"전투씬");
+		}
+	}
+	_sD->update();
 }
 void sceneReadybase::render(void) {
 
@@ -64,10 +111,19 @@ void sceneReadybase::render(void) {
 	TextOut(getMemDC(), 100, 100, tmp, _tcslen(tmp));
 	
 	if (_posClicking) {
-		IMAGEMANAGER->findImage(L"출진눌림")->render(getMemDC(), _rcPosUI.left, _rcPosUI.top-2);
+		IMAGEMANAGER->findImage(L"출진눌림")->render(getMemDC(), _rcPosUI.left, _rcPosUI.top);
+	}
+	if (_equipClicking) {
+		IMAGEMANAGER->findImage(L"장비눌림")->render(getMemDC(), _rcEquipUI.left, _rcEquipUI.top );
+	}
+	if (_buyClicking) {
+		IMAGEMANAGER->findImage(L"구입눌림")->render(getMemDC(), _rcBuyUI.left, _rcBuyUI.top);
+	}
+	if (_sellClicking) {
+		IMAGEMANAGER->findImage(L"매각눌림")->render(getMemDC(), _rcSellUI.left, _rcSellUI.top);
 	}
 
 	//Rectangle(getMemDC(), _rcPosUI.left, _rcPosUI.top, _rcPosUI.right, _rcPosUI.bottom);
 	
-
+	_sD->render();
 }

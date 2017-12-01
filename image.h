@@ -160,5 +160,8 @@ public:
 	inline void setWidth(float width) { _imageInfo->width = width; }
 
 	inline TCHAR* getFileName(void) { return _fileName; }
+
+	inline void nextFrameX(void) { _imageInfo->currentFrameX = _imageInfo->currentFrameX == _imageInfo->maxFrameX ? 0 : _imageInfo->currentFrameX + 1; }
+	inline void nextFrameY(void) { _imageInfo->currentFrameY = _imageInfo->currentFrameY == _imageInfo->maxFrameY ? 0 : _imageInfo->currentFrameY + 1; }
 };
 
