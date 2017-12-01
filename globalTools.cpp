@@ -85,6 +85,23 @@ void globalTools::setFontAll(void)
 				FF_DONTCARE,			
 				TEXT("바탕체"));			
 			break;
+		case FONTVERSION_SAMJOJO_HEE:
+			_gFont[i] = CreateFont(
+				13,
+				6,
+				0,
+				0,
+				300,
+				false,
+				false,
+				false,
+				HANGUL_CHARSET,
+				OUT_DEFAULT_PRECIS,
+				CLIP_DEFAULT_PRECIS,
+				DEFAULT_QUALITY,
+				FF_DONTCARE,
+				TEXT("a세종실록M"));
+			break;
 		}
 	}
 }

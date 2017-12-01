@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "sceneReadybase.h"
 
-
 sceneReadybase::sceneReadybase()
 {
 }
@@ -24,13 +23,16 @@ HRESULT sceneReadybase::init(void) {
 
 	_posClicking = _equipClicking = _buyClicking = _sellClicking = false;
 	
-
-
-
-
+	_sD = new scanDialog;
+	_sD->init("scripts/script 04.txt");
+	_sD->setNext(7);
+	ShowCursor(true);
+	
 	return S_OK;
 }
 void sceneReadybase::release(void) {
+	_sD->release();
+	SAFE_DELETE(_sD);
 
 }
 void sceneReadybase::update(void) {
@@ -89,14 +91,25 @@ void sceneReadybase::update(void) {
 		}
 	}
 
+	_vUnits = _player->getUnits();
+	if (_vUnits.size() > 3)
+	{
+		_sD->update();
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			_sD->loadDialog();
+			if (_sD->getNext() == 8) SCENEMANAGER->changeScene(L"전투씬");
+		}
+	}
+	
 }
 void sceneReadybase::render(void) {
 
 	_baseImg->render(getMemDC(), 0, 0);
 
-	TCHAR tmp[30];
-	_stprintf(tmp, L"x: %d, y: %d", _pt.x, _pt.y);
-	TextOut(getMemDC(), 100, 100, tmp, _tcslen(tmp));
+	//TCHAR tmp[30];
+	//_stprintf(tmp, L"x: %d, y: %d", _pt.x, _pt.y);
+	//TextOut(getMemDC(), 100, 100, tmp, _tcslen(tmp));
 	
 	if (_posClicking) {
 		IMAGEMANAGER->findImage(L"출진눌림")->render(getMemDC(), _rcPosUI.left, _rcPosUI.top);
@@ -113,5 +126,5 @@ void sceneReadybase::render(void) {
 
 	//Rectangle(getMemDC(), _rcPosUI.left, _rcPosUI.top, _rcPosUI.right, _rcPosUI.bottom);
 	
-	
+	_sD->render();
 }
