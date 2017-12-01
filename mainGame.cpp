@@ -96,6 +96,7 @@ void mainGame::initScene(void)
 	_scenePos->setLinkAdressPlayer(_player);
 	SCENEMANAGER->addScene(L"ÃâÁø¾À", _scenePos);
 
+
 	sceneEquip* _sceneEquip = new sceneEquip;                      //Àåºñ¾À
 	_sceneEquip->setLinkAdressPlayer(_player);
 	SCENEMANAGER->addScene(L"Àåºñ¾À", _sceneEquip);
