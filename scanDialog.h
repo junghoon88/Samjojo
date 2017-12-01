@@ -42,6 +42,7 @@ public:
 	
 	
 	inline int getNext(void) { return next; }
+	inline void setNext(int nt) { next = nt; }
 	inline float getTime(void) { return time; }
 	inline int getDirection(void){ return Direction; }
 	inline void setDirection(int dr) { Direction = dr; }

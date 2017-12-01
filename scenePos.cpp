@@ -26,7 +26,6 @@ HRESULT scenePos::init(void) {
 	_okClicking = false;
 	_cancelClicking = false;
 
-
 	//이름배정
 	_tcscpy(_posUnits[0].name, L"조조");
 	_tcscpy(_posUnits[1].name, L"조인");
@@ -166,6 +165,9 @@ void scenePos::update(void){
 			_vUnits.clear();
 			_player->setUnits(_vUnits);
 			_player->registUnitBasic();
+			SCENEMANAGER->changeScene(L"준비기본씬");
+		}
+		if(PtInRect(&_rcOK, _pt) && _availableOK) {  //결정클릭
 			SCENEMANAGER->changeScene(L"준비기본씬");
 		}
 		for (int i = 0; i < 7; i++) {

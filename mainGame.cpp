@@ -96,6 +96,7 @@ void mainGame::initScene(void)
 	_scenePos->setLinkAdressPlayer(_player);
 	SCENEMANAGER->addScene(L"ÃâÁø¾À", _scenePos);
 
+
 	sceneEquip* _sceneEquip = new sceneEquip;                      //Àåºñ¾À
 	_sceneEquip->setLinkAdressPlayer(_player);
 	SCENEMANAGER->addScene(L"Àåºñ¾À", _sceneEquip);
@@ -216,7 +217,7 @@ void mainGame::checkWindowSize(void)
 	}
 	else if (SCENEMANAGER->isCurScene(L"ÁØºñ±âº»¾À"))
 	{
-		setWindowResize({ WINSIZEX,WINSIZEY });
+		setWindowResize({ WINSIZEX2,WINSIZEY2 });
 	}
 	else if (SCENEMANAGER->isCurScene(L"ÃâÁø¾À"))
 	{

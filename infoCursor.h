@@ -81,7 +81,7 @@ private:
 	RECT infoBox;
 	button* actionBtn[BTN_MAX];
 	btnName btName;
-
+	POINT backToPT;
 	bool isCommand;
 	//플레이어 유닛 클릭시 표시할 정보,공격,스킬,도구,대기,취소
 
@@ -93,12 +93,13 @@ public:
 	infoCursor();
 	~infoCursor();
 	void buttonSetup(void);
-public:
+
 	HRESULT init(void);
 	void release(void);
 	void update(void);
 	void render(void);
 
+	void infoSetup(void);// == init
 	void dataClean(void);//마우스 우클릭시 클리어 용
 	void tileLineDraw(void);
 	void infoDraw(void);
@@ -106,7 +107,8 @@ public:
 	void mouse_Scanning(void);
 	void mouse_ClickToTile(void);
 	void mouse_ClickToAction(void);
-
+	void mouse_ActionCancel(void);
+	void callToMenu(void);
 public:
 	inline void setLinkPlyer(Player* player) { _player = player; }
 	inline void setLinkEnemy(Enemy* enm) { _enemy = enm; }

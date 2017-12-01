@@ -27,8 +27,15 @@ HRESULT sceneBattle::init(void)
 	_astar->init(_map);
 
 	linkClass();
+	setUpPlayer();//
 
 	_phase = PLAYERPHASE;
+	
+	_sDL = new scanDialog;
+	_sDL->init("scripts/script 05.txt");
+	_sDL->setNext(9);
+	ShowCursor(true);
+
 
 
 	return S_OK;
@@ -42,6 +49,9 @@ void sceneBattle::release(void)
 
 	_astar->release();
 	SAFE_DELETE(_astar);
+
+	_sDL->release();
+	SAFE_DELETE(_sDL);
 }
 
 void sceneBattle::update(void)
@@ -77,12 +87,16 @@ void sceneBattle::update(void)
 			unit->findEnemy(TEAM_ENEMY, findCloseEnemyPos(unit));
 		}
 	}
-
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	{
+		_sDL->loadDialog();
+	}
 	_player->update();
 	_friend->update(); 
 	_enemy->update();
 	_map->scanUnitsPos();
 	_map->update(); 
+	_sDL->update();
 	if(_phase == PLAYERPHASE)_cursor->update();
 	else if (_phase == FRIENDPHASE); //friendAction();
 	else if (_phase == ENEMYPHASE); //enemyAction();
@@ -98,6 +112,7 @@ void sceneBattle::render(void)
 	_enemy->render();
 	_astar->render();
 	_cursor->render();
+	_sDL->render();
 	
 }
 
@@ -207,11 +222,7 @@ void sceneBattle::phaseCheck(void)
 		}
 		if (_Active == 0)
 		{
-			for (int i = 0; i < _player->getUnits().size(); i++)
-			{
-				_player->getUnits()[i]->setVaild(true);
-			}
-			_phase = PLAYERPHASE;
+			setUpPlayer();
 		}
 	}
 }
@@ -306,4 +317,15 @@ Unit* sceneBattle::findUnit(TEAM team, POINT pt)
 	}
 
 	return NULL;
+}
+
+
+void sceneBattle::setUpPlayer(void)
+{
+	_phase = PLAYERPHASE;
+	for (int i = 0; i < _player->getUnits().size(); i++)
+	{
+		_player->getUnits()[i]->setVaild(true);
+		_player->getUnits()[i]->setMoved(true);
+	}
 }

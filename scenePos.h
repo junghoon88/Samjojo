@@ -22,7 +22,6 @@ private:
 
 	image* _expbar;
 
-
 	image* _atkbar;
 	image* _depbar;
 	image* _resbar;

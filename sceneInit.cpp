@@ -497,9 +497,12 @@ void sceneInit::initImageStory(void)
 
 void sceneInit::initImageReady(void) {
 
-	_loading->loadImage(L"레디UI", L"image/ready/readyUI.bmp", 960, 960, false, RGB(255, 0, 255));
+	_loading->loadImage(L"레디UI", L"image/ready/readyUI.bmp", 640, 400, false, RGB(255, 0, 255));
 	_loading->loadImage(L"출진UI", L"image/ready/posUI.bmp", 617, 522, false, RGB(255, 0, 255));
-	_loading->loadImage(L"출진눌림", L"image/ready/출진눌림버튼.bmp", 75, 117, false, RGB(255, 0, 255));
+	_loading->loadImage(L"출진눌림", L"image/ready/출진눌림버튼.bmp", 50, 50, false, RGB(255, 0, 255));
+	_loading->loadImage(L"장비눌림", L"image/ready/장비눌림버튼.bmp", 50, 50, false, RGB(255, 0, 255));
+	_loading->loadImage(L"구입눌림", L"image/ready/구입눌림버튼.bmp", 50, 50, false, RGB(255, 0, 255));
+	_loading->loadImage(L"매각눌림", L"image/ready/매각눌림버튼.bmp", 50, 50, false, RGB(255, 0, 255));
 	_loading->loadImage(L"결정비활성버튼", L"image/ready/결정비활성버튼.bmp", 86, 21, false, RGB(255, 0, 255));
 	_loading->loadImage(L"결정활성버튼", L"image/ready/결정활성버튼.bmp",  86, 21, false, RGB(255, 0, 255));
 	_loading->loadImage(L"결정눌림버튼", L"image/ready/결정눌림버튼.bmp",  86, 21, false, RGB(255, 0, 255));

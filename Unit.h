@@ -5,6 +5,7 @@
 #include "gameMap.h"
 
 #define MAXDEF 100
+#define MAXLVL 50
 
 struct tagStatus //기본정보 (수정하지말것)
 {
@@ -32,20 +33,20 @@ struct tagStatus //기본정보 (수정하지말것)
 	int Dep;		//방어력
 	int Res;		//정신력
 	int Agl;		//순발력
-	int Fig;		//사기
-	int Pwr;		//무력
+	int Fig;		//사기		↑변화스탯
+	int Pwr;		//무력		↓고정스탯
 	int Lds;		//통솔
 	int Int;		//지력
 	int Dex;		//민첩
-	int Luk;		//운
+	int Luk;		//운	
 
 	//기본 수치
 	int InitHPMax;
 	int InitMPMax;
-	int InitAtk;		//공격력
-	int InitDep;		//방어력
-	int InitRes;		//정신력
-	int InitAgl;		//순발력
+	int InitAtk;		//공격력 = 무력/2
+	int InitDep;		//방어력 = 통솔/2
+	int InitRes;		//정신력 = 지력/2
+	int InitAgl;		//순발력 = 민첩/2
 	int InitFig;		//사기
 	int InitPwr;		//무력
 	int InitLds;		//통솔
@@ -150,7 +151,7 @@ enum UNITSEQUENCE
 struct tagBattleState
 {
 	BOOL			valid; //행동 가능하면 true, 행동 했으면 false
-
+	BOOL			moved;//플레이어용. 움직였나 안움직였나 체크 -> 움직였지만 추가 명령 가능상태 구분용.
 
 	POINT			pt;
 	RECT			rc;
@@ -210,6 +211,10 @@ private:
 	int _imgFrameTime;
 	int _imgFrameY;
 
+	UNITSEQUENCE _oldSeq;
+
+	int _delayTime;
+
 protected:
 	tagStatus		_status;
 
@@ -254,6 +259,7 @@ public:
 	inline void earnExp(int exp) { _status.exp += exp; };
 	inline void	expMaxCheck(void);
 
+public:
 	inline tagStatus getStatus(void) { return _status; }
 	inline void setStatus(tagStatus status) { _status = status; }
 	inline ItemWeapon* getItemW(void) { return _itemW; }
@@ -338,6 +344,13 @@ public:
 	inline RECT getRect(void) { return _battleState.rc; }
 	inline void setBattleState(tagBattleState state) { _battleState = state; }
 	inline void setVaild(bool val) { _battleState.valid = val; }
+	inline void setMoved(bool val) { _battleState.moved = val; }
+	inline void moveBack(POINT backPT) // 이동한거 취소용.
+	{
+		_battleState.pt = backPT;
+		_battleState.rc = RectMake(_battleState.pt.x - TILESIZE / 2, _battleState.pt.y - TILESIZE / 2, TILESIZE, TILESIZE);
+		_battleState.tilePt = { (LONG)(_battleState.pt.x / TILESIZE), (LONG)(_battleState.pt.y / TILESIZE) };
+	}
 	inline UNITSEQUENCE getUnitSequnce(void) { return _battleState.squence; }
 	inline void setUnitSequnce(UNITSEQUENCE squence) { _battleState.squence = squence; }
 };
