@@ -26,14 +26,13 @@ HRESULT Unit::init(gameMap* map)
 	_itemA = NULL;
 	_itemS = NULL;
 
-
-	_idleFrmCnt = _idleFrmIdx = _atkFrmCnt = _atkFrmIdx = 0;
-
-
 	ZeroMemory(&_battleState, sizeof(tagBattleState));
 
 	_map = map;
 
+
+	_imgFrameTime = 0;
+	_imgFrameY = 0;
 	return S_OK;
 }
 
@@ -42,57 +41,24 @@ void Unit::release(void)
 	_moveArea.clear();
 }
 
-void Unit::update(void)
+void Unit::update(TEAM team)
 {
-//Unit Sequenece: 턴 동안 진행되는 행동들
-	updateSequence();
+	updateStatus();	// 초기능력치 + 레벨당능력치 + 아이템능력치
+	expMaxCheck();	// 경험치 확인
+	
 
-
-//~Unit Sequence
-
-	switch (_battleState.unitState)
+	switch (team)
 	{
-		case UNITSTATE_IDLE:	  //기본상태
-			_battleState.frameIdle = (FRAME_IDLE)_battleState.dir;
-			_battleState.imgBattleIdle->setFrameX(_battleState.frameIdle);
+		case TEAM_PLAYER:
+			updateSequence(false);
 		break;
-		case UNITSTATE_ATK:	  //공격상태
-			_battleState.frameAtk = (FRAME_ATK)_battleState.dir;
-			_battleState.imgBattleAtk->setFrameX(_battleState.frameAtk);
-		break;
-		case UNITSTATE_DEF:	  //방어상태
-			_battleState.frameSpc = (FRAME_SPC)_battleState.dir;
-			_battleState.imgBattleSpc->setFrameX(_battleState.frameSpc);
-		break;
-		case UNITSTATE_HIT:    //피격상태
-			_battleState.frameSpc = FRAME_SPC_HIT;
-			_battleState.imgBattleSpc->setFrameX(_battleState.frameSpc);
-		break;
-		case UNITSTATE_VIC:    //승리
-			_battleState.frameSpc = FRAME_SPC_VIC;
-			_battleState.imgBattleSpc->setFrameX(_battleState.frameSpc);
-		break;
-		case UNITSTATE_TIRED:
-			_battleState.frameIdle = FRAME_IDLE_TIRED;
-			_battleState.imgBattleIdle->setFrameX(_battleState.frameIdle);
+		case TEAM_FRIEND:
+		case TEAM_ENEMY:
+			updateSequence(true);
 		break;
 	}
 
-	
-	_idleFrmCnt++;
-
-	if (_idleFrmCnt % 10 == 0)
-	{
-		if (_idleFrmIdx >= _battleState.imgBattleIdle->getMaxFrameY())
-		{
-			_idleFrmIdx = 0;
-		}
-
-		else _idleFrmIdx++;
-
-		_idleFrmCnt = 0;
-	}
-	
+	updateImage();
 }
 
 void Unit::render(void)
@@ -101,26 +67,48 @@ void Unit::render(void)
 	if (!_battleState.imgBattleIdle) return;
 	if (!_battleState.imgBattleSpc) return;
 
-
+	showMoveArea();
 	switch (_battleState.unitState)
 	{
 		case UNITSTATE_IDLE:	  //기본상태
 		case UNITSTATE_TIRED:
-			_battleState.imgBattleIdle->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY(), _battleState.frameIdle, _idleFrmIdx);
+			_battleState.imgBattleIdle->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY(), _battleState.frameIdle, _imgFrameY);
 		break;
 		case UNITSTATE_ATK:	  //공격상태
-			_battleState.imgBattleAtk->frameRender(getMemDC(), _battleState.rc.left, _battleState.rc.top, _battleState.frameAtk, _atkFrmIdx);
+			_battleState.imgBattleAtk->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY(), _battleState.frameAtk, _imgFrameY);
 		break;
 		case UNITSTATE_DEF:	  //방어상태
 		case UNITSTATE_HIT:    //피격상태
 		case UNITSTATE_VIC:    //승리
-			_battleState.imgBattleSpc->frameRender(getMemDC(), _battleState.rc.left, _battleState.rc.top, _battleState.frameSpc, 0);
+			_battleState.imgBattleSpc->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY(), _battleState.frameSpc, _imgFrameY);
 		break;
 	}
 
 	showMoveArea();
+}
 
-	TCHAR str[200];
+void Unit::updateStatus(void)
+{
+	_status.HP = _status.HPMax = _status.InitHPMax + (_status.level * _status.LvPerHPMax) + _status.ItemPlusHPMax;
+	_status.MP = _status.MPMax = _status.InitMPMax + (_status.level * _status.LvPerMPMax) + _status.ItemPlusMPMax;
+	_status.Atk = _status.InitAtk + (_status.level * _status.LvPerAtk) + _status.ItemPlusAtk;
+	_status.Dep = _status.InitDep + (_status.level * _status.LvPerDep) + _status.ItemPlusDep;
+	_status.Res = _status.InitRes + (_status.level * _status.LvPerRes) + _status.ItemPlusRes;
+	_status.Agl = _status.InitAgl + (_status.level * _status.LvPerAgl) + _status.ItemPlusAgl;
+	_status.Fig = _status.InitFig + (_status.level * _status.LvPerFig) + _status.ItemPlusFig;
+	_status.Pwr = _status.InitPwr + (_status.level * _status.LvPerPwr) + _status.ItemPlusPwr;
+	_status.Lds = _status.InitLds + (_status.level * _status.LvPerLds) + _status.ItemPlusLds;
+	_status.Int = _status.InitInt + (_status.level * _status.LvPerInt) + _status.ItemPlusInt;
+	_status.Dex = _status.InitDex + (_status.level * _status.LvPerDex) + _status.ItemPlusDex;
+	_status.Luk = _status.InitLuk + (_status.level * _status.LvPerLuk) + _status.ItemPlusLuk;
+}
+void Unit::expMaxCheck(void)
+{
+	if (_status.expMax <= _status.exp)
+	{
+		_status.exp = 0;
+		_status.level += 1;
+	}
 }
 
 void Unit::loadUnitData(tagUnitSaveInfo &info)
@@ -291,6 +279,13 @@ void Unit::move(DIRECTION dir)
 
 }
 
+
+void Unit::moveTo(POINT tliePt)
+{
+	_battleState.tilePtNext = tliePt;
+}
+
+
 void Unit::attack(Unit* opponent)
 {
 	_battleState.unitState = UNITSTATE_ATK;
@@ -334,6 +329,7 @@ void Unit::counterAttack(Unit* opponent)
 
 	_battleState.squence = UNITSEQUENCE_TURNOFF;
 }
+
 
 void Unit::findEnemy(TEAM myTeam, POINT closeEnemyPos)
 {
@@ -408,20 +404,15 @@ void Unit::showMoveArea(void)
 		switch (_status.team)
 		{
 			case TEAM_PLAYER:
-				IMAGEMANAGER->findImage(L"playerMoveAreaTile")->alphaRender(getMemDC(), x * TILESIZE, y * TILESIZE, 120);
+				IMAGEMANAGER->findImage(L"playerMoveAreaTile")->alphaRender(getMemDC(), x * TILESIZE - MAINCAMERA->getCameraX(), y * TILESIZE - MAINCAMERA->getCameraY(), 120);
 			break;
 			case TEAM_FRIEND:
-				IMAGEMANAGER->findImage(L"nonPlayerMoveAreaTile")->alphaRender(getMemDC(), x * TILESIZE, y * TILESIZE, 120);
+				IMAGEMANAGER->findImage(L"nonPlayerMoveAreaTile")->alphaRender(getMemDC(), x * TILESIZE - MAINCAMERA->getCameraX(), y * TILESIZE - MAINCAMERA->getCameraY(), 120);
 			break;
 			case TEAM_ENEMY:
-				IMAGEMANAGER->findImage(L"nonPlayerMoveAreaTile")->alphaRender(getMemDC(), x * TILESIZE, y * TILESIZE, 120);
+				IMAGEMANAGER->findImage(L"nonPlayerMoveAreaTile")->alphaRender(getMemDC(), x * TILESIZE - MAINCAMERA->getCameraX(), y * TILESIZE - MAINCAMERA->getCameraY(), 120);
 			break;
 		}
-
-		TCHAR str[10];
-		_stprintf(str, L"%d", cost);
-
-		TextOut(getMemDC(), x * TILESIZE + 20, y * TILESIZE + 20, str, _tcslen(str));
 
 		TCHAR str2[10];
 		_stprintf(str2, L"%d", cost);
@@ -441,7 +432,7 @@ void Unit::showMoveArea(void)
 				if (y < 0) continue;
 				if (x >= _map->getTileSizeX()) continue;
 				if (y >= _map->getTileSizeY()) continue;
-				IMAGEMANAGER->findImage(L"curAtkArea")->alphaRender(getMemDC(), x * TILESIZE, y * TILESIZE, 120);
+				IMAGEMANAGER->findImage(L"curAtkArea")->alphaRender(getMemDC(), x * TILESIZE - MAINCAMERA->getCameraX(), y * TILESIZE - MAINCAMERA->getCameraX(), 120);
 			}
 		}
 	}
@@ -452,42 +443,26 @@ void Unit::clearMoveArea(void)
 	_moveArea.clear();
 }
 
-void Unit::atkFrmPlay(void)
-{
-	_atkFrmCnt++;
-
-	if (_atkFrmCnt % 10 == 0)
-	{
-		if (_atkFrmIdx >= _battleState.imgBattleAtk->getMaxFrameY())
-		{
-			_atkFrmIdx = 0;
-		}
-
-		else _atkFrmIdx++;
-
-		_atkFrmCnt = 0;
-	}
-}
-
-void Unit::updateSequence(void)
+void Unit::updateSequence(bool bAuto)
 {
 	if (_battleState.squence == UNITSEQUENCE_MOVE)	// findEnemy 함수에서 변경해줌
 	{
 		_battleState.isMoving = move();
 		if (_battleState.isMoving == FALSE)
 		{
-			if (_battleState.findEnemy)
+			if (bAuto)
 			{
-				_battleState.squence = UNITSEQUENCE_ATTACK;
+				if (_battleState.findEnemy)
+				{
+					_battleState.squence = UNITSEQUENCE_ATTACK;
+				}
+				else
+				{
+					_battleState.squence = UNITSEQUENCE_TURNOFF;
+				}
+				_moveArea.clear();
 			}
-			else
-			{
-				_battleState.squence = UNITSEQUENCE_TURNOFF;
-			}
-
-			_moveArea.clear();
 		}
-
 		return;
 	}
 
@@ -517,4 +492,68 @@ void Unit::updateSequence(void)
 	//	if (_battleState.findEnemy) opponent->setUnitState(UNITSTATE_IDLE);
 	//	_battleState.unitState = UNITSTATE_IDLE;
 	//}
+}
+
+void Unit::updateImage(void)
+{
+	UNITSTATE oldUnitState = _battleState.unitState;
+
+	switch (_battleState.unitState)
+	{
+	case UNITSTATE_IDLE:	  //기본상태
+		_battleState.frameIdle = (FRAME_IDLE)_battleState.dir;
+		break;
+	case UNITSTATE_ATK:	  //공격상태
+		_battleState.frameAtk = (FRAME_ATK)_battleState.dir;
+		break;
+	case UNITSTATE_DEF:	  //방어상태
+		_battleState.frameSpc = (FRAME_SPC)_battleState.dir;
+		break;
+	case UNITSTATE_HIT:    //피격상태
+		_battleState.frameSpc = FRAME_SPC_HIT;
+		break;
+	case UNITSTATE_VIC:    //승리
+		_battleState.frameSpc = FRAME_SPC_VIC;
+		break;
+	case UNITSTATE_TIRED:
+		_battleState.frameIdle = FRAME_IDLE_TIRED;
+		break;
+	}
+
+
+
+	if (oldUnitState == _battleState.unitState)
+	{
+		float frameFPS = 10.0f;
+
+		_imgFrameTime += TIMEMANAGER->getElapsedTime();
+		if (_imgFrameTime >= (1 / frameFPS))
+		{
+			switch (_battleState.unitState)
+			{
+			case UNITSTATE_IDLE:	  //기본상태
+			case UNITSTATE_TIRED:
+				_imgFrameY = _imgFrameY == _battleState.imgBattleIdle->getMaxFrameY() ? 0 : _imgFrameY + 1;
+				break;
+			case UNITSTATE_ATK:	  //공격상태
+				_imgFrameY = _imgFrameY == _battleState.imgBattleAtk->getMaxFrameY() ? 0 : _imgFrameY + 1;
+				break;
+			case UNITSTATE_DEF:	  //방어상태
+			case UNITSTATE_HIT:    //피격상태
+			case UNITSTATE_VIC:    //승리
+				_imgFrameY = _imgFrameY == _battleState.imgBattleSpc->getMaxFrameY() ? 0 : _imgFrameY + 1;
+				break;
+			}
+
+			_imgFrameTime -= (1 / frameFPS);
+		}
+	}
+	else
+	{
+		_imgFrameTime = 0;
+		_imgFrameY = 0;
+	}
+		
+		
+
 }

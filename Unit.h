@@ -207,11 +207,8 @@ class Unit : public gameNode
 private:
 	typedef BOOL(*Temp)[UNIT_ATTACK_RANGE_MAX];
 
-	int _idleFrmCnt;
-	int _idleFrmIdx;
-
-	int _atkFrmCnt;
-	int _atkFrmIdx;
+	int _imgFrameTime;
+	int _imgFrameY;
 
 protected:
 	tagStatus		_status;
@@ -234,7 +231,7 @@ public:
 
 	HRESULT init(gameMap* map);
 	void release(void);
-	void update(void);
+	void update(TEAM team);
 	void render(void);
 
 	void loadUnitData(tagUnitSaveInfo &info);
@@ -242,18 +239,21 @@ public:
 
 	bool move(void);
 	void move(DIRECTION dir);
+	void moveTo(POINT tliePt);
 	void attack(Unit* opponent);
 	void counterAttack(Unit* opponent);
-
 	void findEnemy(TEAM myTeam, POINT closeEnemyPos);
 	void findMoveArea(void);
 	void showMoveArea(void);
 	void clearMoveArea(void);
 
-	void atkFrmPlay(void);
-
-	void updateSequence(void);
+	void updateSequence(bool bAuto);
+	void updateImage(void);
 public:
+	inline void updateStatus(void);
+	inline void earnExp(int exp) { _status.exp += exp; };
+	inline void	expMaxCheck(void);
+
 	inline tagStatus getStatus(void) { return _status; }
 	inline void setStatus(tagStatus status) { _status = status; }
 	inline ItemWeapon* getItemW(void) { return _itemW; }

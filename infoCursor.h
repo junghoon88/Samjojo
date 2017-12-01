@@ -2,6 +2,7 @@
 #include "tileNode.h"
 #include "gameNode.h"
 #include "progressBar.h"
+#include "button.h"
 
 #define FROFILEIMAGE 120
 
@@ -9,6 +10,16 @@ class Player;
 class Enemy;
 class Friend;
 class gameMap;
+
+enum btnName
+{
+	BTN_NONE,
+	BTN_SKILL,
+	BTN_ATTACK,
+	BTN_ITEM,
+	BTN_WAIT,
+	BTN_MAX
+};
 
 enum clickFW
 {
@@ -26,6 +37,7 @@ private:
 
 	RECT rc;//정보 제공용 박스
 	RECT drawLine;//타일 테두리 표시용
+	RECT drawMoveLine;
 	HPEN linePen,oPen;
 	RECT tileImgRect;
 	image* tileImg;
@@ -67,10 +79,10 @@ private:
 	//지형 정보 표시용
 	//플레이어 유닛 클릭시 표시할 정보,공격,스킬,도구,대기,취소
 	RECT infoBox;
-	
+	button* actionBtn[BTN_MAX];
+	btnName btName;
 
-
-
+	bool isCommand;
 	//플레이어 유닛 클릭시 표시할 정보,공격,스킬,도구,대기,취소
 
 
@@ -80,7 +92,8 @@ private:
 public:
 	infoCursor();
 	~infoCursor();
-
+	void buttonSetup(void);
+public:
 	HRESULT init(void);
 	void release(void);
 	void update(void);
@@ -91,7 +104,6 @@ public:
 	void infoDraw(void);
 	void moveCamera(void);
 	void mouse_Scanning(void);
-	void mouse_MovetileScanning(void);//플레이어 유닛 클릭 시 이동가능 타일 검색용
 	void mouse_ClickToTile(void);
 	void mouse_ClickToAction(void);
 
