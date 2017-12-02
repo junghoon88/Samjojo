@@ -13,7 +13,7 @@ class gameMap;
 
 enum btnName
 {
-	BTN_NONE,
+	BTN_NONE = -1,
 	BTN_SKILL,
 	BTN_ATTACK,
 	BTN_ITEM,
@@ -120,13 +120,14 @@ public:
 	void dataClean(void);//마우스 우클릭시 클리어 용
 	void tileLineDraw(void);
 	void infoDraw(void);
+	void cmdDraw(void);
 	void moveCamera(void);
 	void mouse_Scanning(void);
 	void mouse_ClickToTile(void);
 	void mouse_ClickToAction(void);
 	void mouse_ActionCancel(void);
 	void mouse_ClickToAttack(void);
-	void callToMenu(void);
+	void callToMenu(POINT mouse);
 
 public:
 	inline void setLinkPlyer(Player* player) { _player = player; }

@@ -47,13 +47,17 @@ void battleSceneInterface::update(void)
 		{
 			//이동취소.
 			_player->getUnits()[vNum]->setMoved(false);
-			callToMenu();//메뉴화면을 호출
+		//	callToMenu(_ptMouse);//메뉴화면을 호출
 			isCommand = false;
 		}
 	}
-	else if (popUpMenu)
+	else if (popUpMenu) //커맨드 목록이 활성화 됬을때
 	{
-		callToMenu();
+		for (int i = 0; i < BTN_MAX; i++)
+		{
+			if (actionBtn[i] == NULL)continue;
+			actionBtn[i]->update();
+		}
 	}
 }
 
@@ -64,6 +68,10 @@ void battleSceneInterface::render(void)
 	if (isShow)
 	{
 		infoDraw();// 정보 표시
+	}
+	if (popUpMenu)
+	{
+		cmdDraw();
 	}
 }
 
@@ -95,6 +103,15 @@ void battleSceneInterface::mouse_ClickToTile(void)
 				vNum = i;
 				isUnit = true;
 				clickUnit = PLAYER;
+				exp = _player->getUnits()[i]->getStatus().exp;
+				lv = _player->getUnits()[i]->getStatus().level;
+				atk = _player->getUnits()[i]->getStatus().Atk;
+				def = _player->getUnits()[i]->getStatus().Dep;
+				curHp = _player->getUnits()[i]->getStatus().HP;
+				maxHp = _player->getUnits()[i]->getStatus().HPMax;
+				curMp = _player->getUnits()[i]->getStatus().MP;
+				maxMp = _player->getUnits()[i]->getStatus().MPMax;
+				movePoint;
 				_tcscpy(factionName, L"플레이어");
 				_tcscpy(unitName, _player->getUnits()[i]->getStatus().name);
 				unitImg = _player->getUnits()[i]->getStatus().imgFace;
@@ -112,6 +129,14 @@ void battleSceneInterface::mouse_ClickToTile(void)
 				vNum = i;
 				isUnit = true;
 				clickUnit = FRIEND;
+				exp = _friend->getUnits()[i]->getStatus().exp;
+				lv = _friend->getUnits()[i]->getStatus().level;
+				atk = _friend->getUnits()[i]->getStatus().Atk;
+				def = _friend->getUnits()[i]->getStatus().Dep;
+				curHp = _friend->getUnits()[i]->getStatus().HP;
+				maxHp = _friend->getUnits()[i]->getStatus().HPMax;
+				curMp = _friend->getUnits()[i]->getStatus().MP;
+				maxMp = _friend->getUnits()[i]->getStatus().MPMax;
 				_tcscpy(factionName, L"아군");
 				_tcscpy(unitName, _friend->getUnits()[i]->getStatus().name);
 				unitImg = _friend->getUnits()[i]->getStatus().imgFace;
@@ -129,6 +154,14 @@ void battleSceneInterface::mouse_ClickToTile(void)
 				vNum = i;
 				isUnit = true;
 				clickUnit = ENEMY;
+				exp = _enemy->getUnits()[i]->getStatus().exp;
+				lv = _enemy->getUnits()[i]->getStatus().level;
+				atk = _enemy->getUnits()[i]->getStatus().Atk;
+				def = _enemy->getUnits()[i]->getStatus().Dep;
+				curHp = _enemy->getUnits()[i]->getStatus().HP;
+				maxHp = _enemy->getUnits()[i]->getStatus().HPMax;
+				curMp = _enemy->getUnits()[i]->getStatus().MP;
+				maxMp = _enemy->getUnits()[i]->getStatus().MPMax;
 				_tcscpy(factionName, L"적군");
 				_tcscpy(unitName, _enemy->getUnits()[i]->getStatus().name);
 				unitImg = _enemy->getUnits()[i]->getStatus().imgFace;
@@ -434,7 +467,7 @@ void battleSceneInterface::mouse_ClickToAction(void)//행동가능한 플레이어 유닛을
 	//해당유닛 한번 더 클릭하면
 	if (findIndex == (int)(_player->getUnits()[vNum]->getBattleState().tilePt.x + _player->getUnits()[vNum]->getBattleState().tilePt.y * TILEX) && _player->getUnits()[vNum]->getUnitSequnce() == UNITSEQUENCE_TURNON)
 	{
-		popUpMenu = true;;//행동가능 버튼 출력.
+		//행동가능 버튼 출력.
 	}
 	//적 유닛 클릭 시
 	if (findtile->getTeamInfo()[findIndex] == TEAM_ENEMY)
@@ -453,6 +486,7 @@ void battleSceneInterface::mouse_ClickToAction(void)//행동가능한 플레이어 유닛을
 	}
 	else if(_player->getUnits()[vNum]->getBattleState().moved) dataClean();
 }
+
 void battleSceneInterface::mouse_ClickToAttack(void)
 {
 	int setindex = (int)(_ptMouse.x / TILESIZE) + (int)(_ptMouse.y / TILESIZE)  * TILEX;
@@ -527,9 +561,13 @@ void battleSceneInterface::dataClean(void)//마우스 우클릭 시 현재 인터페이스의 �
 	isCommand = false;
 	drawMoveLine = { 0,0,0,0 };
 }
-void battleSceneInterface::callToMenu(void)
+void battleSceneInterface::callToMenu(POINT mouse)
 {
-	
+	popUpMenu = true;
+	if (mouse.y <= WINSIZEY / 2)
+	{
+
+	}
 }
 
 void battleSceneInterface::tileLineDraw(void)
@@ -548,7 +586,14 @@ void battleSceneInterface::tileLineDraw(void)
 		LineTo(getMemDC(), drawMoveLine.left, drawMoveLine.top);		 //이동 타일 테두리그림
 		SelectObject(getMemDC(), (HPEN)oPen);
 }
-
+void battleSceneInterface::cmdDraw(void)
+{
+	for (int i = 0; i < BTN_MAX; i++)
+	{
+		if (actionBtn[i] == NULL) continue;
+		actionBtn[i]->render(cmdBox.left, cmdBox.top);
+	}
+}
 void battleSceneInterface::infoDraw(void)
 {
 	IMAGEMANAGER->findImage(L"스크롤")->render(getMemDC(), rc.left, rc.top);
@@ -605,6 +650,7 @@ void battleSceneInterface::buttonSetup(void)
 			actionBtn[i] = new button;
 			actionBtn[i]->init(L"SELECT-선택버튼", L"취소", cmdBox.left + 5, cmdBox.top + 5 + 35 + 35 + 35, { 0,0 }, { 0,1 }, cb_cancel, this);
 			break;
+
 		}
 	}
 }
