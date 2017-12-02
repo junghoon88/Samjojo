@@ -48,7 +48,6 @@ void Unit::release(void)
 
 void Unit::update(TEAM team)
 {
-	updateStatus();	// 초기능력치 + 레벨당능력치 + 아이템능력치
 	expMaxCheck();	// 경험치 확인
 
 	switch (team)
@@ -130,6 +129,17 @@ void Unit::expMaxCheck(void)
 	{
 		_status.exp = 0;
 		if (_status.level < MAXLVL) _status.level += 1;
+	}
+}
+
+void Unit::useItem(Unit* unit, int type, int value)
+{
+	switch (type)	// TESTITEM 변경시 변경 필요, 매개변수도 마찬가지
+	{
+		case 0:
+			unit->setCurHP(unit->getCurHP() + value);
+			if (unit->getCurHP() > unit->getMaxHP()) unit->setCurHP(unit->getMaxHP());
+		break;
 	}
 }
 
@@ -332,6 +342,12 @@ void Unit::attack(Unit* opponent)
 void Unit::counterAttack(Unit* opponent)
 {
 	opponent->setUnitState(UNITSTATE_ATK);
+
+	//반격하는 방향으로 전환
+	if (_battleState.tilePt.y > opponent->getBattleState().tilePt.y) opponent->setDir(DIRECTION_DN);
+	if (_battleState.tilePt.y < opponent->getBattleState().tilePt.y) opponent->setDir(DIRECTION_UP);
+	if (_battleState.tilePt.x < opponent->getBattleState().tilePt.x) opponent->setDir(DIRECTION_LF);
+	if (_battleState.tilePt.x > opponent->getBattleState().tilePt.x) opponent->setDir(DIRECTION_RG);
 
 	if (1)
 	{

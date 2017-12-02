@@ -26,7 +26,7 @@ enum clickFW
 	NONE,PLAYER,FRIEND,ENEMY
 };
 
-class infoCursor : public gameNode
+class battleSceneInterface : public gameNode
 {
 private:
 	Player*		_player;
@@ -55,16 +55,22 @@ private:
 	TCHAR unitName[100];
 	TCHAR utype[100];//클래스
 	TCHAR factionName[100];//진영(아군적군)
-	TCHAR showExp[100];//플레이어는 아군적군대신 경험치 표시됨
-	TCHAR showAtk[100];//A.K.A 공격력
+	TCHAR txtExp[10];
+	TCHAR txtAtk[10];//A.K.A 공격력
+	TCHAR txtDef[10];
+	TCHAR txtMove[10];
 	
 	int vNum;// v넘버
 	int bonus;//밟은 땅에 따른 전투력 증감표시
 	int exp;
 	int lv;
-	progressBar hpBar;
+	int atk;
+	int def;
+	int movePoint;
+
+	progressBar* hpBar;
 	int curHp, maxHp;
-	progressBar mpBar;
+	progressBar* mpBar;
 	int curMp, maxMp;
 	//유닛 정보 표시용
 
@@ -99,9 +105,10 @@ private:
 	bool isUnit;//Unit은 true. 지형은 false
 	bool isShow;//클릭하면 true로
 	bool popUpMenu;
+	bool targetAttack;
 public:
-	infoCursor();
-	~infoCursor();
+	battleSceneInterface();
+	~battleSceneInterface();
 	void buttonSetup(void);
 
 	HRESULT init(void);
@@ -118,7 +125,9 @@ public:
 	void mouse_ClickToTile(void);
 	void mouse_ClickToAction(void);
 	void mouse_ActionCancel(void);
+	void mouse_ClickToAttack(void);
 	void callToMenu(void);
+
 public:
 	inline void setLinkPlyer(Player* player) { _player = player; }
 	inline void setLinkEnemy(Enemy* enm) { _enemy = enm; }

@@ -45,7 +45,7 @@ HRESULT scenePos::init(void) {
 	_posUnits[2].isPos = true;
 	
 	for (int i = 0; i < _vUnitsInFile.size(); i++) {
-		_vUnitsInFile[i]->update(TEAM_PLAYER);
+		_vUnitsInFile[i]->updateStatus();
 		if (!_tcscmp(_vUnitsInFile[i]->getStatus().name, L"Á¶Á¶")) {
 			_chosang = _vUnitsInFile[i]->getStatus().imgFace;
 			_tcscpy(_name, _vUnitsInFile[i]->getStatus().name);

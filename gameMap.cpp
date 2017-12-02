@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "Friend.h"
 #include "Enemy.h"
-#include "infoCursor.h"
+#include "battleSceneInterface.h"
 #include "Unit.h"
 
 

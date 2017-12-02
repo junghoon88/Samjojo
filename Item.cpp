@@ -58,7 +58,7 @@ ItemArmor::~ItemArmor()
 {
 }
 
-HRESULT ItemArmor::init(ITEM_CLASS icls,ITEMA_CLASS cls, int atk, int dep, int res, int hp, int mp) {
+HRESULT ItemArmor::init(ITEM_CLASS icls, ITEMA_CLASS cls, const TCHAR *name, const TCHAR *img32key, const TCHAR *img16key, int atk, int dep, int res, int hp, int mp){
 
 	_cls = icls;
 	_atk = atk;
