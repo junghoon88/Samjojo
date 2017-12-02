@@ -566,19 +566,19 @@ void infoCursor::buttonSetup(void)
 		{
 		case BTN_ATTACK:
 			actionBtn[i] = new button;
-			actionBtn[i]->init(L"SELECT-선택버튼", L"공격", 50, 150, { 0,0 }, { 0,1 }, cb_attack, this);
+			actionBtn[i]->init(L"SELECT-선택버튼", L"공격", cmdBox.left + 5, cmdBox.top + 5, { 0,0 }, { 0,1 }, cb_attack, this);
 			break;
 		case BTN_SKILL:
 			actionBtn[i] = new button;
-			actionBtn[i]->init(L"SELECT-선택버튼", L"도구", 50, 200, { 0,0 }, { 0,1 }, cb_item, this);
+			actionBtn[i]->init(L"SELECT-선택버튼", L"도구", cmdBox.left + 5, cmdBox.top + 5 + 35, { 0,0 }, { 0,1 }, cb_item, this);
 			break;
 		case BTN_ITEM:
 			actionBtn[i] = new button;
-			actionBtn[i]->init(L"SELECT-선택버튼", L"대기", 50, 250, { 0,0 }, { 0,1 }, cb_wait, this);
+			actionBtn[i]->init(L"SELECT-선택버튼", L"대기", cmdBox.left + 5, cmdBox.top + 5 + 35 + 35, { 0,0 }, { 0,1 }, cb_wait, this);
 			break;
 		case BTN_WAIT:
 			actionBtn[i] = new button;
-			actionBtn[i]->init(L"SELECT-선택버튼", L"취소", 50, 300, { 0,0 }, { 0,1 }, cb_cancel, this);
+			actionBtn[i]->init(L"SELECT-선택버튼", L"취소", cmdBox.left + 5, cmdBox.top + 5 + 35 + 35 + 35, { 0,0 }, { 0,1 }, cb_cancel, this);
 			break;
 		}
 	}
@@ -665,6 +665,7 @@ void infoCursor::infoSetup(void)
 	linePen = CreatePen(PS_SOLID, 3, RGB(255, 0, 0));
 
 	buttonSetup();
-	cmdBox = RectMakeCenter(0, 0, 110, 250);
+	cmdBox = RectMakeCenter(0, 0, 110, 145);
+
 
 }

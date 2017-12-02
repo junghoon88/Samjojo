@@ -7,6 +7,8 @@
 #define MAXDEF 100
 #define MAXLVL 50
 
+#define TESTITEM 1
+
 struct tagStatus //기본정보 (수정하지말것)
 {
 	TCHAR name[32];
@@ -259,6 +261,7 @@ public:
 	inline void updateStatus(void);
 	inline void earnExp(int exp) { _status.exp += exp; };
 	inline void	expMaxCheck(void);
+	inline void useItem(Unit* unit);
 
 public:
 	inline tagStatus getStatus(void) { return _status; }
@@ -295,7 +298,9 @@ public:
 	inline void setUnitState(UNITSTATE state) { _battleState.unitState = state; }
 	inline UNITSTATE getUnitState(void) { return _battleState.unitState; }
 
-	inline void setCurHP(int damage) { _status.HP -= damage; }
+	inline void setMaxHP(int val) { _status.HPMax = val; }
+	inline int getMaxHP(void) { return _status.HPMax; }
+	inline void setCurHP(int val) { _status.HP = val; }
 	inline int getCurHP(void) { return _status.HP; }
 
 	inline void setImgBattleIdle(int num)

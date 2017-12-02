@@ -132,6 +132,40 @@ void Unit::expMaxCheck(void)
 	}
 }
 
+void Unit::useItem(Unit* unit)
+{
+
+#if TESTITEM
+	enum ITEMTYPE
+	{
+		ITEMTYPE_HEAL,
+		ITEMTYPE_DEAL,
+		ITEMTYPE_MAX
+	};
+	struct tagItem
+	{
+		ITEMTYPE	itemType;
+		int			value;
+	};
+
+	tagItem testItem;
+	testItem.itemType = ITEMTYPE_HEAL;
+	testItem.value = 50;
+#endif
+
+	switch (testItem.itemType)	// TESTITEM 변경시 변경 필요, 매개변수도 마찬가지
+	{
+		case ITEMTYPE_HEAL:
+			unit->setCurHP(unit->getCurHP() + testItem.value);
+			if (unit->getCurHP() > unit->getMaxHP()) unit->setCurHP(unit->getMaxHP());
+		break;
+		case ITEMTYPE_DEAL:
+			unit->setCurHP(unit->getCurHP() - testItem.value);
+			if (unit->getCurHP() < 0) unit->setCurHP(0);
+		break;
+	}
+}
+
 void Unit::loadUnitData(tagUnitSaveInfo &info)
 {
 	//기본 정보
@@ -331,6 +365,12 @@ void Unit::attack(Unit* opponent)
 void Unit::counterAttack(Unit* opponent)
 {
 	opponent->setUnitState(UNITSTATE_ATK);
+
+	//반격하는 방향으로 전환
+	if (_battleState.tilePt.y > opponent->getBattleState().tilePt.y) opponent->setDir(DIRECTION_DN);
+	if (_battleState.tilePt.y < opponent->getBattleState().tilePt.y) opponent->setDir(DIRECTION_UP);
+	if (_battleState.tilePt.x < opponent->getBattleState().tilePt.x) opponent->setDir(DIRECTION_LF);
+	if (_battleState.tilePt.x > opponent->getBattleState().tilePt.x) opponent->setDir(DIRECTION_RG);
 
 	if (1)
 	{
