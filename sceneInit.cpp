@@ -499,6 +499,7 @@ void sceneInit::initImageReady(void) {
 
 	_loading->loadImage(L"레디UI", L"image/ready/readyUI.bmp", 640, 400, false, RGB(255, 0, 255));
 	_loading->loadImage(L"출진UI", L"image/ready/posUI.bmp", 617, 522, false, RGB(255, 0, 255));
+	_loading->loadImage(L"장비UI", L"image/ready/장비UI.bmp", 632, 365, false, RGB(255, 0, 255));
 	_loading->loadImage(L"출진눌림", L"image/ready/출진눌림버튼.bmp", 50, 50, false, RGB(255, 0, 255));
 	_loading->loadImage(L"장비눌림", L"image/ready/장비눌림버튼.bmp", 50, 50, false, RGB(255, 0, 255));
 	_loading->loadImage(L"구입눌림", L"image/ready/구입눌림버튼.bmp", 50, 50, false, RGB(255, 0, 255));
@@ -508,7 +509,10 @@ void sceneInit::initImageReady(void) {
 	_loading->loadImage(L"결정눌림버튼", L"image/ready/결정눌림버튼.bmp",  86, 21, false, RGB(255, 0, 255));
 	_loading->loadImage(L"취소버튼", L"image/ready/취소버튼.bmp", 86, 21, false, RGB(255, 0, 255));
 	_loading->loadImage(L"취소눌림버튼", L"image/ready/취소눌림버튼.bmp", 86, 21, false, RGB(255, 0, 255));
-
+	_loading->loadImage(L"뒤로버튼", L"image/ready/뒤로버튼.bmp", 74, 22, false, RGB(255, 0, 255));
+	_loading->loadImage(L"뒤로눌림버튼", L"image/ready/뒤로눌림버튼.bmp", 74, 22, false, RGB(255, 0, 255));
+	_loading->loadImage(L"다음버튼", L"image/ready/다음버튼.bmp", 74, 22, false, RGB(255, 0, 255));
+	_loading->loadImage(L"다음눌림버튼", L"image/ready/다음눌림버튼.bmp", 74, 22, false, RGB(255, 0, 255));
 
 	_loading->loadImage(L"체력바", L"image/ready/체력바.bmp", 129, 9, false, RGB(255, 0, 255));
 	_loading->loadImage(L"마나바", L"image/ready/마나바.bmp", 129, 9, false, RGB(255, 0, 255));

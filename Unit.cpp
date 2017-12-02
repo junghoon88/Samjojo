@@ -98,7 +98,7 @@ void Unit::render(void)
 		break;
 	}
 
-	showMoveArea();
+	
 }
 
 void Unit::updateStatus(void)
