@@ -58,7 +58,7 @@ void sceneInit::initImage(void)
 	initImageStory();
 	initImageReady();
 	initImageUnits();
-
+	initImageItems();
 	initImageUI();
 }
 
@@ -551,7 +551,35 @@ void sceneInit::initImageUI(void)
 	_loading->loadImage(L"수속성비활성", L"image/icon/un_water.bmp", 24, 24, true, RGB(255, 0, 255));
 	_loading->loadImage(L"스크롤", L"image/battleScene/scroll.bmp", 144, 960, true, RGB(255, 0, 255));
 }
+void sceneInit::initImageItems(void) {
+	//size 32
+	_loading->loadImage(L"가죽갑옷32", L"image/item/32/가죽갑옷.bmp", 32, 32, true, RGB(255, 0, 255));
+	_loading->loadImage(L"가죽방패32", L"image/item/32/가죽방패.bmp", 32, 32, true, RGB(255, 0, 255));
+	_loading->loadImage(L"고정도32", L"image/item/32/고정도.bmp", 32, 32, true, RGB(255, 0, 255));
+	_loading->loadImage(L"단검32", L"image/item/32/단검.bmp", 32, 32, true, RGB(255, 0, 255));
+	_loading->loadImage(L"단창32", L"image/item/32/단창.bmp", 32, 32, true, RGB(255, 0, 255));
+	_loading->loadImage(L"반궁32", L"image/item/32/반궁.bmp", 32, 32, true, RGB(255, 0, 255));
+	_loading->loadImage(L"신수장갑32", L"image/item/32/신수장갑.bmp", 32, 32, true, RGB(255, 0, 255));
+	_loading->loadImage(L"의천검32", L"image/item/32/의천검.bmp", 32, 32, true, RGB(255, 0, 255));
+	_loading->loadImage(L"제후검32", L"image/item/32/제후검.bmp", 32, 32, true, RGB(255, 0, 255));
+	_loading->loadImage(L"태평청령서32", L"image/item/32/태평청령서.bmp", 32, 32, true, RGB(255, 0, 255));
+	_loading->loadImage(L"황금방패32", L"image/item/32/황금방패.bmp", 32, 32, true, RGB(255, 0, 255));
 
+	//size 16
+	_loading->loadImage(L"가죽갑옷16", L"image/item/16/가죽갑옷.bmp", 16,16, true, RGB(255, 0, 255));
+	_loading->loadImage(L"가죽방패16", L"image/item/16/가죽방패.bmp", 16, 16, true, RGB(255, 0, 255));
+	_loading->loadImage(L"고정도16", L"image/item/16/고정도.bmp", 16, 16, true, RGB(255, 0, 255));
+	_loading->loadImage(L"단검16", L"image/item/16/단검.bmp", 16,16, true, RGB(255, 0, 255));
+	_loading->loadImage(L"단창16", L"image/item/16/단창.bmp", 16,16, true, RGB(255, 0, 255));
+	_loading->loadImage(L"반궁16", L"image/item/16/반궁.bmp", 16,16, true, RGB(255, 0, 255));
+	_loading->loadImage(L"신수장갑16", L"image/item/16/신수장갑.bmp", 16, 16, true, RGB(255, 0, 255));
+	_loading->loadImage(L"의천검16", L"image/item/16/의천검.bmp", 16,16, true, RGB(255, 0, 255));
+	_loading->loadImage(L"제후검16", L"image/item/16/제후검.bmp", 16,16, true, RGB(255, 0, 255));
+	_loading->loadImage(L"태평청령서16", L"image/item/16/태평청령서.bmp", 16, 16, true, RGB(255, 0, 255));
+	_loading->loadImage(L"황금방패16", L"image/item/16/황금방패.bmp", 16, 16, true, RGB(255, 0, 255));
+	_loading->loadImage(L"회복의콩", L"image/item/16/회복의콩.bmp", 16, 16, true, RGB(255, 0, 255));
+
+}
 void sceneInit::initSound(void)
 {
 	TCHAR strKey[256], strName[256];

@@ -53,6 +53,7 @@ public:
 	inline void setUnits(vUnits vunits) { _vUnits = vunits; }
 	inline vUnits getUnitsInFile(void) { return _vUnitsInFile; }
 	inline vItems getItems(void) { return _vItems; }
+	inline void setItems(vItems items) { _vItems = items; }
 	inline void setLinkAdressFriend(Friend* friends) { _friend = friends; }
 	inline void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
 	inline void setLinkAdressMap(gameMap* map) { _map = map; }
