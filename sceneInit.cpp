@@ -514,6 +514,7 @@ void sceneInit::initImageReady(void) {
 	_loading->loadImage(L"마나바", L"image/ready/마나바.bmp", 129, 9, false, RGB(255, 0, 255));
 	_loading->loadImage(L"경험치바", L"image/ready/경험치바.bmp", 129, 9, false, RGB(255, 0, 255));
 	_loading->loadImage(L"능력치바", L"image/ready/능력치바.bmp", 129, 9, false, RGB(255, 0, 255));
+	_loading->loadImage(L"빈바", L"image/ready/빈바.bmp", 129, 9, false, RGB(255, 0, 255));
 
 	//출진유닛
 	_loading->loadImage(L"조조출진", L"image/ready/조조.bmp", 84, 84, true, RGB(255, 0, 255));

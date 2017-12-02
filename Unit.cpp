@@ -48,7 +48,6 @@ void Unit::release(void)
 
 void Unit::update(TEAM team)
 {
-	updateStatus();	// 초기능력치 + 레벨당능력치 + 아이템능력치
 	expMaxCheck();	// 경험치 확인
 
 	switch (team)
@@ -393,6 +392,7 @@ void Unit::counterAttack(Unit* opponent)
 
 void Unit::findEnemy(TEAM myTeam, POINT closeEnemyPos)
 {
+	if (_battleState.squence != UNITSEQUENCE_TURNON) return;
 	//1. 공격 범위 넣고
 	_astar->resetAtkRange();
 	for (int i = 0; i < UNIT_ATTACK_RANGE_MAX; i++)
@@ -546,7 +546,7 @@ void Unit::updateSequence(bool bAuto)
 			if (opponent->getStatus().atkRange[_battleState.tilePt.x][_battleState.tilePt.y] == TRUE )
 			{
 				_battleState.squence = UNITSEQUENCE_COUNTER;
-			}			
+			}
 			else _battleState.squence = UNITSEQUENCE_IDLE;
 		}
 		else _battleState.squence = UNITSEQUENCE_IDLE;

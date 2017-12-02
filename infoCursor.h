@@ -52,25 +52,25 @@ private:
 
 
 	//유닛 정보 표시용
-	TCHAR* unitName;
-	TCHAR* utype;//클래스
-	TCHAR* factionName;//진영(아군적군)
-	TCHAR* showExp;//플레이어는 아군적군대신 경험치 표시됨
-	TCHAR* showAtk;//A.K.A 공격력
+	TCHAR unitName[100];
+	TCHAR utype[100];//클래스
+	TCHAR factionName[100];//진영(아군적군)
+	TCHAR showExp[100];//플레이어는 아군적군대신 경험치 표시됨
+	TCHAR showAtk[100];//A.K.A 공격력
 	
 	int vNum;// v넘버
 	int bonus;//밟은 땅에 따른 전투력 증감표시
 	int exp;
 	int lv;
-	progressBar hpBar;
+	progressBar* hpBar;
 	int curHp, maxHp;
-	progressBar mpBar;
+	progressBar* mpBar;
 	int curMp, maxMp;
 	//유닛 정보 표시용
 
 	//지형 정보 표시용
-	TCHAR* tilename;
-	TCHAR* prop;
+	TCHAR tilename[100];
+	TCHAR prop[100];
 	int tileNum;
 	bool fire;
 	bool wind;
