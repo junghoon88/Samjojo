@@ -37,6 +37,7 @@ HRESULT sceneBattle::init(void)
 	_sDL->setNext(9);
 	ShowCursor(true);
 
+	_isDialog = false;
 
 
 	return S_OK;
@@ -57,6 +58,21 @@ void sceneBattle::release(void)
 
 void sceneBattle::update(void)
 {
+	if (_isDialog)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			_sDL->loadDialog();
+		}
+		_sDL->update();
+
+		return;
+	}
+
+
+
+
+
 	//debug
 	{
 		Unit* unit = _enemy->getUnits()[1];
@@ -88,16 +104,12 @@ void sceneBattle::update(void)
 			unit->findEnemy(TEAM_ENEMY, findCloseEnemyPos(unit));
 		}
 	}
-	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-	{
-		_sDL->loadDialog();
-	}
+
 	_player->update();
 	//_friend->update();
 	//_enemy->update();
 
 	_map->update(); 
-	_sDL->update();
 	friendAction();
 	enemyAction();
 	_map->scanUnitsPos();
@@ -116,7 +128,12 @@ void sceneBattle::render(void)
 	_enemy->render();
 	_astar->render();
 	_cursor->render();
-	_sDL->render();
+
+
+	if (_isDialog)
+	{
+		_sDL->render();
+	}
 	
 }
 
