@@ -24,19 +24,19 @@ void infoCursor::release(void)
 
 void infoCursor::update(void) 
 {
-	if (!isCommand)
+	if (!isCommand && !popUpMenu)
 	{
 		mouse_Scanning();//지형 타일 갱신
 		if (!isShow)moveCamera();
 		if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON)) dataClean();  //윈도우 닫기
 		if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
 		{
-			if (isShow && clickUnit == PLAYER && _player->getUnits()[vNum]->getBattleState().valid) mouse_ClickToAction(); // 
+			if (isShow && clickUnit == PLAYER && _player->getUnits()[vNum]->getUnitSequnce() == UNITSEQUENCE_TURNON &&  _player->getUnits()[vNum]->getBattleState().moved) mouse_ClickToAction(); // 
 			else if (isShow) dataClean();
 			else if (!isShow) mouse_ClickToTile();//지형 클릭 시 
 		}
 	}
-	else if (isCommand)//명령 내린 상태이면 해당 동작이 끝날때까지 조작불가
+	else if (isCommand && !popUpMenu)//명령 내린 상태이면 해당 동작이 끝날때까지 조작불가
 	{
 		if (UNITSEQUENCE_MOVE != _player->getUnits()[vNum]->getUnitSequnce()) 
 		{
@@ -46,6 +46,10 @@ void infoCursor::update(void)
 			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON)) dataClean();
 			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON)) mouse_ActionCancel();
 		}
+	}
+	else if (popUpMenu)
+	{
+		callToMenu();
 	}
 
 }
@@ -87,8 +91,8 @@ void infoCursor::mouse_ClickToTile(void)
 				vNum = i;
 				isUnit = true;
 				clickUnit = PLAYER;
-				factionName = L"플레이어";
-				unitName = _player->getUnits()[i]->getStatus().name;
+				_tcscpy(factionName, L"플레이어");
+				_tcscpy(unitName, _player->getUnits()[i]->getStatus().name);
 				unitImg = _player->getUnits()[i]->getStatus().imgFace;
 				_player->getUnits()[i]->findMoveArea();
 				break;
@@ -104,8 +108,8 @@ void infoCursor::mouse_ClickToTile(void)
 				vNum = i;
 				isUnit = true;
 				clickUnit = FRIEND;
-				factionName = L"아군";
-				unitName = _friend->getUnits()[i]->getStatus().name;
+				_tcscpy(factionName, L"아군");
+				_tcscpy(unitName, _friend->getUnits()[i]->getStatus().name);
 				unitImg = _friend->getUnits()[i]->getStatus().imgFace;
 				_friend->getUnits()[i]->findMoveArea();
 				break;
@@ -121,8 +125,8 @@ void infoCursor::mouse_ClickToTile(void)
 				vNum = i;
 				isUnit = true;
 				clickUnit = ENEMY;
-				factionName = L"적군";
-				unitName = _enemy->getUnits()[i]->getStatus().name;
+				_tcscpy(factionName, L"적군");
+				_tcscpy(unitName, _enemy->getUnits()[i]->getStatus().name);
 				unitImg = _enemy->getUnits()[i]->getStatus().imgFace;
 				_enemy->getUnits()[i]->findMoveArea();
 				break;
@@ -134,24 +138,24 @@ void infoCursor::mouse_ClickToTile(void)
 	switch (findtile->getTile()[findIndex].terrain)
 	{
 	case TERRAIN_RIVER:
-		tilename = L"강";
-		prop = L"이동 불가";
+		_tcscpy(tilename, L"강");
+		_tcscpy(prop, L"이동 불가");
 		fire = false;
 		water = false;
 		wind = false;
 		earth = false;
 		break;
 	case TERRAIN_BRIDGE:
-		tilename = L"다리";
-		prop = L"";
+		_tcscpy(tilename, L"다리");
+		_tcscpy(prop, L"");
 		fire = true;
 		water = true;
 		wind = true;
 		earth = false;
 		break;
 	case TERRAIN_WATER:
-		tilename = L"대하";
-		prop = L"이동 불가";
+		_tcscpy(tilename, L"대하");
+		_tcscpy(prop, L"이동 불가");
 		fire = true;
 		water = true;
 		wind = true;
@@ -159,8 +163,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_DITCH:
-		tilename = L"도랑";
-		prop = L"이동 불가";
+		_tcscpy(tilename, L"도랑");
+		_tcscpy(prop, L"이동 불가");
 		fire = false;
 		water = false;
 		wind = false;
@@ -168,8 +172,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_VILLAGE:
-		tilename = L"마을";
-		prop = L"회복 있음";
+		_tcscpy(tilename, L"마을");
+		_tcscpy(prop, L"회복 있음");
 		fire = true;
 		water = false;
 		wind = false;
@@ -177,8 +181,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_PREMISES:
-		tilename = L"가옥";
-		prop = L"";
+		_tcscpy(tilename, L"가옥");
+		_tcscpy(prop, L"");
 		fire = true;
 		water = false;
 		wind = false;
@@ -186,8 +190,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_ROCK:
-		tilename = L"암벽";
-		prop = L"이동 불가";
+		_tcscpy(tilename, L"암벽");
+		_tcscpy(prop, L"이동 불가");
 		fire = false;
 		water = false;
 		wind = false;
@@ -195,8 +199,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_SHIP:
-		tilename = L"배";
-		prop = L"이동 불가";
+		_tcscpy(tilename, L"배");
+		_tcscpy(prop, L"이동 불가");
 		fire = false;
 		water = false;
 		wind = false;
@@ -204,8 +208,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_BROW:
-		tilename = L"벼랑";
-		prop = L"이동 불가";
+		_tcscpy(tilename, L"벼랑");
+		_tcscpy(prop, L"이동 불가");
 		fire = false;
 		water = false;
 		wind = false;
@@ -213,8 +217,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_BARRACK:
-		tilename = L"병영";
-		prop = L"회복 있음";
+		_tcscpy(tilename, L"병영");
+		_tcscpy(prop, L"회복 있음");
 		fire = true;
 		water = false;
 		wind = false;
@@ -222,8 +226,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_WAREHOUSE:
-		tilename = L"보급소";
-		prop = L"회복 있음";
+		_tcscpy(tilename, L"보급소");
+		_tcscpy(prop, L"회복 있음");
 		fire = true;
 		water = false;
 		wind = false;
@@ -231,8 +235,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_FIRE:
-		tilename = L"불";
-		prop = L"이동 불가";
+		_tcscpy(tilename, L"불");
+		_tcscpy(prop, L"이동 불가");
 		fire = false;
 		water = false;
 		wind = false;
@@ -240,8 +244,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_MOUNTAIN:
-		tilename = L"산";
-		prop = L"";
+		_tcscpy(tilename, L"산");
+		_tcscpy(prop, L"");
 		fire = false;
 		water = false;
 		wind = true;
@@ -249,8 +253,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_SNOW:
-		tilename = L"설원";
-		prop = L"";
+		_tcscpy(tilename, L"설원");
+		_tcscpy(prop, L"");
 		fire = false;
 		water = false;
 		wind = false;
@@ -258,8 +262,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_CASTLE:
-		tilename = L"성";
-		prop = L"회복 있음";
+		_tcscpy(tilename, L"성");
+		_tcscpy(prop, L"회복 있음");
 		fire = true;
 		water = false;
 		wind = false;
@@ -267,8 +271,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_INCASTLE:
-		tilename = L"성내";
-		prop = L"";
+		_tcscpy(tilename, L"성내");
+		_tcscpy(prop, L"");
 		fire = true;
 		water = false;
 		wind = false;
@@ -276,8 +280,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_CASTLEGATE:
-		tilename = L"성문";
-		prop = L"이동 불가";
+		_tcscpy(tilename, L"성문");
+		_tcscpy(prop, L"이동 불가");
 		fire = false;
 		water = false;
 		wind = false;
@@ -285,8 +289,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_RAMPART:
-		tilename = L"성벽";
-		prop = L"이동 불가";
+		_tcscpy(tilename, L"성벽");
+		_tcscpy(prop, L"이동 불가");
 		fire = false;
 		water = false;
 		wind = false;
@@ -294,8 +298,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_FOREST:
-		tilename = L"숲";
-		prop = L"";
+		_tcscpy(tilename, L"숲");
+		_tcscpy(prop, L"");
 		fire = true;
 		water = false;
 		wind = false;
@@ -303,8 +307,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_SWAMP:
-		tilename = L"슾지";
-		prop = L"";
+		_tcscpy(tilename, L"슾지");
+		_tcscpy(prop, L"");
 		fire = false;
 		water = true;
 		wind = true;
@@ -312,8 +316,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_FORD:
-		tilename = L"여울";
-		prop = L"";
+		_tcscpy(tilename, L"여울");
+		_tcscpy(prop, L"");
 		fire = false;
 		water = true;
 		wind = true;
@@ -321,8 +325,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_POND:
-		tilename = L"연못";
-		prop = L"이동 불가";
+		_tcscpy(tilename, L"연못");
+		_tcscpy(prop, L"이동 불가");
 		fire = false;
 		water = false;
 		wind = false;
@@ -330,8 +334,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_STRONGHOLD:
-		tilename = L"요새";
-		prop = L"회복 있음";
+		_tcscpy(tilename, L"요새");
+		_tcscpy(prop, L"회복 있음");
 		fire = true;
 		water = false;
 		wind = false;
@@ -339,8 +343,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERAAIN_FENCE:
-		tilename = L"울타리";
-		prop = L"이동 불가";
+		_tcscpy(tilename, L"울타리");
+		_tcscpy(prop, L"이동 불가");
 		fire = false;
 		water = false;
 		wind = false;
@@ -348,8 +352,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_ALTER:
-		tilename = L"제단";
-		prop = L"";
+		_tcscpy(tilename, L"제단");
+		_tcscpy(prop, L"");
 		fire = false;
 		water = false;
 		wind = false;
@@ -357,8 +361,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_UNDERGROUND:
-		tilename = L"지하";
-		prop = L"이동 불가";
+		_tcscpy(tilename, L"지하");
+		_tcscpy(prop, L"이동 불가");
 		fire = false;
 		water = false;
 		wind = false;
@@ -366,8 +370,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_GRASSLAND:
-		tilename = L"초원";
-		prop = L"";
+		_tcscpy(tilename, L"초원");
+		_tcscpy(prop, L"");
 		fire = true;
 		water = false;
 		wind = true;
@@ -375,8 +379,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_FLAT:
-		tilename = L"평지";
-		prop = L"";
+		_tcscpy(tilename, L"평지");
+		_tcscpy(prop, L"");
 		fire = true;
 		water = false;
 		wind = true;
@@ -384,8 +388,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_BADLANDS:
-		tilename = L"황무지";
-		prop = L"";
+		_tcscpy(tilename, L"황무지");
+		_tcscpy(prop, L"");
 		fire = false;
 		water = false;
 		wind = true;
@@ -393,8 +397,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_GATEWAY:
-		tilename = L"관문";
-		prop = L"회복 있음";
+		_tcscpy(tilename, L"관문");
+		_tcscpy(prop, L"회복 있음");
 		fire = true;
 		water = false;
 		wind = false;
@@ -402,8 +406,8 @@ void infoCursor::mouse_ClickToTile(void)
 		break;
 
 	case TERRAIN_NONE:
-		tilename = L"지형정보없음";
-		prop = L"";
+		_tcscpy(tilename, L"지형정보없음");
+		_tcscpy(prop, L"");
 		fire = false;
 		water = false;
 		wind = false;
@@ -430,8 +434,10 @@ void infoCursor::mouse_ClickToAction(void)//행동가능한 플레이어 유닛을 누른상태�
 	//여기에 조건으로 적유닛을 누르면 공격가능할경우 공격, 불가능할경우 무반응??
 	else if (_player->getUnits()[vNum]->isMovableArea(findIndex) && _player->getUnits()[vNum]->getBattleState().moved)//유닛이 아니고 땅 누르면 
 	{
+
 		backToPT.x = _player->getUnits()[vNum]->getBattleState().pt.x;
 		backToPT.y = _player->getUnits()[vNum]->getBattleState().pt.y;
+		backToDir = _player->getUnits()[vNum]->getBattleState().dir;
 		_player->getUnits()[vNum]->moveTo(goToTile);
 		_player->getUnits()[vNum]->setUnitSequnce(UNITSEQUENCE_MOVE);
 		isCommand = true;
@@ -520,15 +526,13 @@ void infoCursor::infoDraw(void)
 	{
 		Rectangle(getMemDC(), unitImgRect.left, unitImgRect.top, unitImgRect.right, unitImgRect.bottom); // 디버그용 렉트출력
 		unitImg->render(getMemDC(), unitImgRect.left, unitImgRect.top);
-		TextOut(getMemDC(), unitImgRect.left, unitImgRect.bottom + 24, unitName, _tcslen(unitName));
-		TextOut(getMemDC(), unitImgRect.left, unitImgRect.bottom + 72, factionName, _tcslen(factionName));
+		TextOut(getMemDC(), unitImgRect.left, unitImgRect.bottom + 48, unitName, _tcslen(unitName));
+		TextOut(getMemDC(), unitImgRect.left, unitImgRect.bottom + 24, factionName, _tcslen(factionName));
 	}
 	Rectangle(getMemDC(), tileImgRect.left, tileImgRect.top, tileImgRect.right, tileImgRect.bottom); // 디버그용 렉트출력
 	TextOut(getMemDC(), tileImgRect.left, tileImgRect.bottom + 50, tilename, _tcslen(tilename));
 	TextOut(getMemDC(), tileImgRect.left, tileImgRect.bottom + 80, prop, _tcslen(prop));
 
-	
-	
 	//for (int i = 0; i < 4; i++) // 디버그용 렉트출력
 	//{
 	//	Rectangle(getMemDC(), element[i].left, element[i].top, element[i].right, element[i].bottom);
@@ -547,38 +551,78 @@ void infoCursor::infoDraw(void)
 void infoCursor::mouse_ActionCancel(void)//이동명령 취소용
 {
 	_player->getUnits()[vNum]->moveBack(backToPT);
-	_player->getUnits()[vNum]->setVaild(true);
+	_player->getUnits()[vNum]->setUnitSequnce(UNITSEQUENCE_TURNON);
 	_player->getUnits()[vNum]->setMoved(true);
+	_player->getUnits()[vNum]->setDir(backToDir);
 	isCommand = false;
 	dataClean();
 }
 
+void infoCursor::buttonSetup(void)
+{
+	for (int i = 0; i < BTN_MAX; i++)
+	{
+		switch (i)
+		{
+		case BTN_ATTACK:
+			actionBtn[i] = new button;
+			actionBtn[i]->init(L"SELECT-선택버튼", L"공격", 50, 150, { 0,0 }, { 0,1 }, cb_attack, this);
+			break;
+		case BTN_SKILL:
+			actionBtn[i] = new button;
+			actionBtn[i]->init(L"SELECT-선택버튼", L"도구", 50, 200, { 0,0 }, { 0,1 }, cb_item, this);
+			break;
+		case BTN_ITEM:
+			actionBtn[i] = new button;
+			actionBtn[i]->init(L"SELECT-선택버튼", L"대기", 50, 250, { 0,0 }, { 0,1 }, cb_wait, this);
+			break;
+		case BTN_WAIT:
+			actionBtn[i] = new button;
+			actionBtn[i]->init(L"SELECT-선택버튼", L"취소", 50, 300, { 0,0 }, { 0,1 }, cb_cancel, this);
+			break;
+		}
+	}
+}
 
+void infoCursor::cb_attack(void* obj)
+{
+	infoCursor* cursor = (infoCursor*)obj;
+	cursor->cmd_atk();
+}
+void infoCursor::cb_item(void* obj)
+{
+	infoCursor* cursor = (infoCursor*)obj;
+	cursor->cmd_item();
+}
+void infoCursor::cb_wait(void* obj)
+{
+	infoCursor* cursor = (infoCursor*)obj;
+	cursor->cmd_wait();
+}
+void infoCursor::cb_cancel(void* obj)
+{
+	infoCursor* cursor = (infoCursor*)obj;
+	cursor->cmd_cancel();
+}
 
-//void infoCursor::buttonSetup(void)
-//{
-//	for (int i = 0; i < BTN_MAX; i++)
-//	{
-//		switch (i)
-//		{
-//		case BTN_ATTACK:
-//			actionBtn[i] = new button;
-//			actionBtn[i]->init(L"SELECT-선택버튼", L"게임시작", 50, 150, { 0,0 }, { 0,1 }, cbFuncSelect, this);
-//			break;
-//		case BTN_SKILL:
-//			actionBtn[i] = new button;
-//			actionBtn[i]->init(L"SELECT-선택버튼", L"맵편집", 50, 200, { 0,0 }, { 0,1 }, cbFuncMaptool, this);
-//			break;
-//		case BTN_ITEM:
-//			actionBtn[i] = new button;
-//			actionBtn[i]->init(L"SELECT-선택버튼", L"유닛편집", 50, 250, { 0,0 }, { 0,1 }, cbFuncUnitEditor, this);
-//			break;
-//		case BTN_WAIT:
-//			actionBtn[i] = new button;
-//			actionBtn[i]->init(L"SELECT-선택버튼", L"게임종료", 50, 300, { 0,0 }, { 0,1 }, cbFuncGameExit, this);
-//			break;
-//		}
-//}
+void infoCursor::cmd_atk(void)
+{
+	//공격명령을 수행하자.
+}
+void infoCursor::cmd_item(void)	 
+{
+	//아이템 목록을 불러와서 쓰자.
+}
+void infoCursor::cmd_wait(void)	 
+{
+	_player->getUnits()[vNum]->setUnitSequnce(UNITSEQUENCE_TURNOFF);
+	dataClean();
+
+}
+void infoCursor::cmd_cancel(void)
+{
+
+}
 
 void infoCursor::infoSetup(void)
 {
@@ -586,7 +630,7 @@ void infoCursor::infoSetup(void)
 	isUnit = false;
 	isCommand = false;
 	indexTile = 0;
-
+	popUpMenu = false;
 	for (int i = 0; i < BTN_MAX; i++)
 	{
 		actionBtn[i] = NULL;
@@ -601,16 +645,16 @@ void infoCursor::infoSetup(void)
 	}
 	clickUnit = NONE;
 	vNum = 0;
-	factionName = L"진영정보";
-	unitName = L"유닛이름정보";
-	tilename = L"타일이름정보";
-	prop = L"지형속성정보";
-	showExp = L"경험치";
+	_tcscpy(factionName, L"진영정보");
+	_stprintf(unitName, L"유닛이름정보");
+	_tcscpy(tilename, L"타일이름정보");
+	_tcscpy(prop, L"지형속성정보");
+	_tcscpy(showExp, L"경험치");
 	fire = false;
 	wind = false;
 	earth = false;
 	water = false;
-
+	backToDir = DIRECTION_DN;
 
 	backToPT = { 0,0 };
 	unitImg = IMAGEMANAGER->findImage(L"보병");
@@ -619,4 +663,8 @@ void infoCursor::infoSetup(void)
 	drawMoveLine = { 0,0,0,0 };
 	oPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
 	linePen = CreatePen(PS_SOLID, 3, RGB(255, 0, 0));
+
+	buttonSetup();
+	cmdBox = RectMakeCenter(0, 0, 110, 250);
+
 }

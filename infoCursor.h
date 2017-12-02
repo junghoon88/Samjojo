@@ -52,11 +52,11 @@ private:
 
 
 	//유닛 정보 표시용
-	TCHAR* unitName;
-	TCHAR* utype;//클래스
-	TCHAR* factionName;//진영(아군적군)
-	TCHAR* showExp;//플레이어는 아군적군대신 경험치 표시됨
-	TCHAR* showAtk;//A.K.A 공격력
+	TCHAR unitName[100];
+	TCHAR utype[100];//클래스
+	TCHAR factionName[100];//진영(아군적군)
+	TCHAR showExp[100];//플레이어는 아군적군대신 경험치 표시됨
+	TCHAR showAtk[100];//A.K.A 공격력
 	
 	int vNum;// v넘버
 	int bonus;//밟은 땅에 따른 전투력 증감표시
@@ -69,8 +69,8 @@ private:
 	//유닛 정보 표시용
 
 	//지형 정보 표시용
-	TCHAR* tilename;
-	TCHAR* prop;
+	TCHAR tilename[100];
+	TCHAR prop[100];
 	int tileNum;
 	bool fire;
 	bool wind;
@@ -78,17 +78,27 @@ private:
 	bool water;
 	//지형 정보 표시용
 	//플레이어 유닛 클릭시 표시할 정보,공격,스킬,도구,대기,취소
-	RECT infoBox;
+	RECT cmdBox;
 	button* actionBtn[BTN_MAX];
 	btnName btName;
 	POINT backToPT;
 	bool isCommand;
+	DIRECTION backToDir;
+	static void cb_attack(void* obj);
+	static void cb_item(void* obj);
+	static void cb_wait(void* obj);
+	static void cb_cancel(void* obj);
+
+	void cmd_atk(void);
+	void cmd_item(void);
+	void cmd_wait(void);
+	void cmd_cancel(void);
 	//플레이어 유닛 클릭시 표시할 정보,공격,스킬,도구,대기,취소
 
 
 	bool isUnit;//Unit은 true. 지형은 false
 	bool isShow;//클릭하면 true로
-
+	bool popUpMenu;
 public:
 	infoCursor();
 	~infoCursor();
