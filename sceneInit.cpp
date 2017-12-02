@@ -549,6 +549,7 @@ void sceneInit::initImageUI(void)
 	_loading->loadImage(L"浅加己厚劝己", L"image/icon/un_wind.bmp", 24, 24, true, RGB(255, 0, 255));
 	_loading->loadImage(L"荐加己", L"image/icon/water.bmp", 24, 24, true, RGB(255, 0, 255));
 	_loading->loadImage(L"荐加己厚劝己", L"image/icon/un_water.bmp", 24, 24, true, RGB(255, 0, 255));
+	_loading->loadImage(L"胶农费", L"image/battleScene/scroll.bmp", 144, 960, true, RGB(255, 0, 255));
 }
 
 void sceneInit::initSound(void)
