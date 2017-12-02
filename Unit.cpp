@@ -506,13 +506,8 @@ void Unit::updateSequence(bool bAuto)
 			if (opponent->getStatus().atkRange[_battleState.tilePt.x][_battleState.tilePt.y] == TRUE )
 			{
 				_battleState.squence = UNITSEQUENCE_COUNTER;
-			}
-<<<<<<< HEAD
-			else _battleState.squence = UNITSEQUENCE_TURNOFF;
-			
-=======
+			}			
 			else _battleState.squence = UNITSEQUENCE_IDLE;
->>>>>>> 4dac4b70cc34565ac9084604aa16a8ba24962aa1
 		}
 		else _battleState.squence = UNITSEQUENCE_IDLE;
 
