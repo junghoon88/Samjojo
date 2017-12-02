@@ -64,6 +64,7 @@ public:
 	void phaseCheck(void);
 	void linkClass(void);
 	void setUpPlayer(void);
+	void setUpBattle(void);
 
 };
 

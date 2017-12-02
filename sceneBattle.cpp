@@ -27,6 +27,7 @@ HRESULT sceneBattle::init(void)
 	_astar->init(_map);
 
 	linkClass();
+	setUpBattle();
 	setUpPlayer();//
 
 	_phase = PLAYERPHASE;
@@ -57,36 +58,36 @@ void sceneBattle::release(void)
 void sceneBattle::update(void)
 {
 	//debug
-	{
-		Unit* unit = _enemy->getUnits()[0];
-		if (KEYMANAGER->isOnceKeyDown('3') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD8))
-		{
-			unit->move(DIRECTION_UP);
-		}
-		if (KEYMANAGER->isOnceKeyDown('5') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
-		{
-			unit->move(DIRECTION_DN);
-		}
-		if (KEYMANAGER->isOnceKeyDown('4') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
-		{
-			unit->move(DIRECTION_LF);
-		}
-		if (KEYMANAGER->isOnceKeyDown('6') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD6))
-		{
-			unit->move(DIRECTION_RG);
-		}
-		if (KEYMANAGER->isOnceKeyDown('7') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD7))
-		{
-			_map->scanUnitsPos();
-			unit->findMoveArea();
-		}
-		if (KEYMANAGER->isOnceKeyDown('8') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD9))
-		{
-			unit->setUnitSequnce(UNITSEQUENCE_TURNON);
-			_map->scanUnitsPos();
-			unit->findEnemy(TEAM_ENEMY, findCloseEnemyPos(unit));
-		}
-	}
+	//{
+	//	Unit* unit = _enemy->getUnits()[0];
+	//	if (KEYMANAGER->isOnceKeyDown('3') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD8))
+	//	{
+	//		unit->move(DIRECTION_UP);
+	//	}
+	//	if (KEYMANAGER->isOnceKeyDown('5') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
+	//	{
+	//		unit->move(DIRECTION_DN);
+	//	}
+	//	if (KEYMANAGER->isOnceKeyDown('4') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
+	//	{
+	//		unit->move(DIRECTION_LF);
+	//	}
+	//	if (KEYMANAGER->isOnceKeyDown('6') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD6))
+	//	{
+	//		unit->move(DIRECTION_RG);
+	//	}
+	//	if (KEYMANAGER->isOnceKeyDown('7') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD7))
+	//	{
+	//		_map->scanUnitsPos();
+	//		unit->findMoveArea();
+	//	}
+	//	if (KEYMANAGER->isOnceKeyDown('8') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD9))
+	//	{
+	//		unit->setUnitSequnce(UNITSEQUENCE_TURNON);
+	//		_map->scanUnitsPos();
+	//		unit->findEnemy(TEAM_ENEMY, findCloseEnemyPos(unit));
+	//	}
+	//}
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
 		_sDL->loadDialog();
@@ -338,5 +339,18 @@ void sceneBattle::setUpPlayer(void)
 	{
 		_player->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
 		_player->getUnits()[i]->setMoved(true);
+	}
+}
+
+
+void sceneBattle::setUpBattle(void)
+{
+	for (int i = 0; i < _enemy->getUnits().size(); i++)
+	{
+		_enemy->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNOFF);
+	}
+	for (int i = 0; i < _friend->getUnits().size(); i++)
+	{
+		_friend->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNOFF);
 	}
 }
