@@ -552,6 +552,13 @@ void sceneInit::initSound(void)
 
 	for (int i = 0; i <= 8; i++)
 	{
+		_stprintf(strKey, L"Se_b_%02d", i);
+		_stprintf(strName, L"Wav/Se_b_%02d.mp3", i);
+		_loading->loadSound(strKey, strName, true, true);
+	}
+
+	for (int i = 0; i <= 8; i++)
+	{
 		_stprintf(strKey, L"Se_e_%02d", i);
 		_stprintf(strName, L"Wav/Se_e_%02d.wav", i);
 		_loading->loadSound(strKey, strName, false, false);
@@ -570,5 +577,49 @@ void sceneInit::initSound(void)
 		_stprintf(strName, L"Wav/Se%02d.wav", i);
 		_loading->loadSound(strKey, strName, false, false);
 	}
+
+	//노래 설명
+	/*
+	Se_e_00 새소리
+	Se_e_01 매미소리
+	Se_e_02 귀뚜라미소리
+	Se_e_03 으스스한바람소리
+	Se_e_04 천둥번개
+	Se_e_05 새소리
+	Se_e_06 아이들환호성
+	Se_e_07 싸우는소리
+	Se_e_08 노젓는소리
+
+	Se_m 들은 스킬관련이므로 상관 x
+
+	Se02 마우스선택
+	Se03 마우스선택해제
+	Se04 사용볼가 선택 시 효과음
+	Se07 출진버튼 누루면 나는 효과음
+	Se08 인게임에서 컷신 시에 캐릭이 방향 전환 시 나오는 효과음
+	Se15 미션승리효과음
+	Se17 기습하는애들 출현시 효과음 / 출진창에서 캐릭 선택 시 효과음
+	Se25 평지이동음
+	Se26 기마병이동음
+	Se27 투석기이동음
+	Se29 숲이동음
+	Se31 물가이동음
+	Se32 근접공격방어성공음
+	Se33 화살방어성공음
+	Se35 강공격시첫효과음
+	Se36 공격시첫효과음
+	Se37 공격성공효과음
+	Se38 강공격성공시효과음
+	Se39 궁병공격시첫효과음
+
+	Se_b_00 메인화면 배경음
+	Se_b_01 전투배경음 1
+	Se_b_02 전투배경음 2
+	Se_b_03 전투배경음 3
+	Se_b_04 전투배경음 4
+	Se_b_05 전투목표배경음 1
+	Se_b_06 전투목표배경음 2
+	Se_b_07 캐릭선택창 배경음
+	*/
 }
 
