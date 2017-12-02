@@ -1,7 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "Unit.h"
-
+#include "Item.h"
 #define ENTRANT_MAX	7
 
 class Friend;
@@ -12,8 +12,14 @@ class infoCursor;
 class Player : public gameNode
 {
 private:
+	typedef vector<Item*>	vItems;
+	typedef vector<Item*>::iterator	viItems;
+
+
 	vUnits		_vUnitsInFile;		//폴더 내 유닛데이터들 전체
 	vUnits		_vUnits;			//전투에 출전되는 유닛들
+	vItems		_vItems;
+
 
 	Friend*		_friend;	//아군
 	Enemy*		_enemy;		//적군
@@ -45,7 +51,7 @@ public:
 	inline vUnits getUnits(void) { return _vUnits; }
 	inline void setUnits(vUnits vunits) { _vUnits = vunits; }
 	inline vUnits getUnitsInFile(void) { return _vUnitsInFile; }
-
+	inline vItems getItems(void) { return _vItems; }
 	inline void setLinkAdressFriend(Friend* friends) { _friend = friends; }
 	inline void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
 	inline void setLinkAdressMap(gameMap* map) { _map = map; }

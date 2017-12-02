@@ -1,5 +1,6 @@
 #pragma once
 
+
 enum ITEMW_NUMBER //무기 아이템 고유번호
 {
 	ITEMW_NUMBER_NONE = -1,
@@ -12,7 +13,8 @@ enum ITEMA_NUMBER //방어구 아이템 고유번호
 
 enum ITEMS_NUMBER //소비 아이템 고유번호
 {
-	ITEMS_NUMBER_NONE = -1
+	ITEMS_NUMBER_NONE = -1,
+	ITEMS_NUMBER_KONG = 1
 };
 
 

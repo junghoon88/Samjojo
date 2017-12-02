@@ -143,6 +143,7 @@ enum UNITSEQUENCE
 	UNITSEQUENCE_MOVE,
 	UNITSEQUENCE_ATTACK,
 	UNITSEQUENCE_COUNTER,
+	UNITSEQUENCE_IDLE,
 	UNITSEQUENCE_TURNOFF,
 
 
@@ -345,6 +346,7 @@ public:
 	inline void setBattleState(tagBattleState state) { _battleState = state; }
 	inline void setVaild(bool val) { _battleState.valid = val; }
 	inline void setMoved(bool val) { _battleState.moved = val; }
+	inline void setDir(DIRECTION dir) { _battleState.dir = dir; }
 	inline void moveBack(POINT backPT) // 이동한거 취소용.
 	{
 		_battleState.pt = backPT;

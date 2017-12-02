@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "sceneReadybase.h"
 
-
 sceneReadybase::sceneReadybase()
 {
 }
@@ -24,12 +23,11 @@ HRESULT sceneReadybase::init(void) {
 
 	_posClicking = _equipClicking = _buyClicking = _sellClicking = false;
 	
-
 	_sD = new scanDialog;
 	_sD->init("scripts/script 04.txt");
 	_sD->setNext(7);
 	ShowCursor(true);
-	_start = false;
+	
 	return S_OK;
 }
 void sceneReadybase::release(void) {
@@ -92,23 +90,26 @@ void sceneReadybase::update(void) {
 			SCENEMANAGER->changeScene(L"ÆÇ¸Å¾À");
 		}
 	}
-	if (_start)
+
+	_vUnits = _player->getUnits();
+	if (_vUnits.size() > 3)
 	{
+		_sD->update();
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			_sD->loadDialog();
 			if (_sD->getNext() == 8) SCENEMANAGER->changeScene(L"ÀüÅõ¾À");
 		}
 	}
-	_sD->update();
+	
 }
 void sceneReadybase::render(void) {
 
 	_baseImg->render(getMemDC(), 0, 0);
 
-	TCHAR tmp[30];
-	_stprintf(tmp, L"x: %d, y: %d", _pt.x, _pt.y);
-	TextOut(getMemDC(), 100, 100, tmp, _tcslen(tmp));
+	//TCHAR tmp[30];
+	//_stprintf(tmp, L"x: %d, y: %d", _pt.x, _pt.y);
+	//TextOut(getMemDC(), 100, 100, tmp, _tcslen(tmp));
 	
 	if (_posClicking) {
 		IMAGEMANAGER->findImage(L"ÃâÁø´­¸²")->render(getMemDC(), _rcPosUI.left, _rcPosUI.top);

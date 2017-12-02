@@ -169,6 +169,31 @@ void button::render(void)
 }
 
 
+void button::render(int x,int y)
+{
+	switch (_direction)
+	{
+	case BUTTONDIRECTION_NULL: case BUTTONDIRECTION_UP:
+		_image->frameRender(getMemDC(), x, y,
+			_btnUpFramePoint.x, _btnUpFramePoint.y);
+		break;
+	case BUTTONDIRECTION_DOWN:
+		_image->frameRender(getMemDC(), x, y,
+			_btnDownFramePoint.x, _btnDownFramePoint.y);
+		break;
+	}
+
+	COLORREF oldcolor = GetTextColor(getMemDC());
+	SetTextColor(getMemDC(), _color);
+	SetBkMode(getMemDC(), TRANSPARENT);
+	HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
+	DrawText(getMemDC(), _strText, _tcslen(_strText), &_rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	SelectObject(getMemDC(), oldFont);
+	SetTextColor(getMemDC(), oldcolor);
+}
+
+
+
 void button::setText(const TCHAR* text)
 {
 	if (text == NULL) return;
