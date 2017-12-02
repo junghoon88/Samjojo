@@ -26,7 +26,7 @@ enum clickFW
 	NONE,PLAYER,FRIEND,ENEMY
 };
 
-class infoCursor : public gameNode
+class battleSceneInterface : public gameNode
 {
 private:
 	Player*		_player;
@@ -60,7 +60,6 @@ private:
 	TCHAR txtDef[10];
 	TCHAR txtMove[10];
 	
-
 	int vNum;// v넘버
 	int bonus;//밟은 땅에 따른 전투력 증감표시
 	int exp;
@@ -69,9 +68,9 @@ private:
 	int def;
 	int movePoint;
 
-	progressBar hpBar;
+	progressBar* hpBar;
 	int curHp, maxHp;
-	progressBar mpBar;
+	progressBar* mpBar;
 	int curMp, maxMp;
 	//유닛 정보 표시용
 
@@ -108,8 +107,8 @@ private:
 	bool popUpMenu;
 	bool targetAttack;
 public:
-	infoCursor();
-	~infoCursor();
+	battleSceneInterface();
+	~battleSceneInterface();
 	void buttonSetup(void);
 
 	HRESULT init(void);

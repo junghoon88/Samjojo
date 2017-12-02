@@ -17,6 +17,7 @@ public:
 
 	HRESULT init(TCHAR* name, int x, int y, int width, int height);
 	HRESULT init(TCHAR* topImage, TCHAR* bottomImage, float x, float y, int width, int height);
+	HRESULT init(TCHAR* topImage, TCHAR* bottomImage, float x, float y, int width, int height, TCHAR* foldername);
 	void release(void);
 	void update(void);
 	void render(TCHAR* name);

@@ -19,8 +19,8 @@ HRESULT sceneBattle::init(void)
 {
 	DATABASE->getSlectScenario();
 
-	_cursor = new infoCursor;
-	_cursor->init();
+	_interface = new battleSceneInterface;
+	_interface->init();
 	_turn = 1;
 
 	_astar = new aStar;
@@ -46,8 +46,8 @@ HRESULT sceneBattle::init(void)
 
 void sceneBattle::release(void)
 {
-	_cursor->release();
-	SAFE_DELETE(_cursor);
+	_interface->release();
+	SAFE_DELETE(_interface);
 
 	_astar->release();
 	SAFE_DELETE(_astar);
@@ -113,7 +113,7 @@ void sceneBattle::update(void)
 	friendAction();
 	enemyAction();
 	_map->scanUnitsPos();
-	if(_phase == PLAYERPHASE)_cursor->update();
+	if(_phase == PLAYERPHASE)_interface->update();
 //	else if (_phase == FRIENDPHASE); //friendAction();
 //	else if (_phase == ENEMYPHASE); //enemyAction();
 
@@ -127,7 +127,7 @@ void sceneBattle::render(void)
 	_friend->render(); 
 	_enemy->render();
 	_astar->render();
-	_cursor->render();
+	_interface->render();
 
 
 	if (_isDialog)
@@ -278,15 +278,15 @@ void sceneBattle::enemyAction(void) //적군 턴 액션
 
 void sceneBattle::linkClass(void)
 {
-	_cursor->setLinkPlyer(_player);
-	_cursor->setLinkFriend(_friend);
-	_cursor->setLinkEnemy(_enemy);
-	_cursor->setLinkAdressMap(_map);
+	_interface->setLinkPlyer(_player);
+	_interface->setLinkFriend(_friend);
+	_interface->setLinkEnemy(_enemy);
+	_interface->setLinkAdressMap(_map);
 
-	_player->setLinkCursor(_cursor);
-	_friend->setLinkCursor(_cursor);
-	_enemy->setLinkCursor(_cursor);
-	_map->setLinkAdressCursor(_cursor);
+	_player->setLinkAdressUI(_interface);
+	_friend->setLinkAdressUI(_interface);
+	_enemy->setLinkAdressUI(_interface);
+	_map->setLinkAdressUI(_interface);
 
 	//모든 유닛에 a* 연결해주기
 	for (int i = 0; i < _player->getUnits().size(); i++)
