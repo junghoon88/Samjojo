@@ -223,6 +223,10 @@ void mainGame::checkWindowSize(void)
 	{
 		setWindowResize({ WINSIZEX3,WINSIZEY3 });
 	}
+	else if (SCENEMANAGER->isCurScene(L"Àåºñ¾À"))
+	{
+		setWindowResize({ WINSIZEX4,WINSIZEY4 });
+	}
 }
 
 void mainGame::controlFPS(void)

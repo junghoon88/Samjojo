@@ -33,9 +33,9 @@ void aStar::initTiles(void)
 	//최대 타일은 40x40 이지만
 	//실제 맵크기 타일은 28x20 처럼 적기 때문에
 	//쓸데없는 계산을 안하도록함
-	for (int i = 0; i < _tileMax.y; i++)
+	for (int i = 0; i < _tileMax.y; i++) //y
 	{
-		for (int j = 0; j < _tileMax.x; j++)
+		for (int j = 0; j < _tileMax.x; j++) //x
 		{
 			tile* node = new tile;
 			node->init(j, i, _map->getTile()[i * TILEX + j].rc);
@@ -45,6 +45,12 @@ void aStar::initTiles(void)
 			if ((attr & ATTR_UNMOVE) == ATTR_UNMOVE)
 			{
 				node->setAttribute(L"unmove");
+			}
+			else if ((attr & ATTR_UNMOVE) == ATTR_FOREST
+				|| (attr & ATTR_MOUNTAIN) == ATTR_MOUNTAIN
+				|| (attr & ATTR_WATER) == ATTR_WATER)
+			{
+				node->setAttribute(L"slow");
 			}
 
 			_vTotalList.push_back(node);
@@ -181,14 +187,30 @@ void aStar::findOpenList(tile* currentTile, int cost)
 	if (newOpenList.size() == 0)
 		return;
 
+
 	for (int i = 0; i < newOpenList.size(); i++)
 	{
 		int cost = currentTile->getTotalCost();
 		//타일 속성별로 cost 값을 다르게 준다.
-		//if(currentTile->getAttribute() == ) 
+
+		DWORD Attr = _map->getAttribute()[newOpenList[i]->getIdY() * TILEX + newOpenList[i]->getIdX()];
+
+		if ((Attr & ATTR_UNMOVE) == ATTR_FOREST
+			|| (Attr & ATTR_MOUNTAIN) == ATTR_MOUNTAIN
+			|| (Attr & ATTR_WATER) == ATTR_WATER)
+		{
+			cost += 2;
+		}
+		else
 		{
 			cost += 1;
 		}
+
+		//if (newOpenList[i]->getAttribute() == L"slow")
+		//	cost += 2;
+		//else
+		//	cost += 1;
+
 		newOpenList[i]->setTotalCost(cost);
 		newOpenList[i]->setIsOpen(true);
 
@@ -378,7 +400,7 @@ void aStar::resetTilesAttr(void)
 		int idX = _vTotalList[i]->getIdX();
 		int idY = _vTotalList[i]->getIdY();
 
-		DWORD attr = _map->getAttribute()[idX * TILEX + idY];
+		DWORD attr = _map->getAttribute()[idY * TILEX + idX];
 
 		_vTotalList[i]->setAttribute(L"");
 		//if ((attr & ATTR_UNMOVE) == ATTR_UNMOVE)
