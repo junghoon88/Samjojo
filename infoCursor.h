@@ -99,6 +99,7 @@ private:
 	bool isUnit;//Unit은 true. 지형은 false
 	bool isShow;//클릭하면 true로
 	bool popUpMenu;
+	bool targetAttack;
 public:
 	infoCursor();
 	~infoCursor();
@@ -118,7 +119,9 @@ public:
 	void mouse_ClickToTile(void);
 	void mouse_ClickToAction(void);
 	void mouse_ActionCancel(void);
+	void mouse_ClickToAttack(void);
 	void callToMenu(void);
+
 public:
 	inline void setLinkPlyer(Player* player) { _player = player; }
 	inline void setLinkEnemy(Enemy* enm) { _enemy = enm; }

@@ -93,8 +93,8 @@ void sceneBattle::update(void)
 		_sDL->loadDialog();
 	}
 	_player->update();
-	//_friend->update();
-	//_enemy->update();
+	_friend->update();
+	_enemy->update();
 
 	_map->update(); 
 	_sDL->update();
@@ -243,7 +243,6 @@ void sceneBattle::friendAction(void)//아군 턴 액션
 	{
 		if (_friend->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue; //행동 불가능인 애들은 거르고
 		_friend->getUnits()[i]->findEnemy(TEAM_FRIEND, findCloseEnemyPos(_friend->getUnits()[i]));
-		_friend->getUnits()[i]->update(TEAM_FRIEND);
 		break;
 	}
 }
@@ -254,7 +253,6 @@ void sceneBattle::enemyAction(void) //적군 턴 액션
 	{
 		if (_enemy->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue;
 		_enemy->getUnits()[i]->findEnemy(TEAM_ENEMY, findCloseEnemyPos(_enemy->getUnits()[i]));
-		_enemy->getUnits()[i]->update(TEAM_ENEMY);
 		break;
 	}
 }

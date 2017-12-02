@@ -284,13 +284,21 @@ public:
 
 			if (x + y * TILEX == index)
 			{
-				//여기다가 해당 인덱스로 가라고 신호를 넣어주면 되겠죠??
 				return true;
 				break;
 			}
 		}
 		return false;
 	};//인덱스 받아서 인덱스로 해당타일 있으면 트루값 반환 해주자 없으면 빠꾸
+	inline bool isAttackTarget(int index)
+	{
+		if (_status.atkRange[index / 7][index % 7] == true)
+		{
+			return true;
+		}
+		return false;
+	}
+
 
 	inline void setUnitState(UNITSTATE state) { _battleState.unitState = state; }
 	inline UNITSTATE getUnitState(void) { return _battleState.unitState; }

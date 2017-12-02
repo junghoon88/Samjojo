@@ -75,6 +75,7 @@ void infoCursor::mouse_Scanning(void)
 	{
 		int findIndex = indexTile + (MAINCAMERA->getCameraX() / TILESIZE) + (MAINCAMERA->getCameraY() / TILESIZE) * TILEX;
 		if(_player->getUnits()[vNum]->isMovableArea(findIndex))drawMoveLine = { findtile->getTile()[indexTile].rc.left,findtile->getTile()[indexTile].rc.top,findtile->getTile()[indexTile].rc.right,findtile->getTile()[indexTile].rc.bottom };
+		drawLine = _player->getUnits()[vNum]->getRect();
 	}
 }
 
@@ -427,11 +428,16 @@ void infoCursor::mouse_ClickToAction(void)//행동가능한 플레이어 유닛을 누른상태�
 	goToTile.x = (findtile->getTile()[findIndex].rc.left ) / TILESIZE ;
 	goToTile.y = (findtile->getTile()[findIndex].rc.top ) / TILESIZE;
 
-	if (findIndex == (int)(_player->getUnits()[vNum]->getBattleState().tilePt.x + _player->getUnits()[vNum]->getBattleState().tilePt.y * TILEX)) //해당유닛 한번 더 클릭하면
+	//해당유닛 한번 더 클릭하면
+	if (findIndex == (int)(_player->getUnits()[vNum]->getBattleState().tilePt.x + _player->getUnits()[vNum]->getBattleState().tilePt.y * TILEX) && _player->getUnits()[vNum]->getUnitSequnce() == UNITSEQUENCE_TURNON)
 	{
-		//행동가능 버튼 출력.
+		callToMenu();//행동가능 버튼 출력.
 	}
-	//여기에 조건으로 적유닛을 누르면 공격가능할경우 공격, 불가능할경우 무반응??
+	//적 유닛 클릭 시
+	if (findtile->getTeamInfo()[findIndex] == TEAM_ENEMY  && _player->getUnits()[vNum]->getUnitSequnce() == UNITSEQUENCE_TURNON)
+	{
+		mouse_ClickToAttack();
+	}
 	else if (_player->getUnits()[vNum]->isMovableArea(findIndex) && _player->getUnits()[vNum]->getBattleState().moved)//유닛이 아니고 땅 누르면 
 	{
 
@@ -444,7 +450,21 @@ void infoCursor::mouse_ClickToAction(void)//행동가능한 플레이어 유닛을 누른상태�
 	}
 	else dataClean();
 }
+void infoCursor::mouse_ClickToAttack(void)
+{
+	int setindex = (int)(_ptMouse.x / TILESIZE) + (int)(_ptMouse.y / TILESIZE)  * TILEX;
+	int findIndex = setindex + (MAINCAMERA->getCameraX() / TILESIZE) + (MAINCAMERA->getCameraY() / TILESIZE) * TILEX;
 
+	
+	for (int i = 0; i < _enemy->getUnits().size(); i++)
+	{
+		if (findIndex == (int)(_enemy->getUnits()[i]->getBattleState().tilePt.x + _enemy->getUnits()[i]->getBattleState().tilePt.y * TILEX) && _enemy->getUnits()[i]->isAttackTarget(findIndex))
+		{
+				_player->getUnits()[vNum]->attack(_enemy->getUnits()[i]);
+		}
+	}
+
+}
 void infoCursor::moveCamera(void)
 {
 	if (_ptMouse.x > WINSIZEX - TILESIZE/2 - 144 && _ptMouse.x <= WINSIZEX - 144 && MAINCAMERA->getCameraX() < findtile->getTileSizeX() * TILESIZE - TILESIZE * 20)// 마우스가 오른쪽 
@@ -505,23 +525,17 @@ void infoCursor::tileLineDraw(void)
 	LineTo(getMemDC(), drawLine.right, drawLine.bottom);	 //현재 타일 테두리그림
 	LineTo(getMemDC(), drawLine.left, drawLine.bottom);		 //현재 타일 테두리그림
 	LineTo(getMemDC(), drawLine.left, drawLine.top);		 //현재 타일 테두리그림
-	SelectObject(getMemDC(), (HPEN)oPen);
 
-	if (isShow && clickUnit == PLAYER)
-	{
-		SelectObject(getMemDC(), (HPEN)linePen);
 		MoveToEx(getMemDC(), drawMoveLine.left, drawMoveLine.top, NULL); //이동 타일
 		LineTo(getMemDC(), drawMoveLine.right, drawMoveLine.top);		 //이동 타일 테두리그림
 		LineTo(getMemDC(), drawMoveLine.right, drawMoveLine.bottom);	 //이동 타일 테두리그림
 		LineTo(getMemDC(), drawMoveLine.left, drawMoveLine.bottom);		 //이동 타일 테두리그림
 		LineTo(getMemDC(), drawMoveLine.left, drawMoveLine.top);		 //이동 타일 테두리그림
 		SelectObject(getMemDC(), (HPEN)oPen);
-	}
 }
 
 void infoCursor::infoDraw(void)
 {
-
 	if (isUnit) //유닛을 눌렀을때 표시할 것들
 	{
 		Rectangle(getMemDC(), unitImgRect.left, unitImgRect.top, unitImgRect.right, unitImgRect.bottom); // 디버그용 렉트출력
@@ -607,7 +621,7 @@ void infoCursor::cb_cancel(void* obj)
 
 void infoCursor::cmd_atk(void)
 {
-	//공격명령을 수행하자.
+	popUpMenu = false;
 }
 void infoCursor::cmd_item(void)	 
 {
@@ -617,7 +631,6 @@ void infoCursor::cmd_wait(void)
 {
 	_player->getUnits()[vNum]->setUnitSequnce(UNITSEQUENCE_TURNOFF);
 	dataClean();
-
 }
 void infoCursor::cmd_cancel(void)
 {
@@ -628,6 +641,7 @@ void infoCursor::infoSetup(void)
 {
 	isShow = false;
 	isUnit = false;
+	targetAttack = false;
 	isCommand = false;
 	indexTile = 0;
 	popUpMenu = false;
@@ -663,7 +677,7 @@ void infoCursor::infoSetup(void)
 	drawMoveLine = { 0,0,0,0 };
 	oPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
 	linePen = CreatePen(PS_SOLID, 3, RGB(255, 0, 0));
-
+	
 	buttonSetup();
 	cmdBox = RectMakeCenter(0, 0, 110, 250);
 
