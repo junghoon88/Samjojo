@@ -7,8 +7,6 @@
 #define MAXDEF 100
 #define MAXLVL 50
 
-#define TESTITEM 1
-
 struct tagStatus //기본정보 (수정하지말것)
 {
 	TCHAR name[32];
@@ -261,7 +259,7 @@ public:
 	inline void updateStatus(void);
 	inline void earnExp(int exp) { _status.exp += exp; };
 	inline void	expMaxCheck(void);
-	inline void useItem(Unit* unit);
+	inline void useItem(Unit* unit, int type, int value);
 
 public:
 	inline tagStatus getStatus(void) { return _status; }

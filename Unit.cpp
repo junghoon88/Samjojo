@@ -132,36 +132,13 @@ void Unit::expMaxCheck(void)
 	}
 }
 
-void Unit::useItem(Unit* unit)
+void Unit::useItem(Unit* unit, int type, int value)
 {
-
-#if TESTITEM
-	enum ITEMTYPE
+	switch (type)	// TESTITEM 변경시 변경 필요, 매개변수도 마찬가지
 	{
-		ITEMTYPE_HEAL,
-		ITEMTYPE_DEAL,
-		ITEMTYPE_MAX
-	};
-	struct tagItem
-	{
-		ITEMTYPE	itemType;
-		int			value;
-	};
-
-	tagItem testItem;
-	testItem.itemType = ITEMTYPE_HEAL;
-	testItem.value = 50;
-#endif
-
-	switch (testItem.itemType)	// TESTITEM 변경시 변경 필요, 매개변수도 마찬가지
-	{
-		case ITEMTYPE_HEAL:
-			unit->setCurHP(unit->getCurHP() + testItem.value);
+		case 0:
+			unit->setCurHP(unit->getCurHP() + value);
 			if (unit->getCurHP() > unit->getMaxHP()) unit->setCurHP(unit->getMaxHP());
-		break;
-		case ITEMTYPE_DEAL:
-			unit->setCurHP(unit->getCurHP() - testItem.value);
-			if (unit->getCurHP() < 0) unit->setCurHP(0);
 		break;
 	}
 }
