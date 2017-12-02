@@ -65,7 +65,7 @@ void Unit::update(TEAM team)
 			}
 			else
 			{
-				if (_delayTime >= 100)
+				if (_delayTime >= 50)
 				{
 					_oldSeq = _battleState.squence;
 					_delayTime = 0;
@@ -480,7 +480,7 @@ void Unit::updateSequence(bool bAuto)
 				else
 				{
 					_oldSeq = _battleState.squence;
-					_battleState.squence = UNITSEQUENCE_TURNOFF;
+					_battleState.squence = UNITSEQUENCE_IDLE;
 				}
 				_moveArea.clear();
 			}
@@ -507,10 +507,14 @@ void Unit::updateSequence(bool bAuto)
 			{
 				_battleState.squence = UNITSEQUENCE_COUNTER;
 			}
+<<<<<<< HEAD
 			else _battleState.squence = UNITSEQUENCE_TURNOFF;
 			
+=======
+			else _battleState.squence = UNITSEQUENCE_IDLE;
+>>>>>>> 4dac4b70cc34565ac9084604aa16a8ba24962aa1
 		}
-		else _battleState.squence = UNITSEQUENCE_TURNOFF;
+		else _battleState.squence = UNITSEQUENCE_IDLE;
 
 		return;
 	}
@@ -522,14 +526,20 @@ void Unit::updateSequence(bool bAuto)
 			counterAttack(opponent);
 		}
 		_oldSeq = _battleState.squence;
+		_battleState.squence = UNITSEQUENCE_IDLE;
+		return;
+	}
+
+	if (_battleState.squence == UNITSEQUENCE_IDLE)
+	{
+		if (_battleState.findEnemy) opponent->setUnitState(UNITSTATE_IDLE);
+		_battleState.unitState = UNITSTATE_IDLE;
 		_battleState.squence = UNITSEQUENCE_TURNOFF;
 		return;
 	}
 
 	if (_battleState.squence == UNITSEQUENCE_TURNOFF)
 	{
-		if (_battleState.findEnemy) opponent->setUnitState(UNITSTATE_IDLE);
-		_battleState.unitState = UNITSTATE_IDLE;
 		return;
 	}
 }
