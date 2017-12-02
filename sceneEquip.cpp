@@ -53,6 +53,16 @@ HRESULT sceneEquip::init(void) {
 		}
 	}
 
+	//test
+
+	_weapon = new ItemWeapon;
+	_weapon->init(WEAPON,SWORD, L"단검", L"단검32", L"단검16", 8, 0, 0, 0, 0);
+	_vItems.push_back(_weapon);
+	_weapon = new ItemWeapon;
+	_weapon->init(WEAPON,SWORD, L"고정도", L"고정도32", L"고정도16", 12, 0, 0, 0, 0);
+	_vItems.push_back(_weapon);
+
+
 
 	return S_OK;
 }
@@ -115,6 +125,110 @@ void sceneEquip::render(void) {
 	_stprintf(tmp, L"%3d", _move);
 	TextOut(getMemDC(), 410, 345, tmp, _tcslen(tmp));
 	
+
+	//item render
+	if (!_vItems.empty()) {
+		_vItems[0]->getImg16()->render(getMemDC(), 12, 64);//12,64
+		_vItems[1]->getImg16()->render(getMemDC(), 12, 84);
+
+		HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
+		SetTextColor(getMemDC(), RGB(0, 0, 0));
+		TextOut(getMemDC(), 32, 64, _vItems[0]->getName(), _tcslen(_vItems[0]->getName()));
+		switch (_vItems[0]->getWclass()) {
+			case HSWORD:
+				_tcscpy(_itemClass, L"명검");
+				break;
+			case SWORD:
+				_tcscpy(_itemClass, L"검");
+				break;
+			case BOW:
+				_tcscpy(_itemClass, L"활");
+				break;
+			case SPEAR:
+				_tcscpy(_itemClass, L"창");
+				break;
+			default: break;
+		}
+		TextOut(getMemDC(), 150, 64, _itemClass, _tcslen(_itemClass));
+		TextOut(getMemDC(), 190, 64, L"--", _tcslen(L"--"));
+		TextOut(getMemDC(), 220, 64, L"--", _tcslen(L"--"));
+
+		TCHAR tmp[6];
+		_stprintf(tmp, L"+%2d", _vItems[0]->getAtk());
+		TextOut(getMemDC(), 270, 64, tmp, _tcslen(tmp));
+
+
+		//장비가능유무//////////////////
+		if (_vItems[0]->getIclass() == WEAPON) {
+			switch (_vItems[0]->getWclass()) {
+			case HSWORD:
+				if (!_tcscmp(_aos, L"군웅")) {
+					_availableEquip = true;
+				}
+				else {
+					_availableEquip = false;
+				}
+				break;
+
+			case SWORD:
+				if (!_tcscmp(_aos, L"군웅") || !_tcscmp(_aos, L"경보병") || !_tcscmp(_aos, L"보병")) {
+					_availableEquip = true;
+				}
+				else {
+					_availableEquip = false;
+				}
+				break;
+			case BOW:
+				if (!_tcscmp(_aos, L"궁기병")) {
+					_availableEquip = true;
+				}
+				else {
+					_availableEquip = false;
+				}
+				break;
+			case SPEAR:
+				if (!_tcscmp(_aos, L"용장") || !_tcscmp(_aos, L"경기병")
+					|| !_tcscmp(_aos, L"도위") || !_tcscmp(_aos, L"기병")) {
+					_availableEquip = true;
+				}
+				else {
+					_availableEquip = false;
+				}
+				break;
+			default: break;
+			}
+		}
+		else if (_vItems[0]->getIclass() == DEFENCE) {
+			switch (_vItems[0]->getAclass()) {
+			case ARMOR:
+				_availableEquip = true;
+				break;
+			case SHILED:
+				if (!_tcscmp(_aos, L"보병") || !_tcscmp(_aos, L"경보병"))
+					_availableEquip = true;
+				else
+					_availableEquip = false;
+				break;
+			default: break;
+			}
+		}
+		else {
+			_availableEquip = true;
+		}
+		///////////////////
+		
+		if (_availableEquip) {
+			TextOut(getMemDC(), 310, 64, L"O", _tcslen(L"O"));
+		}
+		else {
+			TextOut(getMemDC(), 310, 64, L"X", _tcslen(L"X"));
+		}
+
+
+	}
+
+
+
 	for (int i = 0; i < BTN_MAXX; i++) {
 		_button[i]->render();
 	}

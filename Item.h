@@ -1,9 +1,25 @@
 #pragma once
+#include "gameNode.h"
 
-
+enum ITEMW_CLASS {
+	HSWORD,
+	SWORD,
+	BOW,
+	SPEAR
+};
+enum ITEMA_CLASS {
+	ARMOR,
+	SHILED
+};
+enum ITEM_CLASS {
+	WEAPON,
+	DEFENCE,
+	SPECIAL
+};
 enum ITEMW_NUMBER //무기 아이템 고유번호
 {
 	ITEMW_NUMBER_NONE = -1,
+	
 };
 
 enum ITEMA_NUMBER //방어구 아이템 고유번호
@@ -18,7 +34,7 @@ enum ITEMS_NUMBER //소비 아이템 고유번호
 };
 
 
-class Item
+class Item :public gameNode
 {
 protected:
 	ITEMW_NUMBER _wNum;
@@ -26,11 +42,42 @@ protected:
 	ITEMS_NUMBER _sNum;
 
 	TCHAR _name[128];
-	image* _img;
+	image* _img16;
+	image* _img32;
+
 	RECT _rc;
 
+	ITEMW_CLASS _wcls;
+	ITEMA_CLASS _acls;
+	ITEM_CLASS _cls;
+
+	int _hp;   //보조용
+	int _mp;   //
+
+	int _atk;
+	int _dep;
+
+	int _res;  //명검용
+	
 
 public:
+	HRESULT init(void);
+
+	inline int getHP(void) { return _hp; }
+	inline int getMP(void) { return _mp; }
+	inline int getAtk(void) { return _atk; }
+	inline int getDep(void) { return _dep; }
+	inline int getRes(void) { return _res; }
+
+	inline TCHAR* getName(void) { return _name; }
+	inline image* getImg32(void) { return _img32; }
+	inline image* getImg16(void) { return _img16; }
+	inline ITEMW_CLASS getWclass(void) { return _wcls; }
+	inline ITEMA_CLASS getAclass(void) { return _acls; }
+	inline ITEM_CLASS getIclass(void) { return _cls; }
+	//void release(void);
+	//void update(void);
+	//void render(void);
 	Item();
 	~Item();
 };
@@ -41,6 +88,8 @@ class ItemWeapon : public Item
 private:
 
 public:
+	HRESULT init(ITEM_CLASS icls,ITEMW_CLASS cls, const TCHAR *name, const TCHAR *img32key, const TCHAR *img16key, int atk, int dep, int res, int hp, int mp);
+
 	ItemWeapon();
 	~ItemWeapon();
 };
@@ -51,6 +100,7 @@ class ItemArmor : public Item
 private:
 
 public:
+	HRESULT init(ITEM_CLASS icls,ITEMA_CLASS cls, int atk, int dep, int res, int hp, int mp);
 	ItemArmor();
 	~ItemArmor();
 };
@@ -61,6 +111,7 @@ class ItemSpecial : public Item
 private:
 
 public:
+	HRESULT init(int atk, int dep, int res, int hp, int mp);
 	ItemSpecial();
 	~ItemSpecial();
 };

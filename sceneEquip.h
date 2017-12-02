@@ -2,6 +2,8 @@
 #include "gameNode.h"
 #include "Player.h"
 #include "button.h"
+#include "Item.h"
+
 enum BTN {
 	BTN_NEXT,
 	BTN_PREV,
@@ -12,12 +14,22 @@ enum BTN {
 class sceneEquip : public gameNode
 {
 private:
+	typedef vector<Item*>	vItems;
+	typedef vector<Item*>::iterator	viItems;
+
 	image* _baseUI;
 	image* _chosang;
 
 	vUnits _vUnitsInFile;
-
+	vItems _vItems;        //구매한 아이템
+	vItems _vItemsEquip;   //장착된 아이템벡터 나중에 player _vItems 로 넘겨야함
 	button* _button[BTN_MAXX];
+
+	ItemWeapon* _weapon;
+	ItemArmor* _armor;
+	ItemSpecial* _special;
+	
+	TCHAR _itemClass[32];
 
 	TCHAR _name[32];
 	TCHAR _aos[32];
@@ -40,6 +52,7 @@ private:
 	int _fig;		//사기
 	int _move;      //이동력
 	
+	bool _availableEquip;
 	Player*	_player;
 public:
 	HRESULT init(void);

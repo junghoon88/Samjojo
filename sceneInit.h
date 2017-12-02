@@ -39,6 +39,7 @@ private:
 	void initImageUnits(void);
 
 	void initImageUI(void);
+	void initImageItems(void);
 
 public:
 	HRESULT init(void);
