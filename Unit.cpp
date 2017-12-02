@@ -353,6 +353,7 @@ void Unit::counterAttack(Unit* opponent)
 
 void Unit::findEnemy(TEAM myTeam, POINT closeEnemyPos)
 {
+	if (_battleState.squence != UNITSEQUENCE_TURNON) return;
 	//1. 공격 범위 넣고
 	_astar->resetAtkRange();
 	for (int i = 0; i < UNIT_ATTACK_RANGE_MAX; i++)

@@ -58,36 +58,36 @@ void sceneBattle::release(void)
 void sceneBattle::update(void)
 {
 	//debug
-	//{
-	//	Unit* unit = _enemy->getUnits()[0];
-	//	if (KEYMANAGER->isOnceKeyDown('3') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD8))
-	//	{
-	//		unit->move(DIRECTION_UP);
-	//	}
-	//	if (KEYMANAGER->isOnceKeyDown('5') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
-	//	{
-	//		unit->move(DIRECTION_DN);
-	//	}
-	//	if (KEYMANAGER->isOnceKeyDown('4') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
-	//	{
-	//		unit->move(DIRECTION_LF);
-	//	}
-	//	if (KEYMANAGER->isOnceKeyDown('6') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD6))
-	//	{
-	//		unit->move(DIRECTION_RG);
-	//	}
-	//	if (KEYMANAGER->isOnceKeyDown('7') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD7))
-	//	{
-	//		_map->scanUnitsPos();
-	//		unit->findMoveArea();
-	//	}
-	//	if (KEYMANAGER->isOnceKeyDown('8') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD9))
-	//	{
-	//		unit->setUnitSequnce(UNITSEQUENCE_TURNON);
-	//		_map->scanUnitsPos();
-	//		unit->findEnemy(TEAM_ENEMY, findCloseEnemyPos(unit));
-	//	}
-	//}
+	{
+		Unit* unit = _enemy->getUnits()[1];
+		if (KEYMANAGER->isOnceKeyDown('3') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD8))
+		{
+			debug_enemyturn();
+		}
+		if (KEYMANAGER->isOnceKeyDown('5') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
+		{
+			unit->move(DIRECTION_DN);
+		}
+		if (KEYMANAGER->isOnceKeyDown('4') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
+		{
+			unit->move(DIRECTION_LF);
+		}
+		if (KEYMANAGER->isOnceKeyDown('6') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD6))
+		{
+			unit->move(DIRECTION_RG);
+		}
+		if (KEYMANAGER->isOnceKeyDown('7') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD7))
+		{
+			_map->scanUnitsPos();
+			unit->findMoveArea();
+		}
+		if (KEYMANAGER->isOnceKeyDown('8') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD9))
+		{
+			unit->setUnitSequnce(UNITSEQUENCE_TURNON);
+			_map->scanUnitsPos();
+			unit->findEnemy(TEAM_ENEMY, findCloseEnemyPos(unit));
+		}
+	}
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
 		_sDL->loadDialog();
@@ -242,8 +242,8 @@ void sceneBattle::friendAction(void)//아군 턴 액션
 	for (int i = 0; i < _friend->getUnits().size(); i++) //행동 끝난 뒤에 끝나는 신호가 필요함..
 	{
 		if (_friend->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue; //행동 불가능인 애들은 거르고
-		_friend->getUnits()[i]->update(TEAM_FRIEND);
 		_friend->getUnits()[i]->findEnemy(TEAM_FRIEND, findCloseEnemyPos(_friend->getUnits()[i]));
+		_friend->getUnits()[i]->update(TEAM_FRIEND);
 		break;
 	}
 }
@@ -253,11 +253,10 @@ void sceneBattle::enemyAction(void) //적군 턴 액션
 	for (int i = 0; i < _enemy->getUnits().size(); i++)
 	{
 		if (_enemy->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue;
-		_enemy->getUnits()[i]->update(TEAM_ENEMY);
 		_enemy->getUnits()[i]->findEnemy(TEAM_ENEMY, findCloseEnemyPos(_enemy->getUnits()[i]));
+		_enemy->getUnits()[i]->update(TEAM_ENEMY);
 		break;
 	}
-	
 }
 
 void sceneBattle::linkClass(void)
@@ -352,5 +351,13 @@ void sceneBattle::setUpBattle(void)
 	for (int i = 0; i < _friend->getUnits().size(); i++)
 	{
 		_friend->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNOFF);
+	}
+}
+
+void sceneBattle::debug_enemyturn(void)
+{
+	for (int i = 0; i < _enemy->getUnits().size(); i++)
+	{
+		_enemy->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
 	}
 }

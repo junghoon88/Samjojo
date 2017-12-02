@@ -65,6 +65,7 @@ public:
 	void linkClass(void);
 	void setUpPlayer(void);
 	void setUpBattle(void);
+	void debug_enemyturn(void);
 
 };
 
