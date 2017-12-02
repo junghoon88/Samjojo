@@ -48,7 +48,7 @@ void Unit::release(void)
 
 void Unit::update(TEAM team)
 {
-	updateStatus();	// 초기능력치 + 레벨당능력치 + 아이템능력치
+	//updateStatus();	// 초기능력치 + 레벨당능력치 + 아이템능력치
 	expMaxCheck();	// 경험치 확인
 
 	switch (team)
@@ -79,6 +79,8 @@ void Unit::update(TEAM team)
 
 void Unit::render(void)
 {
+	if (_battleState.isHiding) return;
+
 	if (!_battleState.imgBattleAtk) return;
 	if (!_battleState.imgBattleIdle) return;
 	if (!_battleState.imgBattleSpc) return;
@@ -128,7 +130,11 @@ void Unit::expMaxCheck(void)
 	if (_status.expMax <= _status.exp)
 	{
 		_status.exp = 0;
-		if (_status.level < MAXLVL) _status.level += 1;
+		if (_status.level < MAXLVL)
+		{
+			_status.level += 1;
+			updateStatus();
+		}
 	}
 }
 
@@ -317,7 +323,18 @@ void Unit::attack(Unit* opponent)
 
 		int damage;
 		damage = _status.Atk * opponent->getStatus().Dep / MAXDEF;
-		opponent->setCurHP(opponent->getCurHP() - damage);
+
+		int curHP = opponent->getCurHP() - damage;
+		if (curHP <= 0)
+		{
+			curHP = 0;
+			opponent->setCurHP(curHP);
+			opponent->setIsLive(false);
+		}
+		else
+		{
+			opponent->setCurHP(curHP);
+		}
 
 		return;
 	}
@@ -354,6 +371,7 @@ void Unit::counterAttack(Unit* opponent)
 void Unit::findEnemy(TEAM myTeam, POINT closeEnemyPos)
 {
 	if (_battleState.squence != UNITSEQUENCE_TURNON) return;
+
 	//1. 공격 범위 넣고
 	_astar->resetAtkRange();
 	for (int i = 0; i < UNIT_ATTACK_RANGE_MAX; i++)

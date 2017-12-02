@@ -297,6 +297,8 @@ public:
 
 	inline void setCurHP(int damage) { _status.HP -= damage; }
 	inline int getCurHP(void) { return _status.HP; }
+	inline void setIsLive(bool live) { _status.isLive = live; }
+	inline bool getIsLive(void) { return _status.isLive; }
 
 	inline void setImgBattleIdle(int num)
 	{

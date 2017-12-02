@@ -30,6 +30,8 @@ void Enemy::update(void)
 	{
 		_vUnits[i]->update(TEAM_ENEMY);
 	}
+
+	UnitLiveCheck();
 }
 
 void Enemy::render(void)
@@ -140,4 +142,17 @@ void Enemy::deleteUnits(void)
 	}
 	_vUnitsInFile.clear();
 
+}
+
+void Enemy::UnitLiveCheck(void)
+{
+	viUnits iter = _vUnits.begin();
+	while (iter != _vUnits.end())
+	{
+		if ((*iter)->getIsLive() == FALSE)
+		{
+			_vUnits.erase(iter);
+		}
+		else ++iter;
+	}
 }

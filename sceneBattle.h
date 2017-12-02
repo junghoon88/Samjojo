@@ -8,11 +8,13 @@
 #include "aStar.h"
 #include "scanDialog.h"
 
-enum tagPhase
+enum BATTLEPHASE
 {
-	PLAYERPHASE,
-	FRIENDPHASE,
-	ENEMYPHASE // 이 순으로 전투 진행
+	BATTLEPHASE_PLAYER,
+	BATTLEPHASE_FRIEND,
+	BATTLEPHASE_ENEMY, // 이 순으로 전투 진행
+
+	BATTLEPHASE_MAX
 };
 
 
@@ -27,7 +29,7 @@ private:
 
 	
 
-	tagPhase	_phase;
+	BATTLEPHASE	_phase;
 	int _turn; //턴 진행상황
 
 
@@ -66,7 +68,6 @@ public:
 	void enemyAction(void);
 	void phaseCheck(void);
 	void linkClass(void);
-	void setUpPlayer(void);
 	void setUpBattle(void);
 	void debug_enemyturn(void);
 

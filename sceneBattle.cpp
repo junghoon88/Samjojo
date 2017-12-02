@@ -28,10 +28,15 @@ HRESULT sceneBattle::init(void)
 
 	linkClass();
 	setUpBattle();
-	setUpPlayer();//
 
-	_phase = PLAYERPHASE;
-	
+	_turn = 1;
+	_phase = BATTLEPHASE_PLAYER;
+	for (int i = 0; i < _player->getUnits().size(); i++)
+	{
+		_player->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
+		_player->getUnits()[i]->setMoved(true);
+	}
+
 	_sDL = new scanDialog;
 	_sDL->init("scripts/script 05.txt");
 	_sDL->setNext(9);
@@ -105,18 +110,20 @@ void sceneBattle::update(void)
 		}
 	}
 
-	_player->update();
-	//_friend->update();
-	//_enemy->update();
-
-	_map->update(); 
 	friendAction();
 	enemyAction();
-	_map->scanUnitsPos();
-	if(_phase == PLAYERPHASE)_cursor->update();
-//	else if (_phase == FRIENDPHASE); //friendAction();
-//	else if (_phase == ENEMYPHASE); //enemyAction();
 
+	_player->update();
+	_friend->update();
+	_enemy->update();
+
+	_map->update(); 
+	_map->scanUnitsPos();
+	
+	if(_phase == BATTLEPHASE_PLAYER)
+		_cursor->update();
+
+	phaseCheck();
 }
 
 void sceneBattle::render(void)
@@ -203,48 +210,71 @@ void sceneBattle::initSound(void)
 // ▼행동 종료시나..아무튼 호출해서 체크. 계속 체크돌릴 필요는 없을듯▼
 void sceneBattle::phaseCheck(void)
 {
-	int _Active = 0;
-	if (_phase == PLAYERPHASE)
+	bool isEnd = true;
+
+	if (_phase == BATTLEPHASE_PLAYER)
 	{
 		for (int i = 0; i < _player->getUnits().size(); i++)
 		{
-			if (_player->getUnits()[i]->getBattleState().squence != UNITSEQUENCE_TURNOFF) continue;
-			_Active++;
+			if (_player->getUnits()[i]->getBattleState().squence != UNITSEQUENCE_TURNOFF)
+			{
+				isEnd = false;
+				break;
+			}
 		}
-		if (_Active == 0)//전부 행동 불가면 다음턴 애들 행동가능으로 만들고 페이즈 넘김.
+
+		if (isEnd) //전부 행동 불가면 다음턴 애들 행동가능으로 만들고 페이즈 넘김.
 		{
 			for (int i = 0; i < _friend->getUnits().size(); i++)
 			{
 				_friend->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
 			}
-			_phase = FRIENDPHASE;
+			_phase = BATTLEPHASE_FRIEND;
 		}
 	}
-	else if (_phase == FRIENDPHASE)
+	else if (_phase == BATTLEPHASE_FRIEND)
 	{
 		for (int i = 0; i < _friend->getUnits().size(); i++)
 		{
-			if (!_friend->getUnits()[i]->getBattleState().squence != UNITSEQUENCE_TURNOFF) continue;
+			if (_friend->getUnits()[i]->getBattleState().squence != UNITSEQUENCE_TURNOFF)
+			{
+				isEnd = false;
+				break;
+			}
 		}
-		if (_Active == 0)
+
+		if (isEnd)
 		{
 			for (int i = 0; i < _enemy->getUnits().size(); i++)
 			{
+				//은신중일땐 턴을주지 않는다.
+				if (_enemy->getUnits()[i]->getBattleState().isHiding) continue;
+
 				_enemy->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
 			}
-			_phase = ENEMYPHASE;
+			_phase = BATTLEPHASE_ENEMY;
 		}
 	}
-	else if (_phase == ENEMYPHASE)
+	else if (_phase == BATTLEPHASE_ENEMY)
 	{
 		for (int i = 0; i < _enemy->getUnits().size(); i++)
 		{
-			if (!_enemy->getUnits()[i]->getBattleState().squence != UNITSEQUENCE_TURNOFF) continue;
+			if (!_enemy->getUnits()[i]->getBattleState().squence != UNITSEQUENCE_TURNOFF)
+			{
+				isEnd = false;
+				break;
+			}
 		}
-		if (_Active == 0)
+
+		if (isEnd)
 		{
+			_phase = BATTLEPHASE_PLAYER;
+			for (int i = 0; i < _player->getUnits().size(); i++)
+			{
+				_player->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
+				_player->getUnits()[i]->setMoved(true);
+			}
 			_turn++;
-			setUpPlayer();
 		}
 	}
 }
@@ -260,7 +290,6 @@ void sceneBattle::friendAction(void)//아군 턴 액션
 	{
 		if (_friend->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue; //행동 불가능인 애들은 거르고
 		_friend->getUnits()[i]->findEnemy(TEAM_FRIEND, findCloseEnemyPos(_friend->getUnits()[i]));
-		_friend->getUnits()[i]->update(TEAM_FRIEND);
 		break;
 	}
 }
@@ -271,7 +300,6 @@ void sceneBattle::enemyAction(void) //적군 턴 액션
 	{
 		if (_enemy->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue;
 		_enemy->getUnits()[i]->findEnemy(TEAM_ENEMY, findCloseEnemyPos(_enemy->getUnits()[i]));
-		_enemy->getUnits()[i]->update(TEAM_ENEMY);
 		break;
 	}
 }
@@ -345,17 +373,6 @@ Unit* sceneBattle::findUnit(TEAM team, POINT pt)
 	}
 
 	return NULL;
-}
-
-
-void sceneBattle::setUpPlayer(void)
-{
-	_phase = PLAYERPHASE;
-	for (int i = 0; i < _player->getUnits().size(); i++)
-	{
-		_player->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
-		_player->getUnits()[i]->setMoved(true);
-	}
 }
 
 
