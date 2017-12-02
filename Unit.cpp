@@ -320,6 +320,15 @@ void Unit::moveTo(POINT tliePt)
 
 void Unit::attack(Unit* opponent)
 {
+	_oldSeq = _battleState.squence;
+
+	// 상대의 공격범위 내에 자신이 위치하고 있으면 반격 시퀀스로 간다
+	if (opponent->getStatus().atkRange[_battleState.tilePt.x][_battleState.tilePt.y] == TRUE)
+	{
+		_battleState.squence = UNITSEQUENCE_COUNTER;
+	}
+	else _battleState.squence = UNITSEQUENCE_IDLE;
+
 	_battleState.unitState = UNITSTATE_ATK;
 
 	if (1)
@@ -327,7 +336,7 @@ void Unit::attack(Unit* opponent)
 		opponent->setUnitState(UNITSTATE_HIT);			// 피격
 
 		int damage;
-		damage = _status.Atk * opponent->getStatus().Dep / MAXDEF;
+		damage = _status.Atk - opponent->getStatus().Dep / 2;
 		opponent->setCurHP(opponent->getCurHP() - damage);
 
 		return;
@@ -337,10 +346,18 @@ void Unit::attack(Unit* opponent)
 		opponent->setUnitState(UNITSTATE_DEF);			// 방어		
 		return;
 	}
+
+	if (_status.team == TEAM_PLAYER && _battleState.imgBattleAtk->getFrameY() >= _battleState.imgBattleAtk->getMaxFrameY())
+	{
+		_battleState.unitState = UNITSTATE_IDLE;
+	}
 }
 
 void Unit::counterAttack(Unit* opponent)
 {
+	_oldSeq = _battleState.squence;
+	_battleState.squence = UNITSEQUENCE_IDLE;
+
 	opponent->setUnitState(UNITSTATE_ATK);
 
 	//반격하는 방향으로 전환
@@ -354,7 +371,7 @@ void Unit::counterAttack(Unit* opponent)
 		_battleState.unitState = UNITSTATE_HIT;			// 피격
 
 		int damage;
-		damage = opponent->getStatus().Atk * _status.Dep / MAXDEF;
+		damage = opponent->getStatus().Atk - _status.Dep / 2;
 		setCurHP(_status.HP - damage);
 
 		return;
@@ -518,16 +535,8 @@ void Unit::updateSequence(bool bAuto)
 		if (opponent != NULL)
 		{
 			attack(opponent);
-			_oldSeq = _battleState.squence;
-
-			// 상대의 공격범위 내에 자신이 위치하고 있으면 반격 시퀀스로 간다
-			if (opponent->getStatus().atkRange[_battleState.tilePt.x][_battleState.tilePt.y] == TRUE )
-			{
-				_battleState.squence = UNITSEQUENCE_COUNTER;
-			}
-			else _battleState.squence = UNITSEQUENCE_IDLE;
 		}
-		else _battleState.squence = UNITSEQUENCE_IDLE;
+		//else _battleState.squence = UNITSEQUENCE_IDLE;
 
 		return;
 	}
@@ -538,8 +547,6 @@ void Unit::updateSequence(bool bAuto)
 		{
 			counterAttack(opponent);
 		}
-		_oldSeq = _battleState.squence;
-		_battleState.squence = UNITSEQUENCE_IDLE;
 		return;
 	}
 
