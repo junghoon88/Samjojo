@@ -615,6 +615,8 @@ void infoCursor::cmd_item(void)
 }
 void infoCursor::cmd_wait(void)	 
 {
+	_player->getUnits()[vNum]->setUnitSequnce(UNITSEQUENCE_TURNOFF);
+	dataClean();
 
 }
 void infoCursor::cmd_cancel(void)
@@ -661,4 +663,8 @@ void infoCursor::infoSetup(void)
 	drawMoveLine = { 0,0,0,0 };
 	oPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
 	linePen = CreatePen(PS_SOLID, 3, RGB(255, 0, 0));
+
+	buttonSetup();
+	cmdBox = RectMakeCenter(0, 0, 110, 250);
+
 }

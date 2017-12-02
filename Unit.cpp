@@ -508,6 +508,7 @@ void Unit::updateSequence(bool bAuto)
 				_battleState.squence = UNITSEQUENCE_COUNTER;
 			}
 			else _battleState.squence = UNITSEQUENCE_TURNOFF;
+			
 		}
 		else _battleState.squence = UNITSEQUENCE_TURNOFF;
 

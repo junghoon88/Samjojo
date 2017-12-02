@@ -94,11 +94,12 @@ void sceneBattle::update(void)
 	_player->update();
 	//_friend->update();
 	//_enemy->update();
-	_map->scanUnitsPos();
+
 	_map->update(); 
 	_sDL->update();
 	friendAction();
 	enemyAction();
+	_map->scanUnitsPos();
 	if(_phase == PLAYERPHASE)_cursor->update();
 //	else if (_phase == FRIENDPHASE); //friendAction();
 //	else if (_phase == ENEMYPHASE); //enemyAction();
@@ -224,6 +225,7 @@ void sceneBattle::phaseCheck(void)
 		}
 		if (_Active == 0)
 		{
+			_turn++;
 			setUpPlayer();
 		}
 	}
@@ -235,20 +237,26 @@ void sceneBattle::phaseControl(void) //호출해서 벡터 검출하고 행동할 수 있는 놈 
 }
 
 void sceneBattle::friendAction(void)//아군 턴 액션
-{ 
+{
 	for (int i = 0; i < _friend->getUnits().size(); i++) //행동 끝난 뒤에 끝나는 신호가 필요함..
 	{
 		if (_friend->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue; //행동 불가능인 애들은 거르고
 		_friend->getUnits()[i]->update(TEAM_FRIEND);
+		_friend->getUnits()[i]->findEnemy(TEAM_FRIEND, findCloseEnemyPos(_friend->getUnits()[i]));
+		break;
 	}
 }
 void sceneBattle::enemyAction(void) //적군 턴 액션
 {
+
 	for (int i = 0; i < _enemy->getUnits().size(); i++)
 	{
 		if (_enemy->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue;
 		_enemy->getUnits()[i]->update(TEAM_ENEMY);
+		_enemy->getUnits()[i]->findEnemy(TEAM_ENEMY, findCloseEnemyPos(_enemy->getUnits()[i]));
+		break;
 	}
+	
 }
 
 void sceneBattle::linkClass(void)
