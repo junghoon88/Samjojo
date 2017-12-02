@@ -18,7 +18,7 @@ private:
 	Friend*		_friend;	//¾Æ±º
 	gameMap*	_map;
 
-	infoCursor* info;
+	battleSceneInterface* info;
 
 public:
 	Enemy();
@@ -43,6 +43,6 @@ public:
 	inline void setLinkAdressPlayer(Player* player) { _player = player; }
 	inline void setLinkAdressFriend(Friend* friends) { _friend = friends; }
 	inline void setLinkAdressMap(gameMap* map) { _map = map; }
-	inline void setLinkCursor(infoCursor* cursor) { info = cursor; }
+	inline void setLinkAdressUI(battleSceneInterface* cursor) { info = cursor; }
 };
 

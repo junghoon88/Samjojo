@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "Friend.h"
 #include "gameMap.h"
-#include "infoCursor.h"
+#include "battleSceneInterface.h"
 
 Enemy::Enemy()
 {
@@ -31,7 +31,7 @@ void Enemy::update(void)
 		_vUnits[i]->update(TEAM_ENEMY);
 	}
 
-	UnitLiveCheck();
+	//UnitLiveCheck();
 }
 
 void Enemy::render(void)
