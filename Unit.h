@@ -209,7 +209,7 @@ class Unit : public gameNode
 private:
 	typedef BOOL(*Temp)[UNIT_ATTACK_RANGE_MAX];
 
-	int _imgFrameTime;
+	float _imgFrameTime;
 	int _imgFrameY;
 
 	UNITSEQUENCE _oldSeq;
@@ -290,11 +290,35 @@ public:
 		}
 		return false;
 	};//인덱스 받아서 인덱스로 해당타일 있으면 트루값 반환 해주자 없으면 빠꾸
-	inline bool isAttackTarget(int index)
+
+	inline bool isAttackTarget(int index) //플레이어랑 인덱스 거리를 계산해서 이게 트루이면
 	{
-		if (_status.atkRange[index / 7][index % 7] == true)
+		int findIdX = index % TILEX;
+		int findIdY = index / TILEX;
+
+		int startX = _battleState.tilePt.x - int(UNIT_ATTACK_RANGE_MAX / 2);
+		int startY = _battleState.tilePt.y - int(UNIT_ATTACK_RANGE_MAX / 2);
+	
+		for (int i = 0; i < UNIT_ATTACK_RANGE_MAX; i++) //y
 		{
-			return true;
+			for (int j = 0; j < UNIT_ATTACK_RANGE_MAX; j++) //x
+			{
+				int targetX = startX + j;
+				int targetY = startY + i;
+
+				if (targetX < 0) continue;
+				if (targetY < 0) continue;
+				if (targetX > _map->getTileSizeX()) continue;
+				if (targetY > _map->getTileSizeY()) continue;
+
+				if (findIdX == targetX && findIdY == targetY)
+				{
+					if (_status.atkRange[j][i] == true)
+					{
+						return true;
+					}
+				}
+			}
 		}
 		return false;
 	}
