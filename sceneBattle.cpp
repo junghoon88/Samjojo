@@ -76,27 +76,27 @@ void sceneBattle::update(void)
 		switch (_battlestory)
 		{
 		case BATTLESTORY_1:
-			_sDL->init("scripts/script 05.txt");
+			_sDL->init("scripts/script 05.txt"); //스타트 스크립트
 			_sDL->setNext(9);
 			_loadDialog = false;
 			break;
 		case BATTLESTORY_2:
-			_sDL->init("scripts/script 06.txt");
+			_sDL->init("scripts/script 06.txt"); //이벤트1 몹이 아무도없을때
 			_sDL->setNext(9);
 			_loadDialog = false;
 			break;
 		case BATTLESTORY_3:
-			_sDL->init("scripts/script 07.txt");
+			_sDL->init("scripts/script 07.txt"); //이벤트 2 조조가 습격당했을때
 			_sDL->setNext(9);
 			_loadDialog = false;
 			break;
 		case BATTLESTORY_4:
-			_sDL->init("scripts/script 10.txt");
+			_sDL->init("scripts/script 10.txt"); //이벤트 3 턴이 10이되서 조조가 움직일때
 			_sDL->setNext(9);
 			_loadDialog = false;
 			break;
 		case BATTLESTORY_5:
-			_sDL->init("scripts/script 11.txt");
+			_sDL->init("scripts/script 11.txt"); //이벤트 4 이유가 뒤졌을때
 			_sDL->setNext(9);
 			_loadDialog = false;
 			break;
