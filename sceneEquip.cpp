@@ -135,6 +135,8 @@ void sceneEquip::update(void) {
 				}
 				SAFE_DELETE(_vItems[i]);                 //메모리해제
 				_vItems.erase(_vItems.begin() + i);      //목록에서 제거	
+				for (int i = 0; i < _vUnitsInFile.size(); i++)
+					_vUnitsInFile[i]->updateStatus();             //스탯 업데이트
 			}
 		}
 	}
@@ -307,6 +309,21 @@ void sceneEquip::render(void) {
 		HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
 		SetTextColor(getMemDC(), RGB(0, 0, 0));
 		TextOut(getMemDC(), 520, 67, _vUnitsInFile[_index]->getItemW()->getName(), _tcslen(_vUnitsInFile[_index]->getItemW()->getName()));
+		TCHAR tmp[32];
+		_stprintf(tmp, L"공격력: +%2d", _vUnitsInFile[_index]->getItemW()->getAtk());
+		TextOut(getMemDC(), 486, 120, tmp, _tcslen(tmp));
+	}
+	if (_vUnitsInFile[_index]->getItemA() != NULL) {
+		_vUnitsInFile[_index]->getItemA()->getImg32()->render(getMemDC(), 488, 182);
+		HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
+		SetTextColor(getMemDC(), RGB(0, 0, 0));
+		TextOut(getMemDC(), 520, 164, _vUnitsInFile[_index]->getItemA()->getName(), _tcslen(_vUnitsInFile[_index]->getItemA()->getName()));
+		TCHAR tmp[32];
+		_stprintf(tmp, L"방어력: +%2d", _vUnitsInFile[_index]->getItemA()->getDep());
+		TextOut(getMemDC(), 486, 216, tmp, _tcslen(tmp));
+
+
+
 
 	}
 
