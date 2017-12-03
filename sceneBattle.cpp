@@ -36,13 +36,11 @@ HRESULT sceneBattle::init(void)
 	ShowCursor(true);
 
 
-	_isDialog[0] = true;
-	for (int i = 1; i < 5; i++)
-	{
-		_isDialog[i] = false;
-	}
+	_isDialog = true;
+	_loadDialog = false;
+	_battlestory = BATTLESTORY_1;
 	_sDL->setAddressLinkBattle(this);
-
+	
 	
 
 	_phaseChanging = false;
@@ -67,35 +65,99 @@ void sceneBattle::release(void)
 
 void sceneBattle::update(void)
 {
-	for (int i = 0; i < BATTLESTORY_MAX; i++)
+	if (KEYMANAGER->isOnceKeyDown('B'))
 	{
-		if (_isDialog[i])
+		_battlestory = BATTLESTORY_5;
+		_isDialog = true;
+		_loadDialog = true;
+	}
+	if (_loadDialog)
+	{
+		switch (_battlestory)
+		{
+		case BATTLESTORY_1:
+			_sDL->init("scripts/script 05.txt"); //스타트 스크립트
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_2:
+			_sDL->init("scripts/script 06.txt"); //이벤트1 몹이 아무도없을때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_3:
+			_sDL->init("scripts/script 07.txt"); //이벤트 2 조조가 습격당했을때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_4:
+			_sDL->init("scripts/script 10.txt"); //이벤트 3 턴이 10이되서 조조가 움직일때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_5:
+			_sDL->init("scripts/script 11.txt"); //이벤트 4 이유가 뒤졌을때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		}
+	}
+		if (_isDialog)
 		{
 			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 			{
 				_sDL->loadDialog();
+				_sDL->update();
 			}
-			_sDL->update();
-
 			return;
 		}
-	}
+	
 	//테스트용 
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> bef7b8e226abd5b0f5c584e90c3071c267675720
 
 
 	if (_phaseChanging)
 	{
 		_phaseChangeTime += TIMEMANAGER->getElapsedTime();
-		if (_phaseChangeTime > 3.0f)
+
+		if (_phase == BATTLEPHASE_VICTORY)
 		{
-			_phaseChanging = false;
-			_phaseChangeTime = 0.0f;
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				DATABASE->setBattleVictory(true);
+				SCENEMANAGER->changeScene(L"결과씬");
+			}
 		}
+		else if (_phase == BATTLEPHASE_DEFEAT)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				DATABASE->setBattleVictory(false);
+				SCENEMANAGER->changeScene(L"결과씬");
+			}
+		}
+		else
+		{
+			if (_phaseChangeTime > 2.5f)
+			{
+				_phaseChanging = false;
+				_phaseChangeTime = 0.0f;
+			}
+		}
+
+		_player->update();
+		_friend->update();
+		_enemy->update();
+
 		return;
 	}
 
 	//debug
+	if(_enemy->getUnits().size() > 2)
 	{
 		Unit* unit = _enemy->getUnits()[1];
 		if (KEYMANAGER->isOnceKeyDown('5') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
@@ -121,6 +183,21 @@ void sceneBattle::update(void)
 			_map->scanUnitsPos();
 			unit->findEnemy(TEAM_ENEMY, findCloseEnemyPos(unit));
 		}
+		if (KEYMANAGER->isOnceKeyDown('9'))
+		{
+			for (int i = 0; i < _enemy->getUnits().size(); i++)
+			{
+				_enemy->getUnits()[i]->setIsLive(false);
+			}
+		}
+		if (KEYMANAGER->isOnceKeyDown('0'))
+		{
+			for (int i = 0; i < _player->getUnits().size(); i++)
+			{
+				_player->getUnits()[i]->setIsLive(false);
+			}
+		}
+
 	}
 
 	friendAction();
@@ -200,9 +277,9 @@ void sceneBattle::render(void)
 			DrawText(getMemDC(), str, _tcslen(str), &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 			break;
 		}
+		SetTextColor(getMemDC(), oldcolor);
 		SelectObject(getMemDC(), hFontOld);
 		DeleteObject(hFontOld);
-		SetTextColor(getMemDC(), oldcolor);
 
 	}
 
@@ -272,6 +349,15 @@ void sceneBattle::phaseCheck(void)
 		_phase = BATTLEPHASE_VICTORY;
 		_phaseChanging = true;
 		_phaseChangeTime = 0.0f;
+
+		for (int i = 0; i < _player->getUnits().size(); i++)
+		{
+			_player->getUnits()[i]->setUnitState(UNITSTATE_VIC);
+		}
+		for (int i = 0; i < _friend->getUnits().size(); i++)
+		{
+			_friend->getUnits()[i]->setUnitState(UNITSTATE_VIC);
+		}
 		return;
 	}
 	//패배조건
@@ -280,6 +366,11 @@ void sceneBattle::phaseCheck(void)
 		_phase = BATTLEPHASE_DEFEAT;
 		_phaseChanging = true;
 		_phaseChangeTime = 0.0f;
+
+		for (int i = 0; i < _enemy->getUnits().size(); i++)
+		{
+			_enemy->getUnits()[i]->setUnitState(UNITSTATE_VIC);
+		}
 		return;
 	}
 
