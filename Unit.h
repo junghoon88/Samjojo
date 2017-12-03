@@ -258,21 +258,28 @@ public:
 
 	void updateSequence(bool bAuto);
 	void updateImage(void);
+
+	void setItemW(Item* item);
+	void setItemA(Item* item);
+	void setItemS(Item* item);
+
+
 public:
 	void updateStatus(void);
 	inline void earnExp(int exp) { _status.exp += exp; };
 	inline void	expMaxCheck(void);
 	inline void useItem(Unit* unit, int type, int value);
 
+
+
 public:
 	inline tagStatus getStatus(void) { return _status; }
 	inline void setStatus(tagStatus status) { _status = status; }
+
 	inline ItemWeapon* getItemW(void) { return _itemW; }
-	inline void setItemW(ItemWeapon* itemw) { _itemW = itemw; }
 	inline ItemArmor* getItemA(void) { return _itemA; }
-	inline void setItemA(ItemArmor* itema) { _itemA = itema; }
 	inline ItemSpecial*	getItemS(void) { return _itemS; }
-	inline void setItemS(ItemSpecial* items) { _itemS = items; }
+
 	inline int getImgBattleIdle(void) { return _battleState.numImgBattleIdle; }
 	inline int getImgBattleAtk(void) { return _battleState.numImgBattleAtk; }
 	inline int getImgBattleSpc(void) { return _battleState.numImgBattleSpc; }
