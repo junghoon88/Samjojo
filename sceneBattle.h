@@ -52,7 +52,8 @@ private:
 	scanDialog* _sDL;
 
 	BATLLESTORY _battlestory;
-	bool		_isDialog[BATTLESTORY_MAX];
+	bool		_isDialog;
+	bool		_loadDialog;
 public:
 	sceneBattle();
 	~sceneBattle();
@@ -72,7 +73,7 @@ public:
 	inline void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
 	inline void setLinkAdressFriend(Friend* friends) { _friend = friends; }
 	inline void setLinkAdressMap(gameMap* map) { _map = map; }
-	inline void setDialog(bool isDialog , int i) { _isDialog[i] = isDialog; }
+	inline void setDialog(bool isDialog) { _isDialog = isDialog; }
 	
 	Unit* findUnit(TEAM team, POINT pt);
 	void friendAction(void);
