@@ -105,6 +105,7 @@ void Unit::updateStatus(void)
 {
 	_status.HP = _status.HPMax = _status.InitHPMax + (_status.level * _status.LvPerHPMax) + _status.ItemPlusHPMax;
 	_status.MP = _status.MPMax = _status.InitMPMax + (_status.level * _status.LvPerMPMax) + _status.ItemPlusMPMax;
+
 	_status.Pwr = _status.InitPwr + _status.ItemPlusPwr;
 	_status.Lds = _status.InitLds + _status.ItemPlusLds;
 	_status.Int = _status.InitInt + _status.ItemPlusInt;
@@ -331,7 +332,7 @@ void Unit::attack(Unit* opponent)
 
 	_battleState.unitState = UNITSTATE_ATK;
 
-	if (1)
+	if (RND->getInt(99) > opponent->getStatus().Agl / 2 - 1)	//예) 순발력이 80이면, 80/2=40 0~99중에 41~99이면 공격 당함 == 40퍼 확률로 방어
 	{
 		opponent->setUnitState(UNITSTATE_HIT);			// 피격
 
@@ -366,7 +367,7 @@ void Unit::counterAttack(Unit* opponent)
 	if (_battleState.tilePt.x < opponent->getBattleState().tilePt.x) opponent->setDir(DIRECTION_LF);
 	if (_battleState.tilePt.x > opponent->getBattleState().tilePt.x) opponent->setDir(DIRECTION_RG);
 
-	if (1)
+	if (RND->getInt(99) > _status.Agl / 2 - 1)
 	{
 		_battleState.unitState = UNITSTATE_HIT;			// 피격
 
