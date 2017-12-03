@@ -143,6 +143,7 @@ public:
 	void infoDraw(void);
 	void cmdDraw(void);
 	void moveCamera(void);
+	void chaseCamera(POINT tilePt);
 	void mouse_Scanning(void);
 	void mouse_ClickToTile(void);
 	void mouse_ClickToAction(void);

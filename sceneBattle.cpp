@@ -119,8 +119,7 @@ void sceneBattle::update(void)
 
 	_map->update(); 
 	_map->scanUnitsPos();
-	if(_phase == BATTLEPHASE_PLAYER)
-		_interface->update();
+	if(_phase == BATTLEPHASE_PLAYER)_interface->update();
 
 	phaseCheck();
 }
@@ -224,9 +223,11 @@ void sceneBattle::phaseCheck(void)
 
 		if (isEnd) //전부 행동 불가면 다음턴 애들 행동가능으로 만들고 페이즈 넘김.
 		{
+			_interface->dataClean();
 			for (int i = 0; i < _friend->getUnits().size(); i++)
 			{
 				_friend->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
+				
 			}
 			_phase = BATTLEPHASE_FRIEND;
 		}
@@ -298,6 +299,7 @@ void sceneBattle::enemyAction(void) //적군 턴 액션
 	for (int i = 0; i < _enemy->getUnits().size(); i++)
 	{
 		if (_enemy->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue;
+	//	_interface->chaseCamera(_enemy->getUnits()[i]->getBattleState().tilePt);
 		_enemy->getUnits()[i]->findEnemy(TEAM_ENEMY, findCloseEnemyPos(_enemy->getUnits()[i]));
 		break;
 	}

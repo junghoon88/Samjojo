@@ -27,9 +27,9 @@ void battleSceneInterface::release(void)
 {
 }
 
-void battleSceneInterface::update(void) 
+void battleSceneInterface::update() 
 {
-	if (!isCommand && !popUpMenu)
+	if (!isCommand && !popUpMenu) //통상 상태
 	{
 		mouse_Scanning();//지형 타일 갱신
 		if (!isShow)moveCamera();
@@ -57,13 +57,14 @@ void battleSceneInterface::update(void)
 		{
 			//이동취소.
 			_player->getUnits()[vNum]->setMoved(false);
+			//chaseCamera(_player->getUnits()[vNum]->getRect());
 			callToMenu(_player->getUnits()[vNum]->getRect().left, _player->getUnits()[vNum]->getRect().top);//메뉴화면을 호출
 			isCommand = false;
 		}
 	}
 	else if (popUpMenu) //커맨드 목록이 활성화 됬을때
 	{
-		for (int i = 0; i < BTN_MAX; i++)
+		for (int i = 0; i < BTN_MAX; i++) // 커맨드 버튼 업데이트
 		{
 			if(actionBtn[i]) actionBtn[i]->update();
 		}
@@ -92,10 +93,11 @@ void battleSceneInterface::mouse_Scanning(void)
 	{
 		drawLine = { findtile->getTile()[indexTile].rc.left,findtile->getTile()[indexTile].rc.top,findtile->getTile()[indexTile].rc.right,findtile->getTile()[indexTile].rc.bottom };
 	}
-	else if (isShow && clickUnit == PLAYER)
+	else
 	{
 		int findIndex = indexTile + (MAINCAMERA->getCameraX() / TILESIZE) + (MAINCAMERA->getCameraY() / TILESIZE) * TILEX;
 		if(_player->getUnits()[vNum]->isMovableArea(findIndex))drawMoveLine = { findtile->getTile()[indexTile].rc.left,findtile->getTile()[indexTile].rc.top,findtile->getTile()[indexTile].rc.right,findtile->getTile()[indexTile].rc.bottom };
+		else drawMoveLine = { WINSIZEX,WINSIZEY,WINSIZEX,WINSIZEY };
 		drawLine = _player->getUnits()[vNum]->getRect();
 	}
 }
@@ -562,7 +564,7 @@ void battleSceneInterface::mouse_ClickToAttack(void)
 
 
 			_player->getUnits()[vNum]->setUnitSequnce(UNITSEQUENCE_ATTACK);
-			//dataClean();
+			dataClean();
 			break;
 		}
 	}
@@ -575,6 +577,7 @@ void battleSceneInterface::mouse_ActionCancel(void)//이동명령 취소용
 	_player->getUnits()[vNum]->setDir(backToDir);
 	_player->getUnits()[vNum]->setUnitSequnce(UNITSEQUENCE_TURNON);
 	_player->getUnits()[vNum]->setMoved(true);
+	//chaseCamera(_player->getUnits()[vNum]->getRect());
 	isCommand = false;
 	
 }
@@ -599,6 +602,20 @@ void battleSceneInterface::moveCamera(void)
 		MAINCAMERA->setCameraX(MAINCAMERA->getCameraX() + TILESIZE);
 	if (KEYMANAGER->isOnceKeyDown(VK_DOWN) && MAINCAMERA->getCameraY() < findtile->getTileSizeY() * TILESIZE - TILESIZE * 20)//아래  
 		MAINCAMERA->setCameraY(MAINCAMERA->getCameraY() + TILESIZE);
+}
+
+void battleSceneInterface::chaseCamera(POINT tilePt)
+{
+	int index = tilePt.x + tilePt.y * TILEX;
+	
+	if (findtile->getTile()[index].rc.left - WINSIZEX / 2 > 0
+		&& findtile->getTile()[index].rc.left - WINSIZEX / 2 < findtile->getTileSizeX() * TILESIZE - TILESIZE * 20)	MAINCAMERA->setCameraX(findtile->getTile()[index].rc.left - WINSIZEX / 2);
+	else if (findtile->getTile()[index].rc.left - WINSIZEX / 2 < WINSIZEX) MAINCAMERA->setCameraX(0);
+	else if (findtile->getTile()[index].rc.left - WINSIZEX / 2 < findtile->getTileSizeX() * TILESIZE - TILESIZE * 20)
+	if (findtile->getTile()[index].rc.top - WINSIZEY / 2 > 0 
+		&& findtile->getTile()[index].rc.top - WINSIZEY / 2 < findtile->getTileSizeY() * TILESIZE - TILESIZE * 20) 	MAINCAMERA->setCameraY(findtile->getTile()[index].rc.top - WINSIZEY / 2);
+
+
 }
 
 void battleSceneInterface::dataClean(void)//마우스 우클릭 시 현재 인터페이스의 정보를 초기화 해주는 역할을 할 것.
@@ -744,6 +761,9 @@ void battleSceneInterface::buttonSetup(void)
 			break;
 
 		}
+	}
+	for (int i = 0; i < BTN_MAX; i++)
+	{
 	}
 }
 
