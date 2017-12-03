@@ -565,8 +565,8 @@ void battleSceneInterface::mouse_ClickToAttack(void)
 			}
 			else
 			{
-				if (dirY > 0)	_player->getUnits()[vNum]->setDir(DIRECTION_UP);
-				else			_player->getUnits()[vNum]->setDir(DIRECTION_DN);
+				if (dirY > 0)	_player->getUnits()[vNum]->setDir(DIRECTION_DN);
+				else			_player->getUnits()[vNum]->setDir(DIRECTION_UP);
 			}
 
 

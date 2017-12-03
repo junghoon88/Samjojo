@@ -193,5 +193,12 @@ void sceneManager::playBGM(void)
 		SOUNDMANAGER->stop(L"Se_b_05");
 		if (SOUNDMANAGER->isPlaySound(L"Se_b_04") == FALSE)		SOUNDMANAGER->play(L"Se_b_04");
 	}
+	else if (_currentScene == _mSceneList.find(L"°á°ú¾À")->second)
+	{
+		SOUNDMANAGER->stop(L"Se_b_00");
+		SOUNDMANAGER->stop(L"Se_b_02");
+		SOUNDMANAGER->stop(L"Se_b_05");
+		SOUNDMANAGER->stop(L"Se_b_04");
+	}
 }
 

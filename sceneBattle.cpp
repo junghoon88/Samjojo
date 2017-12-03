@@ -107,42 +107,12 @@ void sceneBattle::update(void)
 	}
 	
 	
-	//테스트용 
-	if (_phaseChanging)
+	//Phase 변화
+	if (updatePhaseTime() == false)
 	{
-		_phaseChangeTime += TIMEMANAGER->getElapsedTime();
-
-		if (_phase == BATTLEPHASE_VICTORY)
-		{
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-			{
-				DATABASE->setBattleVictory(true);
-				SCENEMANAGER->changeScene(L"결과씬");
-			}
-		}
-		else if (_phase == BATTLEPHASE_DEFEAT)
-		{
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-			{
-				DATABASE->setBattleVictory(false);
-				SCENEMANAGER->changeScene(L"결과씬");
-			}
-		}
-		else
-		{
-			if (_phaseChangeTime > 2.5f)
-			{
-				_phaseChanging = false;
-				_phaseChangeTime = 0.0f;
-			}
-		}
-
-		_player->update();
-		_friend->update();
-		_enemy->update();
-
 		return;
 	}
+
 
 	//debug
 	if(_enemy->getUnits().size() > 2)
@@ -331,6 +301,46 @@ POINT sceneBattle::findCloseEnemyPos(Unit* unit)
 	}
 
 	return tarPt;
+}
+
+bool sceneBattle::updatePhaseTime(void)
+{
+	if (_phaseChanging)
+	{
+		_phaseChangeTime += TIMEMANAGER->getElapsedTime();
+
+		if (_phase == BATTLEPHASE_VICTORY)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				DATABASE->setBattleVictory(true);
+				SCENEMANAGER->changeScene(L"결과씬");
+			}
+		}
+		else if (_phase == BATTLEPHASE_DEFEAT)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				DATABASE->setBattleVictory(false);
+				SCENEMANAGER->changeScene(L"결과씬");
+			}
+		}
+		else
+		{
+			if (_phaseChangeTime > 2.5f)
+			{
+				_phaseChanging = false;
+				_phaseChangeTime = 0.0f;
+			}
+		}
+
+		_player->update();
+		_friend->update();
+		_enemy->update();
+
+		return false;
+	}
+	return true;
 }
 
 // ▼행동 종료시나..아무튼 호출해서 체크. 계속 체크돌릴 필요는 없을듯▼

@@ -91,9 +91,6 @@
     <Filter Include="MainGame\sceneReady">
       <UniqueIdentifier>{cd4f2a5f-7c92-4a24-9ce8-f57c7651afa1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainGame\sceneBattle\info - hyunjun">
-      <UniqueIdentifier>{b83708b4-a485-4097-9ba0-c277e28550ac}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MainGame\SIDEINTERFACE - hyunjun">
       <UniqueIdentifier>{35199bcb-83e6-4f1b-be61-4b97f3b2aa3f}</UniqueIdentifier>
     </Filter>
@@ -276,11 +273,11 @@
     <ClInclude Include="globalTools.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="battleSceneInterface.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="sceneResult.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="battleSceneInterface.h">
+      <Filter>MainGame\sceneBattle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -437,11 +434,11 @@
     <ClCompile Include="globalTools.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="battleSceneInterface.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="sceneResult.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="battleSceneInterface.cpp">
+      <Filter>MainGame\sceneBattle</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -236,6 +236,7 @@ bool Unit::move(void)
 		}
 		else
 		{
+			setIdleState();
 			return FALSE;
 		}
 	}
@@ -259,7 +260,7 @@ bool Unit::move(void)
 	_battleState.rc = RectMake(_battleState.pt.x - TILESIZE / 2, _battleState.pt.y - TILESIZE / 2, TILESIZE, TILESIZE);
 	_battleState.tilePt = { (LONG)(_battleState.pt.x / TILESIZE), (LONG)(_battleState.pt.y / TILESIZE) };
 
-	setIdleState();
+	_battleState.unitState = UNITSTATE_IDLE;
 
 	return TRUE;
 }

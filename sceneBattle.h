@@ -69,6 +69,7 @@ public:
 
 private:
 	POINT findCloseEnemyPos(Unit* unit);
+	bool updatePhaseTime(void);
 public:
 
 
