@@ -253,7 +253,6 @@ void scanDialog::loadDialog(void)
 		}
 		else if (str[0] == '/')
 		{
-			
 			next++;
 			time = 0;
 		}

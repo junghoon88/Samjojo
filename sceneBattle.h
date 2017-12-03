@@ -40,10 +40,10 @@ private:
 	gameMap*	_map;		//게임 맵
 	battleSceneInterface* _interface;	//커서 정보
 
-	
 
 	BATTLEPHASE	_phase;
 	int _turn; //턴 진행상황
+	int _eventAcc;
 	bool		_phaseChanging;
 	float		_phaseChangeTime;
 
@@ -51,7 +51,7 @@ private:
 	aStar*		_astar;		//a* 을 전투씬에 공용으로 선언하고, 각 유닛에서 할당받아서 쓰고 싶을때 쓴다.
 	scanDialog* _sDL;
 
-
+	BATLLESTORY _battlestory;
 	bool		_isDialog[BATTLESTORY_MAX];
 public:
 	sceneBattle();
@@ -80,7 +80,7 @@ public:
 	void phaseCheck(void);
 	void linkClass(void);
 	void setUpBattle(void);
-	void debug_enemyturn(void);
-
+	void checkEvent(void);
+	void unhideEnemy(void);
 };
 
