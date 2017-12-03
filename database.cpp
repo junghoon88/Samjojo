@@ -17,6 +17,8 @@ HRESULT database::init()
 
 	_slectScenario = 0;
 
+	_battleVictory = false;
+
 	return S_OK;
 }
 

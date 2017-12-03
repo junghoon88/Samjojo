@@ -123,6 +123,7 @@
     <ClInclude Include="sceneMaptool.h" />
     <ClInclude Include="scenePos.h" />
     <ClInclude Include="sceneReadybase.h" />
+    <ClInclude Include="sceneResult.h" />
     <ClInclude Include="sceneSelect.h" />
     <ClInclude Include="sceneSell.h" />
     <ClInclude Include="sceneStory.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="sceneMaptool.cpp" />
     <ClCompile Include="scenePos.cpp" />
     <ClCompile Include="sceneReadybase.cpp" />
+    <ClCompile Include="sceneResult.cpp" />
     <ClCompile Include="sceneSelect.cpp" />
     <ClCompile Include="sceneSell.cpp" />
     <ClCompile Include="sceneStory.cpp" />
