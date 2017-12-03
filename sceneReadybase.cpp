@@ -28,23 +28,15 @@ HRESULT sceneReadybase::init(void) {
 	_sD->setNext(7);
 	ShowCursor(true);
 
-	
+
 	_battleStart = false;
-
-	SOUNDMANAGER->play(L"Se_b_02", 1.0f);
-
 	_isSound = false;
-
-
-
 	return S_OK;
 }
 void sceneReadybase::release(void) {
 	_sD->release();
-	SOUNDMANAGER->stop(L"Se_b_02");
 	SOUNDMANAGER->stop(L"Se07");
 	SAFE_DELETE(_sD);
-
 }
 void sceneReadybase::update(void) {
 
@@ -85,7 +77,6 @@ void sceneReadybase::update(void) {
 		{   //출진창 누르고땜
 			_posClicking = false;
 			SOUNDMANAGER->play(L"Se02", 1.0f);
-			SOUNDMANAGER->stop(L"Se_b_02");
 			SCENEMANAGER->changeScene(L"출진씬");
 		}
 		else if (PtInRect(&_rcEquipUI, _pt))

@@ -24,6 +24,7 @@ private:
 	void initScene(void);
 	void checkWindowSize(void);
 	void controlFPS(void);
+	void playBGM(void);
 
 
 public:

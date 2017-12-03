@@ -21,6 +21,8 @@ private:
 
 	DWORD _loadingThreadID;
 
+	void playBGM(void);
+
 public:
 	sceneManager();
 	~sceneManager();

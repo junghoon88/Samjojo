@@ -203,6 +203,9 @@ void scanDialog::render(void)
 			}
 		}
 		break;
+		default: ShowCursor(true);
+
+		break;
 	}
 }
 

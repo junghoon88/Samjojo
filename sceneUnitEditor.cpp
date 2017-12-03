@@ -53,6 +53,7 @@ HRESULT sceneUnitEditor::init(void)
 
 	_exit = false;
 
+
 	return S_OK;
 }
 
