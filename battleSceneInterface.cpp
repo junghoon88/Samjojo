@@ -460,11 +460,16 @@ void battleSceneInterface::mouse_ClickToAttack(void)
 
 //	_player->getUnits()[vNum]->attack(_enemy->getUnits()[1]);
 
+	if (_player->getUnits()[vNum]->isAttackTarget(findIndex) == FALSE)
+		return;
+
 	for (int i = 0; i < _enemy->getUnits().size(); i++)
 	{
-		if (findIndex == (int)(_enemy->getUnits()[i]->getBattleState().tilePt.x + _enemy->getUnits()[i]->getBattleState().tilePt.y * TILEX) && _player->getUnits()[vNum]->isAttackTarget(findIndex))//
+		if (findIndex == (int)(_enemy->getUnits()[i]->getBattleState().tilePt.x + _enemy->getUnits()[i]->getBattleState().tilePt.y * TILEX))//
 		{
-			_player->getUnits()[vNum]->attack(_enemy->getUnits()[i]);
+			_player->getUnits()[vNum]->setOpponent(_enemy->getUnits()[i]);
+			_player->getUnits()[vNum]->setUnitSequnce(UNITSEQUENCE_ATTACK);
+			break;
 		}
 	}
 

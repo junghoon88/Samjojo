@@ -48,6 +48,7 @@ void Unit::release(void)
 
 void Unit::update(TEAM team)
 {
+	//updateStatus();	// 초기능력치 + 레벨당능력치 + 아이템능력치
 	expMaxCheck();	// 경험치 확인
 
 	switch (team)
@@ -78,6 +79,8 @@ void Unit::update(TEAM team)
 
 void Unit::render(void)
 {
+	if (_battleState.isHiding) return;
+
 	if (!_battleState.imgBattleAtk) return;
 	if (!_battleState.imgBattleIdle) return;
 	if (!_battleState.imgBattleSpc) return;
@@ -129,7 +132,11 @@ void Unit::expMaxCheck(void)
 	if (_status.expMax <= _status.exp)
 	{
 		_status.exp = 0;
-		if (_status.level < MAXLVL) _status.level += 1;
+		if (_status.level < MAXLVL)
+		{
+			_status.level += 1;
+			updateStatus();
+		}
 	}
 }
 
@@ -252,8 +259,7 @@ bool Unit::move(void)
 	_battleState.rc = RectMake(_battleState.pt.x - TILESIZE / 2, _battleState.pt.y - TILESIZE / 2, TILESIZE, TILESIZE);
 	_battleState.tilePt = { (LONG)(_battleState.pt.x / TILESIZE), (LONG)(_battleState.pt.y / TILESIZE) };
 
-
-	_battleState.unitState = UNITSTATE_IDLE;
+	setIdleState();
 
 	return TRUE;
 }
@@ -321,36 +327,45 @@ void Unit::moveTo(POINT tliePt)
 
 void Unit::attack(Unit* opponent)
 {
-	_oldSeq = _battleState.squence;
+	//_oldSeq = _battleState.squence;
 
 	// 상대의 공격범위 내에 자신이 위치하고 있으면 반격 시퀀스로 간다
-	if (opponent->getStatus().atkRange[_battleState.tilePt.x][_battleState.tilePt.y] == TRUE)
-	{
-		_battleState.squence = UNITSEQUENCE_COUNTER;
-	}
-	else _battleState.squence = UNITSEQUENCE_IDLE;
+	//if (opponent->getStatus().atkRange[_battleState.tilePt.x][_battleState.tilePt.y] == TRUE)
+	//{
+	//	_battleState.squence = UNITSEQUENCE_COUNTER;
+	//}
+	//else _battleState.squence = UNITSEQUENCE_IDLE;
 
 	_battleState.unitState = UNITSTATE_ATK;
 
-	if (RND->getInt(99) > opponent->getStatus().Agl / 2 - 1)	//예) 순발력이 80이면, 80/2=40 0~99중에 41~99이면 공격 당함 == 40퍼 확률로 방어
+	if ((opponent->getUnitState() == UNITSTATE_IDLE) || (opponent->getUnitState() == UNITSTATE_TIRED))
 	{
-		opponent->setUnitState(UNITSTATE_HIT);			// 피격
-
-		int damage;
-		damage = _status.Atk - opponent->getStatus().Dep / 2;
-		opponent->setCurHP(opponent->getCurHP() - damage);
-
-		return;
+		if (_imgFrameY >= 2)
+		{
+			//공격 성공여부를 계산한다.
+			if (RND->getInt(99) > opponent->getStatus().Agl / 2 - 1)	//예) 순발력이 80이면, 80/2=40 0~99중에 41~99이면 공격 당함 == 40퍼 확률로 방어
+			{
+				int damage = _status.Atk - opponent->getStatus().Dep;
+				opponent->getDamage(damage);
+				_battleState.attackSuccess = true;
+			}
+			else
+			{
+				_battleState.attackSuccess = false;
+			}
+		}
 	}
-	else	// 공격회피 성공하면 밑에 무효
-	{
-		opponent->setUnitState(UNITSTATE_DEF);			// 방어		
-		return;
-	}
 
-	if (_status.team == TEAM_PLAYER && _battleState.imgBattleAtk->getFrameY() >= _battleState.imgBattleAtk->getMaxFrameY())
+	if(_imgFrameY >= 2)
 	{
-		_battleState.unitState = UNITSTATE_IDLE;
+		if (_battleState.attackSuccess) //공격 성공했으면 피격상태로 바꾸고
+		{
+			opponent->setUnitState(UNITSTATE_HIT);			// 피격
+		}
+		else //공격 방어했으면 방어상태로 바꾼다.
+		{
+			opponent->setUnitState(UNITSTATE_DEF);			// 방어		
+		}
 	}
 }
 
@@ -385,10 +400,39 @@ void Unit::counterAttack(Unit* opponent)
 
 }
 
+void Unit::getDamage(int damage)
+{
+	int curHP = _status.HP - damage;
+	if (curHP <= 0)
+	{
+		curHP = 0;
+		_status.HP = curHP;
+		_status.isLive = false;
+	}
+	else
+	{
+		_status.HP = curHP;
+	}
+}
+
+void Unit::setIdleState(void)
+{
+	//float curHPRatio = (float)_status.HP / (float)_status.HPMax;
+	//if (curHPRatio < 0.3)
+	//{
+	//	_battleState.unitState = UNITSTATE_TIRED;
+	//}
+	//else
+	{
+		_battleState.unitState = UNITSTATE_IDLE;
+	}
+}
+
 
 void Unit::findEnemy(TEAM myTeam, POINT closeEnemyPos)
 {
 	if (_battleState.squence != UNITSEQUENCE_TURNON) return;
+
 	//1. 공격 범위 넣고
 	_astar->resetAtkRange();
 	for (int i = 0; i < UNIT_ATTACK_RANGE_MAX; i++)
@@ -511,16 +555,18 @@ void Unit::updateSequence(bool bAuto)
 				if (_battleState.findEnemy)
 				{
 					_oldSeq = _battleState.squence;
+					//상대적인적(player, friend vs enemy)
+					_battleState.opponent = _map->findEnemyUnit(_status.team, _battleState.tilePtEnemy);
 					_battleState.squence = UNITSEQUENCE_ATTACK;
 				}
 				else
 				{
 					_oldSeq = _battleState.squence;
-					_battleState.squence = UNITSEQUENCE_IDLE;
+					_battleState.squence = UNITSEQUENCE_TURNOFF;
 				}
 				_moveArea.clear();
 			}
-			else if (!bAuto)
+			else if (!bAuto) //player
 			{
 				_battleState.squence = UNITSEQUENCE_TURNON;
 			}
@@ -528,39 +574,31 @@ void Unit::updateSequence(bool bAuto)
 		return;
 	}
 
-	//상대적인적(player, friend vs enemy)
-	Unit* opponent = _map->findEnemyUnit(_status.team, _battleState.tilePtEnemy);
 
 	if (_battleState.squence == UNITSEQUENCE_ATTACK)
 	{
-		if (opponent != NULL)
+		if (_battleState.opponent != NULL)
 		{
-			attack(opponent);
+			attack(_battleState.opponent);
 		}
-		//else _battleState.squence = UNITSEQUENCE_IDLE;
+		else setIdleState();
 
 		return;
 	}
 
 	if (_battleState.squence == UNITSEQUENCE_COUNTER)
 	{
-		if (opponent != NULL)
+		if (_battleState.opponent != NULL)
 		{
-			counterAttack(opponent);
+			counterAttack(_battleState.opponent);
 		}
-		return;
-	}
-
-	if (_battleState.squence == UNITSEQUENCE_IDLE)
-	{
-		if (_battleState.findEnemy) opponent->setUnitState(UNITSTATE_IDLE);
-		_battleState.unitState = UNITSTATE_IDLE;
-		_battleState.squence = UNITSEQUENCE_TURNOFF;
+		else setIdleState();
 		return;
 	}
 
 	if (_battleState.squence == UNITSEQUENCE_TURNOFF)
 	{
+		_moveArea.clear();
 		return;
 	}
 }
@@ -593,7 +631,7 @@ void Unit::updateImage(void)
 
 	if (oldUnitState == _battleState.unitState)
 	{
-		float frameFPS = 10.0f;
+		float frameFPS = 5.0f;
 
 		_imgFrameTime += TIMEMANAGER->getElapsedTime();
 		if (_imgFrameTime >= (1 / frameFPS))
@@ -605,7 +643,18 @@ void Unit::updateImage(void)
 				_imgFrameY = _imgFrameY == _battleState.imgBattleIdle->getMaxFrameY() ? 0 : _imgFrameY + 1;
 				break;
 			case UNITSTATE_ATK:	  //공격상태
-				_imgFrameY = _imgFrameY == _battleState.imgBattleAtk->getMaxFrameY() ? 0 : _imgFrameY + 1;
+				if (_imgFrameY == _battleState.imgBattleAtk->getMaxFrameY())
+				{
+					setIdleState();
+					_battleState.squence = UNITSEQUENCE_TURNOFF;
+					_battleState.opponent->setIdleState();
+					_battleState.opponent = NULL;
+					_imgFrameY = 0;
+				}
+				else
+				{
+					_imgFrameY += 1;
+				}
 				break;
 			case UNITSTATE_DEF:	  //방어상태
 			case UNITSTATE_HIT:    //피격상태

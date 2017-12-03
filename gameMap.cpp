@@ -199,7 +199,6 @@ Unit* gameMap::findEnemyUnit(TEAM myTeam, POINT tilePt)
 	switch (myTeam)
 	{
 	case TEAM_PLAYER:
-		break;
 	case TEAM_FRIEND:
 		for (int i = 0; i < _enemy->getUnits().size(); i++)
 		{

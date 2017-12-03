@@ -88,9 +88,6 @@
     <Filter Include="2DFramework\editbox">
       <UniqueIdentifier>{1dec7e4c-1646-401a-8435-9ca07918e97d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainGame\sceneShop">
-      <UniqueIdentifier>{38383b26-74d5-42c8-9bb6-2b43ae5f1080}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MainGame\sceneReady">
       <UniqueIdentifier>{cd4f2a5f-7c92-4a24-9ce8-f57c7651afa1}</UniqueIdentifier>
     </Filter>
@@ -249,6 +246,9 @@
     <ClInclude Include="editboxManager.h">
       <Filter>2DFramework\editbox</Filter>
     </ClInclude>
+    <ClInclude Include="infoCursor.h">
+      <Filter>MainGame\sceneBattle\info - hyunjun</Filter>
+    </ClInclude>
     <ClInclude Include="scanDialog.h">
       <Filter>MainGame\sceneStory</Filter>
     </ClInclude>
@@ -278,9 +278,6 @@
     </ClInclude>
     <ClInclude Include="globalTools.h">
       <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="battleSceneInterface.h">
-      <Filter>MainGame\sceneBattle\info - hyunjun</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -407,6 +404,9 @@
     <ClCompile Include="editboxManager.cpp">
       <Filter>2DFramework\editbox</Filter>
     </ClCompile>
+    <ClCompile Include="infoCursor.cpp">
+      <Filter>MainGame\sceneBattle\info - hyunjun</Filter>
+    </ClCompile>
     <ClCompile Include="scanDialog.cpp">
       <Filter>MainGame\sceneStory</Filter>
     </ClCompile>
@@ -436,9 +436,6 @@
     </ClCompile>
     <ClCompile Include="globalTools.cpp">
       <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="battleSceneInterface.cpp">
-      <Filter>MainGame\sceneBattle\info - hyunjun</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

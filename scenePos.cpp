@@ -45,7 +45,7 @@ HRESULT scenePos::init(void) {
 	_posUnits[2].isPos = true;
 	
 	for (int i = 0; i < _vUnitsInFile.size(); i++) {
-		_vUnitsInFile[i]->update(TEAM_PLAYER);
+		_vUnitsInFile[i]->updateStatus();
 		if (!_tcscmp(_vUnitsInFile[i]->getStatus().name, L"조조")) {
 			_chosang = _vUnitsInFile[i]->getStatus().imgFace;
 			_tcscpy(_name, _vUnitsInFile[i]->getStatus().name);
@@ -168,6 +168,7 @@ void scenePos::update(void){
 			SCENEMANAGER->changeScene(L"준비기본씬");
 		}
 		if(PtInRect(&_rcOK, _pt) && _availableOK) {  //결정클릭
+			_player->locateUnits();
 			SCENEMANAGER->changeScene(L"준비기본씬");
 		}
 		for (int i = 0; i < 7; i++) {

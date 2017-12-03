@@ -140,19 +140,19 @@ void sceneSelect::setuptButtons(void)
 			case BTNSELECT1_GAMESTART:
 				_button1[i] = new button;
 				//_button1[i]->init(L"SELECT-선택버튼", L"게임시작", 50, 150, { 0,0 }, { 0,1 }, cbFuncGameStart, this);
-				_button1[i]->init(L"SELECT-선택버튼", L"게임시작", 50, 150, { 0,0 }, { 0,1 }, cbFuncSelect, this);
+				_button1[i]->init(L"SELECT-선택버튼", L"게임시작", 150, 150, { 0,0 }, { 0,1 }, cbFuncSelect, this);
 			break;
 			case BTNSELECT1_MAPTOOL:
 				_button1[i] = new button;
-				_button1[i]->init(L"SELECT-선택버튼", L"맵편집", 50, 200, { 0,0 }, { 0,1 }, cbFuncMaptool, this);
+				_button1[i]->init(L"SELECT-선택버튼", L"맵편집", 150, 200, { 0,0 }, { 0,1 }, cbFuncMaptool, this);
 			break;
 			case BTNSELECT1_UNITEDITOR:
 				_button1[i] = new button;
-				_button1[i]->init(L"SELECT-선택버튼", L"유닛편집", 50, 250, { 0,0 }, { 0,1 }, cbFuncUnitEditor, this);
+				_button1[i]->init(L"SELECT-선택버튼", L"유닛편집", 150, 250, { 0,0 }, { 0,1 }, cbFuncUnitEditor, this);
 			break;
 			case BTNSELECT1_EXIT:
 				_button1[i] = new button;
-				_button1[i]->init(L"SELECT-선택버튼", L"게임종료", 50, 300, { 0,0 }, { 0,1 }, cbFuncGameExit, this);
+				_button1[i]->init(L"SELECT-선택버튼", L"게임종료", 150, 300, { 0,0 }, { 0,1 }, cbFuncGameExit, this);
 			break;
 		}
 	}
