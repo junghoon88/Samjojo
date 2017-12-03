@@ -37,6 +37,7 @@ private:
 	void initImageStory(void);
 
 	void initImageUnits(void);
+	void initImageBattle(void);
 
 	void initImageUI(void);
 	void initImageItems(void);

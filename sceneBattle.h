@@ -10,9 +10,13 @@
 
 enum BATTLEPHASE
 {
+	BATTLEPHASE_NONE = -1,
 	BATTLEPHASE_PLAYER,
 	BATTLEPHASE_FRIEND,
 	BATTLEPHASE_ENEMY, // 이 순으로 전투 진행
+
+	BATTLEPHASE_VICTORY,
+	BATTLEPHASE_DEFEAT,
 
 	BATTLEPHASE_MAX
 };
@@ -31,6 +35,8 @@ private:
 
 	BATTLEPHASE	_phase;
 	int _turn; //턴 진행상황
+	bool		_phaseChanging;
+	float		_phaseChangeTime;
 
 
 	aStar*		_astar;		//a* 을 전투씬에 공용으로 선언하고, 각 유닛에서 할당받아서 쓰고 싶을때 쓴다.
@@ -38,9 +44,6 @@ private:
 
 
 	bool		_isDialog;
-private:
-	void initImage(void);
-	void initSound(void);
 
 public:
 	sceneBattle();
@@ -63,7 +66,6 @@ public:
 	inline void setLinkAdressMap(gameMap* map) { _map = map; }
 
 	Unit* findUnit(TEAM team, POINT pt);
-	void phaseControl(void);
 	void friendAction(void);
 	void enemyAction(void);
 	void phaseCheck(void);

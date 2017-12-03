@@ -40,7 +40,7 @@ void battleSceneInterface::update()
 		}
 		if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 		{
-			if(clickUnit == PLAYER && !_player->getUnits()[vNum]->getBattleState().moved //현재 클릭한 유닛이 이동한뒤에 턴이 안끝났으면 우클릭시 이동 취소
+			if(clickUnit == PLAYER && !_player->getUnits()[vNum]->getBattleState().moveable //현재 클릭한 유닛이 이동한뒤에 턴이 안끝났으면 우클릭시 이동 취소
 				&& _player->getUnits()[vNum]->getUnitSequnce() != UNITSEQUENCE_TURNOFF) mouse_ActionCancel();
 			else dataClean();  //윈도우 닫기
 		}
@@ -56,8 +56,9 @@ void battleSceneInterface::update()
 		if (UNITSEQUENCE_MOVE != _player->getUnits()[vNum]->getUnitSequnce()) 
 		{
 			//이동취소.
-			_player->getUnits()[vNum]->setMoved(false);
+
 			//chaseCamera(_player->getUnits()[vNum]->getRect());
+			_player->getUnits()[vNum]->setMoveable(false);
 			callToMenu(_player->getUnits()[vNum]->getRect().left, _player->getUnits()[vNum]->getRect().top);//메뉴화면을 호출
 			isCommand = false;
 		}
@@ -516,7 +517,7 @@ void battleSceneInterface::mouse_ClickToAction(void)//행동가능한 플레이어 유닛을
 	{
 		mouse_ClickToAttack();
 	}
-	else if (_player->getUnits()[vNum]->isMovableArea(findIndex) && _player->getUnits()[vNum]->getBattleState().moved)//유닛이 아니고 땅 누르면 
+	else if (_player->getUnits()[vNum]->isMovableArea(findIndex) && _player->getUnits()[vNum]->getBattleState().moveable)//유닛이 아니고 땅 누르면 
 	{
 
 		backToPT.x = _player->getUnits()[vNum]->getBattleState().pt.x;
@@ -526,7 +527,7 @@ void battleSceneInterface::mouse_ClickToAction(void)//행동가능한 플레이어 유닛을
 		_player->getUnits()[vNum]->setUnitSequnce(UNITSEQUENCE_MOVE);
 		isCommand = true;
 	}
-	else if(_player->getUnits()[vNum]->getBattleState().moved) dataClean();
+	else if(_player->getUnits()[vNum]->getBattleState().moveable) dataClean();
 }
 
 void battleSceneInterface::mouse_ClickToAttack(void)
@@ -576,10 +577,12 @@ void battleSceneInterface::mouse_ActionCancel(void)//이동명령 취소용
 	_player->getUnits()[vNum]->moveBack(backToPT);
 	_player->getUnits()[vNum]->setDir(backToDir);
 	_player->getUnits()[vNum]->setUnitSequnce(UNITSEQUENCE_TURNON);
-	_player->getUnits()[vNum]->setMoved(true);
+
 	//chaseCamera(_player->getUnits()[vNum]->getRect());
+
+	_player->getUnits()[vNum]->setMoveable(true);
+
 	isCommand = false;
-	
 }
 
 void battleSceneInterface::moveCamera(void)

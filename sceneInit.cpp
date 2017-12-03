@@ -58,6 +58,7 @@ void sceneInit::initImage(void)
 	initImageStory();
 	initImageReady();
 	initImageUnits();
+	initImageBattle();
 	initImageItems();
 	initImageUI();
 }
@@ -108,7 +109,7 @@ void sceneInit::initImageMapTool(void)
 	_loading->loadFrameImage(L"맵툴버튼2", L"image/button.bmp", 50, 60, 1, 2);
 
 	//하얀 배경 지우기
-	IMAGEMANAGER->addImage(L"maptoolBackground", L"image/maptoolBackground.bmp", 340, 520);
+	_loading->loadImage(L"maptoolBackground", L"image/maptoolBackground.bmp", 340, 520);
 
 
 	//원본맵 이미지 추가하기
@@ -189,11 +190,6 @@ void sceneInit::initImageUnitEditor(void)
 
 void sceneInit::initImageUnits(void)
 {
-	_loading->loadImage(L"curAtkArea", L"image/battleScene/atk_range.bmp", TILESIZE, TILESIZE, true, RGB(255, 0, 255), true);
-	_loading->loadImage(L"playerMoveAreaTile", L"image/battleScene/player_range_tile.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
-	_loading->loadImage(L"nonPlayerMoveAreaTile", L"image/battleScene/non-player_range_tile.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
-
-
 	TCHAR strKey[100], strName[100];
 	int unitNum = 0;
 	//조조
@@ -453,6 +449,18 @@ void sceneInit::initImageUnits(void)
 
 		unitNum++;
 	}
+}
+void sceneInit::initImageBattle(void)
+{
+	_loading->loadImage(L"curAtkArea", L"image/battleScene/atk_range.bmp", TILESIZE, TILESIZE, true, RGB(255, 0, 255), true);
+	_loading->loadImage(L"playerMoveAreaTile", L"image/battleScene/player_range_tile.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
+	_loading->loadImage(L"nonPlayerMoveAreaTile", L"image/battleScene/non-player_range_tile.bmp", TILESIZE, TILESIZE, false, RGB(255, 0, 255), true);
+
+	_loading->loadImage(L"playerturn", L"image/battleScene/playerturn.bmp", 960, 960, false, RGB(255, 0, 255), true);
+	_loading->loadImage(L"friendturn", L"image/battleScene/friendturn.bmp", 960, 960, false, RGB(255, 0, 255), true);
+	_loading->loadImage(L"enemyturn",  L"image/battleScene/enemyturn.bmp",  960, 960, false, RGB(255, 0, 255), true);
+	_loading->loadImage(L"defeatturn", L"image/battleScene/defeatturn.bmp", 960, 960, false, RGB(255, 0, 255), true);
+
 }
 void sceneInit::initImageStory(void)
 {
