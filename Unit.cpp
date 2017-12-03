@@ -590,8 +590,8 @@ void Unit::updateSequence(bool bAuto)
 					}
 					else
 					{
-						if (dirY > 0)	_battleState.dir = DIRECTION_UP;
-						else			_battleState.dir = DIRECTION_DN;
+						if (dirY > 0)	_battleState.dir = DIRECTION_DN;
+						else			_battleState.dir = DIRECTION_UP;
 					}
 
 					//상대적인적(player, friend vs enemy)
@@ -690,10 +690,10 @@ void Unit::updateImage(void)
 			{
 			case UNITSTATE_IDLE:	  //기본상태
 			case UNITSTATE_TIRED:
-				_imgFrameY = _imgFrameY == _battleState.imgBattleIdle->getMaxFrameY() ? 0 : _imgFrameY + 1;
+				_imgFrameY = _imgFrameY >= _battleState.imgBattleIdle->getMaxFrameY() ? 0 : _imgFrameY + 1;
 				break;
 			case UNITSTATE_ATK:	  //공격상태
-				if (_imgFrameY == _battleState.imgBattleAtk->getMaxFrameY())
+				if (_imgFrameY >= _battleState.imgBattleAtk->getMaxFrameY())
 				{
 					setIdleState();
 					_battleState.squence = UNITSEQUENCE_TURNOFF;
@@ -710,7 +710,8 @@ void Unit::updateImage(void)
 			case UNITSTATE_DEF:	  //방어상태
 			case UNITSTATE_HIT:    //피격상태
 			case UNITSTATE_VIC:    //승리
-				_imgFrameY = _imgFrameY == _battleState.imgBattleSpc->getMaxFrameY() ? 0 : _imgFrameY + 1;
+				_imgFrameY = 0;
+				//_imgFrameY = _imgFrameY >= _battleState.imgBattleSpc->getMaxFrameY() ? 0 : _imgFrameY + 1;
 				break;
 			}
 

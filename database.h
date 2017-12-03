@@ -28,6 +28,8 @@ private:
 
 	int _slectScenario;
 
+	bool _battleVictory;
+
 
 public:
 	HRESULT init();
@@ -48,5 +50,8 @@ public:
 public:
 	inline int getSlectScenario(void) { return _slectScenario; }
 	inline void setSlectScenario(int num) { _slectScenario = num; }
+
+	inline bool getBattleVictory(void) { return _battleVictory; }
+	inline void setBattleVictory(bool victory) { _battleVictory = victory; }
 };
 
