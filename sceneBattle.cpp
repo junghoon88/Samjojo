@@ -81,10 +81,7 @@ void sceneBattle::update(void)
 		}
 	}
 	//테스트용 
-	if (KEYMANAGER->isOnceKeyDown('B'))
-	{
-		_isDialog[1] = true;
-	}
+
 
 
 	if (_phaseChanging)
@@ -135,11 +132,9 @@ void sceneBattle::update(void)
 
 	_map->update(); 
 	_map->scanUnitsPos();
-	if (_phase == BATTLEPHASE_PLAYER)
-	{
-		checkEvent();
-		_interface->update();
-	}
+	_interface->update();
+	if (_phase == BATTLEPHASE_PLAYER) checkEvent();
+	
 		
 
 	phaseCheck();
@@ -406,7 +401,9 @@ void sceneBattle::friendAction(void)//아군 턴 액션
 	{
 		if (_friend->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue; //행동 불가능인 애들은 거르고
 		_interface->chaseCamera(_friend->getUnits()[i]->getBattleState().tilePt);
+		_interface->setUnit(TEAM_FRIEND, i);
 		_friend->getUnits()[i]->findEnemy(TEAM_FRIEND, findCloseEnemyPos(_friend->getUnits()[i]));
+		
 		break;
 	}
 }
@@ -417,6 +414,7 @@ void sceneBattle::enemyAction(void) //적군 턴 액션
 	{
 		if (_enemy->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue;
 		if (_turn < 10 && _enemy->getUnits()[i]->getBattleState().Group >= 2) continue;
+		_interface->setUnit(TEAM_ENEMY, i);
 		_interface->chaseCamera(_enemy->getUnits()[i]->getBattleState().tilePt);
 		_enemy->getUnits()[i]->findEnemy(TEAM_ENEMY, findCloseEnemyPos(_enemy->getUnits()[i]));
 		break;
@@ -550,6 +548,7 @@ void sceneBattle::checkEvent(void)
 		{
 			unhideEnemy();
 			_eventAcc++;
+			_isDialog[1] = true;
 			return;
 		}
 
@@ -575,9 +574,22 @@ void sceneBattle::checkEvent(void)
 			_eventAcc++;
 		}
 	}
+	for (int i = 0; i < _player->getUnits().size(); i++)
+	{
+		if (_player->getUnits()[i]->getRect().left > 336)
+		{
+			_isDialog[1] = true;
+		}
+	}
 }
 void sceneBattle::unhideEnemy(void)
 {
+	if (_eventAcc == 1)
+	{
+		_isDialog[1] = true;
+		_eventAcc++;
+	}
+
 	for (int i = 0; i < _enemy->getUnits().size(); i++)
 	{
 		if (!_enemy->getUnits()[i]->getHiding()) continue; //1번,2번그룹은 원래 표시중임.
