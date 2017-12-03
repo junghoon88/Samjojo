@@ -53,6 +53,10 @@ private:
 
 	BATLLESTORY _battlestory;
 	bool		_isDialog;
+	bool		_event_allEnemyDown;
+	bool		_event_whosThere;
+	bool		_event_join;
+	bool		_event_sudden;
 	bool		_loadDialog;
 public:
 	sceneBattle();

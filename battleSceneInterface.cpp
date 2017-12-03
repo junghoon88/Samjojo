@@ -622,7 +622,7 @@ void battleSceneInterface::chaseCamera(POINT tilePt)
 
 	if (targetCameraX > 0 && targetCameraX < findtile->getTileSizeX() * TILESIZE - TILESIZE * 20)//여기까지가 조건
 		MAINCAMERA->setCameraX(targetCameraX);//취할 액션
-	else if(targetCameraX > findtile->getTileSizeX() * TILESIZE - TILESIZE * 20) MAINCAMERA->setCameraX(findtile->getTileSizeX() * TILESIZE - TILESIZE * 20 - (TILESIZE*3));
+	else if(targetCameraX > findtile->getTileSizeX() * TILESIZE - TILESIZE * 20) MAINCAMERA->setCameraX(findtile->getTileSizeX() * TILESIZE - TILESIZE * 20);
 	else if (targetCameraX < WINSIZEX) MAINCAMERA->setCameraX(0);
 
 	//else if (targetCameraX > findtile->getTileSizeX() * TILESIZE - TILESIZE * 20)  MAINCAMERA->setCameraX(targetCameraX);
