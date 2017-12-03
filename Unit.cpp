@@ -39,11 +39,15 @@ HRESULT Unit::init(gameMap* map)
 void Unit::release(void)
 {
 	_moveArea.clear();
+
+	SAFE_DELETE(_itemW);
+	SAFE_DELETE(_itemA);
+	SAFE_DELETE(_itemS);
+
 }
 
 void Unit::update(TEAM team)
 {
-	//updateStatus();	// 초기능력치 + 레벨당능력치 + 아이템능력치
 	expMaxCheck();	// 경험치 확인
 
 	switch (team)
@@ -89,6 +93,14 @@ void Unit::render(void)
 
 void Unit::updateStatus(void)
 {
+	if (_itemW)		_status.ItemPlusAtk = _itemW->getAtk();
+	else			_status.ItemPlusAtk = 0;
+	if (_itemA)		_status.ItemPlusDep = _itemA->getDep();
+	else			_status.ItemPlusDep = 0;
+	if (_itemS)		_status.ItemPlusHPMax = _itemS->getHP();
+	else			_status.ItemPlusHPMax = 0;
+		
+
 	_status.HP = _status.HPMax = _status.InitHPMax + (_status.level * _status.LvPerHPMax) + _status.ItemPlusHPMax;
 	_status.MP = _status.MPMax = _status.InitMPMax + (_status.level * _status.LvPerMPMax) + _status.ItemPlusMPMax;
 	_status.Pwr = _status.InitPwr + _status.ItemPlusPwr;
@@ -197,15 +209,15 @@ bool Unit::move(void)
 	}
 	else if (_battleState.tilePt.y != _battleState.tilePtNext.y)
 	{
-		if (_battleState.tilePt.y < _battleState.tilePtNext.y)	_battleState.dir = DIRECTION_DN;
-		else													_battleState.dir = DIRECTION_UP;
+		if (_battleState.tilePt.y < _battleState.tilePtNext.y)	_battleState.dir = DIRECTION_UP;
+		else													_battleState.dir = DIRECTION_DN;
 	}
 	else //둘다 같으면
 	{
 		if (_battleState.pt.x != ptNext.x)
 		{
 			if (_battleState.pt.x < ptNext.x)	_battleState.dir = DIRECTION_RG;
-			else									_battleState.dir = DIRECTION_LF;
+			else								_battleState.dir = DIRECTION_LF;
 
 			moveSpeed = moveSpeed < abs(_battleState.pt.x - ptNext.x) ? moveSpeed : abs(_battleState.pt.x - ptNext.x);
 		}
@@ -667,4 +679,37 @@ void Unit::updateImage(void)
 		
 		
 
+}
+
+void Unit::setItemW(Item* item)
+{
+	SAFE_DELETE(_itemW);
+	
+	if (item)
+	{
+		_itemW = new ItemWeapon;
+		_itemW->copyItem(item);
+	}
+}
+
+void Unit::setItemA(Item* item)
+{
+	SAFE_DELETE(_itemA);
+
+	if (item)
+	{
+		_itemA = new ItemArmor;
+		_itemA->copyItem(item);
+	}
+}
+
+void Unit::setItemS(Item* item)
+{
+	SAFE_DELETE(_itemS);
+
+	if (item)
+	{
+		_itemS = new ItemSpecial;
+		_itemS->copyItem(item);
+	}
 }

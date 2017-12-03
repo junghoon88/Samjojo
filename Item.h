@@ -63,6 +63,8 @@ protected:
 public:
 	HRESULT init(void);
 
+	void copyItem(Item* item);
+
 	inline int getHP(void) { return _hp; }
 	inline int getMP(void) { return _mp; }
 	inline int getAtk(void) { return _atk; }
@@ -88,7 +90,7 @@ class ItemWeapon : public Item
 private:
 
 public:
-	HRESULT init(ITEM_CLASS icls,ITEMW_CLASS cls, const TCHAR *name, const TCHAR *img32key, const TCHAR *img16key, int atk, int dep, int res, int hp, int mp);
+	HRESULT init(ITEM_CLASS icls,ITEMW_CLASS cls, const TCHAR *name,int atk, int dep, int res, int hp, int mp);
 
 	ItemWeapon();
 	~ItemWeapon();
@@ -100,7 +102,7 @@ class ItemArmor : public Item
 private:
 
 public:
-	HRESULT init(ITEM_CLASS icls, ITEMA_CLASS cls, const TCHAR *name, const TCHAR *img32key, const TCHAR *img16key, int atk, int dep, int res, int hp, int mp);
+	HRESULT init(ITEM_CLASS icls, ITEMA_CLASS cls, const TCHAR *name,int atk, int dep, int res, int hp, int mp);
 	ItemArmor();
 	~ItemArmor();
 };
@@ -111,7 +113,7 @@ class ItemSpecial : public Item
 private:
 
 public:
-	HRESULT init(int atk, int dep, int res, int hp, int mp);
+	HRESULT init(ITEM_CLASS icls, const TCHAR *name,int atk, int dep, int res, int hp, int mp);
 	ItemSpecial();
 	~ItemSpecial();
 };
