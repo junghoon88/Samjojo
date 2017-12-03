@@ -29,13 +29,6 @@ HRESULT sceneBattle::init(void)
 	linkClass();
 	setUpBattle();
 
-	_turn = 1;
-	_phase = BATTLEPHASE_PLAYER;
-	for (int i = 0; i < _player->getUnits().size(); i++)
-	{
-		_player->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
-		_player->getUnits()[i]->setMoved(true);
-	}
 
 	_sDL = new scanDialog;
 	_sDL->init("scripts/script 05.txt");
@@ -271,7 +264,7 @@ void sceneBattle::phaseCheck(void)
 			for (int i = 0; i < _player->getUnits().size(); i++)
 			{
 				_player->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
-				_player->getUnits()[i]->setMoved(true);
+				_player->getUnits()[i]->setMoveable(true);
 			}
 			_turn++;
 		}
@@ -377,13 +370,23 @@ Unit* sceneBattle::findUnit(TEAM team, POINT pt)
 
 void sceneBattle::setUpBattle(void)
 {
+	_turn = 1;
+	_phase = BATTLEPHASE_PLAYER;
+	for (int i = 0; i < _player->getUnits().size(); i++)
+	{
+		_player->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
+		_player->getUnits()[i]->setMoveable(true);
+		_player->getUnits()[i]->updateStatus();
+	}
 	for (int i = 0; i < _enemy->getUnits().size(); i++)
 	{
 		_enemy->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNOFF);
+		_enemy->getUnits()[i]->updateStatus();
 	}
 	for (int i = 0; i < _friend->getUnits().size(); i++)
 	{
 		_friend->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNOFF);
+		_friend->getUnits()[i]->updateStatus();
 	}
 }
 

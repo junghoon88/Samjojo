@@ -30,7 +30,7 @@ void battleSceneInterface::update(void)
 		if (!isShow)moveCamera();
 		if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 		{
-			if(clickUnit == PLAYER &&  !_player->getUnits()[vNum]->getBattleState().moved) 	mouse_ActionCancel();
+			if(clickUnit == PLAYER &&  !_player->getUnits()[vNum]->getBattleState().moveable) 	mouse_ActionCancel();
 			else dataClean();  //윈도우 닫기
 		}
 		if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
@@ -46,7 +46,7 @@ void battleSceneInterface::update(void)
 		if (UNITSEQUENCE_MOVE != _player->getUnits()[vNum]->getUnitSequnce()) 
 		{
 			//이동취소.
-			_player->getUnits()[vNum]->setMoved(false);
+			_player->getUnits()[vNum]->setMoveable(false);
 			callToMenu();//메뉴화면을 호출
 			isCommand = false;
 		}
@@ -441,7 +441,7 @@ void battleSceneInterface::mouse_ClickToAction(void)//행동가능한 플레이어 유닛을
 	{
 		mouse_ClickToAttack();
 	}
-	else if (_player->getUnits()[vNum]->isMovableArea(findIndex) && _player->getUnits()[vNum]->getBattleState().moved)//유닛이 아니고 땅 누르면 
+	else if (_player->getUnits()[vNum]->isMovableArea(findIndex) && _player->getUnits()[vNum]->getBattleState().moveable)//유닛이 아니고 땅 누르면 
 	{
 
 		backToPT.x = _player->getUnits()[vNum]->getBattleState().pt.x;
@@ -451,7 +451,7 @@ void battleSceneInterface::mouse_ClickToAction(void)//행동가능한 플레이어 유닛을
 		_player->getUnits()[vNum]->setUnitSequnce(UNITSEQUENCE_MOVE);
 		isCommand = true;
 	}
-	else if(_player->getUnits()[vNum]->getBattleState().moved) dataClean();
+	else if(_player->getUnits()[vNum]->getBattleState().moveable) dataClean();
 }
 void battleSceneInterface::mouse_ClickToAttack(void)
 {
@@ -498,7 +498,7 @@ void battleSceneInterface::mouse_ActionCancel(void)//이동명령 취소용
 {
 	_player->getUnits()[vNum]->moveBack(backToPT);
 	_player->getUnits()[vNum]->setUnitSequnce(UNITSEQUENCE_TURNON);
-	_player->getUnits()[vNum]->setMoved(true);
+	_player->getUnits()[vNum]->setMoveable(true);
 	_player->getUnits()[vNum]->setDir(backToDir);
 	isCommand = false;
 	dataClean();
