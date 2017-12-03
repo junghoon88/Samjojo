@@ -467,7 +467,26 @@ void battleSceneInterface::mouse_ClickToAttack(void)
 	{
 		if (findIndex == (int)(_enemy->getUnits()[i]->getBattleState().tilePt.x + _enemy->getUnits()[i]->getBattleState().tilePt.y * TILEX))//
 		{
+			POINT tilePtEnemy = { _enemy->getUnits()[i]->getBattleState().tilePt.x, _enemy->getUnits()[i]->getBattleState().tilePt.y };
 			_player->getUnits()[vNum]->setOpponent(_enemy->getUnits()[i]);
+			_player->getUnits()[vNum]->setOpponentTilePt(tilePtEnemy);
+
+			int dirX = _enemy->getUnits()[i]->getBattleState().tilePt.x - _player->getUnits()[vNum]->getBattleState().tilePt.x;
+			int dirY = _enemy->getUnits()[i]->getBattleState().tilePt.y - _player->getUnits()[vNum]->getBattleState().tilePt.y;
+
+			if (abs(dirX) >= abs(dirY))
+			{
+				if (dirX > 0)	_player->getUnits()[vNum]->setDir(DIRECTION_RG);
+				else			_player->getUnits()[vNum]->setDir(DIRECTION_LF);
+			}
+			else
+			{
+				if (dirY > 0)	_player->getUnits()[vNum]->setDir(DIRECTION_UP);
+				else			_player->getUnits()[vNum]->setDir(DIRECTION_DN);
+			}
+
+
+
 			_player->getUnits()[vNum]->setUnitSequnce(UNITSEQUENCE_ATTACK);
 			break;
 		}
