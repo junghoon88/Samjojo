@@ -5,6 +5,8 @@
 editbox::editbox()
 	: _img(NULL)
 {
+	_fontNum = FONTVERSION_SAMJOJO;
+
 }
 
 
@@ -81,7 +83,10 @@ void editbox::render(int textOffsetX, int textOffsetY)
 		SelectObject(getMemDC(), oldBrush);
 	}
 
-	TextOut(getMemDC(), _rc.left + textOffsetX, _rc.top + textOffsetY, _str, _tcslen(_str));
+	HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
+	DrawText(getMemDC(), _str, _tcslen(_str), &_rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	SelectObject(getMemDC(), oldFont);
+
 }
 
 #if 0 //»¹ÁþÀÇÇöÈ²

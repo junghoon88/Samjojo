@@ -46,6 +46,7 @@ public:
 
 private:
 	Unit* findUnit(TCHAR* name);
+	void UnitLiveCheck(void);
 
 public:
 	inline vUnits getUnits(void) { return _vUnits; }

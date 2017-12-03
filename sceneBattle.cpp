@@ -28,16 +28,25 @@ HRESULT sceneBattle::init(void)
 
 	linkClass();
 	setUpBattle();
-	setUpPlayer();//
 
-	_phase = PLAYERPHASE;
-	
+
 	_sDL = new scanDialog;
 	_sDL->init("scripts/script 05.txt");
 	_sDL->setNext(9);
 	ShowCursor(true);
 
-	_isDialog = false;
+
+	_isDialog[0] = true;
+	for (int i = 1; i < 5; i++)
+	{
+		_isDialog[i] = false;
+	}
+	_sDL->setAddressLinkBattle(this);
+
+	
+
+	_phaseChanging = false;
+	_phaseChangeTime = 0.0f;
 
 
 	return S_OK;
@@ -58,20 +67,36 @@ void sceneBattle::release(void)
 
 void sceneBattle::update(void)
 {
-	if (_isDialog)
+	for (int i = 0; i < BATTLESTORY_MAX; i++)
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		if (_isDialog[i])
 		{
-			_sDL->loadDialog();
-		}
-		_sDL->update();
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				_sDL->loadDialog();
+			}
+			_sDL->update();
 
-		return;
+			return;
+		}
+	}
+	//테스트용 
+	if (KEYMANAGER->isOnceKeyDown('B'))
+	{
+		_isDialog[1] = true;
 	}
 
 
-
-
+	if (_phaseChanging)
+	{
+		_phaseChangeTime += TIMEMANAGER->getElapsedTime();
+		if (_phaseChangeTime > 3.0f)
+		{
+			_phaseChanging = false;
+			_phaseChangeTime = 0.0f;
+		}
+		return;
+	}
 
 	//debug
 	{
@@ -105,18 +130,18 @@ void sceneBattle::update(void)
 		}
 	}
 
+	friendAction();
+	enemyAction();
+
 	_player->update();
 	_friend->update();
 	_enemy->update();
 
 	_map->update(); 
-	friendAction();
-	enemyAction();
 	_map->scanUnitsPos();
-	if(_phase == PLAYERPHASE)_interface->update();
-//	else if (_phase == FRIENDPHASE); //friendAction();
-//	else if (_phase == ENEMYPHASE); //enemyAction();
+	if(_phase == BATTLEPHASE_PLAYER)_interface->update();
 
+	phaseCheck();
 }
 
 void sceneBattle::render(void)
@@ -134,6 +159,57 @@ void sceneBattle::render(void)
 	{
 		_sDL->render();
 	}
+
+	if (_phaseChanging)
+	{
+		TCHAR str[100];
+		RECT rc =  RectMake(0, 0, 960, 960);
+		RECT rc1 = RectMake(0, 0, 960, 960 - 60);
+		RECT rc2 = RectMake(0, 60, 960, 960 - 60);
+
+		HFONT hFontOld = (HFONT)SelectObject(getMemDC(), _gFont[FONTVERSION_BATTLETURN]);
+		COLORREF oldcolor = GetTextColor(getMemDC());
+		SetTextColor(getMemDC(), RGB(255, 255, 255));
+
+		switch (_phase)
+		{
+		case BATTLEPHASE_PLAYER:
+			IMAGEMANAGER->findImage(L"playerturn")->alphaRender(getMemDC(), 128);
+			_stprintf(str, L"플레이어 차례");
+			DrawText(getMemDC(), str, _tcslen(str), &rc1, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+			_stprintf(str, L"제 %d 턴", _turn);
+			DrawText(getMemDC(), str, _tcslen(str), &rc2, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+			break;
+		case BATTLEPHASE_FRIEND:
+			IMAGEMANAGER->findImage(L"friendturn")->alphaRender(getMemDC(), 128);
+			_stprintf(str, L"아군 차례");
+			DrawText(getMemDC(), str, _tcslen(str), &rc1, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+			_stprintf(str, L"제 %d 턴", _turn);
+			DrawText(getMemDC(), str, _tcslen(str), &rc2, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+			break;
+		case BATTLEPHASE_ENEMY:
+			IMAGEMANAGER->findImage(L"enemyturn")->alphaRender(getMemDC(), 128);
+			_stprintf(str, L"적군 차례");
+			DrawText(getMemDC(), str, _tcslen(str), &rc1, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+			_stprintf(str, L"제 %d 턴", _turn);
+			DrawText(getMemDC(), str, _tcslen(str), &rc2, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+			break;
+		case BATTLEPHASE_VICTORY:
+			_stprintf(str, L"승리");
+			DrawText(getMemDC(), str, _tcslen(str), &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+			break;
+		case BATTLEPHASE_DEFEAT:
+			IMAGEMANAGER->findImage(L"defeatturn")->alphaRender(getMemDC(), 128);
+			_stprintf(str, L"패배");
+			DrawText(getMemDC(), str, _tcslen(str), &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+			break;
+		}
+		SelectObject(getMemDC(), hFontOld);
+		DeleteObject(hFontOld);
+		SetTextColor(getMemDC(), oldcolor);
+
+	}
+
 	
 }
 
@@ -189,71 +265,128 @@ POINT sceneBattle::findCloseEnemyPos(Unit* unit)
 	return tarPt;
 }
 
-void sceneBattle::initImage(void)
-{
-
-}
-
-void sceneBattle::initSound(void)
-{
-
-}
-
-
 // ▼행동 종료시나..아무튼 호출해서 체크. 계속 체크돌릴 필요는 없을듯▼
 void sceneBattle::phaseCheck(void)
 {
-	int _Active = 0;
-	if (_phase == PLAYERPHASE)
+	bool isEnd = true;
+
+	//승리 조건
+	if (_enemy->getUnits().size() == 0)
+	{
+		_phase = BATTLEPHASE_VICTORY;
+		_phaseChanging = true;
+		_phaseChangeTime = 0.0f;
+		return;
+	}
+	//패배조건
+	if (_player->getUnits().size() == 0)
+	{
+		_phase = BATTLEPHASE_DEFEAT;
+		_phaseChanging = true;
+		_phaseChangeTime = 0.0f;
+		return;
+	}
+
+	//평소상태 전투 페이즈 관리
+	if (_phase == BATTLEPHASE_NONE)
 	{
 		for (int i = 0; i < _player->getUnits().size(); i++)
 		{
-			if (_player->getUnits()[i]->getBattleState().squence != UNITSEQUENCE_TURNOFF) continue;
-			_Active++;
+			_player->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
+			_player->getUnits()[i]->setMoveable(true);
 		}
-		if (_Active == 0)//전부 행동 불가면 다음턴 애들 행동가능으로 만들고 페이즈 넘김.
+		_phase = BATTLEPHASE_PLAYER;
+		_phaseChanging = true;
+		_phaseChangeTime = 0.0f;
+	}
+	else if (_phase == BATTLEPHASE_PLAYER)
+	{
+		for (int i = 0; i < _player->getUnits().size(); i++)
 		{
-			for (int i = 0; i < _friend->getUnits().size(); i++)
+			if (_player->getUnits()[i]->getBattleState().squence != UNITSEQUENCE_TURNOFF)
 			{
-				_friend->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
+				isEnd = false;
+				break;
 			}
-			_phase = FRIENDPHASE;
+		}
+
+		if (isEnd) //전부 행동 불가면 다음턴 애들 행동가능으로 만들고 페이즈 넘김.
+		{
+			_interface->dataClean();			
+			if (_friend->getUnits().size() > 0)
+			{
+				_phase = BATTLEPHASE_FRIEND;
+				for (int i = 0; i < _friend->getUnits().size(); i++)
+				{
+					_friend->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
+				}
+			}
+			else if(_enemy->getUnits().size() > 0)
+			{
+				_phase = BATTLEPHASE_ENEMY;
+				for (int i = 0; i < _enemy->getUnits().size(); i++)
+				{
+					//은신중일땐 턴을주지 않는다.
+					if (_enemy->getUnits()[i]->getBattleState().isHiding) continue;
+
+					_enemy->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
+				}
+			}
+			
+			_phaseChanging = true;
+			_phaseChangeTime = 0.0f;
 		}
 	}
-	else if (_phase == FRIENDPHASE)
+	else if (_phase == BATTLEPHASE_FRIEND)
 	{
 		for (int i = 0; i < _friend->getUnits().size(); i++)
 		{
-			if (_friend->getUnits()[i]->getBattleState().squence != UNITSEQUENCE_TURNOFF) continue;
-			_Active++;
+			if (_friend->getUnits()[i]->getBattleState().squence != UNITSEQUENCE_TURNOFF)
+			{
+				isEnd = false;
+				break;
+			}
 		}
-		if (_Active == 0)
+
+		if (isEnd)
 		{
 			for (int i = 0; i < _enemy->getUnits().size(); i++)
 			{
+				//은신중일땐 턴을주지 않는다.
+				if (_enemy->getUnits()[i]->getBattleState().isHiding) continue;
+
 				_enemy->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
 			}
-			_phase = ENEMYPHASE;
+			_phase = BATTLEPHASE_ENEMY;
+			_phaseChanging = true;
+			_phaseChangeTime = 0.0f;
 		}
 	}
-	else if (_phase == ENEMYPHASE)
+	else if (_phase == BATTLEPHASE_ENEMY)
 	{
 		for (int i = 0; i < _enemy->getUnits().size(); i++)
 		{
-			if (_enemy->getUnits()[i]->getBattleState().squence != UNITSEQUENCE_TURNOFF) continue;
-			_Active++;
+			if (_enemy->getUnits()[i]->getBattleState().squence != UNITSEQUENCE_TURNOFF)
+			{
+				isEnd = false;
+				break;
+			}
 		}
-		if (_Active == 0)
+
+		if (isEnd)
 		{
+			for (int i = 0; i < _player->getUnits().size(); i++)
+			{
+				_player->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
+				_player->getUnits()[i]->setMoveable(true);
+			}
+			_phase = BATTLEPHASE_PLAYER;
+			_phaseChanging = true;
+			_phaseChangeTime = 0.0f;
+
 			_turn++;
-			setUpPlayer();
 		}
 	}
-}
-
-void sceneBattle::phaseControl(void) //호출해서 벡터 검출하고 행동할 수 있는 놈 없으면 페이즈 전환
-{
-	
 }
 
 void sceneBattle::friendAction(void)//아군 턴 액션
@@ -271,6 +404,7 @@ void sceneBattle::enemyAction(void) //적군 턴 액션
 	for (int i = 0; i < _enemy->getUnits().size(); i++)
 	{
 		if (_enemy->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue;
+	//	_interface->chaseCamera(_enemy->getUnits()[i]->getBattleState().tilePt);
 		_enemy->getUnits()[i]->findEnemy(TEAM_ENEMY, findCloseEnemyPos(_enemy->getUnits()[i]));
 		break;
 	}
@@ -348,26 +482,28 @@ Unit* sceneBattle::findUnit(TEAM team, POINT pt)
 }
 
 
-void sceneBattle::setUpPlayer(void)
-{
-	_phase = PLAYERPHASE;
-	for (int i = 0; i < _player->getUnits().size(); i++)
-	{
-		_player->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
-		_player->getUnits()[i]->setMoved(true);
-	}
-}
-
-
 void sceneBattle::setUpBattle(void)
 {
-	for (int i = 0; i < _enemy->getUnits().size(); i++)
+	_turn = 1;
+	_phase = BATTLEPHASE_NONE;
+
+
+
+	for (int i = 0; i < _player->getUnits().size(); i++)
 	{
-		_enemy->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNOFF);
+		_player->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNOFF);
+		_player->getUnits()[i]->setMoveable(false);
+		_player->getUnits()[i]->updateStatus();
 	}
 	for (int i = 0; i < _friend->getUnits().size(); i++)
 	{
 		_friend->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNOFF);
+		_friend->getUnits()[i]->updateStatus();
+	}
+	for (int i = 0; i < _enemy->getUnits().size(); i++)
+	{
+		_enemy->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNOFF);
+		_enemy->getUnits()[i]->updateStatus();
 	}
 }
 

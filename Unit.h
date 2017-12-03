@@ -152,7 +152,7 @@ enum UNITSEQUENCE
 struct tagBattleState
 {
 	BOOL			valid; //행동 가능하면 true, 행동 했으면 false
-	BOOL			moved;//플레이어용. 움직였나 안움직였나 체크 -> 움직였지만 추가 명령 가능상태 구분용.
+	BOOL			moveable;//플레이어용. 움직였나 안움직였나 체크 -> 움직였지만 추가 명령 가능상태 구분용.
 
 	POINT			pt;
 	RECT			rc;
@@ -160,6 +160,8 @@ struct tagBattleState
 	POINT			tilePtNext;
 	POINT			tilePtEnemy;
 	BOOL			findEnemy;
+	Unit*			opponent;
+	BOOL			attackSuccess;
 
 
 	DIRECTION		dir;
@@ -213,7 +215,6 @@ private:
 	int _imgFrameY;
 
 	UNITSEQUENCE _oldSeq;
-
 	int _delayTime;
 
 protected:
@@ -248,6 +249,8 @@ public:
 	void moveTo(POINT tliePt);
 	void attack(Unit* opponent);
 	void counterAttack(Unit* opponent);
+	void getDamage(int damage);
+	void setIdleState(void);
 	void findEnemy(TEAM myTeam, POINT closeEnemyPos);
 	void findMoveArea(void);
 	void showMoveArea(void);
@@ -332,6 +335,8 @@ public:
 	inline int getMaxHP(void) { return _status.HPMax; }
 	inline void setCurHP(int val) { _status.HP = val; }
 	inline int getCurHP(void) { return _status.HP; }
+	inline void setIsLive(bool live) { _status.isLive = live; }
+	inline bool getIsLive(void) { return _status.isLive; }
 
 	inline void setImgBattleIdle(int num)
 	{
@@ -380,7 +385,7 @@ public:
 	inline RECT getRect(void) { return _battleState.rc; }
 	inline void setBattleState(tagBattleState state) { _battleState = state; }
 	inline void setVaild(bool val) { _battleState.valid = val; }
-	inline void setMoved(bool val) { _battleState.moved = val; }
+	inline void setMoveable(bool val) { _battleState.moveable = val; }
 	inline void setDir(DIRECTION dir) { _battleState.dir = dir; }
 	inline void moveBack(POINT backPT) // 이동한거 취소용.
 	{
@@ -390,6 +395,9 @@ public:
 	}
 	inline UNITSEQUENCE getUnitSequnce(void) { return _battleState.squence; }
 	inline void setUnitSequnce(UNITSEQUENCE squence) { _battleState.squence = squence; }
+
+	inline void setOpponent(Unit* unit) { _battleState.opponent = unit; }
+	inline void setOpponentTilePt(POINT tilePt) { _battleState.tilePtEnemy = tilePt; }
 };
 
 typedef vector<Unit*>	vUnits;

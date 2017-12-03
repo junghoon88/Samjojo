@@ -2,8 +2,8 @@
 #include "gameNode.h"
 
 #define STRING_MAX 1024
-
-
+//전투씬 전방선언
+class sceneBattle;
 class scanDialog : public gameNode
 {
 private:
@@ -18,6 +18,7 @@ private:
 	image* mouse;
 	FONTVERSION _fontNum, _fontNum2;
 
+	sceneBattle* _sB;
 	float time; //안내창 등장 시간
 	float Mtime; //마우스 프레임 시간
 	int next;
@@ -40,7 +41,7 @@ public:
 
 public:
 	
-	
+	void setAddressLinkBattle(sceneBattle* _sb) { _sB = _sb; }
 	inline int getNext(void) { return next; }
 	inline void setNext(int nt) { next = nt; }
 	inline float getTime(void) { return time; }

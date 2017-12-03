@@ -31,7 +31,10 @@ public:
 
 	void loadUnits(void);
 	void locateUnits(void);
+
+private:
 	void deleteUnits(void);
+	void UnitLiveCheck(void);
 
 
 public:

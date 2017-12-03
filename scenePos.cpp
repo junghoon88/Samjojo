@@ -168,6 +168,7 @@ void scenePos::update(void){
 			SCENEMANAGER->changeScene(L"준비기본씬");
 		}
 		if(PtInRect(&_rcOK, _pt) && _availableOK) {  //결정클릭
+			_player->locateUnits();
 			SCENEMANAGER->changeScene(L"준비기본씬");
 		}
 		for (int i = 0; i < 7; i++) {
