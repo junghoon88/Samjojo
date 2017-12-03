@@ -28,6 +28,8 @@ private:
 
 	battleSceneInterface* info;
 
+	int _gold;
+
 public:
 	Player();
 	~Player();
@@ -52,8 +54,6 @@ private:
 	void UnitLiveCheck(void);
 
 public:
-	inline int getKong(void) { return _kongNum; }
-	inline void setKong(int kongs) { _kongNum = kongs; }
 	inline vUnits getUnits(void) { return _vUnits; }
 	inline void setUnits(vUnits vunits) { _vUnits = vunits; }
 	inline vUnits getUnitsInFile(void) { return _vUnitsInFile; }
@@ -63,5 +63,9 @@ public:
 	inline void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
 	inline void setLinkAdressMap(gameMap* map) { _map = map; }
 	inline void setLinkAdressUI(battleSceneInterface* cursor) { info = cursor; }
+	inline int getGold(void) { return _gold; }
+	inline void setGold(int gold) { _gold = gold; }
+	inline int getKong(void) { return _kongNum; }
+	inline void setKong(int kong) { _kongNum = kong; }
 };
 

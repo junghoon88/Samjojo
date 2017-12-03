@@ -58,7 +58,8 @@ protected:
 	int _dep;
 
 	int _res;  //명검용
-	
+
+	int _price; //가격
 
 public:
 	HRESULT init(void);
@@ -77,6 +78,7 @@ public:
 	inline ITEMW_CLASS getWclass(void) { return _wcls; }
 	inline ITEMA_CLASS getAclass(void) { return _acls; }
 	inline ITEM_CLASS getIclass(void) { return _cls; }
+	inline int getPrice(void) { return _price; }
 	//void release(void);
 	//void update(void);
 	//void render(void);
@@ -90,7 +92,7 @@ class ItemWeapon : public Item
 private:
 
 public:
-	HRESULT init(ITEM_CLASS icls,ITEMW_CLASS cls, const TCHAR *name,int atk, int dep, int res, int hp, int mp);
+	HRESULT init(ITEM_CLASS icls,ITEMW_CLASS cls, const TCHAR *name,int atk, int dep, int res, int hp, int mp, int price);
 
 	ItemWeapon();
 	~ItemWeapon();
@@ -102,7 +104,7 @@ class ItemArmor : public Item
 private:
 
 public:
-	HRESULT init(ITEM_CLASS icls, ITEMA_CLASS cls, const TCHAR *name,int atk, int dep, int res, int hp, int mp);
+	HRESULT init(ITEM_CLASS icls, ITEMA_CLASS cls, const TCHAR *name,int atk, int dep, int res, int hp, int mp, int price);
 	ItemArmor();
 	~ItemArmor();
 };
@@ -113,7 +115,7 @@ class ItemSpecial : public Item
 private:
 
 public:
-	HRESULT init(ITEM_CLASS icls, const TCHAR *name,int atk, int dep, int res, int hp, int mp);
+	HRESULT init(ITEM_CLASS icls, const TCHAR *name,int atk, int dep, int res, int hp, int mp, int price);
 	ItemSpecial();
 	~ItemSpecial();
 };

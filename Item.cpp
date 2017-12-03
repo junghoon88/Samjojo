@@ -32,6 +32,7 @@ void Item::copyItem(Item * item)
 	_atk = item->_atk;
 	_dep = item->_dep;
 	_res = item->_res;
+	_price = item->_price;
 
 }
 ////////////////
@@ -47,7 +48,7 @@ ItemWeapon::~ItemWeapon()
 {
 }
 
-HRESULT ItemWeapon::init(ITEM_CLASS icls,ITEMW_CLASS cls, const TCHAR *name, int atk, int dep, int res, int hp, int mp) {
+HRESULT ItemWeapon::init(ITEM_CLASS icls,ITEMW_CLASS cls, const TCHAR *name, int atk, int dep, int res, int hp, int mp, int price) {
 	
 	_cls = icls;
 	_wcls = cls;
@@ -64,6 +65,7 @@ HRESULT ItemWeapon::init(ITEM_CLASS icls,ITEMW_CLASS cls, const TCHAR *name, int
 	_res = res;
 	_hp = hp;
 	_mp = mp;
+	_price = price;
 
 	return S_OK;
 }
@@ -84,7 +86,7 @@ ItemArmor::~ItemArmor()
 {
 }
 
-HRESULT ItemArmor::init(ITEM_CLASS icls, ITEMA_CLASS cls, const TCHAR *name,int atk, int dep, int res, int hp, int mp){
+HRESULT ItemArmor::init(ITEM_CLASS icls, ITEMA_CLASS cls, const TCHAR *name,int atk, int dep, int res, int hp, int mp, int price){
 
 	_cls = icls;
 	_acls = cls;
@@ -102,6 +104,7 @@ HRESULT ItemArmor::init(ITEM_CLASS icls, ITEMA_CLASS cls, const TCHAR *name,int 
 	_res = res;
 	_hp = hp;
 	_mp = mp;
+	_price = price;
 
 	return S_OK;
 }
@@ -122,7 +125,7 @@ ItemSpecial::~ItemSpecial()
 {
 }
 
-HRESULT ItemSpecial::init(ITEM_CLASS icls, const TCHAR *name,int atk, int dep, int res, int hp, int mp) {
+HRESULT ItemSpecial::init(ITEM_CLASS icls, const TCHAR *name,int atk, int dep, int res, int hp, int mp, int price) {
 	
 	_cls = icls;
 	_tcscpy(_name, name);
@@ -139,6 +142,7 @@ HRESULT ItemSpecial::init(ITEM_CLASS icls, const TCHAR *name,int atk, int dep, i
 	_res = res;
 	_hp = hp;
 	_mp = mp;
+	_price = price;
 
 	return S_OK;
 }

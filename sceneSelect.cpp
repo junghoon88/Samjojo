@@ -223,9 +223,9 @@ void sceneSelect::selectScenario(void)
 			_friend->locateUnits();
 			_enemy->locateUnits();
 
-			SCENEMANAGER->changeScene(L"´ëÈ­¾À");
+			//SCENEMANAGER->changeScene(L"´ëÈ­¾À");
 			//SCENEMANAGER->changeScene(L"ÁØºñ±âº»¾À");
-			//SCENEMANAGER->changeScene(L"ÀüÅõ¾À");
+			SCENEMANAGER->changeScene(L"ÀüÅõ¾À");
 
 			//break;
 		}

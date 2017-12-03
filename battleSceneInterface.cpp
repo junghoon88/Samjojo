@@ -508,6 +508,7 @@ void battleSceneInterface::setUnit(TEAM faction, int vectorNum)
 	_stprintf(txtAtk, L"공격력 %d", atk);
 	_stprintf(txtDef, L"방어력 %d", def);
 	_stprintf(txtMove, L"이동력 %d", movePoint);
+	_stprintf(txtExp, L"현재exp: %d", exp);
 	_stprintf(txtHp, L"%d / %d", (int)curHp, (int)maxHp);
 	_stprintf(txtMp, L"%d / %d", (int)curMp, (int)maxMp);
 	vNum = vectorNum;
@@ -687,15 +688,15 @@ void battleSceneInterface::dataClean(void)//마우스 우클릭 시 현재 인터페이스의 �
 void battleSceneInterface::callToMenu(int x,int y)
 {
 	popUpMenu = true;
-	int ptX = x + MAINCAMERA->getCameraX();
-	int ptY = y + MAINCAMERA->getCameraY();
+	int ptX = x - MAINCAMERA->getCameraX();
+	int ptY = y - MAINCAMERA->getCameraY();
 	if (ptY <= WINSIZEY / 2)
 	{
 		if (ptX < WINSIZEX / 2)
 		{
 			cmdBox = RectMake(x + TILESIZE - MAINCAMERA->getCameraX(), y, 110, 120);//팝업메뉴가 오른쪽 아래로 펴져야함
 		}
-		else if (ptX >= WINSIZEX)
+		else
 		{
 			cmdBox = RectMake(x - 110 - MAINCAMERA->getCameraX(), y , 110, 120);;//왼쪽 아래
 		}
@@ -706,7 +707,7 @@ void battleSceneInterface::callToMenu(int x,int y)
 		{
 			cmdBox = RectMake(x + TILESIZE - MAINCAMERA->getCameraX(), y - 120 + TILESIZE, 110, 120);//팝업메뉴가 오른쪽 위
 		}
-		else if (ptX >= WINSIZEX)
+		else
 		{
 			cmdBox = RectMake(x - 110 - MAINCAMERA->getCameraX(), y - 120 + TILESIZE, 110, 120);//왼쪽 위
 		}
@@ -741,7 +742,7 @@ void battleSceneInterface::tileLineDraw(void)
 }
 void battleSceneInterface::cmdDraw(void)
 {
-	Rectangle(getMemDC(), cmdBox.left, cmdBox.top, cmdBox.right, cmdBox.bottom);
+	//Rectangle(getMemDC(), cmdBox.left, cmdBox.top, cmdBox.right, cmdBox.bottom);
 	for (int i = 0; i < BTN_MAX; i++)
 	{
 		if (actionBtn[i] == NULL) continue;
@@ -763,6 +764,7 @@ void battleSceneInterface::infoDraw(void)
 		TextOut(getMemDC(), unitImgRect.left, unitImgRect.bottom + 120, txtAtk, _tcslen(txtAtk));
 		TextOut(getMemDC(), unitImgRect.left, unitImgRect.bottom + 144, txtDef, _tcslen(txtDef));
 		TextOut(getMemDC(), unitImgRect.left, unitImgRect.bottom + 168, txtMove, _tcslen(txtMove));
+		TextOut(getMemDC(), unitImgRect.left, unitImgRect.bottom + 192, txtExp, _tcslen(txtExp));
 	}
 	if (isItem)
 	{

@@ -29,8 +29,6 @@ HRESULT sceneBattle::init(void)
 	_eventAcc = 0;//이벤트 체크용
 	_astar = new aStar;
 	_astar->init(_map);
-
-	_player->setKong(1);
 	
 	linkClass();
 	setUpBattle();
