@@ -701,7 +701,7 @@ void battleSceneInterface::cmdDraw(void)
 }
 void battleSceneInterface::infoDraw(void)
 {
-	
+	SetTextColor(getMemDC(), RGB(0, 0, 0));
 	if (isUnit) //유닛을 눌렀을때 표시할 것들
 	{
 		Rectangle(getMemDC(), unitImgRect.left, unitImgRect.top, unitImgRect.right, unitImgRect.bottom); // 디버그용 렉트출력
