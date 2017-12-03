@@ -785,7 +785,7 @@ void battleSceneInterface::cmd_wait(void)
 void battleSceneInterface::cmd_cancel(void)
 {
 	popUpMenu = false;
-	dataClean();
+	mouse_ActionCancel();
 }
 
 void battleSceneInterface::infoSetup(void)
