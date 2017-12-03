@@ -183,22 +183,24 @@ void sceneUnitEditor::render(void)
 	editBoxRender();
 	unitImageRender();
 
+	HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_labelFontNum]);
 	for (int i = 0; i < UNITEDITOR_BUTTON_MAX; i++)
 	{
-		HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_labelFontNum]);
 		_ctrlButton[i]->render();
-		SelectObject(getMemDC(), oldFont);
 	}
+	SelectObject(getMemDC(), oldFont);
+	DeleteObject(oldFont);
 
 
 	atkRangeRender();
 
 	//ÆÀ¼±ÅÃ ¹öÆ°
 
-	HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
+	oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
 	teamButtonRender();
 	filesRender();
 	SelectObject(getMemDC(), oldFont);
+	DeleteObject(oldFont);
 }
 
 void sceneUnitEditor::initImage(void)
