@@ -209,15 +209,15 @@ bool Unit::move(void)
 	}
 	else if (_battleState.tilePt.y != _battleState.tilePtNext.y)
 	{
-		if (_battleState.tilePt.y < _battleState.tilePtNext.y)	_battleState.dir = DIRECTION_DN;
-		else													_battleState.dir = DIRECTION_UP;
+		if (_battleState.tilePt.y < _battleState.tilePtNext.y)	_battleState.dir = DIRECTION_UP;
+		else													_battleState.dir = DIRECTION_DN;
 	}
 	else //둘다 같으면
 	{
 		if (_battleState.pt.x != ptNext.x)
 		{
 			if (_battleState.pt.x < ptNext.x)	_battleState.dir = DIRECTION_RG;
-			else									_battleState.dir = DIRECTION_LF;
+			else								_battleState.dir = DIRECTION_LF;
 
 			moveSpeed = moveSpeed < abs(_battleState.pt.x - ptNext.x) ? moveSpeed : abs(_battleState.pt.x - ptNext.x);
 		}
