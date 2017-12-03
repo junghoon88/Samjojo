@@ -16,6 +16,7 @@ Player::~Player()
 
 HRESULT Player::init(void)
 {
+	_gold = 3000;
 	return S_OK;
 }
 

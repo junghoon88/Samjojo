@@ -53,30 +53,29 @@ HRESULT sceneEquip::init(void) {
 		}
 	}
 
-	//test
-
+	/*test
 	_weapon = new ItemWeapon;
-	_weapon->init(WEAPON,SWORD, L"단검",8, 0, 0, 0, 0);
+	_weapon->init(WEAPON,SWORD, L"단검",8, 0, 0, 0, 0,500);
 	_vItems.push_back(_weapon);
 	_weapon = new ItemWeapon;
-	_weapon->init(WEAPON,SWORD, L"고정도", 12, 0, 0, 0, 0);
+	_weapon->init(WEAPON,SWORD, L"고정도", 12, 0, 0, 0, 0,1000);
 	_vItems.push_back(_weapon);
 	_weapon = new ItemWeapon;
-	_weapon->init(WEAPON, HSWORD, L"의천검", 16, 0, 0, 0, 0);
+	_weapon->init(WEAPON, HSWORD, L"의천검", 16, 0, 0, 0, 0,1500);
 	_vItems.push_back(_weapon);
 	_armor = new ItemArmor;
-	_armor->init(DEFENCE, SHILED, L"가죽방패", 0, 10, 0, 0, 0);
+	_armor->init(DEFENCE, SHILED, L"가죽방패", 0, 10, 0, 0, 0,500);
 	_vItems.push_back(_armor);
 	_armor = new ItemArmor;
-	_armor->init(DEFENCE, ARMOR, L"가죽갑옷", 0, 15, 0, 0, 0);
+	_armor->init(DEFENCE, ARMOR, L"가죽갑옷", 0, 15, 0, 0, 0,500);
 	_vItems.push_back(_armor);
 	_special = new ItemSpecial;
-	_special->init(SPECIAL, L"태평청령서", 0, 0, 0, 50, 0);
+	_special->init(SPECIAL, L"태평청령서", 0, 0, 0, 50, 0,700);
 	_vItems.push_back(_special);
 	_special = new ItemSpecial;
-	_special->init(SPECIAL, L"신수장갑", 0, 0, 0, 30, 0);
+	_special->init(SPECIAL, L"신수장갑", 0, 0, 0, 30, 0,600);
 	_vItems.push_back(_special);
-	//
+	*/
 	for (int i = 0; i < _vUnitsInFile.size(); i++)
 		_vUnitsInFile[i]->updateStatus();
 

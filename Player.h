@@ -27,6 +27,8 @@ private:
 
 	battleSceneInterface* info;
 
+	int _gold;
+
 public:
 	Player();
 	~Player();
@@ -58,5 +60,7 @@ public:
 	inline void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
 	inline void setLinkAdressMap(gameMap* map) { _map = map; }
 	inline void setLinkAdressUI(battleSceneInterface* cursor) { info = cursor; }
+	inline int getGold(void) { return _gold; }
+	inline void setGold(int gold) { _gold = gold; }
 };
 
