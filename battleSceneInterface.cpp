@@ -46,8 +46,12 @@ void battleSceneInterface::update()
 		}
 		if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
 		{
-	
 			if (isShow && clickUnit == PLAYER && _player->getUnits()[vNum]->getUnitSequnce() == UNITSEQUENCE_TURNON) mouse_ClickToAction(); // 
+			else if (isShow && clickUnit != PLAYER)
+			{
+				dataClean();
+				mouse_ClickToTile();
+			}
 			else if (!isShow) mouse_ClickToTile();//지형 클릭 시 
 		}
 	}
@@ -133,6 +137,7 @@ void battleSceneInterface::mouse_ClickToTile(void)
 	{
 		for (int i = 0; i < _enemy->getUnits().size(); i++)
 		{
+			if (_enemy->getUnits()[i]->getBattleState().isHiding) continue;
 			if (findIndex == (int)(_enemy->getUnits()[i]->getBattleState().tilePt.x + _enemy->getUnits()[i]->getBattleState().tilePt.y * TILEX))
 			{
 				setUnit(TEAM_ENEMY, i);
@@ -141,6 +146,7 @@ void battleSceneInterface::mouse_ClickToTile(void)
 		}
 	}
 
+	drawLine = { findtile->getTile()[indexTile].rc.left,findtile->getTile()[indexTile].rc.top,findtile->getTile()[indexTile].rc.right,findtile->getTile()[indexTile].rc.bottom };
 	tileNum = findtile->getTile()[findIndex].terrain + 1;//해당번호를 키값으로 찾으면 된다. 이미지를!	
 	_stprintf(tileKey, L"tileShow (%02d)", tileNum);
 	tileImg = IMAGEMANAGER->findImage(tileKey);
@@ -609,11 +615,15 @@ void battleSceneInterface::moveCamera(void)
 void battleSceneInterface::chaseCamera(POINT tilePt)
 {
 	int index = tilePt.x + tilePt.y * TILEX;
-	
-	if (findtile->getTile()[index].rc.left - WINSIZEX / 2 > 0
-		&& findtile->getTile()[index].rc.left - WINSIZEX / 2 < findtile->getTileSizeX() * TILESIZE - TILESIZE * 20)	MAINCAMERA->setCameraX(findtile->getTile()[index].rc.left - WINSIZEX / 2);
-	else if (findtile->getTile()[index].rc.left - WINSIZEX / 2 < WINSIZEX) MAINCAMERA->setCameraX(0);
-	else if (findtile->getTile()[index].rc.left - WINSIZEX / 2 < findtile->getTileSizeX() * TILESIZE - TILESIZE * 20)  MAINCAMERA->setCameraX(findtile->getTileSizeX() * TILESIZE - TILESIZE * 20);
+	int targetCameraX = findtile->getTile()[index].rc.left - WINSIZEX / 2;
+	int targetCameraY = findtile->getTile()[index].rc.top - WINSIZEY / 2;
+
+	if (targetCameraX > 0 && targetCameraX < findtile->getTileSizeX() * TILESIZE - TILESIZE * 20)//여기까지가 조건
+		MAINCAMERA->setCameraX(targetCameraX);//취할 액션
+
+	else if (targetCameraX < WINSIZEX) MAINCAMERA->setCameraX(0);
+
+	//else if (targetCameraX > findtile->getTileSizeX() * TILESIZE - TILESIZE * 20)  MAINCAMERA->setCameraX(targetCameraX);
 	if (findtile->getTile()[index].rc.top - WINSIZEY / 2 > 0 
 		&& findtile->getTile()[index].rc.top - WINSIZEY / 2 < findtile->getTileSizeY() * TILESIZE - TILESIZE * 20) 	MAINCAMERA->setCameraY(findtile->getTile()[index].rc.top - WINSIZEY / 2);
 }

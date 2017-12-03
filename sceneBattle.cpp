@@ -557,8 +557,7 @@ void sceneBattle::checkEvent(void)
 		
 		for (int i = 0; i < _player->getUnits().size(); i++)
 		{
-			int index = _player->getUnits()[i]->getBattleState().tilePt.x + _player->getUnits()[i]->getBattleState().tilePt.y * TILEX;
-			if (_map->getTile()[index].terrain == TERRAIN_RIVER)
+			if (_player->getUnits()[i]->getRect().left > 815)
 			{
 				unhideEnemy();
 				_eventAcc++;
@@ -567,8 +566,8 @@ void sceneBattle::checkEvent(void)
 		}
 		for (int i = 0; i < _enemy->getUnits().size(); i++)
 		{
-			if (_enemy->getUnits()[i]->getBattleState().Group != 1)
-				GroupAlive++;
+			if (_enemy->getUnits()[i]->getBattleState().Group != 1) continue;
+			GroupAlive++;
 		}
 		if (GroupAlive <= 0)
 		{
