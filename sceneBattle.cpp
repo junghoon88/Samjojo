@@ -68,12 +68,7 @@ void sceneBattle::release(void)
 
 void sceneBattle::update(void)
 {
-	if (KEYMANAGER->isOnceKeyDown('B'))
-	{
-		_battlestory = BATTLESTORY_5; //¿ä±â3°³¸¸ ¾²¸é µÊ.
-		_isDialog = true;
-		_loadDialog = true;
-	}
+	
 	if (_loadDialog)
 	{
 		switch (_battlestory)
@@ -103,6 +98,12 @@ void sceneBattle::update(void)
 			_sDL->setNext(9);
 			_loadDialog = false;
 			break;
+		case BATTLESTORY_6:
+			_sDL->init("scripts/script 12.txt"); //¾ç½Ü »ç¸Á½Ã
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+
 		}
 	}
 	
