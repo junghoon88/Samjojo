@@ -225,8 +225,8 @@ bool Unit::move(void)
 	}
 	else if (_battleState.tilePt.y != _battleState.tilePtNext.y)
 	{
-		if (_battleState.tilePt.y < _battleState.tilePtNext.y)	_battleState.dir = DIRECTION_UP;
-		else													_battleState.dir = DIRECTION_DN;
+		if (_battleState.tilePt.y < _battleState.tilePtNext.y)	_battleState.dir = DIRECTION_DN;
+		else													_battleState.dir = DIRECTION_UP;
 	}
 	else //둘다 같으면
 	{
