@@ -15,7 +15,7 @@ HRESULT sceneReadybase::init(void) {
 	DATABASE->getSlectScenario();
 
 	_baseImg = IMAGEMANAGER->findImage(L"레디UI");
-
+	_baseImg2 = IMAGEMANAGER->findImage(L"레디UI2");
 	_rcPosUI = RectMake(440, 350, 50, 50);
 	_rcEquipUI = RectMake(490, 350, 50, 50);
 	_rcBuyUI = RectMake(540, 350, 50, 50);
@@ -27,8 +27,16 @@ HRESULT sceneReadybase::init(void) {
 	_sD->init("scripts/script 04.txt");
 	_sD->setNext(7);
 	ShowCursor(true);
+
+	
+	_battleStart = false;
+
 	SOUNDMANAGER->play(L"Se_b_02", 1.0f);
+
 	_isSound = false;
+
+
+
 	return S_OK;
 }
 void sceneReadybase::release(void) {
@@ -43,9 +51,8 @@ void sceneReadybase::update(void) {
 
 	_pt.x = _ptMouse.x;
 	_pt.y = _ptMouse.y;
-	
-	
-	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON)) 
+
+	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON) && !_battleStart)
 	{
 		if (PtInRect(&_rcPosUI, _pt)) {  //출진창 누름
 			_posClicking = true;
@@ -72,7 +79,7 @@ void sceneReadybase::update(void) {
 			_sellClicking = false;
 		}
 	}
-	if(KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) 
+	if(KEYMANAGER->isOnceKeyUp(VK_LBUTTON)&&!_battleStart) 
 	{
 		if (PtInRect(&_rcPosUI, _pt)) 
 		{   //출진창 누르고땜
@@ -82,22 +89,27 @@ void sceneReadybase::update(void) {
 			SCENEMANAGER->changeScene(L"출진씬");
 		}
 		else if (PtInRect(&_rcEquipUI, _pt))
-		{   //출진창 누르고땜
+		{
+	
 			_equipClicking = false;
 			SOUNDMANAGER->play(L"Se02", 1.0f);
 			SCENEMANAGER->changeScene(L"장비씬");
 		}
 		else if (PtInRect(&_rcBuyUI, _pt))
-		{   //출진창 누르고땜
+		{   
 			_buyClicking = false;
+
 			SOUNDMANAGER->play(L"Se02", 1.0f);
-			SCENEMANAGER->changeScene(L"구매씬");
+			SCENEMANAGER->changeScene(L"구매상점씬");
+
 		}
 		else if (PtInRect(&_rcSellUI, _pt))
-		{   //출진창 누르고땜
+		{   
 			_sellClicking = false;
+
 			SOUNDMANAGER->play(L"Se02", 1.0f);
-			SCENEMANAGER->changeScene(L"판매씬");
+			SCENEMANAGER->changeScene(L"판매상점씬");
+
 		}
 	}
 	if (_isSound)
@@ -114,6 +126,9 @@ void sceneReadybase::update(void) {
 		SOUNDMANAGER->stop(L"Se_b_02");
 
 		_baseImg = IMAGEMANAGER->findImage(L"smap 0003");
+		_battleStart = true;
+		_sD->update();
+
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			_sD->loadDialog();
@@ -132,7 +147,10 @@ void sceneReadybase::update(void) {
 }
 void sceneReadybase::render(void) {
 
-	_baseImg->render(getMemDC(), 0, 0);
+	if (!_battleStart)
+		_baseImg->render(getMemDC(), 0, 0);
+	else
+		_baseImg2->render(getMemDC(), 0, 0);
 
 	//TCHAR tmp[30];
 	//_stprintf(tmp, L"x: %d, y: %d", _pt.x, _pt.y);

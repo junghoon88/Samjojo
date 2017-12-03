@@ -8,6 +8,7 @@
 class sceneReadybase : public gameNode
 {
 	image* _baseImg;
+	image* _baseImg2;
 	POINT _pt;
 	RECT _rcPosUI, _rcEquipUI, _rcBuyUI, _rcSellUI;
 	scanDialog* _sD;
@@ -18,6 +19,8 @@ class sceneReadybase : public gameNode
 	bool _buyClicking;
 	bool _sellClicking;
 	bool _isSound;
+	bool _battleStart;
+
 public:
 
 	Player* _player;
