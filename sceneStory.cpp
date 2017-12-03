@@ -36,6 +36,8 @@ void sceneStory::release(void)
 
 	_sSmap->release();
 	SAFE_DELETE(_sSmap);
+
+	SOUNDMANAGER->stop(L"Se_b_05");
 }
 
 void sceneStory::update(void)
@@ -45,17 +47,28 @@ void sceneStory::update(void)
 		if (_dialog->getNext() == 0)
 		{
 			if (_dialog->getTime() > 4.0f &&KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
 				_dialog->loadDialog();
+				SOUNDMANAGER->play(L"Se02", 1.0f);
+			}
+			
+			
 		}
 		else if (_dialog->getNext() == 2 || _dialog->getNext() == 3)
 		{
 			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
 				_dialog->loadDialog();
+				SOUNDMANAGER->play(L"Se02", 1.0f);
+			}
 		}
 		else
 		{
 			if (_dialog->getTime() > 2.0f &&KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
 				_dialog->loadDialog();
+				SOUNDMANAGER->play(L"Se02", 1.0f);
+			}
 		}
 	}
 	_sSmap->update();
@@ -69,6 +82,10 @@ void sceneStory::render(void)
 	_sSmap->render();
 	SetBkMode(getMemDC(), TRANSPARENT);
 	_dialog->render();
-	if (_dialog->getNext() == 6) SCENEMANAGER->changeScene(L"준비기본씬");
+	if (_dialog->getNext() == 6)
+	{
+		
+		SCENEMANAGER->changeScene(L"준비기본씬");
+	}
 
 }

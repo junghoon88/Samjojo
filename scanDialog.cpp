@@ -253,7 +253,6 @@ void scanDialog::loadDialog(void)
 		}
 		else if (str[0] == '/')
 		{
-			
 			next++;
 			time = 0;
 		}
@@ -261,7 +260,7 @@ void scanDialog::loadDialog(void)
 		{
 			for (int i = 0; i < 5; i++)
 			{
-				_sB->setDialog(false, i);
+				_sB->setDialog(false);
 			}
 		}
 		else if (str[0] == '=')

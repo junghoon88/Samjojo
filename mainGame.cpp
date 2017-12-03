@@ -12,6 +12,7 @@
 #include "sceneSell.h"
 #include "sceneMaptool.h"
 #include "sceneUnitEditor.h"
+#include "sceneResult.h"
 
 
 mainGame::mainGame()
@@ -116,6 +117,8 @@ void mainGame::initScene(void)
 	_sceneBattle->setLinkAdressFriend(_friend);
 	_sceneBattle->setLinkAdressMap(_map);
 	SCENEMANAGER->addScene(L"ÀüÅõ¾À", _sceneBattle);
+
+	SCENEMANAGER->addScene(L"°á°ú¾À", new sceneResult);
 
 	SCENEMANAGER->changeScene(L"ÃÊ±âÈ­¾À");
 }
@@ -234,6 +237,11 @@ void mainGame::checkWindowSize(void)
 	else if (SCENEMANAGER->isCurScene(L"ÆÇ¸Å»óÁ¡¾À"))
 	{
 		setWindowResize({ WINSIZEX5,WINSIZEY5 });
+	}
+	else if (SCENEMANAGER->isCurScene(L"°á°ú¾À"))
+	{
+		setWindowResize({ WINSIZEX2,WINSIZEY2 });
+
 	}
 }
 
