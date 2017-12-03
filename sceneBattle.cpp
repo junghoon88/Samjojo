@@ -117,9 +117,10 @@ void sceneBattle::update(void)
 	if(_enemy->getUnits().size() > 2)
 	{
 		Unit* unit = _enemy->getUnits()[1];
-		if (KEYMANAGER->isOnceKeyDown('5') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
+		if (KEYMANAGER->isOnceKeyDown('1') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
 		{
-			unhideEnemy();
+			int add = _player->getKong();
+			_player->setKong(add+1);
 		}
 		if (KEYMANAGER->isOnceKeyDown('4') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
 		{
