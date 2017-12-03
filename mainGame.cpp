@@ -109,6 +109,7 @@ void mainGame::initScene(void)
 
 	sceneSell* _sceneSell = new sceneSell;							//판매상점
 	_sceneSell->setLinkAdressPlayer(_player);
+	_sceneSell->setLinkAdressSceneBuy(_sceneBuy);
 	SCENEMANAGER->addScene(L"판매상점씬", _sceneSell);
 	
 

@@ -23,7 +23,7 @@ HRESULT sceneEquip::init(void) {
 	_button[BTN_EXIT]->init(L"SELECT-선택버튼", L"종료", 295, 348, { 0,0 }, { 0,1 }, selectExit, this);
 
 	_vUnitsInFile = _player->getUnitsInFile();
-
+	
 	_index = 0;  //조조
 
 	_tcscpy(_name2[0], L"조조");
@@ -363,6 +363,91 @@ void sceneEquip::render(void) {
 		_available[i] = _availableEquip;
 		///////////////////
 
+		for (int i = 0; i < _vItems.size(); i++) {
+			if (PtInRect(&_rcItm[i], _pt)) {
+				for (int j = 0; j < _vUnitsInFile.size(); j++) {
+					if (!_tcscmp(_vUnitsInFile[j]->getStatus().name, _name2[_index])) {
+						switch (_vItems[i]->getIclass()) {
+						case WEAPON:
+							if (_available[i] == true) {
+								if (_vUnitsInFile[j]->getItemW() != NULL) {
+									_amount = _vItems[i]->getAtk() - _vUnitsInFile[j]->getItemW()->getAtk();
+								}
+								else {
+									_amount = _vItems[i]->getAtk();
+								}
+								TCHAR tmp6[32];
+								if (_amount > 0)
+									_stprintf(tmp6, L"+%2d", _amount);
+								else if(_amount <0)
+									_stprintf(tmp6, L"-%2d", abs(_amount));
+								TextOut(getMemDC(), 438, 249, tmp6, _tcslen(tmp6));
+							}
+							break;
+						case DEFENCE:
+							if (_available[i] == true) {
+								if (_vUnitsInFile[j]->getItemA() != NULL) {
+									_amount = _vItems[i]->getDep() - _vUnitsInFile[j]->getItemA()->getDep();
+								}
+								else {
+									_amount = _vItems[i]->getDep();
+								}
+								TCHAR tmp7[32];
+								if (_amount > 0)
+									_stprintf(tmp7, L"+%2d", _amount);
+								else if (_amount <0)
+									_stprintf(tmp7, L"-%2d", abs(_amount));
+								TextOut(getMemDC(), 438, 268, tmp7, _tcslen(tmp7));
+							}
+							break;
+						case SPECIAL:
+							if (_available[i] == true) {
+								if (_vUnitsInFile[j]->getItemS() != NULL) {
+									_amount = _vItems[i]->getHP() - _vUnitsInFile[j]->getItemS()->getHP();
+								}
+								else {
+									_amount = _vItems[i]->getHP();
+								}
+								TCHAR tmp8[32];
+								if (_amount > 0)
+									_stprintf(tmp8, L"+%2d", _amount);
+								else if (_amount <0)
+									_stprintf(tmp8, L"-%2d", abs(_amount));
+								TextOut(getMemDC(), 438, 210, tmp8, _tcslen(tmp8));
+							}
+							break;
+						default: break;
+						}
+					}
+				}
+			}
+		}
+		for (int i = 0; i < 3; i++) {
+			if (PtInRect(&_rcItm2[i], _pt)) {
+				for (int j = 0; j < _vUnitsInFile.size(); j++) {
+					if (!_tcscmp(_vUnitsInFile[j]->getStatus().name, _name2[_index])) {
+						if (i == 0 && _vUnitsInFile[j]->getItemW() != NULL) {
+							_amount = _vUnitsInFile[j]->getItemW()->getAtk();
+							TCHAR tmp9[32];
+							_stprintf(tmp9, L"-%2d", _amount);
+							TextOut(getMemDC(), 438, 249, tmp9, _tcslen(tmp9));
+						}
+						else if (i == 1 && _vUnitsInFile[j]->getItemA() != NULL) {
+							_amount = _vUnitsInFile[j]->getItemA()->getDep();
+							TCHAR tmp10[32];
+							_stprintf(tmp10, L"-%2d", _amount);
+							TextOut(getMemDC(), 438, 268, tmp10, _tcslen(tmp10));
+						}
+						else if (i == 2 && _vUnitsInFile[j]->getItemS() != NULL) {
+							_amount = _vUnitsInFile[j]->getItemS()->getHP();
+							TCHAR tmp11[32];
+							_stprintf(tmp11, L"-%2d", _amount);
+							TextOut(getMemDC(), 438, 210, tmp11, _tcslen(tmp11));
+						}
+					}
+				}
+			}
+		}
 		if (_availableEquip) {
 			TextOut(getMemDC(), 310, 64 + (i * 20), L"O", _tcslen(L"O"));
 		}
@@ -460,5 +545,6 @@ void sceneEquip::prev(void) {
 	if (_index < 0) _index = 6;
 }
 void sceneEquip::exit(void) {
+	_sBuy->setVItems(_vItems);
 	SCENEMANAGER->changeScene(L"준비기본씬");
 }

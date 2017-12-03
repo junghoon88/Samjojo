@@ -29,8 +29,8 @@ HRESULT sceneBuy::init(void)
 	_gold = _player->getGold();
 	_fontNum = FONTVERSION_SAMJOJO_HEE;
 
-	_buyed = false;
-	_notbuyed = false;
+	_buy = false;
+	_notbuy = false;
 	_messageTime = 0;
 
 	if (_vItemlist.empty()) {   //최초1번
@@ -110,8 +110,8 @@ void sceneBuy::update(void)
 					if (_gold >= _vItemlist[i]->getPrice()&&_vItems.size()<13) {   //구매가능
 						SOUNDMANAGER->play(L"Se03", 1.0f);
 						_gold -= _vItemlist[i]->getPrice();  //money차감
-						_buyed = true;
-						_notbuyed = false;
+						_buy = true;
+						_notbuy = false;
 						switch (_vItemlist[i]->getIclass()) {
 						case WEAPON: 
 							_weaponB = new ItemWeapon;
@@ -132,8 +132,8 @@ void sceneBuy::update(void)
 						}
 					}
 					else {
-						_notbuyed = true;
-						_buyed = false;
+						_notbuy = true;
+						_buy = false;
 						SOUNDMANAGER->play(L"Se04", 1.0f);
 					}
 				}
@@ -143,17 +143,17 @@ void sceneBuy::update(void)
 	else {  //도구탭
 		if (PtInRect(&_listRC[0], _pt)) {
 			if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) {
-				if (_gold >= 75) {   //콩구입
+				if (_gold >= 100) {   //콩구입
 					SOUNDMANAGER->play(L"Se03", 1.0f);
-					_gold -= 75;
-					_buyed = true;
-					_notbuyed = false;
+					_gold -= 100;
+					_buy = true;
+					_notbuy = false;
 					_player->setKong(_player->getKong() + 1);
 				}
 				else {
 					SOUNDMANAGER->play(L"Se04", 1.0f);
-					_buyed = false;
-					_notbuyed = true;
+					_buy = false;
+					_notbuy = true;
 				}
 			}
 		}
@@ -211,7 +211,7 @@ void sceneBuy::render(void)
 		TCHAR tmp5[5];
 		_stprintf(tmp5, L"%2d", _player->getKong());
 		TextOut(getMemDC(), 380, 90, tmp5, _tcslen(tmp5));
-		TextOut(getMemDC(), 430, 90, L"75", _tcslen(L"75"));
+		TextOut(getMemDC(), 425, 90, L"100", _tcslen(L"100"));
 	}
 
 	for (int i = 0; i < 12; i++) {
@@ -226,19 +226,19 @@ void sceneBuy::render(void)
 	_stprintf(tmp, L"%5d", _gold);
 	TextOut(getMemDC(), 330, 345, tmp, _tcslen(tmp));
 
-	if (_buyed) {  //구입완료 메세지
+	if (_buy) {  //구입완료 메세지
 		_messageTime += TIMEMANAGER->getElapsedTime();
 		TextOut(getMemDC(), 180, 345, L"구입완료", _tcslen(L"구입완료"));
 		if (_messageTime > 2.0f) {
-			_buyed = false;
+			_buy = false;
 			_messageTime = 0;
 		}
 	}
-	if (_notbuyed) {
+	if (_notbuy) {
 		_messageTime += TIMEMANAGER->getElapsedTime();
 		TextOut(getMemDC(), 180, 345, L"구입불가", _tcslen(L"구입불가"));
 		if (_messageTime > 2.0f) {
-			_notbuyed = false;
+			_notbuy = false;
 			_messageTime = 0;
 		}
 	}
@@ -254,12 +254,6 @@ void sceneBuy::selectExit(void* obj) {
 }
 //////////////////////////
 
-
-void sceneBuy::buyItem(void) {  //ok
-
-	
-
-}
 
 void sceneBuy::exit(void) {
 	_player->setGold(_gold);

@@ -33,7 +33,7 @@ private:
 	//vItems _vItemsEquip;   //장착된 아이템벡터 나중에 player _vItems 로 넘겨야함
 
 	RECT _rcItm[13];    //장비list RC
-	RECT _rcItm2[13];   //장착중RC
+	RECT _rcItm2[3];   //장착중RC
 	bool _available[13];
 	bool _selectIn;
 	button* _button[BTN_MAXX];
@@ -51,6 +51,7 @@ private:
 
 	TCHAR _name2[7][32];
 
+	int _amount;
 
 	int _index;
 

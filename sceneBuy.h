@@ -36,8 +36,8 @@ private:
 	
 	float _messageTime;
 
-	bool _buyed;
-	bool _notbuyed;
+	bool _buy;
+	bool _notbuy;
 	bool _base1;              //무기상 도구상 구분
 
 	int _gold;
@@ -53,9 +53,8 @@ public:
 
 	static void selectExit(void* obj);
 
-
 	inline vItems getVItems(void) { return _vItems; }
-	void buyItem(void);
+	inline void setVItems(vItems vitems) { _vItems = vitems; }
 	void exit(void);
 };
 
