@@ -6,7 +6,7 @@ class Unit;
 class Player;
 class Friend;
 class Enemy;
-class infoCursor;
+class battleSceneInterface;
 
 class gameMap : public gameNode
 {
@@ -26,7 +26,7 @@ private:
 	Player*		_player;	//플레이어
 	Friend*		_friend;	//아군
 	Enemy*		_enemy;		//적군
-	infoCursor* _cursor;
+	battleSceneInterface* _cursor;
 
 public:
 	gameMap();
@@ -48,7 +48,7 @@ public:
 	inline void setLinkAdressPlayer(Player* player) { _player = player; }
 	inline void setLinkAdressFriend(Friend* friends) { _friend = friends; }
 	inline void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
-	inline void setLinkAdressCursor(infoCursor* info) { _cursor = info; }
+	inline void setLinkAdressUI(battleSceneInterface* info) { _cursor = info; }
 
 	//타일 정보 접근자
 	inline tagTile* getTile(void) { return _tiles; }

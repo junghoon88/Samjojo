@@ -52,6 +52,29 @@ HRESULT progressBar::init(TCHAR* topImage, TCHAR* bottomImage, float x, float y,
 
 	return S_OK;
 }
+HRESULT progressBar::init(TCHAR* topImage, TCHAR* bottomImage, float x, float y, int width, int height, TCHAR* foldername)
+{
+	_pt.x = (LONG)x;
+	_pt.y = (LONG)y;
+
+	_rcProgress = RectMake((int)x, (int)y, width, height);
+
+	TCHAR strTopImageName[128];
+	TCHAR strBottomImageName[128];
+
+	ZeroMemory(strTopImageName, sizeof(strTopImageName));
+	ZeroMemory(strBottomImageName, sizeof(strBottomImageName));
+
+	_stprintf_s(strTopImageName, L"image/%s/%s.bmp", foldername, topImage);
+	_stprintf_s(strBottomImageName, L"image/%s/%s.bmp", foldername, bottomImage);
+
+	_progressBarBottom = IMAGEMANAGER->addImage(bottomImage, strBottomImageName, (float)x, (float)y, width, height, true, RGB(255, 0, 255));
+	_progressBarTop = IMAGEMANAGER->addImage(topImage, strTopImageName, (float)x, (float)y, width, height, true, RGB(255, 0, 255));
+
+	_width = _progressBarTop->getWidth();
+
+	return S_OK;
+}
 
 void progressBar::release(void)
 {

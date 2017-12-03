@@ -160,6 +160,8 @@ struct tagBattleState
 	POINT			tilePtNext;
 	POINT			tilePtEnemy;
 	BOOL			findEnemy;
+	Unit*			opponent;
+	BOOL			attackSuccess;
 
 
 	DIRECTION		dir;
@@ -209,11 +211,10 @@ class Unit : public gameNode
 private:
 	typedef BOOL(*Temp)[UNIT_ATTACK_RANGE_MAX];
 
-	int _imgFrameTime;
+	float _imgFrameTime;
 	int _imgFrameY;
 
 	UNITSEQUENCE _oldSeq;
-
 	int _delayTime;
 
 protected:
@@ -248,6 +249,8 @@ public:
 	void moveTo(POINT tliePt);
 	void attack(Unit* opponent);
 	void counterAttack(Unit* opponent);
+	void getDamage(int damage);
+	void setIdleState(void);
 	void findEnemy(TEAM myTeam, POINT closeEnemyPos);
 	void findMoveArea(void);
 	void showMoveArea(void);
@@ -256,9 +259,10 @@ public:
 	void updateSequence(bool bAuto);
 	void updateImage(void);
 public:
-	inline void updateStatus(void);
+	void updateStatus(void);
 	inline void earnExp(int exp) { _status.exp += exp; };
 	inline void	expMaxCheck(void);
+	inline void useItem(Unit* unit, int type, int value);
 
 public:
 	inline tagStatus getStatus(void) { return _status; }
@@ -284,7 +288,6 @@ public:
 
 			if (x + y * TILEX == index)
 			{
-				//여기다가 해당 인덱스로 가라고 신호를 넣어주면 되겠죠??
 				return true;
 				break;
 			}
@@ -292,11 +295,48 @@ public:
 		return false;
 	};//인덱스 받아서 인덱스로 해당타일 있으면 트루값 반환 해주자 없으면 빠꾸
 
+	inline bool isAttackTarget(int index) //플레이어랑 인덱스 거리를 계산해서 이게 트루이면
+	{
+		int findIdX = index % TILEX;
+		int findIdY = index / TILEX;
+
+		int startX = _battleState.tilePt.x - int(UNIT_ATTACK_RANGE_MAX / 2);
+		int startY = _battleState.tilePt.y - int(UNIT_ATTACK_RANGE_MAX / 2);
+	
+		for (int i = 0; i < UNIT_ATTACK_RANGE_MAX; i++) //y
+		{
+			for (int j = 0; j < UNIT_ATTACK_RANGE_MAX; j++) //x
+			{
+				int targetX = startX + j;
+				int targetY = startY + i;
+
+				if (targetX < 0) continue;
+				if (targetY < 0) continue;
+				if (targetX > _map->getTileSizeX()) continue;
+				if (targetY > _map->getTileSizeY()) continue;
+
+				if (findIdX == targetX && findIdY == targetY)
+				{
+					if (_status.atkRange[j][i] == true)
+					{
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+
 	inline void setUnitState(UNITSTATE state) { _battleState.unitState = state; }
 	inline UNITSTATE getUnitState(void) { return _battleState.unitState; }
 
-	inline void setCurHP(int damage) { _status.HP -= damage; }
+	inline void setMaxHP(int val) { _status.HPMax = val; }
+	inline int getMaxHP(void) { return _status.HPMax; }
+	inline void setCurHP(int val) { _status.HP = val; }
 	inline int getCurHP(void) { return _status.HP; }
+	inline void setIsLive(bool live) { _status.isLive = live; }
+	inline bool getIsLive(void) { return _status.isLive; }
 
 	inline void setImgBattleIdle(int num)
 	{
@@ -355,6 +395,8 @@ public:
 	}
 	inline UNITSEQUENCE getUnitSequnce(void) { return _battleState.squence; }
 	inline void setUnitSequnce(UNITSEQUENCE squence) { _battleState.squence = squence; }
+
+	inline void setOpponent(Unit* unit) { _battleState.opponent = unit; }
 };
 
 typedef vector<Unit*>	vUnits;

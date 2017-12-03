@@ -4,15 +4,17 @@
 #include "Enemy.h"
 #include "Friend.h"
 #include "gameMap.h"
-#include "infoCursor.h"
+#include "battleSceneInterface.h"
 #include "aStar.h"
 #include "scanDialog.h"
 
-enum tagPhase
+enum BATTLEPHASE
 {
-	PLAYERPHASE,
-	FRIENDPHASE,
-	ENEMYPHASE // 이 순으로 전투 진행
+	BATTLEPHASE_PLAYER,
+	BATTLEPHASE_FRIEND,
+	BATTLEPHASE_ENEMY, // 이 순으로 전투 진행
+
+	BATTLEPHASE_MAX
 };
 
 
@@ -23,16 +25,19 @@ private:
 	Friend*		_friend;	//아군
 	Enemy*		_enemy;		//적군
 	gameMap*	_map;		//게임 맵
-	infoCursor* _cursor;	//커서 정보
+	battleSceneInterface* _interface;	//커서 정보
 
 	
 
-	tagPhase	_phase;
+	BATTLEPHASE	_phase;
 	int _turn; //턴 진행상황
 
 
 	aStar*		_astar;		//a* 을 전투씬에 공용으로 선언하고, 각 유닛에서 할당받아서 쓰고 싶을때 쓴다.
 	scanDialog* _sDL;
+
+
+	bool		_isDialog;
 private:
 	void initImage(void);
 	void initSound(void);
@@ -63,7 +68,8 @@ public:
 	void enemyAction(void);
 	void phaseCheck(void);
 	void linkClass(void);
-	void setUpPlayer(void);
+	void setUpBattle(void);
+	void debug_enemyturn(void);
 
 };
 

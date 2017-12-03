@@ -88,9 +88,6 @@
     <Filter Include="2DFramework\editbox">
       <UniqueIdentifier>{1dec7e4c-1646-401a-8435-9ca07918e97d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainGame\sceneShop">
-      <UniqueIdentifier>{38383b26-74d5-42c8-9bb6-2b43ae5f1080}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MainGame\sceneReady">
       <UniqueIdentifier>{cd4f2a5f-7c92-4a24-9ce8-f57c7651afa1}</UniqueIdentifier>
     </Filter>

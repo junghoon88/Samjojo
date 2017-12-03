@@ -15,6 +15,8 @@ private:
 	int _minNum;
 	int _maxNum;
 
+	FONTVERSION _fontNum;
+
 public:
 	editbox();
 	~editbox();

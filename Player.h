@@ -7,7 +7,7 @@
 class Friend;
 class Enemy;
 class gameMap;
-class infoCursor;
+class battleSceneInterface;
 
 class Player : public gameNode
 {
@@ -25,7 +25,7 @@ private:
 	Enemy*		_enemy;		//Àû±º
 	gameMap*	_map;
 
-	infoCursor* info;
+	battleSceneInterface* info;
 
 public:
 	Player();
@@ -46,15 +46,17 @@ public:
 
 private:
 	Unit* findUnit(TCHAR* name);
+	void UnitLiveCheck(void);
 
 public:
 	inline vUnits getUnits(void) { return _vUnits; }
 	inline void setUnits(vUnits vunits) { _vUnits = vunits; }
 	inline vUnits getUnitsInFile(void) { return _vUnitsInFile; }
 	inline vItems getItems(void) { return _vItems; }
+	inline void setItems(vItems items) { _vItems = items; }
 	inline void setLinkAdressFriend(Friend* friends) { _friend = friends; }
 	inline void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
 	inline void setLinkAdressMap(gameMap* map) { _map = map; }
-	inline void setLinkCursor(infoCursor* cursor) { info = cursor; }
+	inline void setLinkAdressUI(battleSceneInterface* cursor) { info = cursor; }
 };
 

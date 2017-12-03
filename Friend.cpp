@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "gameMap.h"
-#include "infoCursor.h"
+#include "battleSceneInterface.h"
 
 Friend::Friend()
 {
@@ -25,6 +25,12 @@ void Friend::release(void)
 
 void Friend::update(void)
 {
+	for (int i = 0; i < _vUnits.size(); i++)
+	{
+		_vUnits[i]->update(TEAM_FRIEND);
+	}
+
+	UnitLiveCheck();
 }
 
 void Friend::render(void)
@@ -129,4 +135,17 @@ void Friend::deleteUnits(void)
 		SAFE_DELETE(_vUnits[i]);
 	}
 	_vUnits.clear();
+}
+
+void Friend::UnitLiveCheck(void)
+{
+	viUnits iter = _vUnits.begin();
+	while (iter != _vUnits.end())
+	{
+		if ((*iter)->getIsLive() == FALSE)
+		{
+			_vUnits.erase(iter);
+		}
+		else ++iter;
+	}
 }

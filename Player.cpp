@@ -3,7 +3,7 @@
 #include "Friend.h"
 #include "Enemy.h"
 #include "gameMap.h"
-#include "infoCursor.h"
+#include "battleSceneInterface.h"
 
 Player::Player()
 {
@@ -29,6 +29,8 @@ void Player::update(void)
 	{
 		_vUnits[i]->update(TEAM_PLAYER);
 	}
+
+	UnitLiveCheck();
 }
 
 void Player::render(void)
@@ -248,4 +250,17 @@ Unit* Player::findUnit(TCHAR* name)
 {
 
 	return NULL;
+}
+
+void Player::UnitLiveCheck(void)
+{
+	viUnits iter = _vUnits.begin();
+	while (iter != _vUnits.end())
+	{
+		if ((*iter)->getIsLive() == FALSE)
+		{
+			_vUnits.erase(iter);
+		}
+		else ++iter;
+	}
 }
