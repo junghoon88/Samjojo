@@ -173,6 +173,7 @@ void scenePos::update(void){
 		}
 		if(PtInRect(&_rcOK, _pt) && _availableOK) {  //결정클릭
 			_player->locateUnits();
+			
 			SOUNDMANAGER->play(L"Se03", 1.0f);
 			SCENEMANAGER->changeScene(L"준비기본씬");
 		}

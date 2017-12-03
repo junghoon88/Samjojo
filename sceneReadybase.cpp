@@ -28,11 +28,13 @@ HRESULT sceneReadybase::init(void) {
 	_sD->setNext(7);
 	ShowCursor(true);
 	SOUNDMANAGER->play(L"Se_b_02", 1.0f);
+	_isSound = false;
 	return S_OK;
 }
 void sceneReadybase::release(void) {
 	_sD->release();
 	SOUNDMANAGER->stop(L"Se_b_02");
+	SOUNDMANAGER->stop(L"Se07");
 	SAFE_DELETE(_sD);
 
 }
@@ -98,22 +100,33 @@ void sceneReadybase::update(void) {
 			SCENEMANAGER->changeScene(L"ÆÇ¸Å¾À");
 		}
 	}
-
+	if (_isSound)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play(L"Se07", 1.0f);
+			_isSound = false;
+		}
+	}
 	_vUnits = _player->getUnits();
 	if (_vUnits.size() > 3)
 	{
-		
+		SOUNDMANAGER->stop(L"Se_b_02");
+
+		_baseImg = IMAGEMANAGER->findImage(L"smap 0003");
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			_sD->loadDialog();
 			_sD->update();
-			
+			_isSound = true;
+	
 			if (_sD->getNext() == 8)
 			{
 				SCENEMANAGER->changeScene(L"ÀüÅõ¾À");
-			
 			}
 		}
+		
+		
 	}
 	
 }
