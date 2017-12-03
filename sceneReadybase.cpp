@@ -27,7 +27,7 @@ HRESULT sceneReadybase::init(void) {
 	_sD->init("scripts/script 04.txt");
 	_sD->setNext(7);
 	ShowCursor(true);
-	
+	SOUNDMANAGER->play(L"Se_b_02", 1.0f);
 	return S_OK;
 }
 void sceneReadybase::release(void) {
@@ -40,6 +40,8 @@ void sceneReadybase::update(void) {
 
 	_pt.x = _ptMouse.x;
 	_pt.y = _ptMouse.y;
+	
+	
 	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON)) 
 	{
 		if (PtInRect(&_rcPosUI, _pt)) {  //출진창 누름
@@ -72,21 +74,26 @@ void sceneReadybase::update(void) {
 		if (PtInRect(&_rcPosUI, _pt)) 
 		{   //출진창 누르고땜
 			_posClicking = false;
+			SOUNDMANAGER->play(L"Se02", 1.0f);
+			SOUNDMANAGER->stop(L"Se_b_02");
 			SCENEMANAGER->changeScene(L"출진씬");
 		}
 		else if (PtInRect(&_rcEquipUI, _pt))
 		{   //출진창 누르고땜
 			_equipClicking = false;
+			SOUNDMANAGER->play(L"Se02", 1.0f);
 			SCENEMANAGER->changeScene(L"장비씬");
 		}
 		else if (PtInRect(&_rcBuyUI, _pt))
 		{   //출진창 누르고땜
 			_buyClicking = false;
+			SOUNDMANAGER->play(L"Se02", 1.0f);
 			SCENEMANAGER->changeScene(L"구매씬");
 		}
 		else if (PtInRect(&_rcSellUI, _pt))
 		{   //출진창 누르고땜
 			_sellClicking = false;
+			SOUNDMANAGER->play(L"Se02", 1.0f);
 			SCENEMANAGER->changeScene(L"판매씬");
 		}
 	}
@@ -94,11 +101,18 @@ void sceneReadybase::update(void) {
 	_vUnits = _player->getUnits();
 	if (_vUnits.size() > 3)
 	{
-		_sD->update();
+		
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			_sD->loadDialog();
-			if (_sD->getNext() == 8) SCENEMANAGER->changeScene(L"전투씬");
+			_sD->update();
+			
+			if (_sD->getNext() == 8)
+			{
+				SOUNDMANAGER->stop(L"Se_b_02");
+				SCENEMANAGER->changeScene(L"전투씬");
+			
+			}
 		}
 	}
 	

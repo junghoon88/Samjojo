@@ -51,7 +51,7 @@ private:
 	aStar*		_astar;		//a* 을 전투씬에 공용으로 선언하고, 각 유닛에서 할당받아서 쓰고 싶을때 쓴다.
 	scanDialog* _sDL;
 
-
+	BATLLESTORY _battlestory;
 	bool		_isDialog[BATTLESTORY_MAX];
 public:
 	sceneBattle();
