@@ -386,8 +386,8 @@ void sceneEquip::render(void) {
 
 	//for(int i=0; i<13; i++)
 	//	Rectangle(getMemDC(), _rcItm[i].left, _rcItm[i].top, _rcItm[i].right, _rcItm[i].bottom);
-	for (int i = 0; i < 3; i++)
-		Rectangle(getMemDC(), _rcItm2[i].left, _rcItm2[i].top, _rcItm2[i].right, _rcItm2[i].bottom);
+	//for (int i = 0; i < 3; i++)
+	//	Rectangle(getMemDC(), _rcItm2[i].left, _rcItm2[i].top, _rcItm2[i].right, _rcItm2[i].bottom);
 	for (int i = 0; i < BTN_MAXX; i++) {
 		_button[i]->render();
 	}
