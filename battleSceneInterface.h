@@ -114,6 +114,11 @@ private:
 	void cmd_wait(void);
 	void cmd_cancel(void);
 	//플레이어 유닛 클릭시 표시할 정보,공격,스킬,도구,대기,취소
+	//아이템 표시
+	TCHAR txtKong[100];//콩 소지 수
+	int kongHave;
+	RECT kongTarget;
+
 	//================================우측 하단 UI 표시용==============================
 	uiBtnName uiBtn_name;
 	button* uiBtn[UIBTN_MAX];

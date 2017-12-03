@@ -84,7 +84,7 @@ void Unit::render(void)
 			_battleState.imgBattleIdle->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY(), _battleState.frameIdle, _imgFrameY);
 		break;
 		case UNITSTATE_ATK:		//공격상태
-			_battleState.imgBattleAtk->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY(), _battleState.frameAtk, _imgFrameY);
+			_battleState.imgBattleAtk->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX() - 8, _battleState.rc.top - MAINCAMERA->getCameraY() - 8, _battleState.frameAtk, _imgFrameY);
 		break;
 		case UNITSTATE_DEF:		//방어상태
 		case UNITSTATE_HIT:		//피격상태
@@ -236,6 +236,7 @@ bool Unit::move(void)
 		}
 		else
 		{
+			setIdleState();
 			return FALSE;
 		}
 	}
@@ -259,7 +260,7 @@ bool Unit::move(void)
 	_battleState.rc = RectMake(_battleState.pt.x - TILESIZE / 2, _battleState.pt.y - TILESIZE / 2, TILESIZE, TILESIZE);
 	_battleState.tilePt = { (LONG)(_battleState.pt.x / TILESIZE), (LONG)(_battleState.pt.y / TILESIZE) };
 
-	setIdleState();
+	_battleState.unitState = UNITSTATE_IDLE;
 
 	return TRUE;
 }

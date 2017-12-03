@@ -27,6 +27,7 @@ enum BATLLESTORY
 	BATTLESTORY_3,
 	BATTLESTORY_4,
 	BATTLESTORY_5,
+	BATTLESTORY_6,
 
 	BATTLESTORY_MAX
 };
@@ -57,6 +58,7 @@ private:
 	bool		_event_whosThere;
 	bool		_event_join;
 	bool		_event_sudden;
+	bool		_event_RIP_yang;
 	bool		_loadDialog;
 public:
 	sceneBattle();
@@ -69,6 +71,7 @@ public:
 
 private:
 	POINT findCloseEnemyPos(Unit* unit);
+	bool updatePhaseTime(void);
 public:
 
 

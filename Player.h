@@ -52,8 +52,8 @@ private:
 	void UnitLiveCheck(void);
 
 public:
-	inline int getkongs(void) { return _kongNum; }
-	inline void setkongs(int kongs) { _kongNum = kongs; }
+	inline int getKong(void) { return _kongNum; }
+	inline void setKong(int kongs) { _kongNum = kongs; }
 	inline vUnits getUnits(void) { return _vUnits; }
 	inline void setUnits(vUnits vunits) { _vUnits = vunits; }
 	inline vUnits getUnitsInFile(void) { return _vUnitsInFile; }

@@ -22,6 +22,7 @@ HRESULT sceneBattle::init(void)
 	_event_whosThere = false;
 	_event_join = false;
 	_event_sudden = false;
+	_event_RIP_yang = false;
 	_interface = new battleSceneInterface;
 	_interface->init();
 	_turn = 1;
@@ -29,10 +30,10 @@ HRESULT sceneBattle::init(void)
 	_astar = new aStar;
 	_astar->init(_map);
 
+	_player->setKong(1);
+	
 	linkClass();
 	setUpBattle();
-
-	_player->setkongs(5);
 
 	_sDL = new scanDialog;
 	_sDL->init("scripts/script 05.txt");
@@ -69,44 +70,50 @@ void sceneBattle::release(void)
 
 void sceneBattle::update(void)
 {
-
-	
-	//테스트용 
-	if (_phaseChanging)
+	if (_loadDialog)
 	{
-		_phaseChangeTime += TIMEMANAGER->getElapsedTime();
-
-		if (_phase == BATTLEPHASE_VICTORY)
+		switch (_battlestory)
 		{
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-			{
-				DATABASE->setBattleVictory(true);
-				SCENEMANAGER->changeScene(L"결과씬");
-			}
-		}
-		else if (_phase == BATTLEPHASE_DEFEAT)
-		{
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-			{
-				DATABASE->setBattleVictory(false);
-				SCENEMANAGER->changeScene(L"결과씬");
-			}
-		}
-		else
-		{
-			if (_phaseChangeTime > 2.5f)
-			{
-				_phaseChanging = false;
-				_phaseChangeTime = 0.0f;
-			}
-		}
+		case BATTLESTORY_1:
+			_sDL->init("scripts/script 05.txt"); //스타트 스크립트
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_2:
+			_sDL->init("scripts/script 06.txt"); //이벤트1 몹이 아무도없을때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_3:
+			_sDL->init("scripts/script 07.txt"); //이벤트 2 조조가 습격당했을때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_4:
+			_sDL->init("scripts/script 10.txt"); //이벤트 3 턴이 10이되서 조조가 움직일때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_5:
+			_sDL->init("scripts/script 11.txt"); //이벤트 4 이유가 뒤졌을때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_6:
+			_sDL->init("scripts/script 12.txt"); //양쌤 사망시
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
 
-		_player->update();
-		_friend->update();
-		_enemy->update();
+		}
+	}
 
+	//Phase 변화
+	if (updatePhaseTime() == false)
+	{
 		return;
 	}
+
 
 	//debug
 	if(_enemy->getUnits().size() > 2)
@@ -327,6 +334,46 @@ POINT sceneBattle::findCloseEnemyPos(Unit* unit)
 	return tarPt;
 }
 
+bool sceneBattle::updatePhaseTime(void)
+{
+	if (_phaseChanging)
+	{
+		_phaseChangeTime += TIMEMANAGER->getElapsedTime();
+
+		if (_phase == BATTLEPHASE_VICTORY)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				DATABASE->setBattleVictory(true);
+				SCENEMANAGER->changeScene(L"결과씬");
+			}
+		}
+		else if (_phase == BATTLEPHASE_DEFEAT)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				DATABASE->setBattleVictory(false);
+				SCENEMANAGER->changeScene(L"결과씬");
+			}
+		}
+		else
+		{
+			if (_phaseChangeTime > 2.5f)
+			{
+				_phaseChanging = false;
+				_phaseChangeTime = 0.0f;
+			}
+		}
+
+		_player->update();
+		_friend->update();
+		_enemy->update();
+
+		return false;
+	}
+	return true;
+}
+
 // ▼행동 종료시나..아무튼 호출해서 체크. 계속 체크돌릴 필요는 없을듯▼
 void sceneBattle::phaseCheck(void)
 {
@@ -432,7 +479,7 @@ void sceneBattle::phaseCheck(void)
 				
 				}
 			}
-			
+			checkEvent();
 			_phaseChanging = true;
 			_phaseChangeTime = 0.0f;
 		}
@@ -458,6 +505,7 @@ void sceneBattle::phaseCheck(void)
 				_enemy->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
 			}
 			_phase = BATTLEPHASE_ENEMY;
+			checkEvent();
 			_phaseChanging = true;
 			_phaseChangeTime = 0.0f;
 		}
@@ -682,6 +730,14 @@ void sceneBattle::checkEvent(void)
 		_isDialog = true;
 		_loadDialog = true;
 		_event_join = true;
+	}
+
+	if (!_event_RIP_yang && _friend->getUnits().size() <= 0)
+	{
+		_battlestory = BATTLESTORY_6;
+		_isDialog = true;
+		_loadDialog = true;
+		_event_RIP_yang = true;
 	}
 }
 void sceneBattle::unhideEnemy(void)
