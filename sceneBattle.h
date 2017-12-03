@@ -20,7 +20,16 @@ enum BATTLEPHASE
 
 	BATTLEPHASE_MAX
 };
+enum BATLLESTORY
+{
+	BATTLESTORY_1,
+	BATTLESTORY_2,
+	BATTLESTORY_3,
+	BATTLESTORY_4,
+	BATTLESTORY_5,
 
+	BATTLESTORY_MAX
+};
 
 class sceneBattle : public gameNode
 {
@@ -43,8 +52,7 @@ private:
 	scanDialog* _sDL;
 
 
-	bool		_isDialog;
-
+	bool		_isDialog[BATTLESTORY_MAX];
 public:
 	sceneBattle();
 	~sceneBattle();
@@ -64,7 +72,8 @@ public:
 	inline void setLinkAdressEnemy(Enemy* enemy) { _enemy = enemy; }
 	inline void setLinkAdressFriend(Friend* friends) { _friend = friends; }
 	inline void setLinkAdressMap(gameMap* map) { _map = map; }
-
+	inline void setDialog(bool isDialog , int i) { _isDialog[i] = isDialog; }
+	
 	Unit* findUnit(TEAM team, POINT pt);
 	void friendAction(void);
 	void enemyAction(void);
