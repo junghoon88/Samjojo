@@ -16,7 +16,9 @@ private:
 	Player*		_player;	//플레이어
 	Enemy*		_enemy;		//적군
 	gameMap*	_map;
+
 	battleSceneInterface* info;
+
 public:
 	Friend();
 	~Friend();

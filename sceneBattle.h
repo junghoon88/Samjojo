@@ -40,10 +40,10 @@ private:
 	gameMap*	_map;		//게임 맵
 	battleSceneInterface* _interface;	//커서 정보
 
-	
 
 	BATTLEPHASE	_phase;
 	int _turn; //턴 진행상황
+	int _eventAcc;
 	bool		_phaseChanging;
 	float		_phaseChangeTime;
 
@@ -81,7 +81,7 @@ public:
 	void phaseCheck(void);
 	void linkClass(void);
 	void setUpBattle(void);
-	void debug_enemyturn(void);
-
+	void checkEvent(void);
+	void unhideEnemy(void);
 };
 

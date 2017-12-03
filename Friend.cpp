@@ -21,6 +21,7 @@ HRESULT Friend::init(void)
 
 void Friend::release(void)
 {
+	deleteUnits();
 }
 
 void Friend::update(void)
@@ -35,6 +36,10 @@ void Friend::update(void)
 
 void Friend::render(void)
 {
+	for (int i = 0; i < _vUnits.size(); i++)
+	{
+		_vUnits[i]->render();
+	}
 }
 
 void Friend::loadUnits(void)
@@ -124,17 +129,18 @@ void Friend::locateUnits(void)
 
 void Friend::deleteUnits(void)
 {
+	for (int i = 0; i < _vUnits.size(); i++)
+	{
+		SAFE_DELETE(_vUnits[i]);
+	}
+	_vUnits.clear();
+
 	for (int i = 0; i < _vUnitsInFile.size(); i++)
 	{
 		SAFE_DELETE(_vUnitsInFile[i]);
 	}
 	_vUnitsInFile.clear();
 
-	for (int i = 0; i < _vUnits.size(); i++)
-	{
-		SAFE_DELETE(_vUnits[i]);
-	}
-	_vUnits.clear();
 }
 
 void Friend::UnitLiveCheck(void)
