@@ -461,6 +461,8 @@ void sceneInit::initImageBattle(void)
 	_loading->loadImage(L"enemyturn",  L"image/battleScene/enemyturn.bmp",  960, 960, false, RGB(255, 0, 255), true);
 	_loading->loadImage(L"defeatturn", L"image/battleScene/defeatturn.bmp", 960, 960, false, RGB(255, 0, 255), true);
 
+	_loading->loadImage(L"battleHpTop", L"image/battleScene/battleGaugeTop.bmp", 30, 5, true, RGB(255, 0, 255), true);
+	_loading->loadImage(L"battleHpBottom", L"image/battleScene/battleGaugeBottom.bmp", 30, 5, true, RGB(255, 0, 255), true);
 }
 void sceneInit::initImageStory(void)
 {
