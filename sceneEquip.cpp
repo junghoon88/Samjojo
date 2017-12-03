@@ -140,6 +140,55 @@ void sceneEquip::update(void) {
 			}
 		}
 	}
+
+	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) {
+		for (int i = 0; i < 3; i++) {
+			if (PtInRect(&_rcItm2[i], _pt)) {
+				switch (i) {
+				case 0:
+					//if (_vUnitsInFile[i]->getItemW() != NULL) {
+						_weapon = new ItemWeapon;
+						_weapon->copyItem(_vUnitsInFile[i]->getItemW());
+						_vItems.push_back(_weapon);
+						_vUnitsInFile[i]->setItemW(NULL);
+				//	}
+					break;
+				case 1:
+					if (_vUnitsInFile[i]->getItemA() != NULL) {
+						_armor = new ItemArmor;
+						_armor->copyItem(_vUnitsInFile[i]->getItemA());
+						_vItems.push_back(_armor);
+						_vUnitsInFile[i]->setItemA(NULL);
+					}
+					break;
+				case 2:
+					if (_vUnitsInFile[i]->getItemS() != NULL) {
+						_special = new ItemSpecial;
+						_special->copyItem(_vUnitsInFile[i]->getItemS());
+						_vItems.push_back(_special);
+						//SAFE_DELETE(_vUnitsInFile[i]->getItemS());
+						_vUnitsInFile[i]->setItemS(NULL);
+					}
+					break;
+				default: break;
+				}
+			}
+		}
+
+
+
+
+
+
+	}
+
+
+
+
+
+
+
+
 }
 void sceneEquip::render(void) {
 	_baseUI->render(getMemDC(),0,0);
@@ -310,7 +359,7 @@ void sceneEquip::render(void) {
 		SetTextColor(getMemDC(), RGB(0, 0, 0));
 		TextOut(getMemDC(), 520, 67, _vUnitsInFile[_index]->getItemW()->getName(), _tcslen(_vUnitsInFile[_index]->getItemW()->getName()));
 		TCHAR tmp[32];
-		_stprintf(tmp, L"공격력: +%2d", _vUnitsInFile[_index]->getItemW()->getAtk());
+		_stprintf(tmp, L"공격력 +%2d", _vUnitsInFile[_index]->getItemW()->getAtk());
 		TextOut(getMemDC(), 486, 120, tmp, _tcslen(tmp));
 	}
 	if (_vUnitsInFile[_index]->getItemA() != NULL) {
@@ -319,23 +368,23 @@ void sceneEquip::render(void) {
 		SetTextColor(getMemDC(), RGB(0, 0, 0));
 		TextOut(getMemDC(), 520, 164, _vUnitsInFile[_index]->getItemA()->getName(), _tcslen(_vUnitsInFile[_index]->getItemA()->getName()));
 		TCHAR tmp[32];
-		_stprintf(tmp, L"방어력: +%2d", _vUnitsInFile[_index]->getItemA()->getDep());
+		_stprintf(tmp, L"방어력 +%2d", _vUnitsInFile[_index]->getItemA()->getDep());
 		TextOut(getMemDC(), 486, 216, tmp, _tcslen(tmp));
-
-
-
-
 	}
-
-
-
-
-
+	if (_vUnitsInFile[_index]->getItemS() != NULL) {
+		_vUnitsInFile[_index]->getItemS()->getImg32()->render(getMemDC(), 488, 279);
+		HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
+		SetTextColor(getMemDC(), RGB(0, 0, 0));
+		TextOut(getMemDC(), 520, 262, _vUnitsInFile[_index]->getItemS()->getName(), _tcslen(_vUnitsInFile[_index]->getItemS()->getName()));
+		TCHAR tmp[32];
+		_stprintf(tmp, L"HP +%2d", _vUnitsInFile[_index]->getItemS()->getHP());
+		TextOut(getMemDC(), 486, 313, tmp, _tcslen(tmp));
+	}
 
 	//for(int i=0; i<13; i++)
 	//	Rectangle(getMemDC(), _rcItm[i].left, _rcItm[i].top, _rcItm[i].right, _rcItm[i].bottom);
-	//for (int i = 0; i < 3; i++)
-	//	Rectangle(getMemDC(), _rcItm2[i].left, _rcItm2[i].top, _rcItm2[i].right, _rcItm2[i].bottom);
+	for (int i = 0; i < 3; i++)
+		Rectangle(getMemDC(), _rcItm2[i].left, _rcItm2[i].top, _rcItm2[i].right, _rcItm2[i].bottom);
 	for (int i = 0; i < BTN_MAXX; i++) {
 		_button[i]->render();
 	}
