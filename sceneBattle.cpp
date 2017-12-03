@@ -36,13 +36,11 @@ HRESULT sceneBattle::init(void)
 	ShowCursor(true);
 
 
-	_isDialog[0] = true;
-	for (int i = 1; i < 5; i++)
-	{
-		_isDialog[i] = false;
-	}
+	_isDialog = true;
+	_loadDialog = false;
+	_battlestory = BATTLESTORY_1;
 	_sDL->setAddressLinkBattle(this);
-
+	
 	
 
 	_phaseChanging = false;
@@ -67,24 +65,55 @@ void sceneBattle::release(void)
 
 void sceneBattle::update(void)
 {
-	for (int i = 0; i < BATTLESTORY_MAX; i++)
+	if (KEYMANAGER->isOnceKeyDown('B'))
 	{
-		if (_isDialog[i])
+		_battlestory = BATTLESTORY_5;
+		_isDialog = true;
+		_loadDialog = true;
+	}
+	if (_loadDialog)
+	{
+		switch (_battlestory)
+		{
+		case BATTLESTORY_1:
+			_sDL->init("scripts/script 05.txt"); //스타트 스크립트
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_2:
+			_sDL->init("scripts/script 06.txt"); //이벤트1 몹이 아무도없을때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_3:
+			_sDL->init("scripts/script 07.txt"); //이벤트 2 조조가 습격당했을때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_4:
+			_sDL->init("scripts/script 10.txt"); //이벤트 3 턴이 10이되서 조조가 움직일때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_5:
+			_sDL->init("scripts/script 11.txt"); //이벤트 4 이유가 뒤졌을때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		}
+	}
+		if (_isDialog)
 		{
 			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 			{
 				_sDL->loadDialog();
+				_sDL->update();
 			}
-			_sDL->update();
-
 			return;
 		}
-	}
+	
 	//테스트용 
-	if (KEYMANAGER->isOnceKeyDown('B'))
-	{
-		_isDialog[1] = true;
-	}
+	
 
 
 	if (_phaseChanging)
