@@ -506,8 +506,11 @@ void sceneInit::initImageStory(void)
 void sceneInit::initImageReady(void) {
 
 	_loading->loadImage(L"레디UI", L"image/ready/readyUI.bmp", 640, 400, false, RGB(255, 0, 255));
+	_loading->loadImage(L"레디UI2", L"image/story/map 0003.bmp", 640, 400, false, RGB(255, 0, 255));
 	_loading->loadImage(L"출진UI", L"image/ready/posUI.bmp", 617, 522, false, RGB(255, 0, 255));
 	_loading->loadImage(L"장비UI", L"image/ready/장비UI.bmp", 632, 365, false, RGB(255, 0, 255));
+	_loading->loadImage(L"구입무기상", L"image/ready/구입무기상.bmp", 472, 368, false, RGB(255, 0, 255));
+	_loading->loadImage(L"구입도구상", L"image/ready/구입도구상.bmp", 472, 368, false, RGB(255, 0, 255));
 	_loading->loadImage(L"출진눌림", L"image/ready/출진눌림버튼.bmp", 50, 50, false, RGB(255, 0, 255));
 	_loading->loadImage(L"장비눌림", L"image/ready/장비눌림버튼.bmp", 50, 50, false, RGB(255, 0, 255));
 	_loading->loadImage(L"구입눌림", L"image/ready/구입눌림버튼.bmp", 50, 50, false, RGB(255, 0, 255));

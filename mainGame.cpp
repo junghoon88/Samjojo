@@ -227,6 +227,14 @@ void mainGame::checkWindowSize(void)
 	{
 		setWindowResize({ WINSIZEX4,WINSIZEY4 });
 	}
+	else if (SCENEMANAGER->isCurScene(L"±∏∏≈ªÛ¡°æ¿"))
+	{
+		setWindowResize({ WINSIZEX5,WINSIZEY5 });
+	}
+	else if (SCENEMANAGER->isCurScene(L"∆«∏≈ªÛ¡°æ¿"))
+	{
+		setWindowResize({ WINSIZEX5,WINSIZEY5 });
+	}
 }
 
 void mainGame::controlFPS(void)

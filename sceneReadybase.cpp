@@ -15,7 +15,7 @@ HRESULT sceneReadybase::init(void) {
 	DATABASE->getSlectScenario();
 
 	_baseImg = IMAGEMANAGER->findImage(L"레디UI");
-
+	_baseImg2 = IMAGEMANAGER->findImage(L"레디UI2");
 	_rcPosUI = RectMake(440, 350, 50, 50);
 	_rcEquipUI = RectMake(490, 350, 50, 50);
 	_rcBuyUI = RectMake(540, 350, 50, 50);
@@ -28,6 +28,7 @@ HRESULT sceneReadybase::init(void) {
 	_sD->setNext(7);
 	ShowCursor(true);
 	
+	_battleStart = false;
 	return S_OK;
 }
 void sceneReadybase::release(void) {
@@ -40,7 +41,7 @@ void sceneReadybase::update(void) {
 
 	_pt.x = _ptMouse.x;
 	_pt.y = _ptMouse.y;
-	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON)) 
+	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON) && !_battleStart)
 	{
 		if (PtInRect(&_rcPosUI, _pt)) {  //출진창 누름
 			_posClicking = true;
@@ -67,7 +68,7 @@ void sceneReadybase::update(void) {
 			_sellClicking = false;
 		}
 	}
-	if(KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) 
+	if(KEYMANAGER->isOnceKeyUp(VK_LBUTTON)&&!_battleStart) 
 	{
 		if (PtInRect(&_rcPosUI, _pt)) 
 		{   //출진창 누르고땜
@@ -82,18 +83,19 @@ void sceneReadybase::update(void) {
 		else if (PtInRect(&_rcBuyUI, _pt))
 		{   //출진창 누르고땜
 			_buyClicking = false;
-			SCENEMANAGER->changeScene(L"구매씬");
+			SCENEMANAGER->changeScene(L"구매상점씬");
 		}
 		else if (PtInRect(&_rcSellUI, _pt))
 		{   //출진창 누르고땜
 			_sellClicking = false;
-			SCENEMANAGER->changeScene(L"판매씬");
+			SCENEMANAGER->changeScene(L"판매상점씬");
 		}
 	}
 
 	_vUnits = _player->getUnits();
 	if (_vUnits.size() > 3)
 	{
+		_battleStart = true;
 		_sD->update();
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
@@ -105,7 +107,10 @@ void sceneReadybase::update(void) {
 }
 void sceneReadybase::render(void) {
 
-	_baseImg->render(getMemDC(), 0, 0);
+	if (!_battleStart)
+		_baseImg->render(getMemDC(), 0, 0);
+	else
+		_baseImg2->render(getMemDC(), 0, 0);
 
 	//TCHAR tmp[30];
 	//_stprintf(tmp, L"x: %d, y: %d", _pt.x, _pt.y);
