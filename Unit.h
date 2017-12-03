@@ -397,6 +397,7 @@ public:
 	inline void setUnitSequnce(UNITSEQUENCE squence) { _battleState.squence = squence; }
 
 	inline void setOpponent(Unit* unit) { _battleState.opponent = unit; }
+	inline void setOpponentTilePt(POINT tilePt) { _battleState.tilePtEnemy = tilePt; }
 };
 
 typedef vector<Unit*>	vUnits;
