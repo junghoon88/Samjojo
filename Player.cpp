@@ -264,3 +264,12 @@ void Player::UnitLiveCheck(void)
 		else ++iter;
 	}
 }
+
+void Player::eatKong(Unit* player, Unit* opponent)
+{
+	if (_kongNum > 0)
+	{
+		_kongNum--;							// 콩 개수 줄이고
+		player->useItem(opponent, 0, 50);	// useItem
+	}
+}

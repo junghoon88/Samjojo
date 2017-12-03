@@ -345,6 +345,8 @@ void sceneBattle::phaseCheck(void)
 		_phaseChanging = true;
 		_phaseChangeTime = 0.0f;
 
+		SOUNDMANAGER->play(L"Se15");
+
 		for (int i = 0; i < _player->getUnits().size(); i++)
 		{
 			_player->getUnits()[i]->setUnitState(UNITSTATE_VIC);
@@ -371,6 +373,8 @@ void sceneBattle::phaseCheck(void)
 		_phase = BATTLEPHASE_DEFEAT;
 		_phaseChanging = true;
 		_phaseChangeTime = 0.0f;
+
+		SOUNDMANAGER->play(L"Se42");
 
 		for (int i = 0; i < _enemy->getUnits().size(); i++)
 		{

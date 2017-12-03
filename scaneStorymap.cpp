@@ -64,7 +64,6 @@ HRESULT scaneStorymap::init(void)
 	img[9].etc->setFrameY(iso[x][y].y);
 	img[9].etc->setFrameY(0);
 	
-	SOUNDMANAGER->play(L"Se_b_05", 1.0f);
 	return S_OK;
 }
 void scaneStorymap::release(void)
