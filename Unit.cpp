@@ -337,6 +337,7 @@ void Unit::attack(Unit* opponent)
 			if (RND->getInt(99) > opponent->getStatus().Agl / 2 - 1)	//예) 순발력이 80이면, 80/2=40 0~99중에 41~99이면 공격 당함 == 40퍼 확률로 방어
 			{
 				int damage = (_status.Atk - opponent->getStatus().Dep) / 2 + 25 + _status.level;
+				if (damage < 1) damage = 1;	//작아질 경우 1로 고정
 				opponent->setHitDamage(damage);
 				opponent->getDamage(damage);
 				_battleState.attackSuccess = true;
