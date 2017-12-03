@@ -111,7 +111,7 @@ void sceneBuy::render(void)
 			switch (_vItemlist[i]->getIclass()) { //속성
 			case WEAPON:
 				TCHAR tmp[20];
-				_stprintf(tmp, L"공격력+%2d", _vItemlist[i]->getAtk());
+				_stprintf(tmp, L"Atk+%2d", _vItemlist[i]->getAtk());
 				TextOut(getMemDC(), 335, 90 + (i * 20), tmp, _tcslen(tmp));
 				if (_vItemlist[i]->getWclass() == HSWORD) TextOut(getMemDC(), 205, 90 + (i * 20), L"명검", _tcslen(L"명검"));
 				else if(_vItemlist[i]->getWclass()==SWORD) TextOut(getMemDC(), 205, 90 + (i * 20), L"검", _tcslen(L"검"));
@@ -120,7 +120,7 @@ void sceneBuy::render(void)
 				break;
 			case DEFENCE:
 				TCHAR tmp2[20];
-				_stprintf(tmp2, L"방어력+%2d", _vItemlist[i]->getDep());
+				_stprintf(tmp2, L"Def+%2d", _vItemlist[i]->getDep());
 				TextOut(getMemDC(), 335, 90 + (i * 20), tmp2, _tcslen(tmp2));
 				if (_vItemlist[i]->getAclass() == ARMOR) TextOut(getMemDC(), 205, 90 + (i * 20), L"갑옷", _tcslen(L"갑옷"));
 				else TextOut(getMemDC(), 205, 90 + (i * 20), L"방패", _tcslen(L"방패"));
@@ -144,7 +144,7 @@ void sceneBuy::render(void)
 		IMAGEMANAGER->findImage(L"회복의콩")->render(getMemDC(), 15, 88);
 		TextOut(getMemDC(), 40, 90, L"회복의 콩", _tcslen(L"회복의 콩"));
 		TextOut(getMemDC(), 205, 90, L"HP회복", _tcslen(L"HP회복"));
-		TextOut(getMemDC(), 335, 90, L"+50", _tcslen(L"+50"));
+		TextOut(getMemDC(), 330, 90, L"+50", _tcslen(L"+50"));
 		TCHAR tmp5[4];
 		//_stprintf(tmp5,L"%2d",)
 
