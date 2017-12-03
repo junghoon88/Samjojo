@@ -30,13 +30,8 @@ HRESULT Unit::init(gameMap* map)
 
 	_map = map;
 
-
 	_imgFrameTime = 0;
 	_imgFrameY = 0;
-
-	_oldSeq = UNITSEQUENCE_TURNON;
-
-	_delayTime = 0;
 
 	return S_OK;
 }
@@ -58,19 +53,7 @@ void Unit::update(TEAM team)
 		break;
 		case TEAM_FRIEND:
 		case TEAM_ENEMY:
-			_delayTime++;
-			if (_oldSeq == _battleState.squence)
-			{
-				updateSequence(true);
-			}
-			else
-			{
-				if (_delayTime >= 50)
-				{
-					_oldSeq = _battleState.squence;
-					_delayTime = 0;
-				}
-			}
+			updateSequence(true);
 		break;
 	}
 
@@ -327,8 +310,6 @@ void Unit::moveTo(POINT tliePt)
 
 void Unit::attack(Unit* opponent)
 {
-	//_oldSeq = _battleState.squence;
-
 	// 상대의 공격범위 내에 자신이 위치하고 있으면 반격 시퀀스로 간다
 	//if (opponent->getStatus().atkRange[_battleState.tilePt.x][_battleState.tilePt.y] == TRUE)
 	//{
@@ -371,7 +352,6 @@ void Unit::attack(Unit* opponent)
 
 void Unit::counterAttack(Unit* opponent)
 {
-	_oldSeq = _battleState.squence;
 	_battleState.squence = UNITSEQUENCE_IDLE;
 
 	opponent->setUnitState(UNITSTATE_ATK);
@@ -554,14 +534,28 @@ void Unit::updateSequence(bool bAuto)
 			{
 				if (_battleState.findEnemy)
 				{
-					_oldSeq = _battleState.squence;
+					int dirX = _battleState.tilePtEnemy.x - _battleState.tilePt.x;
+					int dirY = _battleState.tilePtEnemy.y - _battleState.tilePt.y;
+
+					if (abs(dirX) >= abs(dirY))
+					{
+						if (dirX > 0)	_battleState.dir = DIRECTION_RG;
+						else			_battleState.dir = DIRECTION_LF;
+					}
+					else
+					{
+						if (dirY > 0)	_battleState.dir = DIRECTION_UP;
+						else			_battleState.dir = DIRECTION_DN;
+					}
+
 					//상대적인적(player, friend vs enemy)
 					_battleState.opponent = _map->findEnemyUnit(_status.team, _battleState.tilePtEnemy);
+
+
 					_battleState.squence = UNITSEQUENCE_ATTACK;
 				}
 				else
 				{
-					_oldSeq = _battleState.squence;
 					_battleState.squence = UNITSEQUENCE_TURNOFF;
 				}
 				_moveArea.clear();
@@ -598,7 +592,6 @@ void Unit::updateSequence(bool bAuto)
 
 	if (_battleState.squence == UNITSEQUENCE_TURNOFF)
 	{
-		_moveArea.clear();
 		return;
 	}
 }
@@ -649,6 +642,7 @@ void Unit::updateImage(void)
 					_battleState.squence = UNITSEQUENCE_TURNOFF;
 					_battleState.opponent->setIdleState();
 					_battleState.opponent = NULL;
+					_moveArea.clear();
 					_imgFrameY = 0;
 				}
 				else

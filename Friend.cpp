@@ -30,7 +30,7 @@ void Friend::update(void)
 		_vUnits[i]->update(TEAM_FRIEND);
 	}
 
-	UnitLiveCheck();
+	//UnitLiveCheck();
 }
 
 void Friend::render(void)
