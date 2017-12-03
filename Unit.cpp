@@ -39,6 +39,11 @@ HRESULT Unit::init(gameMap* map)
 void Unit::release(void)
 {
 	_moveArea.clear();
+
+	SAFE_DELETE(_itemW);
+	SAFE_DELETE(_itemA);
+	SAFE_DELETE(_itemS);
+
 }
 
 void Unit::update(TEAM team)
