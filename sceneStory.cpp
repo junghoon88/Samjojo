@@ -36,6 +36,8 @@ void sceneStory::release(void)
 
 	_sSmap->release();
 	SAFE_DELETE(_sSmap);
+
+	SOUNDMANAGER->stop(L"Se_b_05");
 }
 
 void sceneStory::update(void)
@@ -82,7 +84,7 @@ void sceneStory::render(void)
 	_dialog->render();
 	if (_dialog->getNext() == 6)
 	{
-		SOUNDMANAGER->stop(L"Se_b_05");
+		
 		SCENEMANAGER->changeScene(L"준비기본씬");
 	}
 

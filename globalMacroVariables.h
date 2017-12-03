@@ -5,7 +5,7 @@
 #define BTN_PLAYER_LEFT		VK_LEFT		   //
 #define BTN_PLAYER_RIGHT	VK_RIGHT	   //
 
-#define CAMERA_SPEED		48
+#define CAMERA_SPEED		24
 
 #define MAP_WIDTH			WINSIZEX
 #define MAP_HEIGHT			WINSIZEY
