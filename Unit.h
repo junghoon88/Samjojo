@@ -153,6 +153,8 @@ struct tagBattleState
 {
 	BOOL			valid; //행동 가능하면 true, 행동 했으면 false
 	BOOL			moveable;//플레이어용. 움직였나 안움직였나 체크 -> 움직였지만 추가 명령 가능상태 구분용.
+	int Group;
+
 
 	POINT			pt;
 	RECT			rc;
@@ -395,7 +397,9 @@ public:
 	}
 	inline UNITSEQUENCE getUnitSequnce(void) { return _battleState.squence; }
 	inline void setUnitSequnce(UNITSEQUENCE squence) { _battleState.squence = squence; }
-
+	inline void setGroup(int groupNum) { _battleState.Group = groupNum; }
+	inline void setHiding(bool hide) { _battleState.isHiding = hide; }
+	inline bool getHiding(void) { return _battleState.isHiding; }
 	inline void setOpponent(Unit* unit) { _battleState.opponent = unit; }
 	inline void setOpponentTilePt(POINT tilePt) { _battleState.tilePtEnemy = tilePt; }
 };

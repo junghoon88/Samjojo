@@ -22,7 +22,7 @@ HRESULT sceneBattle::init(void)
 	_interface = new battleSceneInterface;
 	_interface->init();
 	_turn = 1;
-
+	_eventAcc = 0;//이벤트 체크용
 	_astar = new aStar;
 	_astar->init(_map);
 
@@ -87,13 +87,9 @@ void sceneBattle::update(void)
 	//debug
 	{
 		Unit* unit = _enemy->getUnits()[1];
-		if (KEYMANAGER->isOnceKeyDown('3') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD8))
-		{
-			debug_enemyturn();
-		}
 		if (KEYMANAGER->isOnceKeyDown('5') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
 		{
-			unit->move(DIRECTION_DN);
+			unhideEnemy();
 		}
 		if (KEYMANAGER->isOnceKeyDown('4') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
 		{
@@ -125,7 +121,12 @@ void sceneBattle::update(void)
 
 	_map->update(); 
 	_map->scanUnitsPos();
-	if(_phase == BATTLEPHASE_PLAYER)_interface->update();
+	if (_phase == BATTLEPHASE_PLAYER)
+	{
+		checkEvent();
+		_interface->update();
+	}
+		
 
 	phaseCheck();
 }
@@ -309,8 +310,18 @@ void sceneBattle::phaseCheck(void)
 				{
 					//은신중일땐 턴을주지 않는다.
 					if (_enemy->getUnits()[i]->getBattleState().isHiding) continue;
-
-					_enemy->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
+					if (_enemy->getUnits()[i]->getBattleState().Group == 2 && _turn < 10)//10턴미만일때 후방조 애들
+					{
+						int Alive = 0;
+						for (int i = 0; i < _enemy->getUnits().size(); i++)
+						{
+							if (_enemy->getUnits()[i]->getBattleState().Group == 2) continue;
+							Alive++;
+						}
+						if(Alive <= 0) _enemy->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
+					}
+					else _enemy->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
+				
 				}
 			}
 			
@@ -375,6 +386,7 @@ void sceneBattle::friendAction(void)//아군 턴 액션
 	for (int i = 0; i < _friend->getUnits().size(); i++) //행동 끝난 뒤에 끝나는 신호가 필요함..
 	{
 		if (_friend->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue; //행동 불가능인 애들은 거르고
+		_interface->chaseCamera(_friend->getUnits()[i]->getBattleState().tilePt);
 		_friend->getUnits()[i]->findEnemy(TEAM_FRIEND, findCloseEnemyPos(_friend->getUnits()[i]));
 		break;
 	}
@@ -385,7 +397,8 @@ void sceneBattle::enemyAction(void) //적군 턴 액션
 	for (int i = 0; i < _enemy->getUnits().size(); i++)
 	{
 		if (_enemy->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue;
-	//	_interface->chaseCamera(_enemy->getUnits()[i]->getBattleState().tilePt);
+		if (_turn < 10 && _enemy->getUnits()[i]->getBattleState().Group >= 2) continue;
+		_interface->chaseCamera(_enemy->getUnits()[i]->getBattleState().tilePt);
 		_enemy->getUnits()[i]->findEnemy(TEAM_ENEMY, findCloseEnemyPos(_enemy->getUnits()[i]));
 		break;
 	}
@@ -468,6 +481,10 @@ void sceneBattle::setUpBattle(void)
 	_turn = 1;
 	_phase = BATTLEPHASE_NONE;
 
+	RECT GroupRc2 = { 1200,432,1300,580 }; //후반 행동조
+	RECT GroupRc3 = { 96,576,244,768 }; //그룹 체크용 전방 기습조
+	RECT GroupRc3_1 = { 576,192,768,384 }; //하단 전방 기습조
+	RECT GroupRc4 = { 1008,336,1152,624 }; //그룹 체크용 후방 기습조
 
 
 	for (int i = 0; i < _player->getUnits().size(); i++)
@@ -485,13 +502,67 @@ void sceneBattle::setUpBattle(void)
 	{
 		_enemy->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNOFF);
 		_enemy->getUnits()[i]->updateStatus();
+
+		if (isCollision(GroupRc2, _enemy->getUnits()[i]->getRect()))
+		{
+			_enemy->getUnits()[i]->setGroup(2); // 10턴 이후 행동할놈들
+			_enemy->getUnits()[i]->setHiding(false);
+			continue;
+		}
+		else if (isCollision(GroupRc3, _enemy->getUnits()[i]->getRect()))	_enemy->getUnits()[i]->setGroup(3);
+		else if (isCollision(GroupRc3_1, _enemy->getUnits()[i]->getRect()))	_enemy->getUnits()[i]->setGroup(3);
+		else if (isCollision(GroupRc4, _enemy->getUnits()[i]->getRect()))	_enemy->getUnits()[i]->setGroup(4);
+		else
+		{
+			_enemy->getUnits()[i]->setGroup(1);//처음부터 행동할 놈들
+			_enemy->getUnits()[i]->setHiding(false);
+			continue;
+		}
+		_enemy->getUnits()[i]->setHiding(true);
 	}
 }
 
-void sceneBattle::debug_enemyturn(void)
+void sceneBattle::checkEvent(void)
+{
+
+	if (_eventAcc <= 0)
+	{
+		if (_turn >= 10)
+		{
+			unhideEnemy();
+			_eventAcc++;
+			return;
+		}
+
+		int GroupAlive = 0;
+		
+		for (int i = 0; i < _player->getUnits().size(); i++)
+		{
+			int index = _player->getUnits()[i]->getBattleState().tilePt.x + _player->getUnits()[i]->getBattleState().tilePt.y * TILEX;
+			if (_map->getTile()[index].terrain == TERRAIN_RIVER)
+			{
+				unhideEnemy();
+				_eventAcc++;
+				break;
+			}
+		}
+		for (int i = 0; i < _enemy->getUnits().size(); i++)
+		{
+			if (_enemy->getUnits()[i]->getBattleState().Group != 1)
+				GroupAlive++;
+		}
+		if (GroupAlive <= 0)
+		{
+			unhideEnemy();
+			_eventAcc++;
+		}
+	}
+}
+void sceneBattle::unhideEnemy(void)
 {
 	for (int i = 0; i < _enemy->getUnits().size(); i++)
 	{
-		_enemy->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
+		if (!_enemy->getUnits()[i]->getHiding()) continue; //1번,2번그룹은 원래 표시중임.
+		_enemy->getUnits()[i]->setHiding(false);
 	}
 }

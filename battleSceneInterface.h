@@ -80,9 +80,9 @@ private:
 	int movePoint;
 
 	progressBar* hpBar;
-	int curHp, maxHp;
+	float curHp, maxHp;
 	progressBar* mpBar;
-	int curMp, maxMp;
+	float curMp, maxMp;
 	//유닛 정보 표시용
 
 	//지형 정보 표시용
@@ -151,6 +151,7 @@ public:
 	void mouse_ClickToAttack(void);
 	void setUnit(TEAM faction ,int vectorNum);
 	void callToMenu(int x,int y);
+	
 
 public:
 	inline void setLinkPlyer(Player* player) { _player = player; }

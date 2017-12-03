@@ -558,6 +558,18 @@ void sceneInit::initImageUI(void)
 	_loading->loadImage(L"荐加己", L"image/icon/water.bmp", 24, 24, true, RGB(255, 0, 255));
 	_loading->loadImage(L"荐加己厚劝己", L"image/icon/un_water.bmp", 24, 24, true, RGB(255, 0, 255));
 	_loading->loadImage(L"胶农费", L"image/battleScene/scroll.bmp", 144, 960, true, RGB(255, 0, 255));
+
+	for (int i = 0; i < SAMPLETILEY; i++)
+	{
+		for (int j = 0; j < SAMPLETILEX; j++)
+		{
+			int index = i * SAMPLETILEX + j;
+			TCHAR strImgKey[100], strName[100];
+			_stprintf(strImgKey, L"tileShow (%02d)", index + 1);
+			_stprintf(strName, L"image/tiles/terrain/tile (%02d).bmp", index + 1);
+			_loading->loadImage(strImgKey, strName, 120, 120);
+		}
+	}
 }
 void sceneInit::initImageItems(void) {
 	//size 32
