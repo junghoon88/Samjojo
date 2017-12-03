@@ -35,7 +35,15 @@ HRESULT sceneBattle::init(void)
 	_sDL->setNext(9);
 	ShowCursor(true);
 
-	_isDialog = false;
+
+	_isDialog[0] = true;
+	for (int i = 1; i < 5; i++)
+	{
+		_isDialog[i] = false;
+	}
+	_sDL->setAddressLinkBattle(this);
+
+	
 
 	_phaseChanging = false;
 	_phaseChangeTime = 0.0f;
@@ -59,16 +67,25 @@ void sceneBattle::release(void)
 
 void sceneBattle::update(void)
 {
-	if (_isDialog)
+	for (int i = 0; i < BATTLESTORY_MAX; i++)
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		if (_isDialog[i])
 		{
-			_sDL->loadDialog();
-		}
-		_sDL->update();
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				_sDL->loadDialog();
+			}
+			_sDL->update();
 
-		return;
+			return;
+		}
 	}
+	//테스트용 
+	if (KEYMANAGER->isOnceKeyDown('B'))
+	{
+		_isDialog[1] = true;
+	}
+
 
 	if (_phaseChanging)
 	{
@@ -80,9 +97,6 @@ void sceneBattle::update(void)
 		}
 		return;
 	}
-
-
-
 
 	//debug
 	{
