@@ -568,7 +568,9 @@ void sceneInit::initImageUI(void)
 	_loading->loadImage(L"수속성", L"image/icon/water.bmp", 24, 24, true, RGB(255, 0, 255));
 	_loading->loadImage(L"수속성비활성", L"image/icon/un_water.bmp", 24, 24, true, RGB(255, 0, 255));
 	_loading->loadImage(L"스크롤", L"image/battleScene/scroll.bmp", 144, 960, true, RGB(255, 0, 255));
-
+	_loading->loadImage(L"선두", L"image/icon/kong.bmp", 120, 120, true, RGB(255, 0, 255));
+	_loading->loadImage(L"선두없다", L"image/icon/kong_none.bmp", 120, 120, true, RGB(255, 0, 255));
+	_loading->loadImage(L"선두타겟", L"image/battleScene/non-player_range_tile.bmp", 48, 48, true, RGB(255, 0, 255),true);
 	for (int i = 0; i < SAMPLETILEY; i++)
 	{
 		for (int j = 0; j < SAMPLETILEX; j++)

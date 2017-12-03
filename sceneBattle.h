@@ -58,6 +58,7 @@ private:
 	bool		_event_whosThere;
 	bool		_event_join;
 	bool		_event_sudden;
+	bool		_event_RIP_yang;
 	bool		_loadDialog;
 public:
 	sceneBattle();
