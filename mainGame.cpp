@@ -140,6 +140,7 @@ void mainGame::update(void)
 
 	checkWindowSize();
 	controlFPS();
+	//playBGM();
 
 
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))
@@ -245,5 +246,43 @@ void mainGame::controlFPS(void)
 	else
 	{
 		_FPS = 60.0f;
+	}
+}
+
+void mainGame::playBGM(void)
+{
+	if (SCENEMANAGER->isCurScene(L"¼±ÅÃ¾À")
+		|| SCENEMANAGER->isCurScene(L"¸ÊÅø¾À")
+		|| SCENEMANAGER->isCurScene(L"À¯´Ö¿¡µðÅÍ"))
+	{
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_00") == FALSE)		SOUNDMANAGER->play(L"Se_b_00");
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_02") == TRUE)		SOUNDMANAGER->stop(L"Se_b_02");
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_04") == TRUE)		SOUNDMANAGER->stop(L"Se_b_04");
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_05") == TRUE)		SOUNDMANAGER->stop(L"Se_b_05");
+	}
+	else if (SCENEMANAGER->isCurScene(L"´ëÈ­¾À"))
+	{
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_00") == TRUE)		SOUNDMANAGER->stop(L"Se_b_00");
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_02") == TRUE)		SOUNDMANAGER->stop(L"Se_b_02");
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_04") == TRUE)		SOUNDMANAGER->stop(L"Se_b_04");
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_05") == FALSE)		SOUNDMANAGER->play(L"Se_b_05");
+	}
+	else if (SCENEMANAGER->isCurScene(L"ÁØºñ±âº»¾À")
+			|| SCENEMANAGER->isCurScene(L"ÃâÁø¾À")
+			|| SCENEMANAGER->isCurScene(L"Àåºñ¾À")
+			|| SCENEMANAGER->isCurScene(L"±¸¸Å»óÁ¡¾À")
+			|| SCENEMANAGER->isCurScene(L"ÆÇ¸Å»óÁ¡¾À"))
+	{
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_00") == TRUE)		SOUNDMANAGER->stop(L"Se_b_00");
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_02") == FALSE)		SOUNDMANAGER->play(L"Se_b_02");
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_04") == TRUE)		SOUNDMANAGER->stop(L"Se_b_04");
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_05") == TRUE)		SOUNDMANAGER->stop(L"Se_b_05");
+	}
+	else if (SCENEMANAGER->isCurScene(L"ÀüÅõ¾À"))
+	{
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_00") == TRUE)		SOUNDMANAGER->stop(L"Se_b_00");
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_02") == TRUE)		SOUNDMANAGER->stop(L"Se_b_02");
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_04") == FALSE)		SOUNDMANAGER->play(L"Se_b_04");
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_05") == TRUE)		SOUNDMANAGER->stop(L"Se_b_05");
 	}
 }

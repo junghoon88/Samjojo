@@ -216,9 +216,6 @@ private:
 	float _imgFrameTime;
 	int _imgFrameY;
 
-	UNITSEQUENCE _oldSeq;
-	int _delayTime;
-
 	int _showDamageValue;
 
 	bool _soundSwitch;

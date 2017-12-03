@@ -26,6 +26,7 @@ HRESULT sceneStory::init(void)
 	_sSmap->init();
 	_sSmap->setAddressLinkDialog(_dialog);
 
+
 	return S_OK;
 }
 
@@ -36,8 +37,6 @@ void sceneStory::release(void)
 
 	_sSmap->release();
 	SAFE_DELETE(_sSmap);
-
-	SOUNDMANAGER->stop(L"Se_b_05");
 }
 
 void sceneStory::update(void)
