@@ -67,8 +67,14 @@ HRESULT sceneEquip::init(void) {
 	_armor = new ItemArmor;
 	_armor->init(DEFENCE, SHILED, L"가죽방패", 0, 10, 0, 0, 0);
 	_vItems.push_back(_armor);
+	_armor = new ItemArmor;
+	_armor->init(DEFENCE, ARMOR, L"가죽갑옷", 0, 15, 0, 0, 0);
+	_vItems.push_back(_armor);
 	_special = new ItemSpecial;
 	_special->init(SPECIAL, L"태평청령서", 0, 0, 0, 50, 0);
+	_vItems.push_back(_special);
+	_special = new ItemSpecial;
+	_special->init(SPECIAL, L"신수장갑", 0, 0, 0, 30, 0);
 	_vItems.push_back(_special);
 	//
 	for (int i = 0; i < _vUnitsInFile.size(); i++)
@@ -108,89 +114,128 @@ void sceneEquip::update(void) {
 	}
 
 
-	for (int i = 0; i < BTN_MAXX; i++) {
-		_button[i]->update();
-	}
+	
 
-	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) {       //실질적 장착
-		for (int i = 0; i < _vItems.size(); i++) {
-			if (PtInRect(&_rcItm[i], _pt) && _available[i] == true) {
+	
+	for (int i = 0; i < _vItems.size(); i++) {
+		if (PtInRect(&_rcItm[i], _pt) && _available[i] == true) {
+			if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) {       //실질적 장착
 				switch (_vItems[i]->getIclass()) {
 				case WEAPON:
-					//_weaponU = new ItemWeapon;
-					//_weaponU->copyItem(_vItems[i]);
-					//_vUnitsInFile[_index]->setItemW(_weaponU);
-					_vUnitsInFile[_index]->setItemW(_vItems[i]);
+					for (int j = 0; j < _vUnitsInFile.size(); j++) {
+						if (!_tcscmp(_vUnitsInFile[j]->getStatus().name, _name2[_index])) {
+							if (_vUnitsInFile[j]->getItemW() == NULL) {
+								_vUnitsInFile[j]->setItemW(_vItems[i]);
+							}
+							else {
+								_weapon = new ItemWeapon;
+								_weapon->copyItem(_vUnitsInFile[j]->getItemW());
+								_vItems.push_back(_weapon);
+								_vUnitsInFile[j]->setItemW(NULL);
+								_vUnitsInFile[j]->setItemW(_vItems[i]);
+							}
+						}
+					}
 					break;
 				case DEFENCE:
-					//_armorU = new ItemArmor;
-					//_armorU->copyItem(_vItems[i]);
-					//_vUnitsInFile[_index]->setItemA(_armorU);
-					_vUnitsInFile[_index]->setItemA(_vItems[i]);
+					for (int j = 0; j < _vUnitsInFile.size(); j++) {
+						if (!_tcscmp(_vUnitsInFile[j]->getStatus().name, _name2[_index])) {
+							if (_vUnitsInFile[j]->getItemA() == NULL) {
+								_vUnitsInFile[j]->setItemA(_vItems[i]);
+							}
+							else {
+								_armor = new ItemArmor;
+								_armor->copyItem(_vUnitsInFile[j]->getItemA());
+								_vItems.push_back(_armor);
+								_vUnitsInFile[j]->setItemA(NULL);
+								_vUnitsInFile[j]->setItemA(_vItems[i]);
+							}
+						}
+					}
 					break;
 				case SPECIAL:
-					//_specialU = new ItemSpecial;
-					//_specialU->copyItem(_vItems[i]);
-					//_vUnitsInFile[_index]->setItemS(_specialU);
-					_vUnitsInFile[_index]->setItemS(_vItems[i]);
+					for (int j = 0; j < _vUnitsInFile.size(); j++) {
+						if (!_tcscmp(_vUnitsInFile[j]->getStatus().name, _name2[_index])) {
+							if (_vUnitsInFile[j]->getItemS() == NULL) {
+								_vUnitsInFile[j]->setItemS(_vItems[i]);
+							}
+							else {
+								_special = new ItemSpecial;
+								_special->copyItem(_vUnitsInFile[j]->getItemS());
+								_vItems.push_back(_special);
+								_vUnitsInFile[j]->setItemS(NULL);
+								_vUnitsInFile[j]->setItemS(_vItems[i]);
+							}
+						}
+					}
 					break;
 				default:
 					break;
 				}
 				SAFE_DELETE(_vItems[i]);                 //메모리해제
-				_vItems.erase(_vItems.begin() + i);      //목록에서 제거	
-				_vUnitsInFile[_index]->updateStatus();             //스탯 업데이트
+				_vItems.erase(_vItems.begin() + i);      //목록에서 제거
+				for (int j = 0; j < _vUnitsInFile.size(); j++) {     
+					if (!_tcscmp(_vUnitsInFile[j]->getStatus().name, _name2[_index])) {
+						_vUnitsInFile[j]->updateStatus();                            //스탯업데이트
+					}
+				}	
 			}
 		}
 	}
 
-	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) {
-		for (int i = 0; i < 3; i++) {
-			if (PtInRect(&_rcItm2[i], _pt)) {
+	
+	for (int i = 0; i < 3; i++) {
+		if (PtInRect(&_rcItm2[i], _pt)) {
+			if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) {
 				switch (i) {
 				case 0:
-					//if (_vUnitsInFile[i]->getItemW() != NULL) {
-						_weapon = new ItemWeapon;
-						_weapon->copyItem(_vUnitsInFile[i]->getItemW());
-						_vItems.push_back(_weapon);
-						_vUnitsInFile[i]->setItemW(NULL);
-				//	}
+					for (int j = 0; j < _vUnitsInFile.size(); j++) {
+						if (!_tcscmp(_vUnitsInFile[j]->getStatus().name, _name2[_index])) {
+							if (_vUnitsInFile[j]->getItemW() != NULL) {
+								_weapon = new ItemWeapon;
+								_weapon->copyItem(_vUnitsInFile[j]->getItemW());
+								_vItems.push_back(_weapon);
+								_vUnitsInFile[j]->setItemW(NULL);
+								_vUnitsInFile[j]->updateStatus();
+							}
+						}
+					}
 					break;
 				case 1:
-					if (_vUnitsInFile[i]->getItemA() != NULL) {
-						_armor = new ItemArmor;
-						_armor->copyItem(_vUnitsInFile[i]->getItemA());
-						_vItems.push_back(_armor);
-						_vUnitsInFile[i]->setItemA(NULL);
+					for (int j = 0; j < _vUnitsInFile.size(); j++) {
+						if (!_tcscmp(_vUnitsInFile[j]->getStatus().name, _name2[_index])) {
+							if (_vUnitsInFile[j]->getItemA() != NULL) {
+								_armor = new ItemArmor;
+								_armor->copyItem(_vUnitsInFile[j]->getItemA());
+								_vItems.push_back(_armor);
+								_vUnitsInFile[j]->setItemA(NULL);
+								_vUnitsInFile[j]->updateStatus();
+							}
+						}
 					}
 					break;
 				case 2:
-					if (_vUnitsInFile[i]->getItemS() != NULL) {
-						_special = new ItemSpecial;
-						_special->copyItem(_vUnitsInFile[i]->getItemS());
-						_vItems.push_back(_special);
-						//SAFE_DELETE(_vUnitsInFile[i]->getItemS());
-						_vUnitsInFile[i]->setItemS(NULL);
+					for (int j = 0; j < _vUnitsInFile.size(); j++) {
+						if (!_tcscmp(_vUnitsInFile[j]->getStatus().name, _name2[_index])) {
+							if (_vUnitsInFile[j]->getItemS() != NULL) {
+								_special = new ItemSpecial;
+								_special->copyItem(_vUnitsInFile[j]->getItemS());
+								_vItems.push_back(_special);
+								_vUnitsInFile[j]->setItemS(NULL);
+								_vUnitsInFile[j]->updateStatus();
+							}
+						}
 					}
 					break;
 				default: break;
 				}
 			}
 		}
-
-
-
-
-
-
 	}
 
-
-
-
-
-
-
+	for (int i = 0; i < BTN_MAXX; i++) {
+		_button[i]->update();
+	}
 
 }
 void sceneEquip::render(void) {
@@ -356,34 +401,37 @@ void sceneEquip::render(void) {
 		}
 	}
 
-	if (_vUnitsInFile[_index]->getItemW() != NULL) {
-		_vUnitsInFile[_index]->getItemW()->getImg32()->render(getMemDC(), 488, 86);
-		HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
-		SetTextColor(getMemDC(), RGB(0, 0, 0));
-		TextOut(getMemDC(), 520, 67, _vUnitsInFile[_index]->getItemW()->getName(), _tcslen(_vUnitsInFile[_index]->getItemW()->getName()));
-		TCHAR tmp[32];
-		_stprintf(tmp, L"공격력 +%2d", _vUnitsInFile[_index]->getItemW()->getAtk());
-		TextOut(getMemDC(), 486, 120, tmp, _tcslen(tmp));
+	for (int i = 0; i < _vUnitsInFile.size(); i++) {
+		if (!_tcscmp(_vUnitsInFile[i]->getStatus().name, _name2[_index])) {
+			if (_vUnitsInFile[i]->getItemW() != NULL) {
+				_vUnitsInFile[i]->getItemW()->getImg32()->render(getMemDC(), 488, 86);
+				HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
+				SetTextColor(getMemDC(), RGB(0, 0, 0));
+				TextOut(getMemDC(), 520, 67, _vUnitsInFile[i]->getItemW()->getName(), _tcslen(_vUnitsInFile[i]->getItemW()->getName()));
+				TCHAR tmp[32];
+				_stprintf(tmp, L"공격력 +%2d", _vUnitsInFile[i]->getItemW()->getAtk());
+				TextOut(getMemDC(), 486, 120, tmp, _tcslen(tmp));
+			}
+			if (_vUnitsInFile[i]->getItemA() != NULL) {
+				_vUnitsInFile[i]->getItemA()->getImg32()->render(getMemDC(), 488, 182);
+				HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
+				SetTextColor(getMemDC(), RGB(0, 0, 0));
+				TextOut(getMemDC(), 520, 164, _vUnitsInFile[i]->getItemA()->getName(), _tcslen(_vUnitsInFile[i]->getItemA()->getName()));
+				TCHAR tmp[32];
+				_stprintf(tmp, L"방어력 +%2d", _vUnitsInFile[i]->getItemA()->getDep());
+				TextOut(getMemDC(), 486, 216, tmp, _tcslen(tmp));
+			}
+			if (_vUnitsInFile[i]->getItemS() != NULL) {
+				_vUnitsInFile[i]->getItemS()->getImg32()->render(getMemDC(), 488, 279);
+				HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
+				SetTextColor(getMemDC(), RGB(0, 0, 0));
+				TextOut(getMemDC(), 520, 262, _vUnitsInFile[i]->getItemS()->getName(), _tcslen(_vUnitsInFile[i]->getItemS()->getName()));
+				TCHAR tmp[32];
+				_stprintf(tmp, L"HP +%2d", _vUnitsInFile[i]->getItemS()->getHP());
+				TextOut(getMemDC(), 486, 313, tmp, _tcslen(tmp));
+			}
+		}
 	}
-	if (_vUnitsInFile[_index]->getItemA() != NULL) {
-		_vUnitsInFile[_index]->getItemA()->getImg32()->render(getMemDC(), 488, 182);
-		HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
-		SetTextColor(getMemDC(), RGB(0, 0, 0));
-		TextOut(getMemDC(), 520, 164, _vUnitsInFile[_index]->getItemA()->getName(), _tcslen(_vUnitsInFile[_index]->getItemA()->getName()));
-		TCHAR tmp[32];
-		_stprintf(tmp, L"방어력 +%2d", _vUnitsInFile[_index]->getItemA()->getDep());
-		TextOut(getMemDC(), 486, 216, tmp, _tcslen(tmp));
-	}
-	if (_vUnitsInFile[_index]->getItemS() != NULL) {
-		_vUnitsInFile[_index]->getItemS()->getImg32()->render(getMemDC(), 488, 279);
-		HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
-		SetTextColor(getMemDC(), RGB(0, 0, 0));
-		TextOut(getMemDC(), 520, 262, _vUnitsInFile[_index]->getItemS()->getName(), _tcslen(_vUnitsInFile[_index]->getItemS()->getName()));
-		TCHAR tmp[32];
-		_stprintf(tmp, L"HP +%2d", _vUnitsInFile[_index]->getItemS()->getHP());
-		TextOut(getMemDC(), 486, 313, tmp, _tcslen(tmp));
-	}
-
 	//for(int i=0; i<13; i++)
 	//	Rectangle(getMemDC(), _rcItm[i].left, _rcItm[i].top, _rcItm[i].right, _rcItm[i].bottom);
 	//for (int i = 0; i < 3; i++)

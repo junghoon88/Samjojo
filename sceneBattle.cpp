@@ -105,15 +105,7 @@ void sceneBattle::update(void)
 			break;
 		}
 	}
-		if (_isDialog)
-		{
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-			{
-				_sDL->loadDialog();
-				_sDL->update();
-			}
-			return;
-		}
+	
 	
 	//테스트용 
 	if (_phaseChanging)
@@ -194,6 +186,16 @@ void sceneBattle::update(void)
 			}
 		}
 
+	}
+
+	if (_isDialog)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			_sDL->loadDialog();
+			_sDL->update();
+		}
+		return;
 	}
 
 	friendAction();
