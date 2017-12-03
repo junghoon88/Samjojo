@@ -43,7 +43,6 @@ void Unit::release(void)
 
 void Unit::update(TEAM team)
 {
-	//updateStatus();	// 초기능력치 + 레벨당능력치 + 아이템능력치
 	expMaxCheck();	// 경험치 확인
 
 	switch (team)
@@ -89,6 +88,14 @@ void Unit::render(void)
 
 void Unit::updateStatus(void)
 {
+	if (_itemW)		_status.ItemPlusAtk = _itemW->getAtk();
+	else			_status.ItemPlusAtk = 0;
+	if (_itemA)		_status.ItemPlusDep = _itemA->getDep();
+	else			_status.ItemPlusDep = 0;
+	if (_itemS)		_status.ItemPlusHPMax = _itemS->getHP();
+	else			_status.ItemPlusHPMax = 0;
+		
+
 	_status.HP = _status.HPMax = _status.InitHPMax + (_status.level * _status.LvPerHPMax) + _status.ItemPlusHPMax;
 	_status.MP = _status.MPMax = _status.InitMPMax + (_status.level * _status.LvPerMPMax) + _status.ItemPlusMPMax;
 	_status.Pwr = _status.InitPwr + _status.ItemPlusPwr;
@@ -667,4 +674,37 @@ void Unit::updateImage(void)
 		
 		
 
+}
+
+void Unit::setItemW(Item* item)
+{
+	SAFE_DELETE(_itemW);
+	
+	if (item)
+	{
+		_itemW = new ItemWeapon;
+		_itemW->copyItem(item);
+	}
+}
+
+void Unit::setItemA(Item* item)
+{
+	SAFE_DELETE(_itemA);
+
+	if (item)
+	{
+		_itemA = new ItemArmor;
+		_itemA->copyItem(item);
+	}
+}
+
+void Unit::setItemS(Item* item)
+{
+	SAFE_DELETE(_itemS);
+
+	if (item)
+	{
+		_itemS = new ItemSpecial;
+		_itemS->copyItem(item);
+	}
 }

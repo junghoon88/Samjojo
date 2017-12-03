@@ -117,26 +117,29 @@ void sceneEquip::update(void) {
 			if (PtInRect(&_rcItm[i], _pt) && _available[i] == true) {
 				switch (_vItems[i]->getIclass()) {
 				case WEAPON:
-					_weaponU = new ItemWeapon;
-					_weaponU->copyItem(_vItems[i]);
-					_vUnitsInFile[_index]->setItemW(_weaponU);
+					//_weaponU = new ItemWeapon;
+					//_weaponU->copyItem(_vItems[i]);
+					//_vUnitsInFile[_index]->setItemW(_weaponU);
+					_vUnitsInFile[_index]->setItemW(_vItems[i]);
 					break;
 				case DEFENCE:
-					_armorU = new ItemArmor;
-					_armorU->copyItem(_vItems[i]);
-					_vUnitsInFile[_index]->setItemA(_armorU);
+					//_armorU = new ItemArmor;
+					//_armorU->copyItem(_vItems[i]);
+					//_vUnitsInFile[_index]->setItemA(_armorU);
+					_vUnitsInFile[_index]->setItemA(_vItems[i]);
 					break;
 				case SPECIAL:
-					_specialU = new ItemSpecial;
-					_specialU->copyItem(_vItems[i]);
-					_vUnitsInFile[_index]->setItemS(_specialU);
+					//_specialU = new ItemSpecial;
+					//_specialU->copyItem(_vItems[i]);
+					//_vUnitsInFile[_index]->setItemS(_specialU);
+					_vUnitsInFile[_index]->setItemS(_vItems[i]);
 					break;
-				default:break;
+				default:
+					break;
 				}
 				SAFE_DELETE(_vItems[i]);                 //메모리해제
 				_vItems.erase(_vItems.begin() + i);      //목록에서 제거	
-				for (int i = 0; i < _vUnitsInFile.size(); i++)
-					_vUnitsInFile[i]->updateStatus();             //스탯 업데이트
+				_vUnitsInFile[_index]->updateStatus();             //스탯 업데이트
 			}
 		}
 	}
