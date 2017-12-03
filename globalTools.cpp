@@ -102,6 +102,23 @@ void globalTools::setFontAll(void)
 				FF_DONTCARE,
 				TEXT("a세종실록M"));
 			break;
+		case FONTVERSION_BATTLETURN:
+			_gFont[i] = CreateFont(
+				40,						  //문자폭
+				20,						  //문자 넓이
+				0,						  //문자 기울기(실제로 문자가 각도로 기움)
+				0,						  //문자 방향
+				300,					  //문자 굵기(폰트 크기)
+				false,					  //bool 문자 기울기
+				false,					  //bool 문자 밑줄
+				false,					  //bool 문자 취소선(나무위키에 많음)
+				HANGUL_CHARSET,			  //문자 셋팅
+				OUT_DEFAULT_PRECIS,		  //출력 정확도
+				CLIP_DEFAULT_PRECIS,	  //클리핑 정확도
+				DEFAULT_QUALITY,		  //출력의 퀄리티
+				FF_DONTCARE,			  //자간
+				TEXT("돋움체"));			  //폰트
+			break;
 		}
 	}
 }
@@ -112,6 +129,8 @@ void globalTools::deleteFontAll(void)
 		DeleteObject(_gFont[i]);
 	}
 }
+
+
 void globalTools::setBrushAll(void)
 {
 	for (int i = 0; i < BRUSHVERSION_MAX; i++)
