@@ -65,5 +65,7 @@ public:
 	inline void setLinkAdressUI(battleSceneInterface* cursor) { info = cursor; }
 	inline int getGold(void) { return _gold; }
 	inline void setGold(int gold) { _gold = gold; }
+	inline int getKong(void) { return _kongNum; }
+	inline void setKong(int kong) { _kongNum = kong; }
 };
 

@@ -33,8 +33,11 @@ private:
 	RECT _baseRC[2];
 
 	RECT _listRC[12];
+	
+	float _messageTime;
 
-
+	bool _buyed;
+	bool _notbuyed;
 	bool _base1;              //무기상 도구상 구분
 
 	int _gold;

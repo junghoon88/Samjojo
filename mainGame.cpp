@@ -105,11 +105,12 @@ void mainGame::initScene(void)
 	sceneBuy* _sceneBuy = new sceneBuy;							    //구매상점
 	_sceneBuy->setLinkAdressPlayer(_player);
 	SCENEMANAGER->addScene(L"구매상점씬", _sceneBuy);
+	_sceneEquip->setLinkAdressSceneBuy(_sceneBuy);
 
 	sceneSell* _sceneSell = new sceneSell;							//판매상점
 	_sceneSell->setLinkAdressPlayer(_player);
 	SCENEMANAGER->addScene(L"판매상점씬", _sceneSell);
-
+	
 
 	sceneBattle* _sceneBattle = new sceneBattle;					//전투
 	_sceneBattle->setLinkAdressPlayer(_player);

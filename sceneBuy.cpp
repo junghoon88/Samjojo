@@ -29,6 +29,10 @@ HRESULT sceneBuy::init(void)
 	_gold = _player->getGold();
 	_fontNum = FONTVERSION_SAMJOJO_HEE;
 
+	_buyed = false;
+	_notbuyed = false;
+	_messageTime = 0;
+
 	if (_vItemlist.empty()) {   //최초1번
 		//검
 		_weaponList = new ItemWeapon;
@@ -88,15 +92,74 @@ void sceneBuy::update(void)
 
 	if (PtInRect(&_baseRC[0], _pt)&&!_base1) {
 		if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) {
+			SOUNDMANAGER->play(L"Se02", 1.0f);
 			_base1 = true;
 		}
 	}
 	if (PtInRect(&_baseRC[1], _pt) && _base1) {
 		if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) {
+			SOUNDMANAGER->play(L"Se02", 1.0f);
 			_base1 = false;
 		}
 	}
 	
+	if (_base1) {  //장비탭
+		for (int i = 0; i < _vItemlist.size(); i++) {
+			if (PtInRect(&_listRC[i], _pt)) {
+				if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) {
+					if (_gold >= _vItemlist[i]->getPrice()&&_vItems.size()<13) {   //구매가능
+						SOUNDMANAGER->play(L"Se03", 1.0f);
+						_gold -= _vItemlist[i]->getPrice();  //money차감
+						_buyed = true;
+						_notbuyed = false;
+						switch (_vItemlist[i]->getIclass()) {
+						case WEAPON: 
+							_weaponB = new ItemWeapon;
+							_weaponB->copyItem(_vItemlist[i]);
+							_vItems.push_back(_weaponB);
+							break;
+						case DEFENCE:
+							_armorB = new ItemArmor;
+							_armorB->copyItem(_vItemlist[i]);
+							_vItems.push_back(_armorB);
+							break;
+						case SPECIAL:
+							_specialB = new ItemSpecial;
+							_specialB->copyItem(_vItemlist[i]);
+							_vItems.push_back(_specialB);
+							break;
+						default: break;
+						}
+					}
+					else {
+						_notbuyed = true;
+						_buyed = false;
+						SOUNDMANAGER->play(L"Se04", 1.0f);
+					}
+				}
+			}
+		}
+	}
+	else {  //도구탭
+		if (PtInRect(&_listRC[0], _pt)) {
+			if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) {
+				if (_gold >= 75) {   //콩구입
+					SOUNDMANAGER->play(L"Se03", 1.0f);
+					_gold -= 75;
+					_buyed = true;
+					_notbuyed = false;
+					_player->setKong(_player->getKong() + 1);
+				}
+				else {
+					SOUNDMANAGER->play(L"Se04", 1.0f);
+					_buyed = false;
+					_notbuyed = true;
+				}
+			}
+		}
+	}
+
+
 	_EXIT->update();
 }
 void sceneBuy::render(void)	 
@@ -145,16 +208,11 @@ void sceneBuy::render(void)
 		TextOut(getMemDC(), 40, 90, L"회복의 콩", _tcslen(L"회복의 콩"));
 		TextOut(getMemDC(), 205, 90, L"HP회복", _tcslen(L"HP회복"));
 		TextOut(getMemDC(), 330, 90, L"+50", _tcslen(L"+50"));
-		TCHAR tmp5[4];
-		//_stprintf(tmp5,L"%2d",)
-
-
+		TCHAR tmp5[5];
+		_stprintf(tmp5, L"%2d", _player->getKong());
+		TextOut(getMemDC(), 380, 90, tmp5, _tcslen(tmp5));
+		TextOut(getMemDC(), 430, 90, L"75", _tcslen(L"75"));
 	}
-
-
-
-
-
 
 	for (int i = 0; i < 12; i++) {
 		if (PtInRect(&_listRC[i], _pt)) {
@@ -162,14 +220,28 @@ void sceneBuy::render(void)
 		}
 	}
 
-
 	HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
 	SetTextColor(getMemDC(), RGB(0, 0, 0));
 	TCHAR tmp[32];
 	_stprintf(tmp, L"%5d", _gold);
 	TextOut(getMemDC(), 330, 345, tmp, _tcslen(tmp));
 
-
+	if (_buyed) {  //구입완료 메세지
+		_messageTime += TIMEMANAGER->getElapsedTime();
+		TextOut(getMemDC(), 180, 345, L"구입완료", _tcslen(L"구입완료"));
+		if (_messageTime > 2.0f) {
+			_buyed = false;
+			_messageTime = 0;
+		}
+	}
+	if (_notbuyed) {
+		_messageTime += TIMEMANAGER->getElapsedTime();
+		TextOut(getMemDC(), 180, 345, L"구입불가", _tcslen(L"구입불가"));
+		if (_messageTime > 2.0f) {
+			_notbuyed = false;
+			_messageTime = 0;
+		}
+	}
 
 	_EXIT->render();
 }
@@ -190,6 +262,6 @@ void sceneBuy::buyItem(void) {  //ok
 }
 
 void sceneBuy::exit(void) {
-
+	_player->setGold(_gold);
 	SCENEMANAGER->changeScene(L"준비기본씬");
 }

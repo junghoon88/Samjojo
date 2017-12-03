@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "sceneEquip.h"
-
+#include "sceneBuy.h"
 
 sceneEquip::sceneEquip()
 {
@@ -53,29 +53,8 @@ HRESULT sceneEquip::init(void) {
 		}
 	}
 
-	/*test
-	_weapon = new ItemWeapon;
-	_weapon->init(WEAPON,SWORD, L"단검",8, 0, 0, 0, 0,500);
-	_vItems.push_back(_weapon);
-	_weapon = new ItemWeapon;
-	_weapon->init(WEAPON,SWORD, L"고정도", 12, 0, 0, 0, 0,1000);
-	_vItems.push_back(_weapon);
-	_weapon = new ItemWeapon;
-	_weapon->init(WEAPON, HSWORD, L"의천검", 16, 0, 0, 0, 0,1500);
-	_vItems.push_back(_weapon);
-	_armor = new ItemArmor;
-	_armor->init(DEFENCE, SHILED, L"가죽방패", 0, 10, 0, 0, 0,500);
-	_vItems.push_back(_armor);
-	_armor = new ItemArmor;
-	_armor->init(DEFENCE, ARMOR, L"가죽갑옷", 0, 15, 0, 0, 0,500);
-	_vItems.push_back(_armor);
-	_special = new ItemSpecial;
-	_special->init(SPECIAL, L"태평청령서", 0, 0, 0, 50, 0,700);
-	_vItems.push_back(_special);
-	_special = new ItemSpecial;
-	_special->init(SPECIAL, L"신수장갑", 0, 0, 0, 30, 0,600);
-	_vItems.push_back(_special);
-	*/
+	_vItems = _sBuy->getVItems();   //상점에서 산 아이템벡터
+	
 	for (int i = 0; i < _vUnitsInFile.size(); i++)
 		_vUnitsInFile[i]->updateStatus();
 
@@ -119,6 +98,7 @@ void sceneEquip::update(void) {
 	for (int i = 0; i < _vItems.size(); i++) {
 		if (PtInRect(&_rcItm[i], _pt) && _available[i] == true) {
 			if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) {       //실질적 장착
+				SOUNDMANAGER->play(L"Se03", 1.0f);
 				switch (_vItems[i]->getIclass()) {
 				case WEAPON:
 					for (int j = 0; j < _vUnitsInFile.size(); j++) {
@@ -186,6 +166,7 @@ void sceneEquip::update(void) {
 	for (int i = 0; i < 3; i++) {
 		if (PtInRect(&_rcItm2[i], _pt)) {
 			if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) {
+				SOUNDMANAGER->play(L"Se03", 1.0f);
 				switch (i) {
 				case 0:
 					for (int j = 0; j < _vUnitsInFile.size(); j++) {
