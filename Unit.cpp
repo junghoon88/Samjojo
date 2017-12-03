@@ -84,7 +84,7 @@ void Unit::render(void)
 			_battleState.imgBattleIdle->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY(), _battleState.frameIdle, _imgFrameY);
 		break;
 		case UNITSTATE_ATK:		//공격상태
-			_battleState.imgBattleAtk->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY(), _battleState.frameAtk, _imgFrameY);
+			_battleState.imgBattleAtk->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX() - 8, _battleState.rc.top - MAINCAMERA->getCameraY() - 8, _battleState.frameAtk, _imgFrameY);
 		break;
 		case UNITSTATE_DEF:		//방어상태
 		case UNITSTATE_HIT:		//피격상태
@@ -150,16 +150,6 @@ void Unit::expMaxCheck(void)
 	}
 }
 
-void Unit::useItem(Unit* unit, int type, int value)
-{
-	switch (type)	// TESTITEM 변경시 변경 필요, 매개변수도 마찬가지
-	{
-		case 0:
-			unit->setCurHP(unit->getCurHP() + value);
-			if (unit->getCurHP() > unit->getMaxHP()) unit->setCurHP(unit->getMaxHP());
-		break;
-	}
-}
 
 void Unit::loadUnitData(tagUnitSaveInfo &info)
 {
@@ -246,6 +236,7 @@ bool Unit::move(void)
 		}
 		else
 		{
+			setIdleState();
 			return FALSE;
 		}
 	}
@@ -269,7 +260,7 @@ bool Unit::move(void)
 	_battleState.rc = RectMake(_battleState.pt.x - TILESIZE / 2, _battleState.pt.y - TILESIZE / 2, TILESIZE, TILESIZE);
 	_battleState.tilePt = { (LONG)(_battleState.pt.x / TILESIZE), (LONG)(_battleState.pt.y / TILESIZE) };
 
-	setIdleState();
+	_battleState.unitState = UNITSTATE_IDLE;
 
 	return TRUE;
 }
@@ -347,6 +338,7 @@ void Unit::attack(Unit* opponent)
 			if (RND->getInt(99) > opponent->getStatus().Agl / 2 - 1)	//예) 순발력이 80이면, 80/2=40 0~99중에 41~99이면 공격 당함 == 40퍼 확률로 방어
 			{
 				int damage = (_status.Atk - opponent->getStatus().Dep) / 2 + 25 + _status.level;
+				if (damage < 1) damage = 1;	//작아질 경우 1로 고정
 				opponent->setHitDamage(damage);
 				opponent->getDamage(damage);
 				_battleState.attackSuccess = true;

@@ -28,18 +28,15 @@ HRESULT sceneReadybase::init(void) {
 	_sD->setNext(7);
 	ShowCursor(true);
 
-	
+
 	_battleStart = false;
-
-	SOUNDMANAGER->play(L"Se_b_02", 1.0f);
-
+	_isSound = false;
 	return S_OK;
 }
 void sceneReadybase::release(void) {
 	_sD->release();
-	SOUNDMANAGER->stop(L"Se_b_02");
+	SOUNDMANAGER->stop(L"Se07");
 	SAFE_DELETE(_sD);
-
 }
 void sceneReadybase::update(void) {
 
@@ -80,7 +77,6 @@ void sceneReadybase::update(void) {
 		{   //출진창 누르고땜
 			_posClicking = false;
 			SOUNDMANAGER->play(L"Se02", 1.0f);
-			SOUNDMANAGER->stop(L"Se_b_02");
 			SCENEMANAGER->changeScene(L"출진씬");
 		}
 		else if (PtInRect(&_rcEquipUI, _pt))
@@ -107,10 +103,20 @@ void sceneReadybase::update(void) {
 
 		}
 	}
-
+	if (_isSound)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play(L"Se07", 1.0f);
+			_isSound = false;
+		}
+	}
 	_vUnits = _player->getUnits();
 	if (_vUnits.size() > 3)
 	{
+		SOUNDMANAGER->stop(L"Se_b_02");
+
+		_baseImg = IMAGEMANAGER->findImage(L"smap 0003");
 		_battleStart = true;
 		_sD->update();
 
@@ -118,13 +124,15 @@ void sceneReadybase::update(void) {
 		{
 			_sD->loadDialog();
 			_sD->update();
-			
+			_isSound = true;
+	
 			if (_sD->getNext() == 8)
 			{
 				SCENEMANAGER->changeScene(L"전투씬");
-			
 			}
 		}
+		
+		
 	}
 	
 }

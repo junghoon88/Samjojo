@@ -100,16 +100,19 @@ void scanDialog::render(void)
 		SetTextColor(getMemDC(), RGB(0, 0, 255));
 		TextOut(getMemDC(), story.left + 150, story.top + 30, ss.c_str(), len);
 		SelectObject(getMemDC(), oldFont);
+		
+
+		oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum2]);
 		for (int i = 0; i < _vScripts.size(); i++)
 		{
 			SetTextColor(getMemDC(), RGB(0, 0, 0));
 			ss = convert_wc(_vScripts[i]);
 			len = _tcslen(ss.c_str());
 			SetBkMode(getMemDC(), TRANSPARENT);
-			HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum2]);
 			TextOut(getMemDC(), story.left + 150, story.top + 35 + 15 * (i + 1), ss.c_str(), len);
-			SelectObject(getMemDC(), oldFont);
 		}
+		SelectObject(getMemDC(), oldFont); 
+		DeleteObject(oldFont);
 	}
 	else  
 	{
@@ -118,16 +121,19 @@ void scanDialog::render(void)
 		SetTextColor(getMemDC(), RGB(0, 0, 255));
 		TextOut(getMemDC(), story.left+10, story.top + 30, ss.c_str(), len);
 		SelectObject(getMemDC(), oldFont);
+		DeleteObject(oldFont);
+
+		oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum2]);
 		for (int i = 0; i < _vScripts.size(); i++)
 		{
 			ss = convert_wc(_vScripts[i]);
 			len = _tcslen(ss.c_str());
 			SetBkMode(getMemDC(), TRANSPARENT);
-			HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum2]);
 			SetTextColor(getMemDC(), RGB(0, 0, 0));
 			TextOut(getMemDC(), story.left +10 , story.top + 35 + 15 * (i + 1), ss.c_str(), len);
-			SelectObject(getMemDC(), oldFont);
 		}
+		SelectObject(getMemDC(), oldFont);
+		DeleteObject(oldFont);
 	}
 	switch (next)
 	{	
@@ -202,6 +208,9 @@ void scanDialog::render(void)
 				mouse->frameRender(getMemDC(), _ptMouse.x - mouse->getFrameWidth() / 2, _ptMouse.y - mouse->getFrameHeight() / 2);
 			}
 		}
+		break;
+		default: ShowCursor(true);
+
 		break;
 	}
 }

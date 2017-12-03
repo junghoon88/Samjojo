@@ -86,6 +86,7 @@ void editbox::render(int textOffsetX, int textOffsetY)
 	HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
 	DrawText(getMemDC(), _str, _tcslen(_str), &_rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 	SelectObject(getMemDC(), oldFont);
+	DeleteObject(oldFont);
 
 }
 

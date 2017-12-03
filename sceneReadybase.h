@@ -18,7 +18,9 @@ class sceneReadybase : public gameNode
 	bool _equipClicking;
 	bool _buyClicking;
 	bool _sellClicking;
+	bool _isSound;
 	bool _battleStart;
+
 public:
 
 	Player* _player;

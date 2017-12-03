@@ -273,7 +273,7 @@ void sceneEquip::render(void) {
 	for (int i = 0; i < _vItems.size(); i++) {
 		_vItems[i]->getImg16()->render(getMemDC(), 12, 64 + (i * 20));//12,64
 
-		HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
+		//HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
 		SetTextColor(getMemDC(), RGB(0, 0, 0));
 		TextOut(getMemDC(), 32, 64 + (i * 20), _vItems[i]->getName(), _tcslen(_vItems[i]->getName()));
 
@@ -404,7 +404,7 @@ void sceneEquip::render(void) {
 		if (!_tcscmp(_vUnitsInFile[i]->getStatus().name, _name2[_index])) {
 			if (_vUnitsInFile[i]->getItemW() != NULL) {
 				_vUnitsInFile[i]->getItemW()->getImg32()->render(getMemDC(), 488, 86);
-				HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
+				//HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
 				SetTextColor(getMemDC(), RGB(0, 0, 0));
 				TextOut(getMemDC(), 520, 67, _vUnitsInFile[i]->getItemW()->getName(), _tcslen(_vUnitsInFile[i]->getItemW()->getName()));
 				TCHAR tmp[32];
@@ -413,7 +413,7 @@ void sceneEquip::render(void) {
 			}
 			if (_vUnitsInFile[i]->getItemA() != NULL) {
 				_vUnitsInFile[i]->getItemA()->getImg32()->render(getMemDC(), 488, 182);
-				HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
+				//HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
 				SetTextColor(getMemDC(), RGB(0, 0, 0));
 				TextOut(getMemDC(), 520, 164, _vUnitsInFile[i]->getItemA()->getName(), _tcslen(_vUnitsInFile[i]->getItemA()->getName()));
 				TCHAR tmp[32];
@@ -422,7 +422,7 @@ void sceneEquip::render(void) {
 			}
 			if (_vUnitsInFile[i]->getItemS() != NULL) {
 				_vUnitsInFile[i]->getItemS()->getImg32()->render(getMemDC(), 488, 279);
-				HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
+				//HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
 				SetTextColor(getMemDC(), RGB(0, 0, 0));
 				TextOut(getMemDC(), 520, 262, _vUnitsInFile[i]->getItemS()->getName(), _tcslen(_vUnitsInFile[i]->getItemS()->getName()));
 				TCHAR tmp[32];
@@ -438,6 +438,9 @@ void sceneEquip::render(void) {
 	for (int i = 0; i < BTN_MAXX; i++) {
 		_button[i]->render();
 	}
+
+	SelectObject(getMemDC(), oldFont);
+	DeleteObject(oldFont);
 
 }
 

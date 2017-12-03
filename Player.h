@@ -15,14 +15,15 @@ private:
 	typedef vector<Item*>	vItems;
 	typedef vector<Item*>::iterator	viItems;
 
-
+private:
 	vUnits		_vUnitsInFile;		//폴더 내 유닛데이터들 전체
 	vUnits		_vUnits;			//전투에 출전되는 유닛들
 	vItems		_vItems;
 
+	int			_kongNum;			//콩 개수
 
-	Friend*		_friend;	//아군
-	Enemy*		_enemy;		//적군
+	Friend*		_friend;			//아군
+	Enemy*		_enemy;				//적군
 	gameMap*	_map;
 
 	battleSceneInterface* info;
@@ -45,6 +46,8 @@ public:
 	void cancleUnit(int num);		//출전유닛중에서 취소할 유닛
 	void locateUnits(void);
 	void deleteUnits(void);
+
+	void eatKong(Unit* player, Unit* opponent);
 
 private:
 	Unit* findUnit(TCHAR* name);

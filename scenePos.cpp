@@ -173,6 +173,7 @@ void scenePos::update(void){
 		}
 		if(PtInRect(&_rcOK, _pt) && _availableOK) {  //결정클릭
 			_player->locateUnits();
+			
 			SOUNDMANAGER->play(L"Se03", 1.0f);
 			SCENEMANAGER->changeScene(L"준비기본씬");
 		}
@@ -270,6 +271,7 @@ void scenePos::render(void){
 	_stprintf(tmp2, L"%d", _vUnits.size());
 	TextOut(getMemDC(), 81, 348, tmp2, _tcslen(tmp2));
 	SelectObject(getMemDC(), oldFont);
+	DeleteObject(oldFont);
 	
 	_hpbar->render(getMemDC(), 424, 182 ,0, 0, 129*(_hpMax/1000.0f), 9);
 	_mpbar->render(getMemDC(), 424, 218, 0, 0, 129 * (_mpMax / 250.0f), 9);

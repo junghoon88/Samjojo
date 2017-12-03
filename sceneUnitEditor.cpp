@@ -17,6 +17,9 @@ sceneUnitEditor::sceneUnitEditor()
 	{
 		_strEditBox[i] = NULL;
 	}
+
+	_fontNum = FONTVERSION_SAMJOJO_ASEJONG;
+	_labelFontNum = FONTVERSION_SAMJOJO_AJINJI;
 }
 
 
@@ -49,6 +52,7 @@ HRESULT sceneUnitEditor::init(void)
 	hBrushAttack = CreateSolidBrush(RGB(240, 32, 32));
 
 	_exit = false;
+
 
 	return S_OK;
 }
@@ -175,21 +179,28 @@ void sceneUnitEditor::render(void)
 	if (_bgImage) _bgImage->render(getMemDC());
 
 
-	rectSketch();		// 컨트롤 박스들 위치 도안
+	//rectSketch();		// 컨트롤 박스들 위치 도안
 	editBoxRender();
 	unitImageRender();
 
+	HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_labelFontNum]);
 	for (int i = 0; i < UNITEDITOR_BUTTON_MAX; i++)
 	{
 		_ctrlButton[i]->render();
 	}
+	SelectObject(getMemDC(), oldFont);
+	DeleteObject(oldFont);
 
-	filesRender();
 
 	atkRangeRender();
 
 	//팀선택 버튼
+
+	oldFont = (HFONT)SelectObject(getMemDC(), _gFont[_fontNum]);
 	teamButtonRender();
+	filesRender();
+	SelectObject(getMemDC(), oldFont);
+	DeleteObject(oldFont);
 }
 
 void sceneUnitEditor::initImage(void)
@@ -291,9 +302,9 @@ void sceneUnitEditor::initButton(void)
 
 
 	_ctrlButton[UNITEDITOR_BUTTON_LABEL_RANGE]->init(L"LABEL-큰이름표", L"공격범위", 900 + 50 + UPDATEPOSX, 100 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_WEAPON]->init(L"LABEL-큰이름표" , L"무기", 900 + 50 + UPDATEPOSX, 345 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_ARMOR]->init(L"LABEL-큰이름표", L"방어구", 900 + 50 + UPDATEPOSX, 460 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
-	_ctrlButton[UNITEDITOR_BUTTON_LABEL_SUBITEM]->init(L"LABEL-큰이름표", L"보조", 900 + 50 + UPDATEPOSX, 575 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	//_ctrlButton[UNITEDITOR_BUTTON_LABEL_WEAPON]->init(L"LABEL-큰이름표" , L"무기", 900 + 50 + UPDATEPOSX, 345 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	//_ctrlButton[UNITEDITOR_BUTTON_LABEL_ARMOR]->init(L"LABEL-큰이름표", L"방어구", 900 + 50 + UPDATEPOSX, 460 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
+	//_ctrlButton[UNITEDITOR_BUTTON_LABEL_SUBITEM]->init(L"LABEL-큰이름표", L"보조", 900 + 50 + UPDATEPOSX, 575 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
 
 	_ctrlButton[UNITEDITOR_BUTTON_LABEL_FILENAME]->init(L"LABEL-큰이름표", L"저장이름", 294 + 50 + UPDATEPOSX, 900 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 0 }, NULL);
 
@@ -308,12 +319,12 @@ void sceneUnitEditor::initButton(void)
 	//_ctrlButton[UNITEDITOR_BUTTON_COMBAT_NEXT]->init(L"맵툴버튼", 200 + 50 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectCombatNext, this);
 
 
-	_ctrlButton[UNITEDITOR_BUTTON_WEAPON_PREV]->init(L"SELECT-작은선택버튼" , L"◁", 900 + 25 + UPDATEPOSX, 410 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectWeaponPrev, this);
-	_ctrlButton[UNITEDITOR_BUTTON_WEAPON_NEXT]->init(L"SELECT-작은선택버튼" , L"▷", 950 + 25 + UPDATEPOSX, 410 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectWeaponNext, this);
-	_ctrlButton[UNITEDITOR_BUTTON_ARMOR_PREV]->init(L"SELECT-작은선택버튼"  , L"◁", 900 + 25 + UPDATEPOSX, 525 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectArmorPrev, this);
-	_ctrlButton[UNITEDITOR_BUTTON_ARMOR_NEXT]->init(L"SELECT-작은선택버튼"  , L"▷", 950 + 25 + UPDATEPOSX, 525 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectArmorNext, this);
-	_ctrlButton[UNITEDITOR_BUTTON_SUBITEM_PREV]->init(L"SELECT-작은선택버튼", L"◁", 900 + 25 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectSubitemPrev, this);
-	_ctrlButton[UNITEDITOR_BUTTON_SUBITEM_NEXT]->init(L"SELECT-작은선택버튼", L"▷", 950 + 25 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectSubitemNext, this);
+	//_ctrlButton[UNITEDITOR_BUTTON_WEAPON_PREV]->init(L"SELECT-작은선택버튼" , L"◁", 900 + 25 + UPDATEPOSX, 410 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectWeaponPrev, this);
+	//_ctrlButton[UNITEDITOR_BUTTON_WEAPON_NEXT]->init(L"SELECT-작은선택버튼" , L"▷", 950 + 25 + UPDATEPOSX, 410 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectWeaponNext, this);
+	//_ctrlButton[UNITEDITOR_BUTTON_ARMOR_PREV]->init(L"SELECT-작은선택버튼"  , L"◁", 900 + 25 + UPDATEPOSX, 525 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectArmorPrev, this);
+	//_ctrlButton[UNITEDITOR_BUTTON_ARMOR_NEXT]->init(L"SELECT-작은선택버튼"  , L"▷", 950 + 25 + UPDATEPOSX, 525 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectArmorNext, this);
+	//_ctrlButton[UNITEDITOR_BUTTON_SUBITEM_PREV]->init(L"SELECT-작은선택버튼", L"◁", 900 + 25 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectSubitemPrev, this);
+	//_ctrlButton[UNITEDITOR_BUTTON_SUBITEM_NEXT]->init(L"SELECT-작은선택버튼", L"▷", 950 + 25 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectSubitemNext, this);
 
 	//new, save, load, exit
 	_ctrlButton[UNITEDITOR_BUTTON_DATA_NEW]->init(L"SELECT-선택버튼" , L"초기화", 150 + 50 + UPDATEPOSX, 780 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectDataNew, this);
@@ -412,7 +423,7 @@ void sceneUnitEditor::initTeamButton(void)
 		_teamButton[i].rc = RectMake(UPDATEPOSX, 150 + UPDATEPOSY + 35 * i, 100, 30);
 		_teamButton[i].img = NULL;
 		_teamButton[i].clicked = false;
-
+		
 		switch (i)
 		{
 		case TEAM_PLAYER:
@@ -601,7 +612,7 @@ void sceneUnitEditor::filesRender(void)
 		Rectangle(getMemDC(), _vUnits[i].rc.left, _vUnits[i].rc.top, _vUnits[i].rc.right, _vUnits[i].rc.bottom);
 
 		//HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[FONTVERSION_SAMJOJO]);
-		DrawText(getMemDC(), _vUnits[i].str, _tcslen(_vUnits[i].str), &_vUnits[i].rc, /*DT_CENTER | */DT_VCENTER | DT_SINGLELINE);
+		DrawText(getMemDC(), _vUnits[i].str, _tcslen(_vUnits[i].str), &_vUnits[i].rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 		//SelectObject(getMemDC(), oldFont);
 		SelectObject(getMemDC(), oldBrush);
 	}

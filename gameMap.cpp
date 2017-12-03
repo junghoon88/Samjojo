@@ -189,6 +189,8 @@ void gameMap::scanUnitsPos(void)
 	}
 	for (int i = 0; i < _enemy->getUnits().size(); i++)
 	{
+		if (_enemy->getUnits()[i]->getBattleState().isHiding) continue;
+
 		POINT tilept = _enemy->getUnits()[i]->getBattleState().tilePt;
 		_teamInfo[tilept.x + tilept.y * TILEX] = TEAM_ENEMY;
 	}

@@ -120,6 +120,9 @@ HRESULT sceneManager::changeScene(wstring sceneName)
 
 		_currentScene = find->second;
 
+
+		playBGM();
+
 		return S_OK;
 	}
 
@@ -153,4 +156,49 @@ HRESULT sceneManager::changeScene(wstring sceneName, wstring loadingSceneName)
 	return E_FAIL;
 }
 
+
+void sceneManager::playBGM(void)
+{
+	if (_currentScene == _mSceneList.find(L"¼±ÅÃ¾À")->second
+		|| _currentScene == _mSceneList.find(L"¸ÊÅø¾À")->second
+		|| _currentScene == _mSceneList.find(L"À¯´Ö¿¡µðÅÍ")->second)
+	{
+		SOUNDMANAGER->stop(L"Se_b_02");
+		SOUNDMANAGER->stop(L"Se_b_04");
+		SOUNDMANAGER->stop(L"Se_b_05");
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_00") == FALSE)		SOUNDMANAGER->play(L"Se_b_00");
+	}
+	else if (_currentScene == _mSceneList.find(L"´ëÈ­¾À")->second)
+	{
+		SOUNDMANAGER->stop(L"Se_b_00");
+		SOUNDMANAGER->stop(L"Se_b_02");
+		SOUNDMANAGER->stop(L"Se_b_04");
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_05") == FALSE)		SOUNDMANAGER->play(L"Se_b_05");
+	}
+	else if (_currentScene == _mSceneList.find(L"ÁØºñ±âº»¾À")->second
+			|| _currentScene == _mSceneList.find(L"ÃâÁø¾À")->second
+			|| _currentScene == _mSceneList.find(L"Àåºñ¾À")->second
+			|| _currentScene == _mSceneList.find(L"±¸¸Å»óÁ¡¾À")->second
+			|| _currentScene == _mSceneList.find(L"ÆÇ¸Å»óÁ¡¾À")->second)
+	{
+		SOUNDMANAGER->stop(L"Se_b_00");
+		SOUNDMANAGER->stop(L"Se_b_04");
+		SOUNDMANAGER->stop(L"Se_b_05");
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_02") == FALSE)		SOUNDMANAGER->play(L"Se_b_02");
+	}
+	else if (_currentScene == _mSceneList.find(L"ÀüÅõ¾À")->second)
+	{
+		SOUNDMANAGER->stop(L"Se_b_00");
+		SOUNDMANAGER->stop(L"Se_b_02");
+		SOUNDMANAGER->stop(L"Se_b_05");
+		if (SOUNDMANAGER->isPlaySound(L"Se_b_04") == FALSE)		SOUNDMANAGER->play(L"Se_b_04");
+	}
+	else if (_currentScene == _mSceneList.find(L"°á°ú¾À")->second)
+	{
+		SOUNDMANAGER->stop(L"Se_b_00");
+		SOUNDMANAGER->stop(L"Se_b_02");
+		SOUNDMANAGER->stop(L"Se_b_05");
+		SOUNDMANAGER->stop(L"Se_b_04");
+	}
+}
 

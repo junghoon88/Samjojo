@@ -437,8 +437,8 @@ void battleSceneInterface::setUnit(TEAM faction, int vectorNum)
 {
 	if (faction == TEAM_PLAYER)
 	{
+
 		vNum = vectorNum;
-		isUnit = true;
 		clickUnit = PLAYER;
 		exp = _player->getUnits()[vectorNum]->getStatus().exp;
 		lv = _player->getUnits()[vectorNum]->getStatus().level;
@@ -454,14 +454,13 @@ void battleSceneInterface::setUnit(TEAM faction, int vectorNum)
 		_tcscpy(unitName, _player->getUnits()[vectorNum]->getStatus().name);
 		_stprintf(txtAtk, L"공격력 %d", atk);
 		_stprintf(txtDef, L"방어력 %d", def);
-		_stprintf(txtMove, L"이동력 (%02d)", movePoint);
+		_stprintf(txtMove, L"이동력 %d", movePoint);
 		unitImg = _player->getUnits()[vectorNum]->getStatus().imgFace;
 		if(_player->getUnits()[vectorNum]->getUnitSequnce() == UNITSEQUENCE_TURNON) _player->getUnits()[vectorNum]->findMoveArea();
 	}
 	else if (faction == TEAM_FRIEND)
 	{
 		vNum = vectorNum;
-		isUnit = true;
 		clickUnit = FRIEND;
 		exp = _friend->getUnits()[vectorNum]->getStatus().exp;
 		lv = _friend->getUnits()[vectorNum]->getStatus().level;
@@ -474,7 +473,7 @@ void battleSceneInterface::setUnit(TEAM faction, int vectorNum)
 		movePoint;
 		_tcscpy(factionName, L"아군");
 		_tcscpy(unitName, _friend->getUnits()[vectorNum]->getStatus().name);
-		_stprintf(txtAtk, L"공격력 %02d)", atk);
+		_stprintf(txtAtk, L"공격력 %d)", atk);
 		_stprintf(txtDef, L"방어력 %d", def);
 		_stprintf(txtMove, L"이동력 %d", movePoint);
 		unitImg = _friend->getUnits()[vectorNum]->getStatus().imgFace;
@@ -483,7 +482,6 @@ void battleSceneInterface::setUnit(TEAM faction, int vectorNum)
 	else if (faction == TEAM_ENEMY)
 	{
 		vNum = vectorNum;
-		isUnit = true;
 		clickUnit = ENEMY;
 		exp = _enemy->getUnits()[vectorNum]->getStatus().exp;
 		lv = _enemy->getUnits()[vectorNum]->getStatus().level;
@@ -502,12 +500,16 @@ void battleSceneInterface::setUnit(TEAM faction, int vectorNum)
 		unitImg = _enemy->getUnits()[vectorNum]->getStatus().imgFace;
 		_enemy->getUnits()[vectorNum]->findMoveArea();
 	}
+	isUnit = true;
+	isShow = true;
+	hpBar->setGauge(curHp, maxHp);
+	mpBar->setGauge(curMp, maxMp);
 }
 void battleSceneInterface::mouse_ClickToAction(void)//행동가능한 플레이어 유닛을 누른상태일때 클릭하면 취해줄 액션들
 {
 	int setindex = (int)(_ptMouse.x / TILESIZE) + (int)(_ptMouse.y / TILESIZE)  * TILEX;
 	int findIndex = setindex + (MAINCAMERA->getCameraX() / TILESIZE) + (MAINCAMERA->getCameraY() / TILESIZE) * TILEX;
-	//_player->getUnits()[vNum]->getBattleState().rc.right;//액션 메뉴 렉트는 이걸 기준으로..
+
 	POINT goToTile;
 	goToTile.x = (findtile->getTile()[findIndex].rc.left ) / TILESIZE ;
 	goToTile.y = (findtile->getTile()[findIndex].rc.top ) / TILESIZE;
@@ -522,7 +524,7 @@ void battleSceneInterface::mouse_ClickToAction(void)//행동가능한 플레이어 유닛을
 		callToMenu(_player->getUnits()[vNum]->getRect().left, _player->getUnits()[vNum]->getRect().top);//행동가능 버튼 출력.
 	}
 	//적 유닛 클릭 시
-	if (findtile->getTeamInfo()[findIndex] == TEAM_ENEMY)
+	else if (findtile->getTeamInfo()[findIndex] == TEAM_ENEMY)
 	{
 		mouse_ClickToAttack();
 	}
@@ -563,8 +565,8 @@ void battleSceneInterface::mouse_ClickToAttack(void)
 			}
 			else
 			{
-				if (dirY > 0)	_player->getUnits()[vNum]->setDir(DIRECTION_UP);
-				else			_player->getUnits()[vNum]->setDir(DIRECTION_DN);
+				if (dirY > 0)	_player->getUnits()[vNum]->setDir(DIRECTION_DN);
+				else			_player->getUnits()[vNum]->setDir(DIRECTION_UP);
 			}
 
 
@@ -620,7 +622,7 @@ void battleSceneInterface::chaseCamera(POINT tilePt)
 
 	if (targetCameraX > 0 && targetCameraX < findtile->getTileSizeX() * TILESIZE - TILESIZE * 20)//여기까지가 조건
 		MAINCAMERA->setCameraX(targetCameraX);//취할 액션
-
+	else if(targetCameraX > findtile->getTileSizeX() * TILESIZE - TILESIZE * 20) MAINCAMERA->setCameraX(findtile->getTileSizeX() * TILESIZE - TILESIZE * 20);
 	else if (targetCameraX < WINSIZEX) MAINCAMERA->setCameraX(0);
 
 	//else if (targetCameraX > findtile->getTileSizeX() * TILESIZE - TILESIZE * 20)  MAINCAMERA->setCameraX(targetCameraX);
