@@ -32,6 +32,7 @@ HRESULT sceneBattle::init(void)
 	linkClass();
 	setUpBattle();
 
+	_player->setkongs(5);
 
 	_sDL = new scanDialog;
 	_sDL->init("scripts/script 05.txt");
@@ -68,44 +69,7 @@ void sceneBattle::release(void)
 
 void sceneBattle::update(void)
 {
-	if (KEYMANAGER->isOnceKeyDown('B'))
-	{
-		_battlestory = BATTLESTORY_5; //요기3개만 쓰면 됨.
-		_isDialog = true;
-		_loadDialog = true;
-	}
-	if (_loadDialog)
-	{
-		switch (_battlestory)
-		{
-		case BATTLESTORY_1:
-			_sDL->init("scripts/script 05.txt"); //스타트 스크립트
-			_sDL->setNext(9);
-			_loadDialog = false;
-			break;
-		case BATTLESTORY_2:
-			_sDL->init("scripts/script 06.txt"); //이벤트1 몹이 아무도없을때
-			_sDL->setNext(9);
-			_loadDialog = false;
-			break;
-		case BATTLESTORY_3:
-			_sDL->init("scripts/script 07.txt"); //이벤트 2 조조가 습격당했을때
-			_sDL->setNext(9);
-			_loadDialog = false;
-			break;
-		case BATTLESTORY_4:
-			_sDL->init("scripts/script 10.txt"); //이벤트 3 턴이 10이되서 조조가 움직일때
-			_sDL->setNext(9);
-			_loadDialog = false;
-			break;
-		case BATTLESTORY_5:
-			_sDL->init("scripts/script 11.txt"); //이벤트 4 이유가 뒤졌을때
-			_sDL->setNext(9);
-			_loadDialog = false;
-			break;
-		}
-	}
-	
+
 	
 	//테스트용 
 	if (_phaseChanging)
@@ -187,7 +151,37 @@ void sceneBattle::update(void)
 		}
 
 	}
-
+	if (_loadDialog)
+	{
+		switch (_battlestory)
+		{
+		case BATTLESTORY_1:
+			_sDL->init("scripts/script 05.txt"); //스타트 스크립트
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_2:
+			_sDL->init("scripts/script 06.txt"); //이벤트1 몹이 아무도없을때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_3:
+			_sDL->init("scripts/script 07.txt"); //이벤트 2 조조가 습격당했을때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_4:
+			_sDL->init("scripts/script 10.txt"); //이벤트 3 턴이 10이되서 조조가 움직일때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_5:
+			_sDL->init("scripts/script 11.txt"); //이벤트 4 이유가 뒤졌을때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		}
+	}
 	if (_isDialog)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
@@ -458,9 +452,9 @@ void sceneBattle::phaseCheck(void)
 		{
 			for (int i = 0; i < _enemy->getUnits().size(); i++)
 			{
-				//은신중일땐 턴을주지 않는다.
-				if (_enemy->getUnits()[i]->getBattleState().isHiding) continue;
-				if (!_event_join && _enemy->getUnits()[i]->getBattleState().Group == 2) continue;
+			
+				if (_enemy->getUnits()[i]->getBattleState().isHiding) continue; 	//은신중일땐 턴을주지 않는다.
+				if (!_event_join && _enemy->getUnits()[i]->getBattleState().Group == 2) continue; //후방군 참전이벤트가 활성화되지 않으면 턴을 주지 않음
 				_enemy->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
 			}
 			_phase = BATTLEPHASE_ENEMY;
@@ -486,18 +480,16 @@ void sceneBattle::phaseCheck(void)
 				_player->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
 				_player->getUnits()[i]->setMoveable(true);
 			}
+			_interface->dataClean();
 			_phase = BATTLEPHASE_PLAYER;
 			checkEvent();
 			_phaseChanging = true;
 			_phaseChangeTime = 0.0f;
 
 			_turn++;
-
-	
 		}
 	}
 }
-
 void sceneBattle::friendAction(void)//아군 턴 액션
 {
 	for (int i = 0; i < _friend->getUnits().size(); i++) //행동 끝난 뒤에 끝나는 신호가 필요함..
@@ -516,7 +508,7 @@ void sceneBattle::enemyAction(void) //적군 턴 액션
 	for (int i = 0; i < _enemy->getUnits().size(); i++)
 	{
 		if (_enemy->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue;
-		if (_turn < 10 && _enemy->getUnits()[i]->getBattleState().Group >= 2) continue;
+		if (!_event_join && _enemy->getUnits()[i]->getBattleState().Group == 2) continue;
 		_interface->setUnit(TEAM_ENEMY, i);
 		_interface->chaseCamera(_enemy->getUnits()[i]->getBattleState().tilePt);
 		_enemy->getUnits()[i]->findEnemy(TEAM_ENEMY, findCloseEnemyPos(_enemy->getUnits()[i]));
@@ -644,21 +636,14 @@ void sceneBattle::setUpBattle(void)
 
 void sceneBattle::checkEvent(void)
 {
-	if (!_event_whosThere) // 일정거리 이상 전진했을때 조조가 의심함
+	if (!_event_whosThere && _turn >= 3) // 일정거리 이상 전진했을때 조조가 의심함
 	{
-		for (int i = 0; i < _player->getUnits().size(); i++)
-		{
-			if (_player->getUnits()[i]->getRect().left > 420)
-			{
-				_battlestory = BATTLESTORY_2;
-				_isDialog = true;
-				_loadDialog = true;
-				_event_whosThere = true;
-				break;
-			}
-		}
+		_battlestory = BATTLESTORY_2;
+		_isDialog = true;
+		_loadDialog = true;
+		_event_whosThere = true;
 	}
-	if (_event_whosThere && !_event_sudden) // 조조가 의심하고 난 뒤 조건 만족 시
+	if (_event_whosThere && !_event_sudden) // 조조가 의심하고 난 뒤 하단 조건 만족 시
 	{
 		int GroupAlive = 0;
 		for (int i = 0; i < _enemy->getUnits().size(); i++) //전방 유닛을 전부 제거 시
@@ -673,11 +658,12 @@ void sceneBattle::checkEvent(void)
 			_isDialog = true;
 			_loadDialog = true;
 			_event_sudden = true;
+			return;
 		}
 	
 		for (int i = 0; i < _player->getUnits().size(); i++) //적이 남아 있는 상태에서 플레이어가 전진시
 		{
-			if (_player->getUnits()[i]->getRect().left > 815)
+			if (_player->getUnits()[i]->getRect().left > 815)//대충 강 근처임
 			{
 				unhideEnemy();
 				_battlestory = BATTLESTORY_3;
@@ -692,7 +678,7 @@ void sceneBattle::checkEvent(void)
 
 	if (!_event_join && _turn >= 10) //10턴 이상일때 여포 참전
 	{
-		_battlestory = BATTLESTORY_4; //요기3개만 쓰면 됨.
+		_battlestory = BATTLESTORY_4;
 		_isDialog = true;
 		_loadDialog = true;
 		_event_join = true;
@@ -700,10 +686,6 @@ void sceneBattle::checkEvent(void)
 }
 void sceneBattle::unhideEnemy(void)
 {
-	_battlestory = BATTLESTORY_3; 
-	_isDialog = true;
-	_loadDialog = true;
-
 	for (int i = 0; i < _enemy->getUnits().size(); i++)
 	{
 		if (!_enemy->getUnits()[i]->getHiding()) continue; //1번,2번그룹은 원래 표시중임.

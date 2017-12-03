@@ -48,6 +48,7 @@ private:
 	RECT rc;//정보 제공용 박스
 	RECT drawLine;//타일 테두리 표시용
 	RECT drawMoveLine;
+	RECT drawTargetLine;
 	HPEN linePen,oPen;
 	RECT tileImgRect;
 	image* tileImg;
@@ -70,7 +71,8 @@ private:
 	TCHAR txtAtk[100];//A.K.A 공격력
 	TCHAR txtDef[100];
 	TCHAR txtMove[100];
-	
+	TCHAR txtHp[100];
+	TCHAR txtMp[100];
 	int vNum;// v넘버
 	int bonus;//밟은 땅에 따른 전투력 증감표시
 	int exp;
@@ -127,6 +129,7 @@ private:
 	bool isUnit;//Unit은 true. 지형은 false
 	bool isShow;//클릭하면 true로
 	bool popUpMenu;
+	bool isItem;
 	bool targetAttack;
 public:
 	battleSceneInterface();
@@ -150,6 +153,7 @@ public:
 	void mouse_ClickToAction(void);
 	void mouse_ActionCancel(void);
 	void mouse_ClickToAttack(void);
+	void mouse_ClickToItem(void);
 	void setUnit(TEAM faction ,int vectorNum);
 	void callToMenu(int x,int y);
 	
