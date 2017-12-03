@@ -32,6 +32,7 @@ HRESULT sceneReadybase::init(void) {
 }
 void sceneReadybase::release(void) {
 	_sD->release();
+	SOUNDMANAGER->stop(L"Se_b_02");
 	SAFE_DELETE(_sD);
 
 }
@@ -109,7 +110,6 @@ void sceneReadybase::update(void) {
 			
 			if (_sD->getNext() == 8)
 			{
-				SOUNDMANAGER->stop(L"Se_b_02");
 				SCENEMANAGER->changeScene(L"ÀüÅõ¾À");
 			
 			}
