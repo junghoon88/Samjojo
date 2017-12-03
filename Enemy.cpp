@@ -31,7 +31,7 @@ void Enemy::update(void)
 		_vUnits[i]->update(TEAM_ENEMY);
 	}
 
-	//UnitLiveCheck();
+	UnitLiveCheck();
 }
 
 void Enemy::render(void)
@@ -151,7 +151,7 @@ void Enemy::UnitLiveCheck(void)
 	{
 		if ((*iter)->getIsLive() == FALSE)
 		{
-			_vUnits.erase(iter);
+			iter = _vUnits.erase(iter);
 		}
 		else ++iter;
 	}

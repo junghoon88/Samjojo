@@ -30,7 +30,7 @@ void Friend::update(void)
 		_vUnits[i]->update(TEAM_FRIEND);
 	}
 
-	//UnitLiveCheck();
+	UnitLiveCheck();
 }
 
 void Friend::render(void)
@@ -144,7 +144,7 @@ void Friend::UnitLiveCheck(void)
 	{
 		if ((*iter)->getIsLive() == FALSE)
 		{
-			_vUnits.erase(iter);
+			iter = _vUnits.erase(iter);
 		}
 		else ++iter;
 	}

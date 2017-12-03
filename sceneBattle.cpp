@@ -154,6 +154,9 @@ void sceneBattle::render(void)
 		RECT rc2 = RectMake(0, 60, 960, 960 - 60);
 
 		HFONT hFontOld = (HFONT)SelectObject(getMemDC(), _gFont[FONTVERSION_BATTLETURN]);
+		COLORREF oldcolor = GetTextColor(getMemDC());
+		SetTextColor(getMemDC(), RGB(255, 255, 255));
+
 		switch (_phase)
 		{
 		case BATTLEPHASE_PLAYER:
@@ -173,7 +176,7 @@ void sceneBattle::render(void)
 		case BATTLEPHASE_ENEMY:
 			IMAGEMANAGER->findImage(L"enemyturn")->alphaRender(getMemDC(), 128);
 			_stprintf(str, L"적군 차례");
-			DrawText(getMemDC(), str, _tcslen(str), &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+			DrawText(getMemDC(), str, _tcslen(str), &rc1, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 			_stprintf(str, L"제 %d 턴", _turn);
 			DrawText(getMemDC(), str, _tcslen(str), &rc2, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 			break;
@@ -189,6 +192,8 @@ void sceneBattle::render(void)
 		}
 		SelectObject(getMemDC(), hFontOld);
 		DeleteObject(hFontOld);
+		SetTextColor(getMemDC(), oldcolor);
+
 	}
 
 	

@@ -30,7 +30,7 @@ void Player::update(void)
 		_vUnits[i]->update(TEAM_PLAYER);
 	}
 
-	//UnitLiveCheck();
+	UnitLiveCheck();
 }
 
 void Player::render(void)
@@ -259,7 +259,7 @@ void Player::UnitLiveCheck(void)
 	{
 		if ((*iter)->getIsLive() == FALSE)
 		{
-			_vUnits.erase(iter);
+			iter = _vUnits.erase(iter);
 		}
 		else ++iter;
 	}
