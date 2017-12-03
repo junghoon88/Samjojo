@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "scanDialog.h"
-
+#include "sceneBattle.h"
 
 scanDialog::scanDialog()
 	: _fp(NULL)
@@ -231,10 +231,8 @@ void scanDialog::loadDialog(void)
 					_strName[i] = '\0';
 					break;
 				}
-				 
-				_strName[i] = str[i + 1];
+				 _strName[i] = str[i + 1];
 			}
-		
 		}
 		else if (str[0] == '-')
 		{
@@ -258,6 +256,13 @@ void scanDialog::loadDialog(void)
 			
 			next++;
 			time = 0;
+		}
+		else if (str[0] == '+')
+		{
+			for (int i = 0; i < 5; i++)
+			{
+				_sB->setDialog(false, i);
+			}
 		}
 		else if (str[0] == '=')
 		{
@@ -348,6 +353,18 @@ void scanDialog::loadDialog(void)
 		else if (strcmp(_strName, "하후돈") == 0)
 		{
 			_face = IMAGEMANAGER->findImage(L"face 00009");
+		}
+		else if (strcmp(_strName, "여포") == 0)
+		{
+			_face = IMAGEMANAGER->findImage(L"face 00127");
+		}
+		else if (strcmp(_strName, "이각") == 0)
+		{
+			_face = IMAGEMANAGER->findImage(L"face 00139");
+		}
+		else if (strcmp(_strName, "서영") == 0)
+		{
+			_face = IMAGEMANAGER->findImage(L"face 00138");
 		}
 	}
 }
