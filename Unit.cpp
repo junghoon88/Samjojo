@@ -84,7 +84,7 @@ void Unit::render(void)
 			_battleState.imgBattleIdle->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY(), _battleState.frameIdle, _imgFrameY);
 		break;
 		case UNITSTATE_ATK:		//공격상태
-			_battleState.imgBattleAtk->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX(), _battleState.rc.top - MAINCAMERA->getCameraY(), _battleState.frameAtk, _imgFrameY);
+			_battleState.imgBattleAtk->frameRender(getMemDC(), _battleState.rc.left - MAINCAMERA->getCameraX() - 8, _battleState.rc.top - MAINCAMERA->getCameraY() - 8, _battleState.frameAtk, _imgFrameY);
 		break;
 		case UNITSTATE_DEF:		//방어상태
 		case UNITSTATE_HIT:		//피격상태
