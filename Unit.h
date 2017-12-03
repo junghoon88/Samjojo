@@ -160,6 +160,8 @@ struct tagBattleState
 	POINT			tilePtNext;
 	POINT			tilePtEnemy;
 	BOOL			findEnemy;
+	Unit*			opponent;
+	BOOL			attackSuccess;
 
 
 	DIRECTION		dir;
@@ -213,7 +215,6 @@ private:
 	int _imgFrameY;
 
 	UNITSEQUENCE _oldSeq;
-
 	int _delayTime;
 
 protected:
@@ -248,6 +249,8 @@ public:
 	void moveTo(POINT tliePt);
 	void attack(Unit* opponent);
 	void counterAttack(Unit* opponent);
+	void getDamage(int damage);
+	void setIdleState(void);
 	void findEnemy(TEAM myTeam, POINT closeEnemyPos);
 	void findMoveArea(void);
 	void showMoveArea(void);
@@ -256,7 +259,7 @@ public:
 	void updateSequence(bool bAuto);
 	void updateImage(void);
 public:
-	inline void updateStatus(void);
+	void updateStatus(void);
 	inline void earnExp(int exp) { _status.exp += exp; };
 	inline void	expMaxCheck(void);
 	inline void useItem(Unit* unit, int type, int value);
@@ -332,6 +335,8 @@ public:
 	inline int getMaxHP(void) { return _status.HPMax; }
 	inline void setCurHP(int val) { _status.HP = val; }
 	inline int getCurHP(void) { return _status.HP; }
+	inline void setIsLive(bool live) { _status.isLive = live; }
+	inline bool getIsLive(void) { return _status.isLive; }
 
 	inline void setImgBattleIdle(int num)
 	{
@@ -390,6 +395,8 @@ public:
 	}
 	inline UNITSEQUENCE getUnitSequnce(void) { return _battleState.squence; }
 	inline void setUnitSequnce(UNITSEQUENCE squence) { _battleState.squence = squence; }
+
+	inline void setOpponent(Unit* unit) { _battleState.opponent = unit; }
 };
 
 typedef vector<Unit*>	vUnits;

@@ -599,7 +599,10 @@ void sceneUnitEditor::filesRender(void)
 			oldBrush = (HBRUSH)SelectObject(getMemDC(), hBrushNon);
 		}
 		Rectangle(getMemDC(), _vUnits[i].rc.left, _vUnits[i].rc.top, _vUnits[i].rc.right, _vUnits[i].rc.bottom);
-		TextOut(getMemDC(), _vUnits[i].rc.left, _vUnits[i].rc.top, _vUnits[i].str, _tcslen(_vUnits[i].str));
+
+		//HFONT oldFont = (HFONT)SelectObject(getMemDC(), _gFont[FONTVERSION_SAMJOJO]);
+		DrawText(getMemDC(), _vUnits[i].str, _tcslen(_vUnits[i].str), &_vUnits[i].rc, /*DT_CENTER | */DT_VCENTER | DT_SINGLELINE);
+		//SelectObject(getMemDC(), oldFont);
 		SelectObject(getMemDC(), oldBrush);
 	}
 	DeleteObject(oldBrush);
@@ -620,7 +623,8 @@ void sceneUnitEditor::teamButtonRender(void)
 		}
 
 		Rectangle(getMemDC(), _teamButton[i].rc.left, _teamButton[i].rc.top, _teamButton[i].rc.right, _teamButton[i].rc.bottom);
-		TextOut(getMemDC(), _teamButton[i].rc.left, _teamButton[i].rc.top, _teamButton[i].str, _tcslen(_teamButton[i].str));
+		//TextOut(getMemDC(), _teamButton[i].rc.left, _teamButton[i].rc.top, _teamButton[i].str, _tcslen(_teamButton[i].str));
+		DrawText(getMemDC(), _teamButton[i].str, _tcslen(_teamButton[i].str), &_teamButton[i].rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 		SelectObject(getMemDC(), oldBrush);
 	}
 	DeleteObject(oldBrush);

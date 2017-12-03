@@ -62,18 +62,18 @@ public:
 	void release(void);
 	void update(void);
 	void render(void);
-	void render(int x, int y);
 	button();
 	~button();
 
 public:
 	void setText(const TCHAR* text);
-
+	void setRect(int x,int y);
 
 public:
 	inline RECT getRect(void) { return _rc; }
 	inline void setFontNum(FONTVERSION fontNum) { _fontNum = fontNum; }
 	inline void setColor(COLORREF color) { _color = color; }
 
+	
 };
 
