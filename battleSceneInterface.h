@@ -83,6 +83,7 @@ private:
 	int curHp, maxHp;
 	progressBar* mpBar;
 	int curMp, maxMp;
+	progressBar* _battleHP;
 	//유닛 정보 표시용
 
 	//지형 정보 표시용

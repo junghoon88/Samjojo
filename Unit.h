@@ -217,13 +217,16 @@ private:
 	UNITSEQUENCE _oldSeq;
 	int _delayTime;
 
+	int _showDamageValue;
+
+	bool _soundSwitch;
+
 protected:
 	tagStatus		_status;
 
 	ItemWeapon*		_itemW;
 	ItemArmor*		_itemA;
 	ItemSpecial*	_itemS;
-
 
 	//battle 관련 변수
 	tagBattleState	_battleState;
@@ -344,6 +347,7 @@ public:
 	inline int getCurHP(void) { return _status.HP; }
 	inline void setIsLive(bool live) { _status.isLive = live; }
 	inline bool getIsLive(void) { return _status.isLive; }
+	inline void setHitDamage(int val) { _showDamageValue = val; }
 
 	inline void setImgBattleIdle(int num)
 	{
