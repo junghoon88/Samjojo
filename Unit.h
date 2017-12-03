@@ -349,7 +349,7 @@ public:
 	}
 
 
-	inline void setUnitState(UNITSTATE state) { _battleState.unitState = state; }
+	inline void setUnitState(UNITSTATE state) { _battleState.unitState = state; _imgFrameY = 0; }
 	inline UNITSTATE getUnitState(void) { return _battleState.unitState; }
 
 	inline void setMaxHP(int val) { _status.HPMax = val; }
