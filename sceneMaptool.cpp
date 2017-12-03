@@ -213,13 +213,13 @@ void sceneMaptool::update(void)
 	}
 
 	//TERRAIN 보기 on/off
-	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-	{
-		if (_viewTERRAIN)	_viewTERRAIN = false;
-		else				_viewTERRAIN = true;
+	//if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+	//{
+	//	if (_viewTERRAIN)	_viewTERRAIN = false;
+	//	else				_viewTERRAIN = true;
 
-		ctrlSave();
-	}
+	//	ctrlSave();
+	//}
 
 	//원본맵그림 X, Y 업데이트하기
 	if (IMAGEMANAGER->findImage(_fileName) != NULL)

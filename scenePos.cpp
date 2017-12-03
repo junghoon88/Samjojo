@@ -145,6 +145,7 @@ void scenePos::update(void){
 	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON)) {
 		if (PtInRect(&_rcOK, _pt)&&_availableOK) {     //눌림
 			_okClicking = true;
+		
 		}
 		else {
 			_okClicking = false;
@@ -152,6 +153,7 @@ void scenePos::update(void){
 	
 		if (PtInRect(&_rcCancel, _pt)) {
 			_cancelClicking = true;
+		
 		}
 		else {
 			_cancelClicking = false;
@@ -162,6 +164,8 @@ void scenePos::update(void){
 	
 	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) {
 		if (PtInRect(&_rcCancel, _pt)) {       //닫기창클릭
+			SOUNDMANAGER->play(L"Se03", 1.0f);
+
 			_vUnits.clear();
 			_player->setUnits(_vUnits);
 			_player->registUnitBasic();
@@ -169,6 +173,7 @@ void scenePos::update(void){
 		}
 		if(PtInRect(&_rcOK, _pt) && _availableOK) {  //결정클릭
 			_player->locateUnits();
+			SOUNDMANAGER->play(L"Se03", 1.0f);
 			SCENEMANAGER->changeScene(L"준비기본씬");
 		}
 		for (int i = 0; i < 7; i++) {

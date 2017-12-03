@@ -130,6 +130,7 @@ void button::update(void)
 		}
 		else if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON) && _direction == BUTTONDIRECTION_DOWN)
 		{
+			SOUNDMANAGER->play(L"Se02");
 			_direction = BUTTONDIRECTION_UP;
 
 			if (_callbackFunction != NULL)
@@ -143,6 +144,7 @@ void button::update(void)
 		}
 	}
 	else _direction = BUTTONDIRECTION_NULL;
+	
 }
 
 void button::render(void) 

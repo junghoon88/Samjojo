@@ -219,13 +219,16 @@ private:
 	UNITSEQUENCE _oldSeq;
 	int _delayTime;
 
+	int _showDamageValue;
+
+	bool _soundSwitch;
+
 protected:
 	tagStatus		_status;
 
 	ItemWeapon*		_itemW;
 	ItemArmor*		_itemA;
 	ItemSpecial*	_itemS;
-
 
 	//battle 관련 변수
 	tagBattleState	_battleState;
@@ -260,21 +263,28 @@ public:
 
 	void updateSequence(bool bAuto);
 	void updateImage(void);
+
+	void setItemW(Item* item);
+	void setItemA(Item* item);
+	void setItemS(Item* item);
+
+
 public:
 	void updateStatus(void);
 	inline void earnExp(int exp) { _status.exp += exp; };
 	inline void	expMaxCheck(void);
 	inline void useItem(Unit* unit, int type, int value);
 
+
+
 public:
 	inline tagStatus getStatus(void) { return _status; }
 	inline void setStatus(tagStatus status) { _status = status; }
+
 	inline ItemWeapon* getItemW(void) { return _itemW; }
-	inline void setItemW(ItemWeapon* itemw) { _itemW = itemw; }
 	inline ItemArmor* getItemA(void) { return _itemA; }
-	inline void setItemA(ItemArmor* itema) { _itemA = itema; }
 	inline ItemSpecial*	getItemS(void) { return _itemS; }
-	inline void setItemS(ItemSpecial* items) { _itemS = items; }
+
 	inline int getImgBattleIdle(void) { return _battleState.numImgBattleIdle; }
 	inline int getImgBattleAtk(void) { return _battleState.numImgBattleAtk; }
 	inline int getImgBattleSpc(void) { return _battleState.numImgBattleSpc; }
@@ -339,6 +349,7 @@ public:
 	inline int getCurHP(void) { return _status.HP; }
 	inline void setIsLive(bool live) { _status.isLive = live; }
 	inline bool getIsLive(void) { return _status.isLive; }
+	inline void setHitDamage(int val) { _showDamageValue = val; }
 
 	inline void setImgBattleIdle(int num)
 	{

@@ -33,17 +33,25 @@ HRESULT Unit::init(gameMap* map)
 	_imgFrameTime = 0;
 	_imgFrameY = 0;
 
+	_showDamageValue = 0;
+
+	_soundSwitch = true;
+
 	return S_OK;
 }
 
 void Unit::release(void)
 {
 	_moveArea.clear();
+
+	SAFE_DELETE(_itemW);
+	SAFE_DELETE(_itemA);
+	SAFE_DELETE(_itemS);
+
 }
 
 void Unit::update(TEAM team)
 {
-	//updateStatus();	// 초기능력치 + 레벨당능력치 + 아이템능력치
 	expMaxCheck();	// 경험치 확인
 
 	switch (team)
@@ -85,12 +93,32 @@ void Unit::render(void)
 		break;
 	}
 
+	//피격 시 데미지 표기
+	if (_battleState.unitState == UNITSTATE_HIT)
+	{
+		TCHAR str[64];
+		ZeroMemory(str, 64);
+		_stprintf(str, L"%d", _showDamageValue);
+		COLORREF colorOld = GetTextColor(getMemDC());
+		SetTextColor(getMemDC(), RGB(255, 255, 255));
+		TextOut(getMemDC(), _battleState.pt.x - 24, _battleState.pt.y - 24, str, _tcslen(str));
+		SetTextColor(getMemDC(), colorOld);
+	}
 }
 
 void Unit::updateStatus(void)
 {
+	if (_itemW)		_status.ItemPlusAtk = _itemW->getAtk();
+	else			_status.ItemPlusAtk = 0;
+	if (_itemA)		_status.ItemPlusDep = _itemA->getDep();
+	else			_status.ItemPlusDep = 0;
+	if (_itemS)		_status.ItemPlusHPMax = _itemS->getHP();
+	else			_status.ItemPlusHPMax = 0;
+		
+
 	_status.HP = _status.HPMax = _status.InitHPMax + (_status.level * _status.LvPerHPMax) + _status.ItemPlusHPMax;
 	_status.MP = _status.MPMax = _status.InitMPMax + (_status.level * _status.LvPerMPMax) + _status.ItemPlusMPMax;
+
 	_status.Pwr = _status.InitPwr + _status.ItemPlusPwr;
 	_status.Lds = _status.InitLds + _status.ItemPlusLds;
 	_status.Int = _status.InitInt + _status.ItemPlusInt;
@@ -205,7 +233,7 @@ bool Unit::move(void)
 		if (_battleState.pt.x != ptNext.x)
 		{
 			if (_battleState.pt.x < ptNext.x)	_battleState.dir = DIRECTION_RG;
-			else									_battleState.dir = DIRECTION_LF;
+			else								_battleState.dir = DIRECTION_LF;
 
 			moveSpeed = moveSpeed < abs(_battleState.pt.x - ptNext.x) ? moveSpeed : abs(_battleState.pt.x - ptNext.x);
 		}
@@ -309,13 +337,6 @@ void Unit::moveTo(POINT tliePt)
 
 void Unit::attack(Unit* opponent)
 {
-	// 상대의 공격범위 내에 자신이 위치하고 있으면 반격 시퀀스로 간다
-	//if (opponent->getStatus().atkRange[_battleState.tilePt.x][_battleState.tilePt.y] == TRUE)
-	//{
-	//	_battleState.squence = UNITSEQUENCE_COUNTER;
-	//}
-	//else _battleState.squence = UNITSEQUENCE_IDLE;
-
 	_battleState.unitState = UNITSTATE_ATK;
 
 	if ((opponent->getUnitState() == UNITSTATE_IDLE) || (opponent->getUnitState() == UNITSTATE_TIRED))
@@ -323,9 +344,10 @@ void Unit::attack(Unit* opponent)
 		if (_imgFrameY >= 2)
 		{
 			//공격 성공여부를 계산한다.
-			if (1) 
+			if (RND->getInt(99) > opponent->getStatus().Agl / 2 - 1)	//예) 순발력이 80이면, 80/2=40 0~99중에 41~99이면 공격 당함 == 40퍼 확률로 방어
 			{
-				int damage = _status.Atk - opponent->getStatus().Dep;
+				int damage = (_status.Atk - opponent->getStatus().Dep) / 2 + 25 + _status.level;
+				opponent->setHitDamage(damage);
 				opponent->getDamage(damage);
 				_battleState.attackSuccess = true;
 			}
@@ -341,10 +363,42 @@ void Unit::attack(Unit* opponent)
 		if (_battleState.attackSuccess) //공격 성공했으면 피격상태로 바꾸고
 		{
 			opponent->setUnitState(UNITSTATE_HIT);			// 피격
+			if (_tcscmp(_status.aos, L"궁병") == 0)
+			{
+				if (_soundSwitch == true)
+				{
+					SOUNDMANAGER->play(L"Se38", 1.f);
+					_soundSwitch = false;
+				}
+			}
+			else
+			{
+				if (_soundSwitch == true)
+				{
+					SOUNDMANAGER->play(L"Se37", 1.f);
+					_soundSwitch = false;
+				}
+			}
 		}
 		else //공격 방어했으면 방어상태로 바꾼다.
 		{
-			opponent->setUnitState(UNITSTATE_DEF);			// 방어		
+			opponent->setUnitState(UNITSTATE_DEF);			// 방어
+			if (_tcscmp(_status.aos, L"궁병") == 0)
+			{
+				if (_soundSwitch == true)
+				{
+					SOUNDMANAGER->play(L"Se33", 1.f);
+					_soundSwitch = false;
+				}
+			}
+			else
+			{
+				if (_soundSwitch == true)
+				{
+					SOUNDMANAGER->play(L"Se32", 1.f);
+					_soundSwitch = false;
+				}
+			}
 		}
 	}
 }
@@ -361,12 +415,13 @@ void Unit::counterAttack(Unit* opponent)
 	if (_battleState.tilePt.x < opponent->getBattleState().tilePt.x) opponent->setDir(DIRECTION_LF);
 	if (_battleState.tilePt.x > opponent->getBattleState().tilePt.x) opponent->setDir(DIRECTION_RG);
 
-	if (1)
+	if (RND->getInt(99) > _status.Agl / 2 - 1)
 	{
 		_battleState.unitState = UNITSTATE_HIT;			// 피격
 
 		int damage;
-		damage = opponent->getStatus().Atk - _status.Dep / 2;
+		damage = (opponent->getStatus().Atk - _status.Dep) / 2 + 25 + opponent->getStatus().level;
+		opponent->setHitDamage(damage);
 		setCurHP(_status.HP - damage);
 
 		return;
@@ -396,15 +451,17 @@ void Unit::getDamage(int damage)
 
 void Unit::setIdleState(void)
 {
-	//float curHPRatio = (float)_status.HP / (float)_status.HPMax;
-	//if (curHPRatio < 0.3)
-	//{
-	//	_battleState.unitState = UNITSTATE_TIRED;
-	//}
-	//else
+	float curHPRatio = (float)_status.HP / (float)_status.HPMax;
+	if (curHPRatio < 0.3)
+	{
+		_battleState.unitState = UNITSTATE_TIRED;
+	}
+	else
 	{
 		_battleState.unitState = UNITSTATE_IDLE;
 	}
+
+	_soundSwitch = true;
 }
 
 
@@ -574,7 +631,16 @@ void Unit::updateSequence(bool bAuto)
 		{
 			attack(_battleState.opponent);
 		}
-		else setIdleState();
+
+		// 상대의 공격범위 내에 자신이 위치하고 있으면 반격 시퀀스로 간다
+		else
+		{
+			if (_battleState.opponent->getStatus().atkRange[_battleState.tilePt.x][_battleState.tilePt.y] == TRUE)
+			{
+				_battleState.squence = UNITSEQUENCE_COUNTER;
+			}
+			else setIdleState();
+		}
 
 		return;
 	}
@@ -585,7 +651,9 @@ void Unit::updateSequence(bool bAuto)
 		{
 			counterAttack(_battleState.opponent);
 		}
+
 		else setIdleState();
+
 		return;
 	}
 
@@ -623,7 +691,7 @@ void Unit::updateImage(void)
 
 	if (oldUnitState == _battleState.unitState)
 	{
-		float frameFPS = 5.0f;
+		float frameFPS = 2.0f;
 
 		_imgFrameTime += TIMEMANAGER->getElapsedTime();
 		if (_imgFrameTime >= (1 / frameFPS))
@@ -667,4 +735,37 @@ void Unit::updateImage(void)
 		
 		
 
+}
+
+void Unit::setItemW(Item* item)
+{
+	SAFE_DELETE(_itemW);
+	
+	if (item)
+	{
+		_itemW = new ItemWeapon;
+		_itemW->copyItem(item);
+	}
+}
+
+void Unit::setItemA(Item* item)
+{
+	SAFE_DELETE(_itemA);
+
+	if (item)
+	{
+		_itemA = new ItemArmor;
+		_itemA->copyItem(item);
+	}
+}
+
+void Unit::setItemS(Item* item)
+{
+	SAFE_DELETE(_itemS);
+
+	if (item)
+	{
+		_itemS = new ItemSpecial;
+		_itemS->copyItem(item);
+	}
 }

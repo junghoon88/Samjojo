@@ -83,6 +83,7 @@ private:
 	float curHp, maxHp;
 	progressBar* mpBar;
 	float curMp, maxMp;
+
 	//유닛 정보 표시용
 
 	//지형 정보 표시용
