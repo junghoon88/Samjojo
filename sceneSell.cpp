@@ -155,6 +155,8 @@ void sceneSell::render(void)
 			_messageTime = 0;
 		}
 	}
+	SelectObject(getMemDC(), oldFont);
+	DeleteObject(oldFont);
 
 	_EXIT->render();
 }
