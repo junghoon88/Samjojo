@@ -94,9 +94,6 @@
     <Filter Include="MainGame\sceneBattle\info - hyunjun">
       <UniqueIdentifier>{b83708b4-a485-4097-9ba0-c277e28550ac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainGame\SIDEINTERFACE - hyunjun">
-      <UniqueIdentifier>{35199bcb-83e6-4f1b-be61-4b97f3b2aa3f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MainGame\sceneBattle\aStar">
       <UniqueIdentifier>{e9da99b9-273c-45a4-819e-2a1875cad09d}</UniqueIdentifier>
     </Filter>
@@ -264,9 +261,6 @@
     <ClInclude Include="sceneSell.h">
       <Filter>MainGame\sceneReady</Filter>
     </ClInclude>
-    <ClInclude Include="sideInterface.h">
-      <Filter>MainGame\SIDEINTERFACE - hyunjun</Filter>
-    </ClInclude>
     <ClInclude Include="gameMap.h">
       <Filter>MainGame</Filter>
     </ClInclude>
@@ -276,11 +270,11 @@
     <ClInclude Include="globalTools.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="battleSceneInterface.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="sceneResult.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="battleSceneInterface.h">
+      <Filter>MainGame\sceneBattle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -425,9 +419,6 @@
     <ClCompile Include="sceneSell.cpp">
       <Filter>MainGame\sceneReady</Filter>
     </ClCompile>
-    <ClCompile Include="sideInterface.cpp">
-      <Filter>MainGame\SIDEINTERFACE - hyunjun</Filter>
-    </ClCompile>
     <ClCompile Include="gameMap.cpp">
       <Filter>MainGame</Filter>
     </ClCompile>
@@ -437,11 +428,11 @@
     <ClCompile Include="globalTools.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="battleSceneInterface.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="sceneResult.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="battleSceneInterface.cpp">
+      <Filter>MainGame\sceneBattle</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -18,12 +18,29 @@ private:
 	vItems _vItemlist;        //상점목록
 	vItems _vItems;           //구매한놈들
 
+	ItemWeapon* _weaponList, *_weaponB;
+	ItemArmor* _armorList, *_armorB;
+	ItemSpecial* _specialList, *_specialB;
+
+
+
 	Player*		_player;
 
+	FONTVERSION _fontNum;
+
 	button* _EXIT;
-	button* _OK;
-	button* _CANCEL;
+	POINT _pt;
+	RECT _baseRC[2];
+
+	RECT _listRC[12];
+	
+	float _messageTime;
+
+	bool _buy;
+	bool _notbuy;
 	bool _base1;              //무기상 도구상 구분
+
+	int _gold;
 public:
 	sceneBuy();
 	~sceneBuy();
@@ -35,12 +52,9 @@ public:
 	void setLinkAdressPlayer(Player* player) { _player = player; }
 
 	static void selectExit(void* obj);
-	static void selectOK(void* obj);
-	static void selectCancel(void* obj);
 
 	inline vItems getVItems(void) { return _vItems; }
-	void buyItem(void);
-	void cancel(void);
+	inline void setVItems(vItems vitems) { _vItems = vitems; }
 	void exit(void);
 };
 

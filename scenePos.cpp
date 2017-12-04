@@ -179,6 +179,7 @@ void scenePos::update(void){
 		}
 		for (int i = 0; i < 7; i++) {
 			if (PtInRect(&_posUnits[i].posRC, _pt) && !_posUnits[i].isPos) { //위 장수리스트중 하나클릭  (추가)
+				SOUNDMANAGER->play(L"Se02", 1.0f);
 				_posUnits[i].isPos = true;
 				for (int j = 0; j < _vUnitsInFile.size(); j++) {
 					if (!_tcscmp(_posUnits[i].name, _vUnitsInFile[j]->getStatus().name)) {
@@ -190,6 +191,7 @@ void scenePos::update(void){
 		}
 		for (int i = 0; i < _vUnits.size(); i++) {
 			if (PtInRect(&posRC2[i], _pt) && i != 0 && i != 1) {   //아래 장수리스트중 하나클릭 (제거)
+				SOUNDMANAGER->play(L"Se03", 1.0f);
 				for (int j = 0; j < 7; j++) {
 					if (!_tcscmp(_vUnits[i]->getStatus().name, _posUnits[j].name)) {
 						_posUnits[j].isPos = false;
@@ -271,6 +273,7 @@ void scenePos::render(void){
 	_stprintf(tmp2, L"%d", _vUnits.size());
 	TextOut(getMemDC(), 81, 348, tmp2, _tcslen(tmp2));
 	SelectObject(getMemDC(), oldFont);
+	DeleteObject(oldFont);
 	
 	_hpbar->render(getMemDC(), 424, 182 ,0, 0, 129*(_hpMax/1000.0f), 9);
 	_mpbar->render(getMemDC(), 424, 218, 0, 0, 129 * (_mpMax / 250.0f), 9);

@@ -11,24 +11,29 @@ enum BTN {
 
 	BTN_MAXX
 };
+
+class sceneBuy;
+
 class sceneEquip : public gameNode
 {
 private:
 	typedef vector<Item*>	vItems;
 	typedef vector<Item*>::iterator	viItems;
 
-	POINT _pt;
+	sceneBuy* _sBuy;
 
+	POINT _pt;
+	
 	image* _baseUI;
 	image* _chosang;
 
 	vUnits _vUnitsInFile;
 
 	vItems _vItems;        //구매한 아이템
-	vItems _vItemsEquip;   //장착된 아이템벡터 나중에 player _vItems 로 넘겨야함
+	//vItems _vItemsEquip;   //장착된 아이템벡터 나중에 player _vItems 로 넘겨야함
 
 	RECT _rcItm[13];    //장비list RC
-	RECT _rcItm2[13];   //장착중RC
+	RECT _rcItm2[3];   //장착중RC
 	bool _available[13];
 	bool _selectIn;
 	button* _button[BTN_MAXX];
@@ -46,6 +51,7 @@ private:
 
 	TCHAR _name2[7][32];
 
+	int _amount;
 
 	int _index;
 
@@ -77,6 +83,7 @@ public:
 	void exit(void);
 
 	void setLinkAdressPlayer(Player* player) { _player = player; }
+	void setLinkAdressSceneBuy(sceneBuy* sbuy) { _sBuy = sbuy; }
 	sceneEquip();
 	~sceneEquip();
 };

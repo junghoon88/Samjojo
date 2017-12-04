@@ -82,10 +82,10 @@ void sceneSelect::update(void)
 		}
 
 		//debug
-		for (int i = 0; i < BTNTEST_MAX; i++)
-		{
-			if (_buttonTest[i]) _buttonTest[i]->update();
-		}
+		//for (int i = 0; i < BTNTEST_MAX; i++)
+		//{
+		//	if (_buttonTest[i]) _buttonTest[i]->update();
+		//}
 		break;
 	case SELECTLEVEL2:
 		for (int i = 0; i < SCENARIO_MAX + 1; i++)
@@ -114,11 +114,11 @@ void sceneSelect::render(void)
 		}
 
 		//debug
-		for (int i = 0; i < BTNTEST_MAX; i++)
-		{
-			if (_buttonTest[i] == NULL) continue;
-			_buttonTest[i]->render();
-		}
+		//for (int i = 0; i < BTNTEST_MAX; i++)
+		//{
+		//	if (_buttonTest[i] == NULL) continue;
+		//	_buttonTest[i]->render();
+		//}
 		break;
 	case SELECTLEVEL2:
 		for (int i = 0; i < SCENARIO_MAX + 1; i++)
@@ -140,19 +140,19 @@ void sceneSelect::setuptButtons(void)
 			case BTNSELECT1_GAMESTART:
 				_button1[i] = new button;
 				//_button1[i]->init(L"SELECT-선택버튼", L"게임시작", 50, 150, { 0,0 }, { 0,1 }, cbFuncGameStart, this);
-				_button1[i]->init(L"SELECT-선택버튼", L"게임시작", 150, 150, { 0,0 }, { 0,1 }, cbFuncSelect, this);
+				_button1[i]->init(L"SELECT-선택버튼", L"게임시작", 100, 150, { 0,0 }, { 0,1 }, cbFuncSelect, this);
 			break;
 			case BTNSELECT1_MAPTOOL:
 				_button1[i] = new button;
-				_button1[i]->init(L"SELECT-선택버튼", L"맵편집", 150, 200, { 0,0 }, { 0,1 }, cbFuncMaptool, this);
+				_button1[i]->init(L"SELECT-선택버튼", L"맵편집", 100, 200, { 0,0 }, { 0,1 }, cbFuncMaptool, this);
 			break;
 			case BTNSELECT1_UNITEDITOR:
 				_button1[i] = new button;
-				_button1[i]->init(L"SELECT-선택버튼", L"유닛편집", 150, 250, { 0,0 }, { 0,1 }, cbFuncUnitEditor, this);
+				_button1[i]->init(L"SELECT-선택버튼", L"유닛편집", 100, 250, { 0,0 }, { 0,1 }, cbFuncUnitEditor, this);
 			break;
 			case BTNSELECT1_EXIT:
 				_button1[i] = new button;
-				_button1[i]->init(L"SELECT-선택버튼", L"게임종료", 150, 300, { 0,0 }, { 0,1 }, cbFuncGameExit, this);
+				_button1[i]->init(L"SELECT-선택버튼", L"게임종료", 100, 300, { 0,0 }, { 0,1 }, cbFuncGameExit, this);
 			break;
 		}
 	}
@@ -223,9 +223,11 @@ void sceneSelect::selectScenario(void)
 			_friend->locateUnits();
 			_enemy->locateUnits();
 
+
 			//SCENEMANAGER->changeScene(L"대화씬");
-			//SCENEMANAGER->changeScene(L"준비기본씬");
-			SCENEMANAGER->changeScene(L"전투씬");
+			SCENEMANAGER->changeScene(L"준비기본씬");
+			//SCENEMANAGER->changeScene(L"전투씬");
+
 
 			//break;
 		}

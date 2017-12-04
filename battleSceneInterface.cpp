@@ -46,7 +46,8 @@ void battleSceneInterface::update()
 		}
 		if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))
 		{
-			if (isShow && clickUnit == PLAYER && _player->getUnits()[vNum]->getUnitSequnce() == UNITSEQUENCE_TURNON) mouse_ClickToAction(); // 
+			if (isItem) mouse_ClickToItem();
+			else if (isShow && clickUnit == PLAYER && _player->getUnits()[vNum]->getUnitSequnce() == UNITSEQUENCE_TURNON) mouse_ClickToAction(); // 
 			else if (isShow && clickUnit != PLAYER)
 			{
 				dataClean();
@@ -101,9 +102,25 @@ void battleSceneInterface::mouse_Scanning(void)
 	else if(clickUnit == PLAYER)
 	{
 		int findIndex = indexTile + (MAINCAMERA->getCameraX() / TILESIZE) + (MAINCAMERA->getCameraY() / TILESIZE) * TILEX;
-		if(_player->getUnits()[vNum]->isMovableArea(findIndex))drawMoveLine = { findtile->getTile()[indexTile].rc.left,findtile->getTile()[indexTile].rc.top,findtile->getTile()[indexTile].rc.right,findtile->getTile()[indexTile].rc.bottom };
+		
+		if (isItem)
+		{
+			if (findtile->getTeamInfo()[findIndex] == TEAM_PLAYER)
+			{
+				for (int i = 0; i < _player->getUnits().size(); i++)
+				{
+					if (findIndex == (int)(_player->getUnits()[i]->getBattleState().tilePt.x + _player->getUnits()[i]->getBattleState().tilePt.y * TILEX))
+					{
+						kongTarget = _player->getUnits()[i]->getRect();
+						break;
+					}
+				}
+			}
+			else kongTarget = { WINSIZEX,WINSIZEY,WINSIZEX,WINSIZEY };
+		}
+		else if(_player->getUnits()[vNum]->isMovableArea(findIndex))drawMoveLine = { findtile->getTile()[indexTile].rc.left,findtile->getTile()[indexTile].rc.top,findtile->getTile()[indexTile].rc.right,findtile->getTile()[indexTile].rc.bottom };
 		else drawMoveLine = { WINSIZEX,WINSIZEY,WINSIZEX,WINSIZEY };
-		drawLine = _player->getUnits()[vNum]->getRect();
+		drawTargetLine = _player->getUnits()[vNum]->getRect();
 	}
 }
 
@@ -118,6 +135,7 @@ void battleSceneInterface::mouse_ClickToTile(void)
 			if (findIndex == (int)(_player->getUnits()[i]->getBattleState().tilePt.x + _player->getUnits()[i]->getBattleState().tilePt.y * TILEX))
 			{
 				setUnit(TEAM_PLAYER, i);
+			
 				break;
 			}
 		}
@@ -145,8 +163,7 @@ void battleSceneInterface::mouse_ClickToTile(void)
 			}
 		}
 	}
-
-	drawLine = { findtile->getTile()[indexTile].rc.left,findtile->getTile()[indexTile].rc.top,findtile->getTile()[indexTile].rc.right,findtile->getTile()[indexTile].rc.bottom };
+	//drawTargetLine = { findtile->getTile()[indexTile].rc.left,findtile->getTile()[indexTile].rc.top,findtile->getTile()[indexTile].rc.right,findtile->getTile()[indexTile].rc.bottom };
 	tileNum = findtile->getTile()[findIndex].terrain + 1;//해당번호를 키값으로 찾으면 된다. 이미지를!	
 	_stprintf(tileKey, L"tileShow (%02d)", tileNum);
 	tileImg = IMAGEMANAGER->findImage(tileKey);
@@ -437,8 +454,6 @@ void battleSceneInterface::setUnit(TEAM faction, int vectorNum)
 {
 	if (faction == TEAM_PLAYER)
 	{
-		vNum = vectorNum;
-		isUnit = true;
 		clickUnit = PLAYER;
 		exp = _player->getUnits()[vectorNum]->getStatus().exp;
 		lv = _player->getUnits()[vectorNum]->getStatus().level;
@@ -452,16 +467,11 @@ void battleSceneInterface::setUnit(TEAM faction, int vectorNum)
 
 		_tcscpy(factionName, L"플레이어");
 		_tcscpy(unitName, _player->getUnits()[vectorNum]->getStatus().name);
-		_stprintf(txtAtk, L"공격력 %d", atk);
-		_stprintf(txtDef, L"방어력 %d", def);
-		_stprintf(txtMove, L"이동력 (%02d)", movePoint);
 		unitImg = _player->getUnits()[vectorNum]->getStatus().imgFace;
 		if(_player->getUnits()[vectorNum]->getUnitSequnce() == UNITSEQUENCE_TURNON) _player->getUnits()[vectorNum]->findMoveArea();
 	}
 	else if (faction == TEAM_FRIEND)
 	{
-		vNum = vectorNum;
-		isUnit = true;
 		clickUnit = FRIEND;
 		exp = _friend->getUnits()[vectorNum]->getStatus().exp;
 		lv = _friend->getUnits()[vectorNum]->getStatus().level;
@@ -471,19 +481,14 @@ void battleSceneInterface::setUnit(TEAM faction, int vectorNum)
 		maxHp = _friend->getUnits()[vectorNum]->getStatus().HPMax;
 		curMp = _friend->getUnits()[vectorNum]->getStatus().MP;
 		maxMp = _friend->getUnits()[vectorNum]->getStatus().MPMax;
-		movePoint;
+		movePoint = _friend->getUnits()[vectorNum]->getStatus().movePoint;;
 		_tcscpy(factionName, L"아군");
 		_tcscpy(unitName, _friend->getUnits()[vectorNum]->getStatus().name);
-		_stprintf(txtAtk, L"공격력 %02d)", atk);
-		_stprintf(txtDef, L"방어력 %d", def);
-		_stprintf(txtMove, L"이동력 %d", movePoint);
 		unitImg = _friend->getUnits()[vectorNum]->getStatus().imgFace;
 		_friend->getUnits()[vectorNum]->findMoveArea();
 	}
 	else if (faction == TEAM_ENEMY)
 	{
-		vNum = vectorNum;
-		isUnit = true;
 		clickUnit = ENEMY;
 		exp = _enemy->getUnits()[vectorNum]->getStatus().exp;
 		lv = _enemy->getUnits()[vectorNum]->getStatus().level;
@@ -493,21 +498,30 @@ void battleSceneInterface::setUnit(TEAM faction, int vectorNum)
 		maxHp = _enemy->getUnits()[vectorNum]->getStatus().HPMax;
 		curMp = _enemy->getUnits()[vectorNum]->getStatus().MP;
 		maxMp = _enemy->getUnits()[vectorNum]->getStatus().MPMax;
-		movePoint;
+		movePoint = _enemy->getUnits()[vectorNum]->getStatus().movePoint;;
 		_tcscpy(factionName, L"적군");
 		_tcscpy(unitName, _enemy->getUnits()[vectorNum]->getStatus().name);
-		_stprintf(txtAtk, L"공격력 %d", atk);
-		_stprintf(txtDef, L"방어력 %d", def);
-		_stprintf(txtMove, L"이동력 %d", movePoint);
+
 		unitImg = _enemy->getUnits()[vectorNum]->getStatus().imgFace;
 		_enemy->getUnits()[vectorNum]->findMoveArea();
 	}
+	_stprintf(txtAtk, L"공격력 %d", atk);
+	_stprintf(txtDef, L"방어력 %d", def);
+	_stprintf(txtMove, L"이동력 %d", movePoint);
+	_stprintf(txtExp, L"현재exp: %d", exp);
+	_stprintf(txtHp, L"%d / %d", (int)curHp, (int)maxHp);
+	_stprintf(txtMp, L"%d / %d", (int)curMp, (int)maxMp);
+	vNum = vectorNum;
+	isUnit = true;
+	isShow = true;
+	hpBar->setGauge(curHp, maxHp);
+	mpBar->setGauge(curMp, maxMp);
 }
 void battleSceneInterface::mouse_ClickToAction(void)//행동가능한 플레이어 유닛을 누른상태일때 클릭하면 취해줄 액션들
 {
 	int setindex = (int)(_ptMouse.x / TILESIZE) + (int)(_ptMouse.y / TILESIZE)  * TILEX;
 	int findIndex = setindex + (MAINCAMERA->getCameraX() / TILESIZE) + (MAINCAMERA->getCameraY() / TILESIZE) * TILEX;
-	//_player->getUnits()[vNum]->getBattleState().rc.right;//액션 메뉴 렉트는 이걸 기준으로..
+
 	POINT goToTile;
 	goToTile.x = (findtile->getTile()[findIndex].rc.left ) / TILESIZE ;
 	goToTile.y = (findtile->getTile()[findIndex].rc.top ) / TILESIZE;
@@ -522,7 +536,7 @@ void battleSceneInterface::mouse_ClickToAction(void)//행동가능한 플레이어 유닛을
 		callToMenu(_player->getUnits()[vNum]->getRect().left, _player->getUnits()[vNum]->getRect().top);//행동가능 버튼 출력.
 	}
 	//적 유닛 클릭 시
-	if (findtile->getTeamInfo()[findIndex] == TEAM_ENEMY)
+	else if (findtile->getTeamInfo()[findIndex] == TEAM_ENEMY)
 	{
 		mouse_ClickToAttack();
 	}
@@ -563,8 +577,8 @@ void battleSceneInterface::mouse_ClickToAttack(void)
 			}
 			else
 			{
-				if (dirY > 0)	_player->getUnits()[vNum]->setDir(DIRECTION_UP);
-				else			_player->getUnits()[vNum]->setDir(DIRECTION_DN);
+				if (dirY > 0)	_player->getUnits()[vNum]->setDir(DIRECTION_DN);
+				else			_player->getUnits()[vNum]->setDir(DIRECTION_UP);
 			}
 
 
@@ -577,14 +591,29 @@ void battleSceneInterface::mouse_ClickToAttack(void)
 
 }
 
+void battleSceneInterface::mouse_ClickToItem(void)
+{
+	int findIndex = indexTile + (MAINCAMERA->getCameraX() / TILESIZE) + (MAINCAMERA->getCameraY() / TILESIZE) * TILEX;
+
+	if (findtile->getTeamInfo()[findIndex] == TEAM_PLAYER)
+	{
+		for (int i = 0; i < _player->getUnits().size(); i++)
+		{
+			if (findIndex == (int)(_player->getUnits()[i]->getBattleState().tilePt.x + _player->getUnits()[i]->getBattleState().tilePt.y * TILEX))
+			{
+				_player->eatKong(_player->getUnits()[vNum], _player->getUnits()[i]);
+				_player->getUnits()[vNum]->setUnitSequnce(UNITSEQUENCE_TURNOFF);
+				dataClean();
+			}
+		}
+	}
+}
+
 void battleSceneInterface::mouse_ActionCancel(void)//이동명령 취소용
 {
 	_player->getUnits()[vNum]->moveBack(backToPT);
 	_player->getUnits()[vNum]->setDir(backToDir);
 	_player->getUnits()[vNum]->setUnitSequnce(UNITSEQUENCE_TURNON);
-
-	//chaseCamera(_player->getUnits()[vNum]->getRect());
-
 	_player->getUnits()[vNum]->setMoveable(true);
 
 	isCommand = false;
@@ -615,12 +644,12 @@ void battleSceneInterface::moveCamera(void)
 void battleSceneInterface::chaseCamera(POINT tilePt)
 {
 	int index = tilePt.x + tilePt.y * TILEX;
-	int targetCameraX = findtile->getTile()[index].rc.left - WINSIZEX / 2;
+	int targetCameraX = findtile->getTile()[index].rc.left - TILESIZE * 9;
 	int targetCameraY = findtile->getTile()[index].rc.top - WINSIZEY / 2;
 
 	if (targetCameraX > 0 && targetCameraX < findtile->getTileSizeX() * TILESIZE - TILESIZE * 20)//여기까지가 조건
 		MAINCAMERA->setCameraX(targetCameraX);//취할 액션
-
+	else if(targetCameraX > findtile->getTileSizeX() * TILESIZE - TILESIZE * 20) MAINCAMERA->setCameraX(findtile->getTileSizeX() * TILESIZE - TILESIZE * 20);
 	else if (targetCameraX < WINSIZEX) MAINCAMERA->setCameraX(0);
 
 	//else if (targetCameraX > findtile->getTileSizeX() * TILESIZE - TILESIZE * 20)  MAINCAMERA->setCameraX(targetCameraX);
@@ -632,6 +661,7 @@ void battleSceneInterface::dataClean(void)//마우스 우클릭 시 현재 인터페이스의 �
 {
 	isShow = false;
 	isUnit = false;
+	isItem = false;
 	fire = false;
 	wind = false;
 	earth = false;
@@ -652,36 +682,39 @@ void battleSceneInterface::dataClean(void)//마우스 우클릭 시 현재 인터페이스의 �
 	clickUnit = NONE;
 	isCommand = false;
 	drawLine = { WINSIZEX,WINSIZEY,WINSIZEX,WINSIZEY };
+	drawTargetLine = { WINSIZEX,WINSIZEY,WINSIZEX,WINSIZEY };
 	drawMoveLine = { 0,0,0,0 };
 }
 void battleSceneInterface::callToMenu(int x,int y)
 {
 	popUpMenu = true;
-	if (y <= WINSIZEY / 2)
+	int ptX = x - MAINCAMERA->getCameraX();
+	int ptY = y - MAINCAMERA->getCameraY();
+	if (ptY <= WINSIZEY / 2)
 	{
-		if (x < WINSIZEX / 2)
+		if (ptX < WINSIZEX / 2)
 		{
-			cmdBox = RectMake(x + TILESIZE, y, 110, 250);//팝업메뉴가 오른쪽 아래로 펴져야함
+			cmdBox = RectMake(x + TILESIZE - MAINCAMERA->getCameraX(), y, 110, 120);//팝업메뉴가 오른쪽 아래로 펴져야함
 		}
-		else if (x >= WINSIZEX)
+		else
 		{
-			cmdBox = RectMake(x - TILESIZE, y, 110, 250);;//왼쪽 아래
+			cmdBox = RectMake(x - 110 - MAINCAMERA->getCameraX(), y , 110, 120);;//왼쪽 아래
 		}
 	}
-	if (y > WINSIZEY / 2)
+	if (ptY > WINSIZEY / 2)
 	{
-		if (x < WINSIZEX / 2)
+		if (ptX < WINSIZEX / 2)
 		{
-		cmdBox = RectMake(x + TILESIZE, y - 250, 110, 250);//팝업메뉴가 오른쪽 위
+			cmdBox = RectMake(x + TILESIZE - MAINCAMERA->getCameraX(), y - 120 + TILESIZE, 110, 120);//팝업메뉴가 오른쪽 위
 		}
-		else if (x >= WINSIZEX)
+		else
 		{
-			cmdBox = RectMake(x - TILESIZE, y - 250, 110, 250);//왼쪽 위
+			cmdBox = RectMake(x - 110 - MAINCAMERA->getCameraX(), y - 120 + TILESIZE, 110, 120);//왼쪽 위
 		}
 	}
 	for (int i = 0; i < BTN_MAX; i++)
 	{
-		actionBtn[i]->setRect(cmdBox.left + 5, cmdBox.top + i * 35);
+		actionBtn[i]->setRect(cmdBox.left + 5, cmdBox.top + i * 30);
 	}
 }
 
@@ -694,15 +727,22 @@ void battleSceneInterface::tileLineDraw(void)
 	LineTo(getMemDC(), drawLine.left, drawLine.bottom);		 //현재 타일 테두리그림
 	LineTo(getMemDC(), drawLine.left, drawLine.top);		 //현재 타일 테두리그림
 
-		MoveToEx(getMemDC(), drawMoveLine.left, drawMoveLine.top, NULL); //이동 타일
-		LineTo(getMemDC(), drawMoveLine.right, drawMoveLine.top);		 //이동 타일 테두리그림
-		LineTo(getMemDC(), drawMoveLine.right, drawMoveLine.bottom);	 //이동 타일 테두리그림
-		LineTo(getMemDC(), drawMoveLine.left, drawMoveLine.bottom);		 //이동 타일 테두리그림
-		LineTo(getMemDC(), drawMoveLine.left, drawMoveLine.top);		 //이동 타일 테두리그림
-		SelectObject(getMemDC(), (HPEN)oPen);
+	MoveToEx(getMemDC(), drawTargetLine.left - MAINCAMERA->getCameraX(), drawTargetLine.top - MAINCAMERA->getCameraY(), NULL); //현재 타일 테두리그림
+	LineTo(getMemDC(), drawTargetLine.right - MAINCAMERA->getCameraX(), drawTargetLine.top - MAINCAMERA->getCameraY());		 //현재 타일 테두리그림
+	LineTo(getMemDC(), drawTargetLine.right - MAINCAMERA->getCameraX(), drawTargetLine.bottom - MAINCAMERA->getCameraY());	 //현재 타일 테두리그림
+	LineTo(getMemDC(), drawTargetLine.left - MAINCAMERA->getCameraX(), drawTargetLine.bottom - MAINCAMERA->getCameraY());		 //현재 타일 테두리그림
+	LineTo(getMemDC(), drawTargetLine.left - MAINCAMERA->getCameraX(), drawTargetLine.top - MAINCAMERA->getCameraY());		 //현재 타일 테두리그림
+
+	MoveToEx(getMemDC(), drawMoveLine.left, drawMoveLine.top, NULL); //이동 타일
+	LineTo(getMemDC(), drawMoveLine.right, drawMoveLine.top);		 //이동 타일 테두리그림
+	LineTo(getMemDC(), drawMoveLine.right, drawMoveLine.bottom);	 //이동 타일 테두리그림
+	LineTo(getMemDC(), drawMoveLine.left, drawMoveLine.bottom);		 //이동 타일 테두리그림
+	LineTo(getMemDC(), drawMoveLine.left, drawMoveLine.top);		 //이동 타일 테두리그림
+	SelectObject(getMemDC(), (HPEN)oPen);
 }
 void battleSceneInterface::cmdDraw(void)
 {
+	//Rectangle(getMemDC(), cmdBox.left, cmdBox.top, cmdBox.right, cmdBox.bottom);
 	for (int i = 0; i < BTN_MAX; i++)
 	{
 		if (actionBtn[i] == NULL) continue;
@@ -714,28 +754,29 @@ void battleSceneInterface::infoDraw(void)
 	SetTextColor(getMemDC(), RGB(0, 0, 0));
 	if (isUnit) //유닛을 눌렀을때 표시할 것들
 	{
-		Rectangle(getMemDC(), unitImgRect.left, unitImgRect.top, unitImgRect.right, unitImgRect.bottom); // 디버그용 렉트출력
 		unitImg->render(getMemDC(), unitImgRect.left, unitImgRect.top);
 		TextOut(getMemDC(), unitImgRect.left, unitImgRect.bottom + 24, factionName, _tcslen(factionName));
 		TextOut(getMemDC(), unitImgRect.left, unitImgRect.bottom + 48, unitName, _tcslen(unitName));
+		hpBar->render();
+		mpBar->render();
+		TextOut(getMemDC(), unitImgRect.left + 30, unitImgRect.bottom + 72, txtHp, _tcslen(txtHp));
+		TextOut(getMemDC(), unitImgRect.left + 30, unitImgRect.bottom + 96, txtMp, _tcslen(txtMp));
 		TextOut(getMemDC(), unitImgRect.left, unitImgRect.bottom + 120, txtAtk, _tcslen(txtAtk));
 		TextOut(getMemDC(), unitImgRect.left, unitImgRect.bottom + 144, txtDef, _tcslen(txtDef));
 		TextOut(getMemDC(), unitImgRect.left, unitImgRect.bottom + 168, txtMove, _tcslen(txtMove));
-		hpBar->render();
-		mpBar->render();
+		TextOut(getMemDC(), unitImgRect.left, unitImgRect.bottom + 192, txtExp, _tcslen(txtExp));
 	}
-	Rectangle(getMemDC(), tileImgRect.left, tileImgRect.top, tileImgRect.right, tileImgRect.bottom); // 디버그용 렉트출력
+	if (isItem)
+	{
+		IMAGEMANAGER->findImage(L"선두")->render(getMemDC(), unitImgRect.left, unitImgRect.bottom + 240);
+		IMAGEMANAGER->findImage(L"선두타겟")->alphaRender(getMemDC(), kongTarget.left - MAINCAMERA->getCameraX() , kongTarget.top - MAINCAMERA->getCameraY(), 160);
+		TextOut(getMemDC(), unitImgRect.left, unitImgRect.bottom + 364, txtKong, _tcslen(txtKong));
+	}
 	tileImg->render(getMemDC(),tileImgRect.left, tileImgRect.top);
 	TextOut(getMemDC(), tileImgRect.left, tileImgRect.bottom + 50, tilename, _tcslen(tilename));
 	TextOut(getMemDC(), tileImgRect.left, tileImgRect.bottom + 80, prop, _tcslen(prop));
 
 	
-
-	//for (int i = 0; i < 4; i++) // 디버그용 렉트출력
-	//{
-	//	Rectangle(getMemDC(), element[i].left, element[i].top, element[i].right, element[i].bottom);
-	//}
-
 	if (fire) IMAGEMANAGER->findImage(L"화속성")->render(getMemDC(), element[0].left, element[0].top);
 	else if(!fire) IMAGEMANAGER->findImage(L"화속성비활성")->render(getMemDC(), element[0].left, element[0].top);
 	if (water) IMAGEMANAGER->findImage(L"수속성")->render(getMemDC(), element[1].left, element[1].top);
@@ -760,7 +801,7 @@ void battleSceneInterface::buttonSetup(void)
 			break;
 		case BTN_ITEM:
 			actionBtn[i] = new button;
-			actionBtn[i]->init(L"SELECT-선택버튼", L"도 구", cmdBox.left + 5, cmdBox.top + 5 + 35, { 0,0 }, { 0,1 }, cb_item, this);
+			actionBtn[i]->init(L"SELECT-선택버튼", L"회 복", cmdBox.left + 5, cmdBox.top + 5 + 35, { 0,0 }, { 0,1 }, cb_item, this);
 			break;
 		case BTN_WAIT:
 			actionBtn[i] = new button;
@@ -805,7 +846,18 @@ void battleSceneInterface::cmd_atk(void)
 }
 void battleSceneInterface::cmd_item(void)	 
 {
-	//아이템 목록을 불러와서 쓰자.
+	if (_player->getKong() > 0)
+	{
+		isItem = true;
+		popUpMenu = false;
+		kongHave = _player->getKong();
+		_stprintf(txtKong, L"남은 콩 : %d", kongHave);
+	}
+	else
+	{
+
+	}
+	
 }
 void battleSceneInterface::cmd_wait(void)	 
 {
@@ -825,10 +877,11 @@ void battleSceneInterface::infoSetup(void)
 	isUnit = false;
 	targetAttack = false;
 	isCommand = false;
+	isItem = false;
 	indexTile = 0;
 	popUpMenu = false;
 
-
+	kongTarget = { WINSIZEX,WINSIZEY,WINSIZEX,WINSIZEY };
 	rc = { WINSIZEX - SIDEWINSIZE,0,WINSIZEX,WINSIZEY };//인터페이스 간이 렉트
 	tileImgRect = RectMakeCenter(rc.left + SIDEWINSIZE / 2, 80, FROFILEIMAGE, FROFILEIMAGE);
 	unitImgRect = RectMakeCenter(rc.left + SIDEWINSIZE / 2, tileImgRect.bottom + TILESIZE*4, FROFILEIMAGE, FROFILEIMAGE);
@@ -846,7 +899,8 @@ void battleSceneInterface::infoSetup(void)
 	_tcscpy(txtAtk, L"공격력");
 	_tcscpy(txtDef, L"방어력");
 	_tcscpy(txtMove, L"이동력");
-
+	_tcscpy(txtHp, L"체력");
+	_tcscpy(txtMp, L"마력");
 	//bonus = 0;//밟은 땅에 따른 전투력 증감표시
 	exp = 0;
 	lv = 0;

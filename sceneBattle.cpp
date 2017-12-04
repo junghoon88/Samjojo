@@ -18,17 +18,20 @@ sceneBattle::~sceneBattle()
 HRESULT sceneBattle::init(void)
 {
 	DATABASE->getSlectScenario();
-
+	_event_allEnemyDown = false;
+	_event_whosThere = false;
+	_event_join = false;
+	_event_sudden = false;
+	_event_RIP_yang = false;
 	_interface = new battleSceneInterface;
 	_interface->init();
 	_turn = 1;
 	_eventAcc = 0;//이벤트 체크용
 	_astar = new aStar;
 	_astar->init(_map);
-
+	
 	linkClass();
 	setUpBattle();
-
 
 	_sDL = new scanDialog;
 	_sDL->init("scripts/script 05.txt");
@@ -65,12 +68,6 @@ void sceneBattle::release(void)
 
 void sceneBattle::update(void)
 {
-	if (KEYMANAGER->isOnceKeyDown('B'))
-	{
-		_battlestory = BATTLESTORY_5;
-		_isDialog = true;
-		_loadDialog = true;
-	}
 	if (_loadDialog)
 	{
 		switch (_battlestory)
@@ -100,65 +97,30 @@ void sceneBattle::update(void)
 			_sDL->setNext(9);
 			_loadDialog = false;
 			break;
+		case BATTLESTORY_6:
+			_sDL->init("scripts/script 12.txt"); //양쌤 사망시
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+
 		}
 	}
-		if (_isDialog)
-		{
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-			{
-				_sDL->loadDialog();
-				_sDL->update();
-			}
-			return;
-		}
-	
-	//테스트용 
-	
 
-
-	if (_phaseChanging)
+	//Phase 변화
+	if (updatePhaseTime() == false)
 	{
-		_phaseChangeTime += TIMEMANAGER->getElapsedTime();
-
-		if (_phase == BATTLEPHASE_VICTORY)
-		{
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-			{
-				DATABASE->setBattleVictory(true);
-				SCENEMANAGER->changeScene(L"결과씬");
-			}
-		}
-		else if (_phase == BATTLEPHASE_DEFEAT)
-		{
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-			{
-				DATABASE->setBattleVictory(false);
-				SCENEMANAGER->changeScene(L"결과씬");
-			}
-		}
-		else
-		{
-			if (_phaseChangeTime > 2.5f)
-			{
-				_phaseChanging = false;
-				_phaseChangeTime = 0.0f;
-			}
-		}
-
-		_player->update();
-		_friend->update();
-		_enemy->update();
-
 		return;
 	}
 
+	
 	//debug
 	if(_enemy->getUnits().size() > 2)
 	{
 		Unit* unit = _enemy->getUnits()[1];
-		if (KEYMANAGER->isOnceKeyDown('5') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
+		if (KEYMANAGER->isOnceKeyDown('1') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD5))
 		{
-			unhideEnemy();
+			int add = _player->getKong();
+			_player->setKong(add+1);
 		}
 		if (KEYMANAGER->isOnceKeyDown('4') || KEYMANAGER->isOnceKeyDown(VK_NUMPAD4))
 		{
@@ -195,6 +157,46 @@ void sceneBattle::update(void)
 		}
 
 	}
+	if (_loadDialog)
+	{
+		switch (_battlestory)
+		{
+		case BATTLESTORY_1:
+			_sDL->init("scripts/script 05.txt"); //스타트 스크립트
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_2:
+			_sDL->init("scripts/script 06.txt"); //이벤트1 몹이 아무도없을때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_3:
+			_sDL->init("scripts/script 07.txt"); //이벤트 2 조조가 습격당했을때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_4:
+			_sDL->init("scripts/script 10.txt"); //이벤트 3 턴이 10이되서 조조가 움직일때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		case BATTLESTORY_5:
+			_sDL->init("scripts/script 11.txt"); //이벤트 4 이유가 뒤졌을때
+			_sDL->setNext(9);
+			_loadDialog = false;
+			break;
+		}
+	}
+	if (_isDialog)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			_sDL->loadDialog();
+			_sDL->update();
+		}
+		return;
+	}
 
 	friendAction();
 	enemyAction();
@@ -205,13 +207,8 @@ void sceneBattle::update(void)
 
 	_map->update(); 
 	_map->scanUnitsPos();
-	if (_phase == BATTLEPHASE_PLAYER)
-	{
-		checkEvent();
-		_interface->update();
-	}
-		
-
+	_interface->update();
+	//if (_phase == BATTLEPHASE_PLAYER) 
 	phaseCheck();
 }
 
@@ -336,6 +333,46 @@ POINT sceneBattle::findCloseEnemyPos(Unit* unit)
 	return tarPt;
 }
 
+bool sceneBattle::updatePhaseTime(void)
+{
+	if (_phaseChanging)
+	{
+		_phaseChangeTime += TIMEMANAGER->getElapsedTime();
+
+		if (_phase == BATTLEPHASE_VICTORY)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				DATABASE->setBattleVictory(true);
+				SCENEMANAGER->changeScene(L"결과씬");
+			}
+		}
+		else if (_phase == BATTLEPHASE_DEFEAT)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				DATABASE->setBattleVictory(false);
+				SCENEMANAGER->changeScene(L"결과씬");
+			}
+		}
+		else
+		{
+			if (_phaseChangeTime > 2.5f)
+			{
+				_phaseChanging = false;
+				_phaseChangeTime = 0.0f;
+			}
+		}
+
+		_player->update();
+		_friend->update();
+		_enemy->update();
+
+		return false;
+	}
+	return true;
+}
+
 // ▼행동 종료시나..아무튼 호출해서 체크. 계속 체크돌릴 필요는 없을듯▼
 void sceneBattle::phaseCheck(void)
 {
@@ -363,6 +400,16 @@ void sceneBattle::phaseCheck(void)
 	//패배조건
 	if (_player->getUnits().size() == 0)
 	{
+		if (!_event_allEnemyDown)
+		{
+			_battlestory = BATTLESTORY_5; //요기3개만 쓰면 됨.
+			_isDialog = true;
+			_loadDialog = true;
+			_event_allEnemyDown = true;
+			return;
+		}
+	
+
 		_phase = BATTLEPHASE_DEFEAT;
 		_phaseChanging = true;
 		_phaseChangeTime = 0.0f;
@@ -431,7 +478,7 @@ void sceneBattle::phaseCheck(void)
 				
 				}
 			}
-			
+			checkEvent();
 			_phaseChanging = true;
 			_phaseChangeTime = 0.0f;
 		}
@@ -451,12 +498,14 @@ void sceneBattle::phaseCheck(void)
 		{
 			for (int i = 0; i < _enemy->getUnits().size(); i++)
 			{
-				//은신중일땐 턴을주지 않는다.
-				if (_enemy->getUnits()[i]->getBattleState().isHiding) continue;
-
+			
+				if (_enemy->getUnits()[i]->getBattleState().isHiding) continue; 	//은신중일땐 턴을주지 않는다.
+				if (!_event_join && (_enemy->getUnits()[i]->getBattleState().Group == 2 || _enemy->getUnits()[i]->getBattleState().Group == 4)) continue; //후방군 참전이벤트가 활성화되지 않으면 턴을 주지 않음
+				
 				_enemy->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
 			}
 			_phase = BATTLEPHASE_ENEMY;
+			checkEvent();
 			_phaseChanging = true;
 			_phaseChangeTime = 0.0f;
 		}
@@ -479,7 +528,9 @@ void sceneBattle::phaseCheck(void)
 				_player->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
 				_player->getUnits()[i]->setMoveable(true);
 			}
+			_interface->dataClean();
 			_phase = BATTLEPHASE_PLAYER;
+			checkEvent();
 			_phaseChanging = true;
 			_phaseChangeTime = 0.0f;
 
@@ -487,14 +538,15 @@ void sceneBattle::phaseCheck(void)
 		}
 	}
 }
-
 void sceneBattle::friendAction(void)//아군 턴 액션
 {
 	for (int i = 0; i < _friend->getUnits().size(); i++) //행동 끝난 뒤에 끝나는 신호가 필요함..
 	{
 		if (_friend->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue; //행동 불가능인 애들은 거르고
 		_interface->chaseCamera(_friend->getUnits()[i]->getBattleState().tilePt);
+		_interface->setUnit(TEAM_FRIEND, i);
 		_friend->getUnits()[i]->findEnemy(TEAM_FRIEND, findCloseEnemyPos(_friend->getUnits()[i]));
+		
 		break;
 	}
 }
@@ -504,7 +556,8 @@ void sceneBattle::enemyAction(void) //적군 턴 액션
 	for (int i = 0; i < _enemy->getUnits().size(); i++)
 	{
 		if (_enemy->getUnits()[i]->getBattleState().squence == UNITSEQUENCE_TURNOFF) continue;
-		if (_turn < 10 && _enemy->getUnits()[i]->getBattleState().Group >= 2) continue;
+		if (!_event_join && _enemy->getUnits()[i]->getBattleState().Group == 2) continue;
+		_interface->setUnit(TEAM_ENEMY, i);
 		_interface->chaseCamera(_enemy->getUnits()[i]->getBattleState().tilePt);
 		_enemy->getUnits()[i]->findEnemy(TEAM_ENEMY, findCloseEnemyPos(_enemy->getUnits()[i]));
 		break;
@@ -631,37 +684,75 @@ void sceneBattle::setUpBattle(void)
 
 void sceneBattle::checkEvent(void)
 {
-
-	if (_eventAcc <= 0)
+	if (!_event_whosThere && _turn >= 3) //3턴 이상 진행했을때 조조가 의심함
 	{
-		if (_turn >= 10)
+		_battlestory = BATTLESTORY_2;
+		_isDialog = true;
+		_loadDialog = true;
+		_event_whosThere = true;
+	}
+	if (_event_whosThere && !_event_sudden) // 조조가 의심하고 난 뒤 하단 조건 만족 시
+	{
+		int GroupAlive = 0;
+		for (int i = 0; i < _enemy->getUnits().size(); i++) //전방 유닛을 전부 제거 시
+		{
+			if (_enemy->getUnits()[i]->getBattleState().Group != 1) continue; //전방 그룹만 체크함
+			GroupAlive++;
+		}
+		if (GroupAlive <= 0)//전방에 남은 적이 없으면 여기 들어옴
 		{
 			unhideEnemy();
-			_eventAcc++;
+			_battlestory = BATTLESTORY_3;
+			_isDialog = true;
+			_loadDialog = true;
+			_event_sudden = true;
 			return;
 		}
-
-		int GroupAlive = 0;
-		
-		for (int i = 0; i < _player->getUnits().size(); i++)
+	
+		for (int i = 0; i < _player->getUnits().size(); i++) //적이 남아 있는 상태에서 플레이어가 전진시
 		{
-			if (_player->getUnits()[i]->getRect().left > 815)
+			if (_player->getUnits()[i]->getRect().left > 780)//대충 강 근처임
 			{
 				unhideEnemy();
-				_eventAcc++;
+				_battlestory = BATTLESTORY_3;
+				_isDialog = true;
+				_loadDialog = true;
+				_event_sudden = true;
 				break;
 			}
 		}
-		for (int i = 0; i < _enemy->getUnits().size(); i++)
+	
+	}
+
+	if (_event_sudden &&!_event_join) //기습조가 등장했을때 여포 참전
+	{
+		if (_turn >= 10) // 10턴 이상이면 참전
 		{
-			if (_enemy->getUnits()[i]->getBattleState().Group != 1) continue;
-			GroupAlive++;
+		_battlestory = BATTLESTORY_4;
+		_isDialog = true;
+		_loadDialog = true;
+		_event_join = true;
+		return;
 		}
-		if (GroupAlive <= 0)
+		for (int i = 0; i < _player->getUnits().size(); i++) //10턴이 안됬는데 플레이어가 전진시 참전
 		{
-			unhideEnemy();
-			_eventAcc++;
+			if (_player->getUnits()[i]->getRect().left > 815)//대충 강 근처임
+			{
+				_battlestory = BATTLESTORY_4;
+				_isDialog = true;
+				_loadDialog = true;
+				_event_join = true;
+				break;
+			}
 		}
+	}
+
+	if (!_event_RIP_yang && _friend->getUnits().size() <= 0)
+	{
+		_battlestory = BATTLESTORY_6;
+		_isDialog = true;
+		_loadDialog = true;
+		_event_RIP_yang = true;
 	}
 }
 void sceneBattle::unhideEnemy(void)

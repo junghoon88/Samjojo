@@ -513,6 +513,8 @@ void sceneInit::initImageReady(void) {
 	_loading->loadImage(L"장비UI", L"image/ready/장비UI.bmp", 632, 365, false, RGB(255, 0, 255));
 	_loading->loadImage(L"구입무기상", L"image/ready/구입무기상.bmp", 472, 368, false, RGB(255, 0, 255));
 	_loading->loadImage(L"구입도구상", L"image/ready/구입도구상.bmp", 472, 368, false, RGB(255, 0, 255));
+	_loading->loadImage(L"매각무기상", L"image/ready/매각무기상.bmp", 472, 368, false, RGB(255, 0, 255));
+	_loading->loadImage(L"매각도구상", L"image/ready/매각도구상.bmp", 472, 368, false, RGB(255, 0, 255));
 	_loading->loadImage(L"출진눌림", L"image/ready/출진눌림버튼.bmp", 50, 50, false, RGB(255, 0, 255));
 	_loading->loadImage(L"장비눌림", L"image/ready/장비눌림버튼.bmp", 50, 50, false, RGB(255, 0, 255));
 	_loading->loadImage(L"구입눌림", L"image/ready/구입눌림버튼.bmp", 50, 50, false, RGB(255, 0, 255));
@@ -533,6 +535,7 @@ void sceneInit::initImageReady(void) {
 	_loading->loadImage(L"능력치바", L"image/ready/능력치바.bmp", 129, 9, false, RGB(255, 0, 255));
 	_loading->loadImage(L"선택바", L"image/ready/선택바.bmp", 327, 16, false, RGB(255, 0, 255), true);
 	_loading->loadImage(L"선택바2", L"image/ready/선택바2.bmp", 144, 16, false, RGB(255, 0, 255), true);
+	_loading->loadImage(L"선택바3", L"image/ready/선택바3.bmp", 440, 16, false, RGB(255, 0, 255), true);
 	_loading->loadImage(L"빈바", L"image/ready/빈바.bmp", 129, 9, false, RGB(255, 0, 255));
 
 	//출진유닛
@@ -565,7 +568,9 @@ void sceneInit::initImageUI(void)
 	_loading->loadImage(L"수속성", L"image/icon/water.bmp", 24, 24, true, RGB(255, 0, 255));
 	_loading->loadImage(L"수속성비활성", L"image/icon/un_water.bmp", 24, 24, true, RGB(255, 0, 255));
 	_loading->loadImage(L"스크롤", L"image/battleScene/scroll.bmp", 144, 960, true, RGB(255, 0, 255));
-
+	_loading->loadImage(L"선두", L"image/icon/kong.bmp", 120, 120, true, RGB(255, 0, 255));
+	_loading->loadImage(L"선두없다", L"image/icon/kong_none.bmp", 120, 120, true, RGB(255, 0, 255));
+	_loading->loadImage(L"선두타겟", L"image/battleScene/non-player_range_tile.bmp", 48, 48, true, RGB(255, 0, 255),true);
 	for (int i = 0; i < SAMPLETILEY; i++)
 	{
 		for (int j = 0; j < SAMPLETILEX; j++)
