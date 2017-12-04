@@ -50,7 +50,6 @@ HRESULT sceneMaptool::init(void)
 	_alphaValueBox->setStrNum(_alphaValue / 255 * 100);
 
 	_stprintf(_saveSize, L"0 x 0");
-	_stprintf(_fileName, L"빈공간");
 
 	return S_OK;
 }
@@ -213,13 +212,13 @@ void sceneMaptool::update(void)
 	}
 
 	//TERRAIN 보기 on/off
-	//if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-	//{
-	//	if (_viewTERRAIN)	_viewTERRAIN = false;
-	//	else				_viewTERRAIN = true;
+	if (KEYMANAGER->isOnceKeyDown('T'))
+	{
+		if (_viewTERRAIN)	_viewTERRAIN = false;
+		else				_viewTERRAIN = true;
 
-	//	ctrlSave();
-	//}
+		ctrlSave();
+	}
 
 	//원본맵그림 X, Y 업데이트하기
 	if (IMAGEMANAGER->findImage(_fileName) != NULL)
@@ -701,4 +700,7 @@ void sceneMaptool::load(void)
 	_mapView = false;
 
 	CloseHandle(file);
+
+	_lSave.clear();
+	_lBackUp.clear();
 }
