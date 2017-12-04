@@ -91,7 +91,6 @@
     <Filter Include="MainGame\sceneReady">
       <UniqueIdentifier>{cd4f2a5f-7c92-4a24-9ce8-f57c7651afa1}</UniqueIdentifier>
     </Filter>
-
     <Filter Include="MainGame\sceneBattle\info - hyunjun">
       <UniqueIdentifier>{b83708b4-a485-4097-9ba0-c277e28550ac}</UniqueIdentifier>
     </Filter>
@@ -275,7 +274,7 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="battleSceneInterface.h">
-      <Filter>MainGame\sceneBattle\info - hyunjun</Filter>
+      <Filter>MainGame\sceneBattle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -433,7 +432,7 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="battleSceneInterface.cpp">
-      <Filter>MainGame\sceneBattle\info - hyunjun</Filter>
+      <Filter>MainGame\sceneBattle</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
