@@ -112,7 +112,7 @@ void sceneBattle::update(void)
 		return;
 	}
 
-
+	
 	//debug
 	if(_enemy->getUnits().size() > 2)
 	{
@@ -500,7 +500,8 @@ void sceneBattle::phaseCheck(void)
 			{
 			
 				if (_enemy->getUnits()[i]->getBattleState().isHiding) continue; 	//은신중일땐 턴을주지 않는다.
-				if (!_event_join && _enemy->getUnits()[i]->getBattleState().Group == 2) continue; //후방군 참전이벤트가 활성화되지 않으면 턴을 주지 않음
+				if (!_event_join && (_enemy->getUnits()[i]->getBattleState().Group == 2 || _enemy->getUnits()[i]->getBattleState().Group == 4)) continue; //후방군 참전이벤트가 활성화되지 않으면 턴을 주지 않음
+				
 				_enemy->getUnits()[i]->setUnitSequnce(UNITSEQUENCE_TURNON);
 			}
 			_phase = BATTLEPHASE_ENEMY;
@@ -683,7 +684,7 @@ void sceneBattle::setUpBattle(void)
 
 void sceneBattle::checkEvent(void)
 {
-	if (!_event_whosThere && _turn >= 3) // 일정거리 이상 전진했을때 조조가 의심함
+	if (!_event_whosThere && _turn >= 3) //3턴 이상 진행했을때 조조가 의심함
 	{
 		_battlestory = BATTLESTORY_2;
 		_isDialog = true;
@@ -710,7 +711,7 @@ void sceneBattle::checkEvent(void)
 	
 		for (int i = 0; i < _player->getUnits().size(); i++) //적이 남아 있는 상태에서 플레이어가 전진시
 		{
-			if (_player->getUnits()[i]->getRect().left > 815)//대충 강 근처임
+			if (_player->getUnits()[i]->getRect().left > 780)//대충 강 근처임
 			{
 				unhideEnemy();
 				_battlestory = BATTLESTORY_3;
@@ -723,12 +724,27 @@ void sceneBattle::checkEvent(void)
 	
 	}
 
-	if (!_event_join && _turn >= 10) //10턴 이상일때 여포 참전
+	if (_event_sudden &&!_event_join) //기습조가 등장했을때 여포 참전
 	{
+		if (_turn >= 10) // 10턴 이상이면 참전
+		{
 		_battlestory = BATTLESTORY_4;
 		_isDialog = true;
 		_loadDialog = true;
 		_event_join = true;
+		return;
+		}
+		for (int i = 0; i < _player->getUnits().size(); i++) //10턴이 안됬는데 플레이어가 전진시 참전
+		{
+			if (_player->getUnits()[i]->getRect().left > 815)//대충 강 근처임
+			{
+				_battlestory = BATTLESTORY_4;
+				_isDialog = true;
+				_loadDialog = true;
+				_event_join = true;
+				break;
+			}
+		}
 	}
 
 	if (!_event_RIP_yang && _friend->getUnits().size() <= 0)

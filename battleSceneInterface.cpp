@@ -114,9 +114,9 @@ void battleSceneInterface::mouse_Scanning(void)
 						kongTarget = _player->getUnits()[i]->getRect();
 						break;
 					}
-					else kongTarget = { WINSIZEX,WINSIZEY,WINSIZEX,WINSIZEY };
 				}
 			}
+			else kongTarget = { WINSIZEX,WINSIZEY,WINSIZEX,WINSIZEY };
 		}
 		else if(_player->getUnits()[vNum]->isMovableArea(findIndex))drawMoveLine = { findtile->getTile()[indexTile].rc.left,findtile->getTile()[indexTile].rc.top,findtile->getTile()[indexTile].rc.right,findtile->getTile()[indexTile].rc.bottom };
 		else drawMoveLine = { WINSIZEX,WINSIZEY,WINSIZEX,WINSIZEY };
@@ -644,7 +644,7 @@ void battleSceneInterface::moveCamera(void)
 void battleSceneInterface::chaseCamera(POINT tilePt)
 {
 	int index = tilePt.x + tilePt.y * TILEX;
-	int targetCameraX = findtile->getTile()[index].rc.left - WINSIZEX / 2;
+	int targetCameraX = findtile->getTile()[index].rc.left - TILESIZE * 9;
 	int targetCameraY = findtile->getTile()[index].rc.top - WINSIZEY / 2;
 
 	if (targetCameraX > 0 && targetCameraX < findtile->getTileSizeX() * TILESIZE - TILESIZE * 20)//여기까지가 조건
