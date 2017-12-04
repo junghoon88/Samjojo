@@ -101,7 +101,7 @@ void Unit::render(void)
 		_stprintf(str, L"%d", _showDamageValue);
 		COLORREF colorOld = GetTextColor(getMemDC());
 		SetTextColor(getMemDC(), RGB(255, 255, 255));
-		TextOut(getMemDC(), _battleState.pt.x - 24, _battleState.pt.y - 24, str, _tcslen(str));
+		TextOut(getMemDC(), _battleState.pt.x - 24 - MAINCAMERA->getCameraX(), _battleState.pt.y - 24 - MAINCAMERA->getCameraY(), str, _tcslen(str));
 		SetTextColor(getMemDC(), colorOld);
 	}
 }
