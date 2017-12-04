@@ -308,10 +308,10 @@ void sceneUnitEditor::initButton(void)
 
 
 	//prev, next
-	_ctrlButton[UNITEDITOR_BUTTON_FACE_PREV]->init(L"SELECT-선택버튼", L"이전", 194 + 50 + UPDATEPOSX, 230 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectFacePrev, this);
-	_ctrlButton[UNITEDITOR_BUTTON_FACE_NEXT]->init(L"SELECT-선택버튼", L"다음", 294 + 50 + UPDATEPOSX, 230 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectFaceNext, this);
-	_ctrlButton[UNITEDITOR_BUTTON_COMBAT_PREV]->init(L"SELECT-선택버튼", L"이전", 194 + 50 + UPDATEPOSX, 710 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectCombatPrev, this);
-	_ctrlButton[UNITEDITOR_BUTTON_COMBAT_NEXT]->init(L"SELECT-선택버튼", L"다음", 294 + 50 + UPDATEPOSX, 710 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectCombatNext, this);
+	_ctrlButton[UNITEDITOR_BUTTON_FACE_PREV]->init(L"SELECT-작은선택버튼", L"이전", 244 + 25 + UPDATEPOSX, 230 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectFacePrev, this);
+	_ctrlButton[UNITEDITOR_BUTTON_FACE_NEXT]->init(L"SELECT-작은선택버튼", L"다음", 294 + 25 + UPDATEPOSX, 230 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectFaceNext, this);
+	_ctrlButton[UNITEDITOR_BUTTON_COMBAT_PREV]->init(L"SELECT-작은선택버튼", L"이전", 244 + 25 + UPDATEPOSX, 710 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectCombatPrev, this);
+	_ctrlButton[UNITEDITOR_BUTTON_COMBAT_NEXT]->init(L"SELECT-작은선택버튼", L"다음", 294 + 25 + UPDATEPOSX, 710 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectCombatNext, this);
 	
 	//_ctrlButton[UNITEDITOR_BUTTON_COMBAT_PREV]->init(L"맵툴버튼", 100 + 50 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectCombatPrev, this);
 	//_ctrlButton[UNITEDITOR_BUTTON_COMBAT_NEXT]->init(L"맵툴버튼", 200 + 50 + UPDATEPOSX, 640 + 15 + UPDATEPOSY, { 0, 0 }, { 0, 1 }, ctrlSelectCombatNext, this);
